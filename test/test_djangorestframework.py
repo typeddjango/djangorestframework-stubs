@@ -12,7 +12,7 @@ TEST_DATA_DIR = ROOT_DIR / 'test' / 'test-data'
 MYPY_INI_PATH = ROOT_DIR / 'test' / 'plugins.ini'
 
 
-class DjangoTestSuite(DataSuite):
+class DRFTestSuite(DataSuite):
     files = []
     data_prefix = str(TEST_DATA_DIR)
 
