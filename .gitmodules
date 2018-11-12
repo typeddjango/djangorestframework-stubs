@@ -1,0 +1,6 @@
+[submodule "external/mypy"]
+	path = external/mypy
+	url = https://github.com/python/mypy.git
+[submodule "external/key-based-typeddict"]
+	path = external/key-based-typeddict
+	url = https://github.com/mkurnikov/key-based-typeddict.git

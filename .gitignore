@@ -1,0 +1,6 @@
+*.egg-info
+__pycache__/
+out/
+/test_sqlite.py
+/django
+.idea/
