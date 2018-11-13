@@ -13,7 +13,10 @@ MYPY_INI_PATH = ROOT_DIR / 'test' / 'plugins.ini'
 
 
 class DRFTestSuite(DataSuite):
-    files = []
+    files = [
+        'check-serializer-run-validation.test',
+        'check-fields.test'
+    ]
     data_prefix = str(TEST_DATA_DIR)
 
     def run_case(self, testcase: DataDrivenTestCase) -> None:

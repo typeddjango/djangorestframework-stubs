@@ -4,9 +4,9 @@ from distutils.core import setup
 
 def find_stubs(package):
     stubs = []
-    for root, dirs, files in os.walk(package):
-        for file in files:
-            path = os.path.join(root, file).replace(package + os.sep, '', 1)
+    for fpath in os.scandir(package):
+        if fpath.is_file():
+            path = fpath.path.replace(package + os.sep, 'rest_framework' + os.sep, 1)
             stubs.append(path)
     return {package: stubs}
 
@@ -19,6 +19,5 @@ setup(
     version="0.1.0",
     license='BSD',
     install_requires='djangorestframework>=3.9.0',
-    packages=['mypy_djangorestframework_plugin']
-    # package_data=find_stubs('django-stubs')
+    packages=['mypy_rest_framework_plugin']
 )
