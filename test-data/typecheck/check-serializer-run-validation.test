@@ -1,4 +1,4 @@
-[case testSerializerToRepresentationReturnsTypedDict]
+[CASE testSerializerToRepresentationReturnsTypedDict]
 from rest_framework import serializers
 
 class MySerializer(serializers.Serializer):
