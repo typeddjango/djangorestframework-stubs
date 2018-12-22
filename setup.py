@@ -2,15 +2,6 @@ import os
 from distutils.core import setup
 
 
-def find_stubs(package):
-    stubs = []
-    for fpath in os.scandir(package):
-        if fpath.is_file():
-            path = fpath.path.replace(package + os.sep, 'rest_framework' + os.sep, 1)
-            stubs.append(path)
-    return {package: stubs}
-
-
 setup(
     name="djangorestframework-stubs",
     url="https://github.com/mkurnikov/djangorestframework-stubs.git",
