@@ -27,6 +27,8 @@ IGNORED_ERRORS = [
     'Invalid base class',
     'MockRequest',
     'MockView',
+    'MockTimezone',
+    'MockLazyStr',
     'Invalid type "self"',
     re.compile(r'Item "None" of "Optional\[[a-zA-Z0-9]+\]" has no attribute'),
     'Optional[List[_Record]]',
@@ -34,7 +36,8 @@ IGNORED_ERRORS = [
     'Cannot assign to a type',
     'Cannot assign to a method',
     '"Type[NonTimeThrottle]" has no attribute "called"',
-    'BaseTokenAuthTests'
+    'BaseTokenAuthTests',
+    re.compile(r'Dict entry [0-9] has incompatible type "[a-zA-Z]+": "None"; expected "object": "bool"')
 ]
 
 MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
