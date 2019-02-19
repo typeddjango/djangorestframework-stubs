@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, MutableMapping, Optional, Tuple
+from typing import Any, Callable, Dict, MutableMapping, Optional, Tuple, List
 
 from rest_framework.request import Request
 
@@ -10,6 +10,9 @@ class BaseThrottle(object):
 class SimpleRateThrottle(BaseThrottle):
     num_requests: int
     duration: int
+    history: List[object]
+    rate: Optional[str]
+    now: float
 
     cache: MutableMapping[str, Any] = ...
     timer: Callable[..., float] = ...

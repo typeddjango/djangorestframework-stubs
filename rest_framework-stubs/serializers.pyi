@@ -49,6 +49,7 @@ from rest_framework.relations import (
     ManyRelatedField as ManyRelatedField,
     SlugRelatedField as SlugRelatedField,
     StringRelatedField as StringRelatedField,
+    Hyperlink as Hyperlink,
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
@@ -65,7 +66,7 @@ class BaseSerializer(Field):
     instance: Optional[Model]
     initial_data: Any
     partial: bool
-    def __init__(self, instance: Optional[Model] = ..., data: Any = ..., **kwargs: Any): ...
+    def __init__(self, instance: Optional[Any] = ..., data: Any = ..., **kwargs: Any): ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def to_internal_value(self, data: Any) -> Any: ...

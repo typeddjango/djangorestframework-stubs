@@ -1,12 +1,14 @@
 import datetime
-from typing import Any, Union, Callable, Dict, NoReturn, Optional, List, TypeVar, Tuple
+from typing import Any, Union, Callable, Dict, NoReturn, Optional, List, TypeVar, Tuple, Generic
 
 from django.db.models import Model
 from rest_framework.serializers import BaseSerializer
 
-_T = TypeVar("_T")
+_FT = TypeVar("_FT")
 
-class Field(object):
+class Field(Generic[_FT]):
+    _pyi_private_field_type: Any
+
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
@@ -24,8 +26,6 @@ class Field(object):
         **kwargs
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
-    # .validators is a lazily loaded property, that gets its default
-    # value from `get_validators`.
     @property
     def validators(self) -> List[Callable]: ...
     @validators.setter
@@ -45,8 +45,10 @@ class Field(object):
     def root(self) -> BaseSerializer: ...
     @property
     def context(self) -> Dict[str, Any]: ...
+    def __get__(self, instance, owner) -> _FT: ...
 
 class CharField(Field):
+    _pyi_private_field_type: str
     def __init__(
         self,
         read_only: bool = ...,
@@ -63,9 +65,9 @@ class CharField(Field):
         max_length: int = ...,
         **kwargs
     ): ...
-    def __get__(self, instance, owner) -> str: ...
 
 class RegexField(Field):
+    _pyi_private_field_type: str
     def __init__(
         self,
         regex: str,
@@ -79,37 +81,36 @@ class RegexField(Field):
         allow_null: bool = ...,
         **kwargs
     ): ...
-    def __get__(self, instance, owner) -> str: ...
 
 class EmailField(Field):
-    def __get__(self, instance, owner) -> str: ...
+    _pyi_private_field_type: str
 
 class URLField(Field):
-    def __get__(self, instance, owner) -> str: ...
+    _pyi_private_field_type: str
 
 class IntegerField(Field):
-    def __get__(self, instance, owner) -> int: ...
+    _pyi_private_field_type: int
 
 class FloatField(Field):
-    def __get__(self, instance, owner) -> float: ...
+    _pyi_private_field_type: float
 
 class BooleanField(Field):
-    def __get__(self, instance, owner) -> bool: ...
+    _pyi_private_field_type: bool
 
 class NullBooleanField(Field):
-    def __get__(self, instance, owner) -> Optional[bool]: ...
+    _pyi_private_field_type: Optional[bool]
 
 class ListField(Field):
-    def __get__(self, instance, owner) -> List[Any]: ...
+    _pyi_private_field_type: List[Any]
 
 class DictField(Field):
-    def __get__(self, instance, owner) -> Dict[str, Any]: ...
+    _pyi_private_field_type: Dict[str, Any]
     def run_child_validation(self, data: Dict[str, Any]) -> Dict[str, Any]: ...
 
 class ChoiceField(Field):
     def __init__(
         self,
-        choices: List[_T],
+        choices: List[Any],
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -120,18 +121,12 @@ class ChoiceField(Field):
         allow_null: bool = ...,
         **kwargs
     ): ...
-    def __get__(self, instance, owner) -> _T: ...
 
-class JSONField(Field):
-    def __get__(self, instance, owner) -> Any: ...
+class JSONField(Field): ...
 
 class DateTimeField(Field):
-    def __get__(self, instance, owner) -> datetime.datetime: ...
+    _pyi_private_field_type: datetime.datetime
 
-class FileField(Field):
-    def __get__(self, instance, owner) -> Any: ...
-
+class FileField(Field): ...
 class HiddenField(Field): ...
-
-class SerializerMethodField(Field):
-    def __get__(self, instance, owner) -> Any: ...
+class SerializerMethodField(Field): ...
