@@ -1,13 +1,9 @@
-from typing import Any, Dict, Iterable, Optional, Protocol, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Protocol, Sequence
 
 from django.db.models import Model
 from django.db.models.query import QuerySet
-from django.utils import six
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.fields import Field, empty, get_attribute, iter_options
+from rest_framework.fields import Field
 from rest_framework.request import Request
-from rest_framework.settings import api_settings
-from rest_framework.utils import html
 
 def method_overridden(method_name: str, klass: type, instance: Any) -> bool: ...
 
@@ -31,18 +27,14 @@ _Choices = Dict[Any, Any]
 class Option(Protocol):
     start_option_group: bool = ...
     end_option_group: bool = ...
+    label: str
+    value: Any
     display_text: str
 
 class RelatedField(Field):
     queryset: Optional[QuerySet] = ...
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
-    def __new__(cls, *args, **kwargs):
-        # We override this method in order to automagically create
-        # `ManyRelatedField` classes instead when `many=True` is set.
-        if kwargs.pop("many", False):
-            return cls.many_init(*args, **kwargs)
-        return super(RelatedField, cls).__new__(cls, *args, **kwargs)
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> ManyRelatedField: ...
     def get_queryset(self) -> QuerySet: ...
@@ -71,54 +63,15 @@ class HyperlinkedRelatedField(RelatedField):
 class HyperlinkedIdentityField(HyperlinkedRelatedField): ...
 
 class SlugRelatedField(RelatedField):
-
-    slug_field: Optional[Field] = ...
-    def __init__(self, slug_field: Optional[Field] = None, **kwargs: Any): ...
+    slug_field: Optional[str] = ...
+    def __init__(self, slug_field: Optional[str] = None, **kwargs: Any): ...
 
 class ManyRelatedField(Field):
-    """
-    Relationships with `many=True` transparently get coerced into instead being
-    a ManyRelatedField with a child relationship.
-
-    The `ManyRelatedField` class is responsible for handling iterating through
-    the values and passing each one to the child relationship.
-
-    This class is treated as private API.
-    You shouldn't generally need to be using this class directly yourself,
-    and should instead simply set 'many=True' on the relationship.
-    """
-
-    initial = []
-    default_empty_html = []
+    initial: List[object] = ...
+    default_empty_html: List[object] = ...
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
-    def __init__(self, child_relation=None, *args, **kwargs):
-        self.child_relation = child_relation
-        self.allow_empty = kwargs.pop("allow_empty", True)
-
-        cutoff_from_settings = api_settings.HTML_SELECT_CUTOFF
-        if cutoff_from_settings is not None:
-            cutoff_from_settings = int(cutoff_from_settings)
-        self.html_cutoff = kwargs.pop("html_cutoff", cutoff_from_settings)
-
-        self.html_cutoff_text = kwargs.pop(
-            "html_cutoff_text", self.html_cutoff_text or _(api_settings.HTML_SELECT_CUTOFF_TEXT)
-        )
-        assert child_relation is not None, "`child_relation` is a required argument."
-        super(ManyRelatedField, self).__init__(*args, **kwargs)
-        self.child_relation.bind(field_name="", parent=self)
-    def get_value(self, dictionary):
-        # We override the default field access in order to support
-        # lists in HTML forms.
-        if html.is_html_input(dictionary):
-            # Don't return [] if the update is partial
-            if self.field_name not in dictionary:
-                if getattr(self.root, "partial", False):
-                    return empty
-            return dictionary.getlist(self.field_name)
-
-        return dictionary.get(self.field_name, empty)
-    def get_attribute(self, instance: Any) -> Any: ...
+    def __init__(self, child_relation: Optional[RelatedField] = ..., *args: Any, **kwargs: Any) -> None: ...
     def get_choices(self, cutoff: Optional[int] = ...) -> _Choices: ...
     @property
     def choices(self) -> _Choices: ...

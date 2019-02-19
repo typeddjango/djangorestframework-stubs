@@ -6,6 +6,10 @@ from rest_framework.request import Request
 
 _Detail = Union[str, Dict[str, Any]]
 
+class ErrorDetail(str):
+    code: Optional[str] = None
+    def __new__(cls, string: str, code: Optional[str] = ...): ...
+
 class APIException(Exception):
     status_code: int = ...
     default_detail: str = ...
