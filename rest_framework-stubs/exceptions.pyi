@@ -15,3 +15,6 @@ class ParseError(APIException):
 
 class PermissionDenied(APIException):
     pass
+
+class ErrorDetail(str):
+    code: Optional[str] = ...
