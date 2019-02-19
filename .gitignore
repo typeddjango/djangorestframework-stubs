@@ -1,7 +1,10 @@
 *.egg-info
 __pycache__/
+.pytest_cache/
 out/
 /test_sqlite.py
 /django
 .idea/
 .mypy_cache
+drf-sources/
+

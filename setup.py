@@ -40,8 +40,8 @@ setup(
     author_email="maxim.kurnikov@gmail.com",
     license='MIT',
     install_requires=dependencies,
-    packages=['djangorestframework-stubs', *find_packages()],
-    package_data={'djangorestframework-stubs': find_stub_files('djangorestframework-stubs')},
+    packages=['rest_framework-stubs', *find_packages()],
+    package_data={'rest_framework-stubs': find_stub_files('rest_framework-stubs')},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',

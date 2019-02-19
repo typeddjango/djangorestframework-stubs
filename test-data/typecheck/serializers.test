@@ -1,9 +1,8 @@
-[CASE testSerializerToRepresentationReturnsTypedDict]
+[CASE serializer_to_representation_returns_typeddict]
 from rest_framework import serializers
 
 class MySerializer(serializers.Serializer):
     name = serializers.CharField()
-
 myserializer = MySerializer()
 data = myserializer.run_validation({'name': 'maxim'})
 
