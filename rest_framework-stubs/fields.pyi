@@ -19,7 +19,6 @@ from typing import (
     Protocol,
 )
 
-from django import forms
 from django.db import models
 from django.db.models import Model
 from django.forms import FilePathField as DjangoFilePathField, ImageField as DjangoImageField
@@ -47,6 +46,17 @@ class Field(Generic[_FT]):
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
     initial: Optional[Any] = ...
+
+    read_only: bool
+    write_only: bool
+    required: bool
+    default: Any
+    label: str
+    help_text: Optional[str]
+    style: Dict[str, Any]
+    allow_null: bool
+    field_name: Optional[str]
+    parent: Optional[Field]
     def __init__(
         self,
         read_only: bool = ...,

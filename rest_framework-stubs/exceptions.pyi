@@ -4,11 +4,15 @@ from django.http import JsonResponse
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 
-_Detail = Union[str, Dict[str, Any]]
+def _get_error_details(data: Any, default_code: Optional[str] = ...) -> Any: ...
+def _get_codes(detail: Any) -> Any: ...
+def _get_full_details(detail: Any) -> Any: ...
 
 class ErrorDetail(str):
     code: Optional[str] = None
     def __new__(cls, string: str, code: Optional[str] = ...): ...
+
+_Detail = Union[str, Dict[str, Any]]
 
 class APIException(Exception):
     status_code: int = ...
