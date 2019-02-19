@@ -26,6 +26,7 @@ IGNORED_ERRORS = [
     'variable has type Module',
     'Invalid base class',
     'MockRequest',
+    'MockView',
     'Invalid type "self"',
     re.compile(r'Item "None" of "Optional\[[a-zA-Z0-9]+\]" has no attribute'),
     'Optional[List[_Record]]',
@@ -55,7 +56,7 @@ def cd(path):
         os.chdir(prev_cwd)
 
 
-def is_ignored(line: str, test_folder_name: str) -> bool:
+def is_ignored(line: str) -> bool:
     for pattern in IGNORED_ERRORS:
         if isinstance(pattern, Pattern):
             if pattern.search(line):
@@ -91,16 +92,12 @@ def check_with_mypy(abs_path: Path) -> int:
             if not error_line.startswith('tests/'):
                 # only leave errors for tests/ directory
                 continue
-
-            if not is_ignored(error_line, abs_path.name):
+            if not is_ignored(error_line):
                 print(replace_with_clickable_location(error_line, abs_test_folder=abs_path))
     return int(error_happened)
 
 
 if __name__ == '__main__':
-
-    # tests_root = repo_directory / 'tests'
-
     # clone Django repository, if it does not exist
     if not REPO_DIRECTORY.exists():
         repo = Repo.clone_from('https://github.com/mkurnikov/django-rest-framework.git', REPO_DIRECTORY)
