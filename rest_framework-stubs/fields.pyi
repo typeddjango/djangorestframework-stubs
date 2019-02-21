@@ -17,6 +17,7 @@ from typing import (
     Union,
     Iterable,
     Protocol,
+    Type,
 )
 
 from django.db import models
