@@ -1,11 +1,11 @@
-[CASE serializer_to_representation_returns_typeddict]
+[CASE multiple_inheritance_from_two_serializers_with_meta_nested_class_defined]
 from rest_framework import serializers
-
-class MySerializer(serializers.Serializer):
-    name = serializers.CharField()
-myserializer = MySerializer()
-data = myserializer.run_validation({'name': 'maxim'})
-
-reveal_type(data['name'])  # E: Revealed type is 'builtins.str'
-[out]
-
+class SerializerA(serializers.Serializer):
+    class Meta:
+        pass
+class SerializerB(serializers.Serializer):
+    class Meta:
+        pass
+class SerializerC(SerializerA, SerializerB):
+    pass
+[/CASE]

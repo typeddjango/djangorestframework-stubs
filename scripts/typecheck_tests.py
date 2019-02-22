@@ -29,6 +29,7 @@ IGNORED_ERRORS = [
     'MockView',
     'MockTimezone',
     'MockLazyStr',
+    'MockQueryset',
     'Invalid type "self"',
     re.compile(r'Item "None" of "Optional\[[a-zA-Z0-9]+\]" has no attribute'),
     'Optional[List[_Record]]',
@@ -37,7 +38,12 @@ IGNORED_ERRORS = [
     'Cannot assign to a method',
     '"Type[NonTimeThrottle]" has no attribute "called"',
     'BaseTokenAuthTests',
-    re.compile(r'Dict entry [0-9] has incompatible type "[a-zA-Z]+": "None"; expected "object": "bool"')
+    re.compile(r'Dict entry [0-9] has incompatible type "[a-zA-Z]+": "None"; expected "object": "bool"'),
+    'Incompatible types in assignment (expression has type "None", variable has type "List[Any]")',
+    'Value of type "Optional[str]" is not indexable',
+    'Argument 1 to "QueryDict" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, bytes, None]"',
+    'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object"; expected "QuerySet[Any]"',
+    'has incompatible type "Dict[<nothing>, <nothing>]"; expected "Request"'
 ]
 
 MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
