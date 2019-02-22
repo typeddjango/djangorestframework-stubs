@@ -1,0 +1,10 @@
+[CASE serializer_run_validation_returns_typeddict_of_fields]
+from rest_framework import serializers
+
+class MySerializer(serializers.Serializer):
+    name = serializers.CharField()
+myserializer = MySerializer()
+data = myserializer.run_validation({'name': 'maxim'})
+
+reveal_type(data['name'])  # E: Revealed type is 'builtins.str'
+[/CASE]
