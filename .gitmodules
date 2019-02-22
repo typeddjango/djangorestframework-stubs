@@ -1,3 +1,0 @@
-[submodule "external/key-based-typeddict"]
-	path = external/key-based-typeddict
-	url = https://github.com/mkurnikov/key-based-typeddict.git
