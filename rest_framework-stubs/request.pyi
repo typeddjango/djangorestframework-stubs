@@ -1,9 +1,9 @@
 from contextlib import contextmanager
-from typing import Any, Dict, Iterator, Optional, Sequence, Tuple, Type, ContextManager
 from types import TracebackType
+from typing import Any, ContextManager, Dict, Iterator, Optional, Sequence, Tuple, Type
 
 from django.db.models.base import Model
-from django.http import HttpRequest, QueryDict
+from django.http import HttpRequest
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
@@ -39,15 +39,15 @@ class Request(HttpRequest):
     user: Optional[Model]
     auth: Optional[Any]
 
-    parsers: Optional[Sequence[Type[BaseParser]]] = ...
-    authenticators: Optional[Sequence[Type[BaseAuthentication]]] = ...
-    negotiator: Optional[Type[BaseContentNegotiation]] = ...
+    parsers: Optional[Sequence[BaseParser]] = ...
+    authenticators: Optional[Sequence[BaseAuthentication]] = ...
+    negotiator: Optional[BaseContentNegotiation] = ...
     parser_context: Optional[Dict[str, Any]] = ...
     def __init__(
         self,
         request: HttpRequest,
-        parsers: Optional[Sequence[Type[BaseParser]]] = ...,
-        authenticators: Optional[Sequence[Type[BaseAuthentication]]] = ...,
+        parsers: Optional[Sequence[BaseParser]] = ...,
+        authenticators: Optional[Sequence[BaseAuthentication]] = ...,
         negotiator: Optional[BaseContentNegotiation] = ...,
         parser_context: Optional[Dict[str, Any]] = ...,
     ) -> None: ...
