@@ -1,7 +1,8 @@
 from mypy.nodes import TypeInfo, Var
 from mypy.plugin import FunctionContext
 from mypy.types import AnyType, Instance, Type, TypeOfAny
-from mypy_django_plugin import helpers
+
+from mypy_drf_plugin import helpers
 
 
 def get_private_descriptor_type(type_info: TypeInfo, private_field_name: str, is_nullable: bool) -> Type:

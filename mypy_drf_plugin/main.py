@@ -1,26 +1,38 @@
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Union
 
 from mypy.nodes import TypeInfo
-from mypy.plugin import ClassDefContext, FunctionContext, MethodContext, Plugin
-from mypy.types import Type
+from mypy.plugin import ClassDefContext, FunctionContext, MethodContext, Plugin, AttributeContext
+from mypy.types import Instance, Type
 
 from mypy_drf_plugin import helpers
-from mypy_drf_plugin.transformers import fields, validation
+from mypy_drf_plugin.transformers import fields, serializers, validation
 
 
-def make_meta_nested_class_inherit_from_any(ctx: ClassDefContext) -> None:
-    meta_node = helpers.get_nested_meta_node_for_current_class(ctx.cls.info)
-    if meta_node is None:
+def extract_base_model_fullname(serializer_type: Type) -> Optional[str]:
+    if not isinstance(serializer_type, Instance):
         return None
-    meta_node.fallback_to_any = True
+
+    base_model_fullname = helpers.get_drf_metadata(serializer_type.type).get('base_model')
+    if not base_model_fullname:
+        return None
+
+    return base_model_fullname
 
 
-def transform_serializer_class(ctx: ClassDefContext) -> None:
-    sym = ctx.api.lookup_fully_qualified_or_none(helpers.BASE_SERIALIZER_FULLNAME)
-    if sym is not None and isinstance(sym.node, TypeInfo):
-        sym.node.metadata['django']['modelform_bases'][ctx.cls.fullname] = 1
+def get_instance_of_model_bound_to_serializer(ctx: MethodContext) -> Type:
+    base_model_fullname = extract_base_model_fullname(ctx.type)
+    if not base_model_fullname:
+        return ctx.default_return_type
 
-    make_meta_nested_class_inherit_from_any(ctx)
+    return ctx.api.named_generic_type(base_model_fullname, [])
+
+
+def get_instance_of_model_bound_to_serializer_instance_attribute(ctx: AttributeContext) -> Type:
+    base_model_fullname = extract_base_model_fullname(ctx.type)
+    if not base_model_fullname:
+        return ctx.default_attr_type
+
+    return helpers.make_optional(ctx.api.named_generic_type(base_model_fullname, []))
 
 
 class DRFPlugin(Plugin):
@@ -29,9 +41,9 @@ class DRFPlugin(Plugin):
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):
             return (base_serializer_sym.node.metadata
                     .setdefault('django', {})
-                    .setdefault('modelform_bases', {helpers.BASE_SERIALIZER_FULLNAME: 1,
-                                                    helpers.MODEL_SERIALIZER_FULLNAME: 1,
-                                                    helpers.SERIALIZER_FULLNAME: 1}))
+                    .setdefault('serializer_bases', {helpers.BASE_SERIALIZER_FULLNAME: 1,
+                                                     helpers.MODEL_SERIALIZER_FULLNAME: 1,
+                                                     helpers.SERIALIZER_FULLNAME: 1}))
         else:
             return {}
 
@@ -45,14 +57,25 @@ class DRFPlugin(Plugin):
     def get_method_hook(self, fullname: str
                         ) -> Optional[Callable[[MethodContext], Type]]:
         class_name, _, method_name = fullname.rpartition('.')
-        if method_name == 'run_validation' and class_name in self._get_currently_defined_serializers():
-            return validation.return_typeddict_from_run_validation
+        if method_name == 'run_validation':
+            if class_name in self._get_currently_defined_serializers():
+                return validation.return_typeddict_from_run_validation
+
+        if method_name in {'create', 'save'}:
+            if class_name in self._get_currently_defined_serializers():
+                return get_instance_of_model_bound_to_serializer
 
     def get_base_class_hook(self, fullname: str
                             ) -> Optional[Callable[[ClassDefContext], None]]:
         if fullname in self._get_currently_defined_serializers():
-            return transform_serializer_class
+            return serializers.transform_serializer_class
 
+    def get_attribute_hook(self, fullname: str
+                           ):
+        class_name, _, method_name = fullname.rpartition('.')
+        if method_name == 'instance':
+            if class_name in self._get_currently_defined_serializers():
+                return get_instance_of_model_bound_to_serializer_instance_attribute
 
 def plugin(version):
     return DRFPlugin

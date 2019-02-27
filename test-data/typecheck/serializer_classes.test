@@ -9,3 +9,20 @@ class SerializerB(serializers.Serializer):
 class SerializerC(SerializerA, SerializerB):
     pass
 [/CASE]
+
+[CASE model_serializer_save_returns_bound_model_instance]
+from django.db import models
+from rest_framework.serializers import ModelSerializer
+
+class Article(models.Model):
+    pass
+class ArticleSerializer(ModelSerializer):
+    class Meta:
+        model = Article
+
+serializer = ArticleSerializer(data={})
+reveal_type(serializer.instance)  # E: Revealed type is 'Union[main.Article, None]'
+serializer.is_valid()
+reveal_type(serializer.create({}))  # E: Revealed type is 'main.Article'
+reveal_type(serializer.save())  # E: Revealed type is 'main.Article'
+[/CASE]
