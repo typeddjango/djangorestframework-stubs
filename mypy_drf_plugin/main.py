@@ -66,7 +66,7 @@ class DRFPlugin(Plugin):
         sym = self.lookup_fully_qualified(fullname)
         if sym is not None and isinstance(sym.node, TypeInfo):
             if sym.node.has_base(helpers.FIELD_FULLNAME):
-                return fields.fill_parameters_of_descriptor_methods_from_private_attributes
+                return fields.set_generic_parameters_for_field
 
     def get_method_hook(self, fullname: str
                         ) -> Optional[Callable[[MethodContext], Type]]:
@@ -77,6 +77,13 @@ class DRFPlugin(Plugin):
 
             if class_name in self._get_currently_defined_list_serializers():
                 return validation.return_list_of_typeddict_for_list_serializer_from_to_representation
+
+        if method_name in {'to_internal_value', 'run_validation'}:
+            if class_name in self._get_currently_defined_serializers():
+                return validation.return_typeddict_from_to_internal_value
+
+            if class_name in self._get_currently_defined_list_serializers():
+                return validation.return_list_of_typeddict_for_list_serializer_from_to_internal_value
 
         if method_name in {'create', 'save'}:
             if class_name in self._get_currently_defined_serializers():

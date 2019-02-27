@@ -38,10 +38,12 @@ class CreateOnlyDefault(object):
 
 class SkipField(Exception): ...
 
-_GT = TypeVar("_GT")
+_FT = TypeVar("_FT")  # Field Type
+_FPT = TypeVar("_FPT")  # Field Primitive Type
 
-class Field(Generic[_GT]):
-    _pyi_private_get_type: Any
+class Field(Generic[_FT, _FPT]):
+    _pyi_field_actual_type: Any
+    _pyi_field_primitive_type: str
 
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
@@ -90,24 +92,23 @@ class Field(Generic[_GT]):
     def root(self) -> BaseSerializer: ...
     @property
     def context(self) -> Dict[str, Any]: ...
-    def __get__(self, instance, owner) -> _GT: ...
 
 class BooleanField(Field):
-    _pyi_private_get_type: bool
+    _pyi_field_actual_type: bool
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
 class NullBooleanField(Field):
-    _pyi_private_get_type: Optional[bool]
+    _pyi_field_actual_type: Optional[bool]
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
 class CharField(Field):
-    _pyi_private_get_type: str
+    _pyi_field_actual_type: str
     def __init__(
         self,
         read_only: bool = ...,
@@ -164,7 +165,7 @@ class SlugField(CharField):
 class URLField(CharField): ...
 
 class UUIDField(Field):
-    _pyi_private_field_get_type: uuid.UUID
+    _pyi_field_actual_type: uuid.UUID
     valid_formats: Sequence[str] = ...
     def __init__(
         self,
@@ -200,7 +201,7 @@ class IPAddressField(CharField):
     ): ...
 
 class IntegerField(Field):
-    _pyi_private_field_get_type: int
+    _pyi_field_actual_type: int
 
     MAX_STRING_LENGTH: str = ...
     re_decimal: Pattern = ...
@@ -220,7 +221,7 @@ class IntegerField(Field):
     ): ...
 
 class FloatField(Field):
-    _pyi_private_field_get_type: float
+    _pyi_field_actual_type: float
 
     MAX_STRING_LENGTH: int = ...
     def __init__(
@@ -263,7 +264,7 @@ class DecimalField(Field):
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
 
 class DateTimeField(Field):
-    _pyi_private_field_get_type: datetime.datetime
+    _pyi_field_actual_type: datetime.datetime
 
     datetime_parser: Callable = ...
     def __init__(
@@ -286,7 +287,7 @@ class DateTimeField(Field):
     def default_timezone(self) -> Optional[str]: ...
 
 class DateField(Field):
-    _pyi_private_field_get_type: datetime.date
+    _pyi_field_actual_type: datetime.date
 
     datetime_parser: Callable = ...
     def __init__(
@@ -305,7 +306,7 @@ class DateField(Field):
     ): ...
 
 class TimeField(Field):
-    _pyi_private_field_get_type: datetime.time
+    _pyi_field_actual_type: datetime.time
 
     datetime_parser: Callable = ...
     def __init__(

@@ -1,23 +1,51 @@
-[CASE serializer_to_representation_returns_typeddict_of_fields]
+[CASE serializer_to_internal_value_returns_typeddict_of_fields]
 from rest_framework import serializers
 
 class MySerializer(serializers.Serializer):
     name = serializers.CharField()
+    dt = serializers.DateTimeField()
 
 szr = MySerializer()
 instance = object()
-reveal_type(szr.to_representation(instance))  # E: Revealed type is 'TypedDict('builtins.object', {'name': builtins.str})'
+reveal_type(szr.run_validation(instance))  # E: Revealed type is 'TypedDict('builtins.object', {'name': builtins.str, 'dt': datetime.datetime})'
+reveal_type(szr.to_internal_value(instance))  # E: Revealed type is 'TypedDict('builtins.object', {'name': builtins.str, 'dt': datetime.datetime})'
 [/CASE]
 
-[CASE list_serializer_to_representation_returns_list_of_typeddicts]
+[CASE list_serializer_to_internal_value_returns_list_of_typeddicts]
 from rest_framework import serializers
 
 class MySerializer(serializers.Serializer):
     name = serializers.CharField()
+    dt = serializers.DateTimeField()
 class MyListSerializer(serializers.ListSerializer):
     child = MySerializer()
 
 list_szr = MyListSerializer()
 instance = object()
-reveal_type(list_szr.to_representation(instance))  # E: Revealed type is 'builtins.list[TypedDict('builtins.object', {'name': builtins.str})]'
+reveal_type(list_szr.run_validation(instance))  # E: Revealed type is 'builtins.list[TypedDict('builtins.object', {'name': builtins.str, 'dt': datetime.datetime})]'
+reveal_type(list_szr.to_internal_value(instance))  # E: Revealed type is 'builtins.list[TypedDict('builtins.object', {'name': builtins.str, 'dt': datetime.datetime})]'
+[/CASE]
+
+[CASE serializer_to_representation_returns_typeddict_of_primitive_types]
+from rest_framework import serializers
+
+class MySerializer(serializers.Serializer):
+    dt = serializers.DateTimeField()
+
+szr = MySerializer()
+instance = object()
+reveal_type(szr.to_representation(instance))  # E: Revealed type is 'TypedDict('builtins.object', {'dt': builtins.str})'
+[/CASE]
+
+[CASE list_serializer_to_representation_returns_list_of_typeddicts_of_primitive_types]
+from rest_framework import serializers
+
+class MySerializer(serializers.Serializer):
+    dt = serializers.DateTimeField()
+class MyListSerializer(serializers.ListSerializer):
+    child = MySerializer()
+
+list_szr = MyListSerializer()
+instance = object()
+reveal_type(list_szr.to_representation(instance))  # E: Revealed type is 'builtins.list[TypedDict('builtins.object', {'dt': builtins.str})]'
 [/CASE]
