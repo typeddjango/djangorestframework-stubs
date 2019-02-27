@@ -24,7 +24,10 @@ def get_instance_of_model_bound_to_serializer(ctx: MethodContext) -> Type:
     if not base_model_fullname:
         return ctx.default_return_type
 
-    return ctx.api.named_generic_type(base_model_fullname, [])
+    try:
+        return ctx.api.named_generic_type(base_model_fullname, [])
+    except AssertionError:  # cannot find a model with name
+        return ctx.default_return_type
 
 
 def get_instance_of_model_bound_to_serializer_instance_attribute(ctx: AttributeContext) -> Type:
