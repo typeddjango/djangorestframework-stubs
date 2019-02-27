@@ -10,6 +10,7 @@ from mypy_django_plugin.helpers import get_argument_by_name, get_argument_type_b
 FIELD_FULLNAME = 'rest_framework.fields.Field'
 BASE_SERIALIZER_FULLNAME = 'rest_framework.serializers.BaseSerializer'
 SERIALIZER_FULLNAME = 'rest_framework.serializers.Serializer'
+LIST_SERIALIZER_FULLNAME = 'rest_framework.serializers.ListSerializer'
 MODEL_SERIALIZER_FULLNAME = 'rest_framework.serializers.ModelSerializer'
 
 

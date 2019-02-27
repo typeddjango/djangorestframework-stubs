@@ -1,7 +1,7 @@
-from typing import Callable, Dict, Optional, Union
+from typing import Callable, Dict, Optional
 
 from mypy.nodes import TypeInfo
-from mypy.plugin import ClassDefContext, FunctionContext, MethodContext, Plugin, AttributeContext
+from mypy.plugin import AttributeContext, ClassDefContext, FunctionContext, MethodContext, Plugin
 from mypy.types import Instance, Type
 
 from mypy_drf_plugin import helpers
@@ -40,12 +40,23 @@ class DRFPlugin(Plugin):
         base_serializer_sym = self.lookup_fully_qualified(helpers.BASE_SERIALIZER_FULLNAME)
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):
             return (base_serializer_sym.node.metadata
-                    .setdefault('django', {})
+                    .setdefault('drf', {})
                     .setdefault('serializer_bases', {helpers.BASE_SERIALIZER_FULLNAME: 1,
                                                      helpers.MODEL_SERIALIZER_FULLNAME: 1,
                                                      helpers.SERIALIZER_FULLNAME: 1}))
         else:
             return {}
+
+    def _get_currently_defined_list_serializers(self) -> Dict[str, int]:
+        list_serializer_sym = self.lookup_fully_qualified(helpers.LIST_SERIALIZER_FULLNAME)
+        if list_serializer_sym is not None and isinstance(list_serializer_sym.node, TypeInfo):
+            return (helpers.get_drf_metadata(list_serializer_sym.node)
+                    .setdefault('list_serializer_bases', {helpers.LIST_SERIALIZER_FULLNAME: 1}))
+        else:
+            return {}
+
+    def _get_defined_serializer_base_classes(self) -> Dict[str, int]:
+        return {**self._get_currently_defined_serializers(), **self._get_currently_defined_list_serializers()}
 
     def get_function_hook(self, fullname: str
                           ) -> Optional[Callable[[FunctionContext], Type]]:
@@ -57,9 +68,12 @@ class DRFPlugin(Plugin):
     def get_method_hook(self, fullname: str
                         ) -> Optional[Callable[[MethodContext], Type]]:
         class_name, _, method_name = fullname.rpartition('.')
-        if method_name == 'run_validation':
+        if method_name == 'to_representation':
             if class_name in self._get_currently_defined_serializers():
-                return validation.return_typeddict_from_run_validation
+                return validation.return_typeddict_from_to_representation
+
+            if class_name in self._get_currently_defined_list_serializers():
+                return validation.return_list_of_typeddict_for_list_serializer_from_to_representation
 
         if method_name in {'create', 'save'}:
             if class_name in self._get_currently_defined_serializers():
@@ -67,7 +81,7 @@ class DRFPlugin(Plugin):
 
     def get_base_class_hook(self, fullname: str
                             ) -> Optional[Callable[[ClassDefContext], None]]:
-        if fullname in self._get_currently_defined_serializers():
+        if fullname in self._get_defined_serializer_base_classes():
             return serializers.transform_serializer_class
 
     def get_attribute_hook(self, fullname: str
@@ -76,6 +90,7 @@ class DRFPlugin(Plugin):
         if method_name == 'instance':
             if class_name in self._get_currently_defined_serializers():
                 return get_instance_of_model_bound_to_serializer_instance_attribute
+
 
 def plugin(version):
     return DRFPlugin

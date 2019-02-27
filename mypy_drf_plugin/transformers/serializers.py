@@ -20,13 +20,19 @@ def save_model_class_to_serializer_metadata(ctx: ClassDefContext) -> None:
     if base_model is None:
         return None
 
-    ctx.cls.info.metadata.setdefault('drf', {})['base_model'] = base_model.fullname
+    helpers.get_drf_metadata(ctx.cls.info)['base_model'] = base_model.fullname
 
 
 def transform_serializer_class(ctx: ClassDefContext) -> None:
-    sym = ctx.api.lookup_fully_qualified_or_none(helpers.BASE_SERIALIZER_FULLNAME)
-    if sym is not None and isinstance(sym.node, TypeInfo):
-        sym.node.metadata['django']['serializer_bases'][ctx.cls.fullname] = 1
+    if ctx.cls.info.has_base(helpers.LIST_SERIALIZER_FULLNAME):
+        sym = ctx.api.lookup_fully_qualified_or_none(helpers.LIST_SERIALIZER_FULLNAME)
+        if sym is not None and isinstance(sym.node, TypeInfo):
+            helpers.get_drf_metadata(sym.node)['list_serializer_bases'][ctx.cls.fullname] = 1
+    else:
+        sym = ctx.api.lookup_fully_qualified_or_none(helpers.BASE_SERIALIZER_FULLNAME)
+        if sym is not None and isinstance(sym.node, TypeInfo):
+            helpers.get_drf_metadata(sym.node)['serializer_bases'][ctx.cls.fullname] = 1
+
+        save_model_class_to_serializer_metadata(ctx)
 
     make_meta_nested_class_inherit_from_any(ctx)
-    save_model_class_to_serializer_metadata(ctx)
