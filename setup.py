@@ -23,9 +23,8 @@ with open('README.md', 'r') as f:
 dependencies = [
     'djangorestframework>=3.9.0'
     'mypy>=0.670',
-    'typing-extensions',
-    'django-stubs',
-    'key-typeddict'
+    'django-stubs>=0.8.0',
+    'typing-extensions'
 ]
 if sys.version_info[:2] < (3, 7):
     # dataclasses port for 3.6
