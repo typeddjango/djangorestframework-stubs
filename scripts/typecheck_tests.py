@@ -43,7 +43,9 @@ IGNORED_ERRORS = [
     'Value of type "Optional[str]" is not indexable',
     'Argument 1 to "QueryDict" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, bytes, None]"',
     'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object"; expected "QuerySet[Any]"',
-    'has incompatible type "Dict[<nothing>, <nothing>]"; expected "Request"'
+    'has incompatible type "Dict[<nothing>, <nothing>]"; expected "Request"',
+    'Argument 1 to "render" has incompatible type "Dict[<nothing>, <nothing>]"; expected "HttpRequest"',
+    'Cannot infer type of lambda'
 ]
 
 MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
