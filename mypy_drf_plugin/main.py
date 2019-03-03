@@ -1,10 +1,11 @@
 from typing import Callable, Dict, Optional
 
 from mypy.nodes import TypeInfo
+from mypy.options import Options
 from mypy.plugin import AttributeContext, ClassDefContext, FunctionContext, MethodContext, Plugin
 from mypy.types import Instance, Type
 
-from mypy_drf_plugin import helpers
+from mypy_drf_plugin import helpers, monkeypatch
 from mypy_drf_plugin.transformers import fields, serializers, validation
 
 
@@ -39,6 +40,10 @@ def get_instance_of_model_bound_to_serializer_instance_attribute(ctx: AttributeC
 
 
 class DRFPlugin(Plugin):
+    def __init__(self, options: Options) -> None:
+        super().__init__(options)
+        monkeypatch.make_field_repr_not_return_any_generics()
+
     def _get_currently_defined_serializers(self) -> Dict[str, int]:
         base_serializer_sym = self.lookup_fully_qualified(helpers.BASE_SERIALIZER_FULLNAME)
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):

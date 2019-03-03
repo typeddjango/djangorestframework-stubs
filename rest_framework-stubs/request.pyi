@@ -3,7 +3,7 @@ from types import TracebackType
 from typing import Any, ContextManager, Dict, Iterator, Optional, Sequence, Tuple, Type
 
 from django.db.models.base import Model
-from django.http import HttpRequest
+from django.http import HttpRequest, QueryDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
@@ -36,8 +36,8 @@ class ForcedAuthentication:
     def authenticate(self, request: Request) -> Tuple[Optional[Model], Optional[Any]]: ...
 
 class Request(HttpRequest):
-    user: Optional[Model]
-    auth: Optional[Any]
+    user: Any
+    auth: Any
 
     parsers: Optional[Sequence[BaseParser]] = ...
     authenticators: Optional[Sequence[BaseAuthentication]] = ...
@@ -57,7 +57,7 @@ class Request(HttpRequest):
     @property
     def stream(self) -> Any: ...
     @property
-    def query_params(self) -> Dict[str, Any]: ...
+    def query_params(self) -> QueryDict: ...
     @property
     def data(self) -> Dict[str, Any]: ...
     @property

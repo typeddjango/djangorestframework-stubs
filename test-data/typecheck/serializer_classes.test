@@ -26,3 +26,20 @@ serializer.is_valid()
 reveal_type(serializer.create({}))  # E: Revealed type is 'main.Article'
 reveal_type(serializer.save())  # E: Revealed type is 'main.Article'
 [/CASE]
+
+[CASE serializer_model_defined_as_string_name]
+from rest_framework.serializers import ModelSerializer
+from apps.models import Article
+
+class ArticleSerializer(ModelSerializer):
+    class Meta:
+        model = 'apps.Article'
+serializer = ArticleSerializer(data={})
+reveal_type(serializer.create({}))  # E: Revealed type is 'apps.models.Article'
+
+[file apps/__init__.py]
+[file apps/models.py]
+from django.db import models
+class Article(models.Model):
+    pass
+[/CASE]

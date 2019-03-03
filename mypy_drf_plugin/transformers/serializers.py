@@ -1,5 +1,8 @@
-from mypy.nodes import TypeInfo
+from typing import cast
+
+from mypy.nodes import StrExpr, TypeInfo
 from mypy.plugin import ClassDefContext
+from mypy.semanal import SemanticAnalyzerPass2
 
 from mypy_drf_plugin import helpers
 
@@ -20,7 +23,14 @@ def save_model_class_to_serializer_metadata(ctx: ClassDefContext) -> None:
     if base_model is None:
         return None
 
-    helpers.get_drf_metadata(ctx.cls.info)['base_model'] = base_model.fullname
+    api = cast(SemanticAnalyzerPass2, ctx.api)
+    if isinstance(base_model, StrExpr):
+        base_model_fullname = helpers.get_model_fullname_from_string(base_model.value,
+                                                                     all_modules=api.modules)
+    else:
+        base_model_fullname = base_model.fullname
+
+    helpers.get_drf_metadata(ctx.cls.info)['base_model'] = base_model_fullname
 
 
 def transform_serializer_class(ctx: ClassDefContext) -> None:

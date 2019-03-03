@@ -18,6 +18,7 @@ from typing import (
     Iterable,
     Protocol,
     Type,
+    Mapping,
 )
 
 from django.db import models
@@ -41,6 +42,8 @@ class SkipField(Exception): ...
 _FT = TypeVar("_FT")  # Field Type
 _FPT = TypeVar("_FPT")  # Field Primitive Type
 
+_Validator = Callable[[Any], None]
+
 class Field(Generic[_FT, _FPT]):
     _pyi_field_actual_type: Any
     _pyi_field_primitive_type: str
@@ -49,17 +52,8 @@ class Field(Generic[_FT, _FPT]):
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
     initial: Optional[Any] = ...
-
-    read_only: bool
-    write_only: bool
-    required: bool
-    default: Any
-    label: str
-    help_text: Optional[str]
-    style: Dict[str, Any]
-    allow_null: bool
-    field_name: Optional[str]
     parent: Optional[Field]
+    validators: Optional[List[_Validator]]
     def __init__(
         self,
         read_only: bool = ...,
@@ -68,15 +62,13 @@ class Field(Generic[_FT, _FPT]):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
-    @property
-    def validators(self) -> List[Callable]: ...
-    @validators.setter
-    def validators(self, validators: List[Callable]) -> None: ...
     def get_validators(self) -> List[Callable]: ...
     def get_initial(self) -> Any: ...
     def get_value(self, dictionary: Any) -> Any: ...
@@ -93,21 +85,21 @@ class Field(Generic[_FT, _FPT]):
     @property
     def context(self) -> Dict[str, Any]: ...
 
-class BooleanField(Field):
+class BooleanField(Field[_FT, _FPT]):
     _pyi_field_actual_type: bool
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
-class NullBooleanField(Field):
+class NullBooleanField(Field[_FT, _FPT]):
     _pyi_field_actual_type: Optional[bool]
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
-class CharField(Field):
+class CharField(Field[_FT, _FPT]):
     _pyi_field_actual_type: str
     def __init__(
         self,
@@ -117,18 +109,20 @@ class CharField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
         min_length: int = ...,
         max_length: int = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class EmailField(CharField): ...
+class EmailField(CharField[_FT, _FPT]): ...
 
-class RegexField(CharField):
+class RegexField(CharField[_FT, _FPT]):
     def __init__(
         self,
         regex: Union[str, Pattern],
@@ -138,12 +132,18 @@ class RegexField(CharField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        allow_blank: bool = ...,
+        trim_whitespace: bool = ...,
+        min_length: int = ...,
+        max_length: int = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class SlugField(CharField):
+class SlugField(CharField[_FT, _FPT]):
     def __init__(
         self,
         allow_unicode: bool = ...,
@@ -153,18 +153,20 @@ class SlugField(CharField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
         min_length: int = ...,
         max_length: int = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class URLField(CharField): ...
+class URLField(CharField[_FT, _FPT]): ...
 
-class UUIDField(Field):
+class UUIDField(Field[_FT, _FPT]):
     _pyi_field_actual_type: uuid.UUID
     valid_formats: Sequence[str] = ...
     def __init__(
@@ -176,12 +178,14 @@ class UUIDField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class IPAddressField(CharField):
+class IPAddressField(CharField[_FT, _FPT]):
     def __init__(
         self,
         protocol: str = ...,
@@ -191,16 +195,18 @@ class IPAddressField(CharField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
         min_length: int = ...,
         max_length: int = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class IntegerField(Field):
+class IntegerField(Field[_FT, _FPT]):
     _pyi_field_actual_type: int
 
     MAX_STRING_LENGTH: str = ...
@@ -215,12 +221,14 @@ class IntegerField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class FloatField(Field):
+class FloatField(Field[_FT, _FPT]):
     _pyi_field_actual_type: float
 
     MAX_STRING_LENGTH: int = ...
@@ -234,12 +242,14 @@ class FloatField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class DecimalField(Field):
+class DecimalField(Field[_FT, _FPT]):
     MAX_STRING_LENGTH: int = ...
     def __init__(
         self,
@@ -256,14 +266,16 @@ class DecimalField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
 
-class DateTimeField(Field):
+class DateTimeField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.datetime
 
     datetime_parser: Callable = ...
@@ -279,14 +291,16 @@ class DateTimeField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...
     ): ...
     def enforce_timezone(self, value: Any) -> Any: ...
     def default_timezone(self) -> Optional[str]: ...
 
-class DateField(Field):
+class DateField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.date
 
     datetime_parser: Callable = ...
@@ -300,12 +314,14 @@ class DateField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class TimeField(Field):
+class TimeField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.time
 
     datetime_parser: Callable = ...
@@ -319,12 +335,14 @@ class TimeField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class DurationField(Field):
+class DurationField(Field[_FT, _FPT]):
     max_value: Any
     min_value: Any
     def __init__(
@@ -337,14 +355,16 @@ class DurationField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
 # Choice types...
 
-class ChoiceField(Field):
+class ChoiceField(Field[_FT, _FPT]):
     choices: Sequence[Any]
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
@@ -360,15 +380,17 @@ class ChoiceField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
     def _get_choices(self) -> Sequence[Any]: ...
     def _set_choices(self, choices: Sequence[Any]) -> None: ...
 
-class MultipleChoiceField(ChoiceField):
+class MultipleChoiceField(ChoiceField[_FT, _FPT]):
     def __init__(
         self,
         choices: Sequence[Any],
@@ -382,12 +404,14 @@ class MultipleChoiceField(ChoiceField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class FilePathField(ChoiceField):
+class FilePathField(ChoiceField[_FT, _FPT]):
     def __init__(
         self,
         path: str = ...,
@@ -402,12 +426,14 @@ class FilePathField(ChoiceField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class FileField(Field):
+class FileField(Field[_FT, _FPT]):
     max_length: int
     allow_empty_file: bool
     def __init__(
@@ -421,15 +447,17 @@ class FileField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
-class ImageField(FileField):
+class ImageField(FileField[_FT, _FPT]):
     _DjangoImageField: SupportsToPython
     def __init__(
         self,
@@ -443,14 +471,16 @@ class ImageField(FileField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class _UnvalidatedField(Field): ...
+class _UnvalidatedField(Field[_FT, _FPT]): ...
 
-class ListField(Field):
+class ListField(Field[_FT, _FPT]):
     child: Field = ...
     allow_empty: bool = ...
     max_length: int = ...
@@ -467,13 +497,15 @@ class ListField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
-class DictField(Field):
+class DictField(Field[_FT, _FPT]):
     child: Field = ...
     def __init__(
         self,
@@ -484,16 +516,18 @@ class DictField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
-class HStoreField(DictField):
+class HStoreField(DictField[_FT, _FPT]):
     child: CharField = ...
 
-class JSONField(Field):
+class JSONField(Field[_FT, _FPT]):
     def __init__(
         self,
         binary: bool = ...,
@@ -503,15 +537,17 @@ class JSONField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class ReadOnlyField(Field): ...
-class HiddenField(Field): ...
+class ReadOnlyField(Field[_FT, _FPT]): ...
+class HiddenField(Field[_FT, _FPT]): ...
 
-class SerializerMethodField(Field):
+class SerializerMethodField(Field[_FT, _FPT]):
     method_name: str
     def __init__(
         self,
@@ -522,12 +558,14 @@ class SerializerMethodField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
 
-class ModelField(Field):
+class ModelField(Field[_FT, _FPT]):
     model_field: models.Field
     def __init__(
         self,
@@ -539,7 +577,9 @@ class ModelField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        **kwargs
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
     ): ...
