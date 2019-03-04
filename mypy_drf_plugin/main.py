@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Sequence
 
 from mypy.nodes import TypeInfo
 from mypy.options import Options
@@ -31,12 +31,13 @@ def get_instance_of_model_bound_to_serializer(ctx: MethodContext) -> Type:
         return ctx.default_return_type
 
 
-def get_instance_of_model_bound_to_serializer_instance_attribute(ctx: AttributeContext) -> Type:
-    base_model_fullname = extract_base_model_fullname(ctx.type)
-    if not base_model_fullname:
-        return ctx.default_attr_type
+class BaseClassTransformers:
+    def __init__(self, hooks: Sequence[Callable]):
+        self.hooks = hooks
 
-    return helpers.make_optional(ctx.api.named_generic_type(base_model_fullname, []))
+    def __call__(self, ctx: ClassDefContext) -> None:
+        for hook in self.hooks:
+            hook(ctx)
 
 
 class DRFPlugin(Plugin):
@@ -65,6 +66,14 @@ class DRFPlugin(Plugin):
 
     def _get_defined_serializer_base_classes(self) -> Dict[str, int]:
         return {**self._get_currently_defined_serializers(), **self._get_currently_defined_list_serializers()}
+
+    def _get_defined_field_base_classes(self) -> Dict[str, int]:
+        base_field_sym = self.lookup_fully_qualified(helpers.FIELD_FULLNAME)
+        if base_field_sym is not None and isinstance(base_field_sym.node, TypeInfo):
+            return (helpers.get_drf_metadata(base_field_sym.node)
+                    .setdefault('field_bases', {helpers.FIELD_FULLNAME: 1}))
+        else:
+            return {}
 
     def get_function_hook(self, fullname: str
                           ) -> Optional[Callable[[FunctionContext], Type]]:
@@ -97,14 +106,11 @@ class DRFPlugin(Plugin):
     def get_base_class_hook(self, fullname: str
                             ) -> Optional[Callable[[ClassDefContext], None]]:
         if fullname in self._get_defined_serializer_base_classes():
-            return serializers.transform_serializer_class
+            return BaseClassTransformers([serializers.transform_serializer_class,
+                                          fields.set_types_metadata])
 
-    def get_attribute_hook(self, fullname: str
-                           ):
-        class_name, _, method_name = fullname.rpartition('.')
-        if method_name == 'instance':
-            if class_name in self._get_currently_defined_serializers():
-                return get_instance_of_model_bound_to_serializer_instance_attribute
+        if fullname in self._get_defined_field_base_classes():
+            return fields.set_types_metadata
 
 
 def plugin(version):

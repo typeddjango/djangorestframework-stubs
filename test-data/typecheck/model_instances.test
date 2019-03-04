@@ -21,7 +21,6 @@ class ArticleSerializer(ModelSerializer):
         model = Article
 
 serializer = ArticleSerializer(data={})
-reveal_type(serializer.instance)  # E: Revealed type is 'Union[main.Article, None]'
 serializer.is_valid()
 reveal_type(serializer.create({}))  # E: Revealed type is 'main.Article'
 reveal_type(serializer.save())  # E: Revealed type is 'main.Article'

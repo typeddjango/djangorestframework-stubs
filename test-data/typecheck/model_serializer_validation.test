@@ -1,0 +1,15 @@
+[CASE model_instance_to_representation]
+from django.db import models
+from rest_framework import serializers
+
+class Article(models.Model):
+    name = models.CharField(max_length=100)
+
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ('id', 'name')
+
+article = Article()
+reveal_type(ArticleSerializer().to_representation(article))  # E: Revealed type is 'TypedDict('builtins.dict', {'id': builtins.int, 'name': builtins.str})'
+[/CASE]

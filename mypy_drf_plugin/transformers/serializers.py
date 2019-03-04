@@ -1,6 +1,6 @@
 from typing import cast
 
-from mypy.nodes import StrExpr, TypeInfo
+from mypy.nodes import StrExpr, TypeInfo, TupleExpr, ListExpr, SetExpr
 from mypy.plugin import ClassDefContext
 from mypy.semanal import SemanticAnalyzerPass2
 
@@ -15,12 +15,8 @@ def make_meta_nested_class_inherit_from_any(ctx: ClassDefContext) -> None:
 
 
 def save_model_class_to_serializer_metadata(ctx: ClassDefContext) -> None:
-    meta_info = helpers.get_nested_meta_node_for_current_class(ctx.cls.info)
-    if meta_info is None:
-        return None
-
-    base_model = helpers.get_assigned_value_for_class(meta_info, 'model')
-    if base_model is None:
+    base_model = helpers.get_meta_attribute_value(ctx, 'model')
+    if not base_model:
         return None
 
     api = cast(SemanticAnalyzerPass2, ctx.api)
@@ -31,6 +27,20 @@ def save_model_class_to_serializer_metadata(ctx: ClassDefContext) -> None:
         base_model_fullname = base_model.fullname
 
     helpers.get_drf_metadata(ctx.cls.info)['base_model'] = base_model_fullname
+
+
+def save_fields_sequence_to_serializer_metadata(ctx: ClassDefContext) -> None:
+    fields = helpers.get_meta_attribute_value(ctx, 'fields')
+    if not fields:
+        return None
+
+    field_names = []
+    if isinstance(fields, (TupleExpr, ListExpr, SetExpr)):
+        for field_expr in fields.items:
+            if isinstance(field_expr, StrExpr):
+                field_names.append(field_expr.value)
+
+    helpers.get_drf_metadata(ctx.cls.info)['fields'] = field_names
 
 
 def transform_serializer_class(ctx: ClassDefContext) -> None:
@@ -44,5 +54,6 @@ def transform_serializer_class(ctx: ClassDefContext) -> None:
             helpers.get_drf_metadata(sym.node)['serializer_bases'][ctx.cls.fullname] = 1
 
         save_model_class_to_serializer_metadata(ctx)
+        save_fields_sequence_to_serializer_metadata(ctx)
 
     make_meta_nested_class_inherit_from_any(ctx)
