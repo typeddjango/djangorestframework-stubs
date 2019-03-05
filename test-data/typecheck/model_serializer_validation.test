@@ -13,3 +13,22 @@ class ArticleSerializer(serializers.ModelSerializer):
 article = Article()
 reveal_type(ArticleSerializer().to_representation(article))  # E: Revealed type is 'TypedDict('builtins.dict', {'id': builtins.int, 'name': builtins.str})'
 [/CASE]
+
+[CASE additional_fields_could_be_defined_in_serializer_even_if_not_present_in_model]
+from django.db import models
+from rest_framework import serializers
+
+class Article(models.Model):
+    name = models.CharField(max_length=100)
+
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ('name', 'age')
+    age = serializers.IntegerField()
+
+article = Article()
+reveal_type(ArticleSerializer().to_internal_value(object()))  # E: Revealed type is 'TypedDict('builtins.dict', {'age': builtins.int, 'name': builtins.str})'
+reveal_type(ArticleSerializer().run_validation(object()))  # E: Revealed type is 'TypedDict('builtins.dict', {'age': builtins.int, 'name': builtins.str})'
+reveal_type(ArticleSerializer().to_representation(article))  # E: Revealed type is 'TypedDict('builtins.dict', {'age': builtins.int, 'name': builtins.str})'
+[/CASE]

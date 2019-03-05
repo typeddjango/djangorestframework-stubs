@@ -77,7 +77,7 @@ def get_corresponding_typeddict(serializer_type: Instance,
                                 api: CheckerPluginInterface,
                                 use_primitive_types: bool = False) -> Type:
     typeddict_items = OrderedDict()  # type: OrderedDict[str, Type]
-    for base in reversed(serializer_type.type.mro):
+    for base in serializer_type.type.mro:
         for name, sym in base.names.items():
             if name in typeddict_items:
                 continue
@@ -105,6 +105,9 @@ def get_corresponding_typeddict(serializer_type: Instance,
 
                     if sym and isinstance(sym.type, Instance) and sym.type.type.has_base(django_helpers.FIELD_FULLNAME):
                         typeddict_items[field_name] = get_type_for_model_field(sym.type, api=api)
+                        continue
+
+                    typeddict_items[field_name] = AnyType(TypeOfAny.from_unimported_type)
 
     return TypedDictType(items=typeddict_items,
                          required_keys=set(typeddict_items.keys()),

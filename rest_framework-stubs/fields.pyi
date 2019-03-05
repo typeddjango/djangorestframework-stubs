@@ -46,7 +46,7 @@ _Validator = Callable[[Any], None]
 
 class Field(Generic[_FT, _FPT]):
     _pyi_field_actual_type: Any
-    _pyi_field_primitive_type: str
+    _pyi_field_primitive_type: Any
 
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
@@ -87,6 +87,7 @@ class Field(Generic[_FT, _FPT]):
 
 class BooleanField(Field[_FT, _FPT]):
     _pyi_field_actual_type: bool
+    _pyi_field_primitive_type: bool
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
@@ -94,6 +95,7 @@ class BooleanField(Field[_FT, _FPT]):
 
 class NullBooleanField(Field[_FT, _FPT]):
     _pyi_field_actual_type: Optional[bool]
+    _pyi_field_primitive_type: Optional[bool]
 
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
@@ -101,6 +103,8 @@ class NullBooleanField(Field[_FT, _FPT]):
 
 class CharField(Field[_FT, _FPT]):
     _pyi_field_actual_type: str
+    _pyi_field_primitive_type: str
+
     def __init__(
         self,
         read_only: bool = ...,
@@ -168,6 +172,8 @@ class URLField(CharField[_FT, _FPT]): ...
 
 class UUIDField(Field[_FT, _FPT]):
     _pyi_field_actual_type: uuid.UUID
+    _pyi_field_primitive_type: str
+
     valid_formats: Sequence[str] = ...
     def __init__(
         self,
@@ -208,6 +214,7 @@ class IPAddressField(CharField[_FT, _FPT]):
 
 class IntegerField(Field[_FT, _FPT]):
     _pyi_field_actual_type: int
+    _pyi_field_primitive_type: int
 
     MAX_STRING_LENGTH: str = ...
     re_decimal: Pattern = ...
@@ -230,6 +237,7 @@ class IntegerField(Field[_FT, _FPT]):
 
 class FloatField(Field[_FT, _FPT]):
     _pyi_field_actual_type: float
+    _pyi_field_primitive_type: float
 
     MAX_STRING_LENGTH: int = ...
     def __init__(
@@ -277,6 +285,7 @@ class DecimalField(Field[_FT, _FPT]):
 
 class DateTimeField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.datetime
+    _pyi_field_primitive_type: str
 
     datetime_parser: Callable = ...
     def __init__(
@@ -302,6 +311,7 @@ class DateTimeField(Field[_FT, _FPT]):
 
 class DateField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.date
+    _pyi_field_primitive_type: str
 
     datetime_parser: Callable = ...
     def __init__(
@@ -323,6 +333,7 @@ class DateField(Field[_FT, _FPT]):
 
 class TimeField(Field[_FT, _FPT]):
     _pyi_field_actual_type: datetime.time
+    _pyi_field_primitive_type: str
 
     datetime_parser: Callable = ...
     def __init__(
