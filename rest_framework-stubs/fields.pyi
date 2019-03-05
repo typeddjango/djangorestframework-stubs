@@ -104,7 +104,6 @@ class NullBooleanField(Field[_FT, _FPT]):
 class CharField(Field[_FT, _FPT]):
     _pyi_field_actual_type: str
     _pyi_field_primitive_type: str
-
     def __init__(
         self,
         read_only: bool = ...,
