@@ -39,6 +39,9 @@ def set_generic_parameters_for_field(ctx: FunctionContext) -> Type:
         return default_return_type
 
     types = helpers.get_drf_metadata_key(default_return_type.type, 'types', traverse_mro=True)
+    if types is None:
+        return default_return_type
+
     actual_field_datatype = helpers.deserialize_type(ctx.api, types['actual'])
     primitive_field_datatype = helpers.deserialize_type(ctx.api, types['primitive'])
 
