@@ -52,7 +52,8 @@ class Field(Generic[_FT, _FPT]):
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
     initial: Optional[Any] = ...
-    parent: Optional[Field]
+    # TODO: add Generic/Plugin support for parent
+    parent: Optional[Any]
     validators: Optional[List[_Validator]]
     def __init__(
         self,

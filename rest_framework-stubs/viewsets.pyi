@@ -1,7 +1,6 @@
 from collections import OrderedDict
-from typing import Any, Callable, List, Mapping, Optional
+from typing import Any, Callable, List
 
-from django.utils.decorators import classonlymethod
 from rest_framework.request import Request
 
 from rest_framework import generics, mixins, views
@@ -10,9 +9,9 @@ def _is_extra_action(attr: Any) -> bool: ...
 
 class ViewSetMixin(object):
     basename: str
-    request: Optional[Request]
-    @classonlymethod
-    def as_view(cls, actions: Optional[Mapping[str, str]] = ..., **initkwargs: Any) -> Callable: ...
+    request: Any
+    @classmethod
+    def as_view(cls, **initkwargs: Any) -> Callable: ...
     def initialize_request(self, request: Request, *args: Any, **kwargs: Any) -> Request: ...
     def reverse_action(self, url_name: str, *args: Any, **kwargs: Any) -> str: ...
     @classmethod

@@ -1,6 +1,5 @@
 from typing import Any, Callable, Dict, Iterable, List, Mapping, NamedTuple, Optional, Tuple, Type, Union
 
-from django.utils import six
 from django.utils.deprecation import RenameMethodsBase
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
@@ -37,7 +36,7 @@ def flatten(list_of_lists: Iterable[Iterable[Any]]) -> Iterable[Any]: ...
 class RenameRouterMethods(RenameMethodsBase):
     renamed_methods: Iterable[Union[str, Callable]] = ...
 
-class BaseRouter(six.with_metaclass(RenameRouterMethods)):
+class BaseRouter(metaclass=RenameRouterMethods):
     registry: List[Tuple[str, Type[ViewSetMixin], str]]
     def register(
         self, prefix: str, viewset: Type[ViewSetMixin], basename: Optional[str] = ..., base_name: Optional[str] = ...

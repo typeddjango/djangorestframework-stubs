@@ -1,0 +1,10 @@
+[CASE test_to_import_all_modules_and_trigger_checking_of_stubs]
+from rest_framework import (
+    apps, authentication, decorators, exceptions, fields, generics, metadata, mixins, negotiation,
+    pagination, parsers, permissions, relations, renderers, request, response, reverse, routers,
+    serializers, settings, status, test, throttling, validators, versioning, views, viewsets
+)
+from rest_framework.utils import (
+    encoders, field_mapping, json, serializer_helpers
+)
+[/CASE]
