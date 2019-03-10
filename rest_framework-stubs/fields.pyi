@@ -68,6 +68,7 @@ class Field(Generic[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
     def get_validators(self) -> List[Callable]: ...
@@ -122,6 +123,7 @@ class CharField(Field[_FT, _FPT]):
         max_length: int = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class EmailField(CharField[_FT, _FPT]): ...
@@ -145,6 +147,7 @@ class RegexField(CharField[_FT, _FPT]):
         max_length: int = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class SlugField(CharField[_FT, _FPT]):
@@ -166,6 +169,7 @@ class SlugField(CharField[_FT, _FPT]):
         max_length: int = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class URLField(CharField[_FT, _FPT]): ...
@@ -189,6 +193,7 @@ class UUIDField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class IPAddressField(CharField[_FT, _FPT]):
@@ -210,6 +215,7 @@ class IPAddressField(CharField[_FT, _FPT]):
         max_length: int = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class IntegerField(Field[_FT, _FPT]):
@@ -233,6 +239,7 @@ class IntegerField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class FloatField(Field[_FT, _FPT]):
@@ -255,6 +262,7 @@ class FloatField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class DecimalField(Field[_FT, _FPT]):
@@ -279,6 +287,7 @@ class DecimalField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
@@ -304,7 +313,8 @@ class DateTimeField(Field[_FT, _FPT]):
         help_text: str = ...,
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...
+        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def enforce_timezone(self, value: Any) -> Any: ...
     def default_timezone(self) -> Optional[str]: ...
@@ -329,6 +339,7 @@ class DateField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class TimeField(Field[_FT, _FPT]):
@@ -351,6 +362,7 @@ class TimeField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class DurationField(Field[_FT, _FPT]):
@@ -371,6 +383,7 @@ class DurationField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 # Choice types...
@@ -396,6 +409,7 @@ class ChoiceField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
     def _get_choices(self) -> Sequence[Any]: ...
@@ -420,6 +434,7 @@ class MultipleChoiceField(ChoiceField[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class FilePathField(ChoiceField[_FT, _FPT]):
@@ -442,6 +457,7 @@ class FilePathField(ChoiceField[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class FileField(Field[_FT, _FPT]):
@@ -463,6 +479,7 @@ class FileField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class SupportsToPython(Protocol):
@@ -487,6 +504,7 @@ class ImageField(FileField[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class _UnvalidatedField(Field[_FT, _FPT]): ...
@@ -513,6 +531,7 @@ class ListField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
@@ -532,6 +551,7 @@ class DictField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
@@ -553,6 +573,7 @@ class JSONField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class ReadOnlyField(Field[_FT, _FPT]): ...
@@ -574,6 +595,7 @@ class SerializerMethodField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
 class ModelField(Field[_FT, _FPT]):
@@ -593,4 +615,5 @@ class ModelField(Field[_FT, _FPT]):
         allow_null: bool = ...,
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
     ): ...
