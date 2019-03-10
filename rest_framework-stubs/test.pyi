@@ -1,10 +1,11 @@
-from typing import Any, Optional, Sequence, Tuple
+from typing import Any, Optional, Sequence, Tuple, Union, Dict
 
 from django.db.models import Model
 from django.http import HttpRequest, HttpResponse
 from django.test import testcases
 from django.test.client import Client as DjangoClient, ClientHandler, RequestFactory as DjangoRequestFactory
 from rest_framework.compat import requests
+from rest_framework.response import Response
 
 def force_authenticate(request: HttpRequest, user: Optional[Model] = ..., token: Optional[Any] = ...) -> None: ...
 
@@ -22,9 +23,42 @@ class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any): ...
     def get_response(self, request: HttpRequest) -> HttpResponse: ...
 
-class APIClient(APIRequestFactory, DjangoClient):  # type: ignore
+class APIClient(DjangoClient):
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: Optional[Model] = ..., token: Optional[Any] = ...) -> None: ...
+    def request(self, **request: Any) -> Response: ...
+    def get(self, path: str, data: Any = ..., secure: bool = ..., **extra: Any) -> Response: ...
+    def post(
+        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def head(self, path: str, data: Any = ..., secure: bool = ..., **extra: Any) -> Response: ...
+    def trace(self, path: str, secure: bool = ..., **extra: Any) -> Response: ...
+    def options(
+        self,
+        path: str,
+        data: Union[Dict[str, str], str] = ...,
+        content_type: str = ...,
+        secure: bool = ...,
+        **extra: Any
+    ) -> Response: ...
+    def put(
+        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def patch(
+        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def delete(
+        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def generic(
+        self,
+        method: str,
+        path: str,
+        data: Any = ...,
+        content_type: Optional[str] = ...,
+        secure: bool = ...,
+        **extra: Any
+    ) -> Response: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase): ...
 class APITestCase(testcases.TestCase): ...
