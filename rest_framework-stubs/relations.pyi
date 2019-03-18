@@ -1,8 +1,8 @@
-from typing import Any, Dict, Iterable, List, Optional, Protocol, Sequence
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Protocol, Sequence, Union
 
 from django.db.models import Model
 from django.db.models.query import QuerySet
-from rest_framework.fields import Field
+from rest_framework.fields import Field, _Validator
 from rest_framework.request import Request
 
 def method_overridden(method_name: str, klass: type, instance: Any) -> bool: ...
@@ -32,6 +32,26 @@ class Option(Protocol):
     display_text: str
 
 class RelatedField(Field):
+    def __init__(
+        self,
+        many: bool = ...,
+        allow_empty: bool = ...,
+        queryset: Optional[QuerySet] = ...,
+        html_cutoff: Optional[int] = ...,
+        html_cutoff_text: str = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Any = ...,
+        initial: Any = ...,
+        source: Union[Callable, str] = ...,
+        label: Optional[str] = ...,
+        help_text: str = ...,
+        allow_null: bool = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
+    ): ...
     queryset: Optional[QuerySet] = ...
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
