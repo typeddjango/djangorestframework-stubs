@@ -19,8 +19,10 @@ from typing import (
     Protocol,
     Type,
     Mapping,
+    MutableMapping,
 )
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Model
 from django.forms import FilePathField as DjangoFilePathField, ImageField as DjangoImageField
@@ -38,6 +40,9 @@ class CreateOnlyDefault(object):
     def __call__(self) -> Any: ...
 
 class SkipField(Exception): ...
+
+def set_value(dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
+def get_error_detail(exc_info: ValidationError) -> Any: ...
 
 _FT = TypeVar("_FT")  # Field Type
 _FPT = TypeVar("_FPT")  # Field Primitive Type
@@ -302,7 +307,6 @@ class DateTimeField(Field[_FT, _FPT]):
         format: Optional[str] = ...,
         input_formats: Optional[Sequence[str]] = ...,
         default_timezone: Optional[Union[str, datetime.tzinfo]] = ...,
-        *args,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
