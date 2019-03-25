@@ -31,7 +31,7 @@ if sys.version_info[:2] < (3, 7):
 
 setup(
     name="djangorestframework-stubs",
-    version="0.4.0",
+    version="0.4.1",
     description='PEP-484 stubs for django-rest-framework',
     long_description=readme,
     long_description_content_type='text/markdown',
