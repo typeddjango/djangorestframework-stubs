@@ -1,10 +1,49 @@
-[CASE test_to_import_all_modules_and_trigger_checking_of_stubs]
-from rest_framework import (
-    apps, authentication, decorators, exceptions, fields, generics, metadata, mixins, negotiation,
-    pagination, parsers, permissions, relations, renderers, request, response, reverse, routers,
-    serializers, settings, status, test, throttling, validators, versioning, views, viewsets
-)
-from rest_framework.utils import (
-    encoders, field_mapping, json, serializer_helpers, model_meta
-)
+[CASE test_to_import_all_root_modules_and_trigger_checking_of_stubs]
+import rest_framework.apps
+import rest_framework.renderers
+import rest_framework.permissions
+import rest_framework.relations
+import rest_framework.filters
+import rest_framework.decorators
+import rest_framework.viewsets
+import rest_framework.mixins
+import rest_framework.throttling
+import rest_framework.reverse
+import rest_framework.settings
+import rest_framework.negotiation
+import rest_framework.response
+import rest_framework.exceptions
+import rest_framework.versioning
+import rest_framework.request
+import rest_framework.status
+import rest_framework.documentation
+import rest_framework.parsers
+import rest_framework.test
+import rest_framework.authentication
+import rest_framework.validators
+import rest_framework.fields
+import rest_framework.views
+import rest_framework.pagination
+import rest_framework.routers
+import rest_framework.serializers
+import rest_framework.generics
+import rest_framework.metadata
+import rest_framework.schemas
+import rest_framework.schemas.generators
+import rest_framework.schemas.utils
+import rest_framework.schemas.views
+import rest_framework.schemas.inspectors
+import rest_framework.utils
+import rest_framework.utils.encoders
+import rest_framework.utils.formatting
+import rest_framework.utils.serializer_helpers
+import rest_framework.utils.json
+import rest_framework.utils.model_meta
+import rest_framework.utils.field_mapping
+import rest_framework.authtoken
+import rest_framework.authtoken.apps
+import rest_framework.authtoken.models
+import rest_framework.authtoken.admin
+import rest_framework.authtoken.views
+import rest_framework.authtoken.serializers
 [/CASE]
