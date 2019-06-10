@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Any, Callable, List
+from typing import Any, Callable, Dict, List, Optional
 
 from rest_framework.request import Request
 
@@ -11,7 +11,7 @@ class ViewSetMixin(object):
     basename: str
     request: Any
     @classmethod
-    def as_view(cls, **initkwargs: Any) -> Callable: ...
+    def as_view(cls, actions: Optional[Dict[str, Any]] = None, **initkwargs: Any) -> Callable: ...
     def initialize_request(self, request: Request, *args: Any, **kwargs: Any) -> Request: ...
     def reverse_action(self, url_name: str, *args: Any, **kwargs: Any) -> str: ...
     @classmethod
