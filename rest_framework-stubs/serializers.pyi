@@ -47,6 +47,7 @@ from rest_framework.fields import (
     ImageField as ImageField,
     SkipField as SkipField,
     CreateOnlyDefault as CreateOnlyDefault,
+    CurrentUserDefault as CurrentUserDefault,
 )
 from rest_framework.exceptions import (
     APIException as APIException,
