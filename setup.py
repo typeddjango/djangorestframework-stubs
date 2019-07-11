@@ -21,7 +21,7 @@ with open('README.md', 'r') as f:
     readme = f.read()
 
 dependencies = [
-    'mypy>=0.670',
+    'mypy>=0.700, <0.710',
     'django-stubs>=0.10.0',
     'typing-extensions'
 ]
@@ -31,7 +31,7 @@ if sys.version_info[:2] < (3, 7):
 
 setup(
     name="djangorestframework-stubs",
-    version="0.4.2",
+    version="0.4.3",
     description='PEP-484 stubs for django-rest-framework',
     long_description=readme,
     long_description_content_type='text/markdown',
