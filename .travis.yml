@@ -13,12 +13,6 @@ jobs:
       set -e
       pytest
 
-  - name: "run test suite with python 3.6"
-    python: 3.6
-    script: |
-      set -e
-      pytest
-
   - name: "Lint with black"
     python: 3.7
     script: |

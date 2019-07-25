@@ -1,0 +1,11 @@
+-   case: multiple_inheritance_from_two_serializers_with_meta_nested_class_defined
+    main: |
+        from rest_framework import serializers
+        class SerializerA(serializers.Serializer):
+            class Meta:
+                pass
+        class SerializerB(serializers.Serializer):
+            class Meta:
+                pass
+        class SerializerC(SerializerA, SerializerB):
+            pass

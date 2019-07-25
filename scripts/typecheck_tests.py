@@ -1,55 +1,15 @@
 import os
-import re
+import shutil
+import subprocess
 import sys
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Pattern
 
-from git import Repo
 from mypy import build
 from mypy.main import process_options
 
-PROJECT_DIRECTORY = Path(__file__).parent.parent
-
-# DRF branch to typecheck against
-DRF_BRANCH = 'drf-plugin-tests'
-
-# Some errors occur for the test suite itself, and cannot be addressed via djangorestframework-stubs. They should be ignored
-# using this constant.
-IGNORED_ERRORS = [
-    'Need type annotation for',
-    'URLPattern',  # moved in django 2.0+
-    'URLResolver',  # moved in django 2.0+
-    'Invalid signature "def (self: Any) -> Any"',
-    'already defined on line',
-    'already defined (possibly by an import)',
-    'variable has type Module',
-    'Invalid base class',
-    'MockRequest',
-    'MockView',
-    'MockTimezone',
-    'MockLazyStr',
-    'MockQueryset',
-    'Invalid type "self"',
-    re.compile(r'Item "None" of "Optional\[[a-zA-Z0-9]+\]" has no attribute'),
-    'Optional[List[_Record]]',
-    '"Callable[..., Any]" has no attribute "initkwargs"',
-    'Cannot assign to a type',
-    'Cannot assign to a method',
-    '"Type[NonTimeThrottle]" has no attribute "called"',
-    'BaseTokenAuthTests',
-    re.compile(r'Dict entry [0-9] has incompatible type "[a-zA-Z]+": "None"; expected "object": "bool"'),
-    'Incompatible types in assignment (expression has type "None", variable has type "List[Any]")',
-    'Value of type "Optional[str]" is not indexable',
-    'Argument 1 to "QueryDict" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, bytes, None]"',
-    'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object"; expected "QuerySet[Any]"',
-    'has incompatible type "Dict[<nothing>, <nothing>]"; expected "Request"',
-    'Argument 1 to "render" has incompatible type "Dict[<nothing>, <nothing>]"; expected "HttpRequest"',
-    'Cannot infer type of lambda'
-]
-
-MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
-REPO_DIRECTORY = PROJECT_DIRECTORY / 'drf-sources'
+from scripts.ignored import IGNORED_ERRORS
 
 
 @contextmanager
@@ -109,14 +69,44 @@ def check_with_mypy(abs_path: Path) -> int:
 
 
 if __name__ == '__main__':
-    # clone Django repository, if it does not exist
-    if not REPO_DIRECTORY.exists():
-        repo = Repo.clone_from('https://github.com/mkurnikov/django-rest-framework.git', REPO_DIRECTORY)
-    else:
-        repo = Repo(REPO_DIRECTORY)
-        repo.remotes['origin'].pull(DRF_BRANCH)
+    PROJECT_DIRECTORY = Path(__file__).parent.parent
 
-    repo.git.checkout(DRF_BRANCH)
+    MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
+    REPO_DIRECTORY = PROJECT_DIRECTORY / 'drf-sources'
 
-    global_rc = check_with_mypy(REPO_DIRECTORY.absolute())
-    sys.exit(global_rc)
+    global_rc = 0
+    tests_root = REPO_DIRECTORY
+    mypy_cache_dir = Path(__file__).parent / '.mypy_cache'
+
+    # copy django settings to the tests_root directory
+    shutil.copy(PROJECT_DIRECTORY / 'scripts' / 'drf_tests_settings.py', tests_root)
+
+    try:
+        mypy_options = ['--cache-dir', str(MYPY_CONFIG_FILE.parent / '.mypy_cache'),
+                        '--config-file', str(MYPY_CONFIG_FILE)]
+        mypy_options += [str(tests_root)]
+
+        import distutils.spawn
+
+        mypy_executable = distutils.spawn.find_executable('mypy')
+        command = [mypy_executable, *mypy_options]
+        print(' '.join(command))
+        completed = subprocess.run(command,
+                                   env={'PYTHONPATH': str(tests_root)},
+                                   stdout=subprocess.PIPE,
+                                   cwd=str(tests_root))
+        sorted_lines = sorted(completed.stdout.decode().splitlines())
+        for line in sorted_lines:
+            try:
+                module_name = line.split('/')[0]
+            except IndexError:
+                module_name = 'unknown'
+
+            if not is_ignored(line):
+                print(replace_with_clickable_location(line, abs_test_folder=tests_root))
+
+        sys.exit(global_rc)
+
+    except BaseException as exc:
+        shutil.rmtree(mypy_cache_dir, ignore_errors=True)
+        raise exc
