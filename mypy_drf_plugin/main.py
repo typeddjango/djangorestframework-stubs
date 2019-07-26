@@ -38,6 +38,7 @@ class NewSemanalDRFPlugin(Plugin):
                             ) -> Optional[Callable[[ClassDefContext], None]]:
         if fullname in self._get_currently_defined_serializers():
             return transform_serializer_class
+        return None
 
 
 def plugin(version):
