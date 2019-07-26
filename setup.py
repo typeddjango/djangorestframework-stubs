@@ -20,7 +20,7 @@ with open('README.md', 'r') as f:
     readme = f.read()
 
 dependencies = [
-    'mypy>=0.720, <0.730',
+    'mypy>=0.720,<0.730',
     'django-stubs>=1.0.0',
     'typing-extensions'
 ]
@@ -31,12 +31,12 @@ setup(
     description='PEP-484 stubs for django-rest-framework',
     long_description=readme,
     long_description_content_type='text/markdown',
-    url="https://github.com/mkurnikov/djangorestframework-stubs",
+    url="https://github.com/typeddjango/djangorestframework-stubs",
     author="Maksim Kurnikov",
     author_email="maxim.kurnikov@gmail.com",
     license='MIT',
     install_requires=dependencies,
-    packages=['rest_framework-stubs', *find_packages()],
+    packages=['rest_framework-stubs', *find_packages(exclude=['scripts'])],
     package_data={'rest_framework-stubs': find_stub_files('rest_framework-stubs')},
     classifiers=[
         'Development Status :: 3 - Alpha',
