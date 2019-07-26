@@ -1,5 +1,4 @@
 from mypy.plugin import ClassDefContext
-
 from mypy_django_plugin.lib import helpers as mypy_django_helpers
 
 
