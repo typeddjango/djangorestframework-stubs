@@ -49,10 +49,7 @@ _FPT = TypeVar("_FPT")  # Field Primitive Type
 
 _Validator = Callable[[Any], None]
 
-class Field(Generic[_FT, _FPT]):
-    _pyi_field_actual_type: Any
-    _pyi_field_primitive_type: Any
-
+class Field:
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
@@ -92,23 +89,17 @@ class Field(Generic[_FT, _FPT]):
     @property
     def context(self) -> Dict[str, Any]: ...
 
-class BooleanField(Field[_FT, _FPT]):
-    _pyi_field_actual_type: bool
-    _pyi_field_primitive_type: bool
-
+class BooleanField(Field):
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
-class NullBooleanField(Field[_FT, _FPT]):
-    _pyi_field_actual_type: Optional[bool]
-    _pyi_field_primitive_type: Optional[bool]
-
+class NullBooleanField(Field):
     TRUE_VALUES: Set[Any] = ...
     FALSE_VALUES: Set[Any] = ...
     NULL_VALUES: Set[Optional[Any]] = ...
 
-class CharField(Field[_FT, _FPT]):
+class CharField(Field):
     _pyi_field_actual_type: str
     _pyi_field_primitive_type: str
     def __init__(
@@ -131,9 +122,9 @@ class CharField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class EmailField(CharField[_FT, _FPT]): ...
+class EmailField(CharField): ...
 
-class RegexField(CharField[_FT, _FPT]):
+class RegexField(CharField):
     def __init__(
         self,
         regex: Union[str, Pattern],
@@ -155,7 +146,7 @@ class RegexField(CharField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class SlugField(CharField[_FT, _FPT]):
+class SlugField(CharField):
     def __init__(
         self,
         allow_unicode: bool = ...,
@@ -177,9 +168,9 @@ class SlugField(CharField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class URLField(CharField[_FT, _FPT]): ...
+class URLField(CharField): ...
 
-class UUIDField(Field[_FT, _FPT]):
+class UUIDField(Field):
     _pyi_field_actual_type: uuid.UUID
     _pyi_field_primitive_type: str
 
@@ -201,7 +192,7 @@ class UUIDField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class IPAddressField(CharField[_FT, _FPT]):
+class IPAddressField(CharField):
     def __init__(
         self,
         protocol: str = ...,
@@ -223,7 +214,7 @@ class IPAddressField(CharField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class IntegerField(Field[_FT, _FPT]):
+class IntegerField(Field):
     _pyi_field_actual_type: int
     _pyi_field_primitive_type: int
 
@@ -247,7 +238,7 @@ class IntegerField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class FloatField(Field[_FT, _FPT]):
+class FloatField(Field):
     _pyi_field_actual_type: float
     _pyi_field_primitive_type: float
 
@@ -270,7 +261,7 @@ class FloatField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class DecimalField(Field[_FT, _FPT]):
+class DecimalField(Field):
     MAX_STRING_LENGTH: int = ...
     def __init__(
         self,
@@ -297,7 +288,7 @@ class DecimalField(Field[_FT, _FPT]):
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
 
-class DateTimeField(Field[_FT, _FPT]):
+class DateTimeField(Field):
     _pyi_field_actual_type: datetime.datetime
     _pyi_field_primitive_type: str
 
@@ -323,7 +314,7 @@ class DateTimeField(Field[_FT, _FPT]):
     def enforce_timezone(self, value: Any) -> Any: ...
     def default_timezone(self) -> Optional[str]: ...
 
-class DateField(Field[_FT, _FPT]):
+class DateField(Field):
     _pyi_field_actual_type: datetime.date
     _pyi_field_primitive_type: str
 
@@ -346,7 +337,7 @@ class DateField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class TimeField(Field[_FT, _FPT]):
+class TimeField(Field):
     _pyi_field_actual_type: datetime.time
     _pyi_field_primitive_type: str
 
@@ -369,7 +360,7 @@ class TimeField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class DurationField(Field[_FT, _FPT]):
+class DurationField(Field):
     max_value: Any
     min_value: Any
     def __init__(
@@ -392,7 +383,7 @@ class DurationField(Field[_FT, _FPT]):
 
 # Choice types...
 
-class ChoiceField(Field[_FT, _FPT]):
+class ChoiceField(Field):
     choices: Sequence[Any]
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
@@ -419,7 +410,7 @@ class ChoiceField(Field[_FT, _FPT]):
     def _get_choices(self) -> Sequence[Any]: ...
     def _set_choices(self, choices: Sequence[Any]) -> None: ...
 
-class MultipleChoiceField(ChoiceField[_FT, _FPT]):
+class MultipleChoiceField(ChoiceField):
     def __init__(
         self,
         choices: Sequence[Any],
@@ -441,7 +432,7 @@ class MultipleChoiceField(ChoiceField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class FilePathField(ChoiceField[_FT, _FPT]):
+class FilePathField(ChoiceField):
     def __init__(
         self,
         path: str = ...,
@@ -464,7 +455,7 @@ class FilePathField(ChoiceField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class FileField(Field[_FT, _FPT]):
+class FileField(Field):
     max_length: int
     allow_empty_file: bool
     def __init__(
@@ -489,7 +480,7 @@ class FileField(Field[_FT, _FPT]):
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
-class ImageField(FileField[_FT, _FPT]):
+class ImageField(FileField):
     _DjangoImageField: SupportsToPython
     def __init__(
         self,
@@ -511,9 +502,9 @@ class ImageField(FileField[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class _UnvalidatedField(Field[_FT, _FPT]): ...
+class _UnvalidatedField(Field): ...
 
-class ListField(Field[_FT, _FPT]):
+class ListField(Field):
     child: Field = ...
     allow_empty: bool = ...
     max_length: int = ...
@@ -539,7 +530,7 @@ class ListField(Field[_FT, _FPT]):
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
-class DictField(Field[_FT, _FPT]):
+class DictField(Field):
     child: Field = ...
     def __init__(
         self,
@@ -559,10 +550,10 @@ class DictField(Field[_FT, _FPT]):
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
-class HStoreField(DictField[_FT, _FPT]):
+class HStoreField(DictField):
     child: CharField = ...
 
-class JSONField(Field[_FT, _FPT]):
+class JSONField(Field):
     def __init__(
         self,
         binary: bool = ...,
@@ -580,10 +571,10 @@ class JSONField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class ReadOnlyField(Field[_FT, _FPT]): ...
-class HiddenField(Field[_FT, _FPT]): ...
+class ReadOnlyField(Field): ...
+class HiddenField(Field): ...
 
-class SerializerMethodField(Field[_FT, _FPT]):
+class SerializerMethodField(Field):
     method_name: str
     def __init__(
         self,
@@ -602,7 +593,7 @@ class SerializerMethodField(Field[_FT, _FPT]):
         style: Optional[Mapping[str, Any]] = ...,
     ): ...
 
-class ModelField(Field[_FT, _FPT]):
+class ModelField(Field):
     model_field: models.Field
     def __init__(
         self,

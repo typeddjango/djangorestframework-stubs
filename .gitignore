@@ -6,6 +6,4 @@ out/
 /django
 .idea/
 .mypy_cache
-drf-sources/
 pip-wheel-metadata/
-

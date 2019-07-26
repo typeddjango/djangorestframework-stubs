@@ -1,5 +1,4 @@
 import os
-import sys
 from distutils.core import setup
 
 from setuptools import find_packages
@@ -21,26 +20,23 @@ with open('README.md', 'r') as f:
     readme = f.read()
 
 dependencies = [
-    'mypy>=0.700, <0.710',
-    'django-stubs>=0.10.0',
+    'mypy>=0.720,<0.730',
+    'django-stubs>=1.0.0',
     'typing-extensions'
 ]
-if sys.version_info[:2] < (3, 7):
-    # dataclasses port for 3.6
-    dependencies += ['dataclasses']
 
 setup(
     name="djangorestframework-stubs",
-    version="0.4.3",
+    version="1.0.0",
     description='PEP-484 stubs for django-rest-framework',
     long_description=readme,
     long_description_content_type='text/markdown',
-    url="https://github.com/mkurnikov/djangorestframework-stubs",
+    url="https://github.com/typeddjango/djangorestframework-stubs",
     author="Maksim Kurnikov",
     author_email="maxim.kurnikov@gmail.com",
     license='MIT',
     install_requires=dependencies,
-    packages=['rest_framework-stubs', *find_packages()],
+    packages=['rest_framework-stubs', *find_packages(exclude=['scripts'])],
     package_data={'rest_framework-stubs': find_stub_files('rest_framework-stubs')},
     classifiers=[
         'Development Status :: 3 - Alpha',

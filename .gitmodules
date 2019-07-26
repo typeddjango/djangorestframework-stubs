@@ -1,0 +1,3 @@
+[submodule "drf-sources"]
+	path = drf-sources
+	url = https://github.com/encode/django-rest-framework.git

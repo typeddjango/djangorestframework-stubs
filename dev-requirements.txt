@@ -1,3 +1,5 @@
 black
--e git+https://github.com/mkurnikov/pytest-mypy-plugins.git#egg=pytest-mypy-plugins
+pytest-mypy-plugins==1.0.3
+flake8==3.7.8
+isort==4.3.4
 -e .
