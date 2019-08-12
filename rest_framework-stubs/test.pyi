@@ -60,8 +60,16 @@ class APIClient(DjangoClient):
         **extra: Any
     ) -> Response: ...
 
-class APITransactionTestCase(testcases.TransactionTestCase): ...
-class APITestCase(testcases.TestCase): ...
-class APISimpleTestCase(testcases.SimpleTestCase): ...
-class APILiveServerTestCase(testcases.LiveServerTestCase): ...
+class APITransactionTestCase(testcases.TransactionTestCase):
+    client: APIClient
+
+class APITestCase(testcases.TestCase):
+    client: APIClient
+
+class APISimpleTestCase(testcases.SimpleTestCase):
+    client: APIClient
+
+class APILiveServerTestCase(testcases.LiveServerTestCase):
+    client: APIClient
+
 class URLPatternsTestCase(testcases.SimpleTestCase): ...
