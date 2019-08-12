@@ -2,7 +2,7 @@
 
 # pep484 stubs for Django REST framework
 
-[![Build Status](https://travis-ci.org/mkurnikov/djangorestframework-stubs.svg?branch=master)](https://travis-ci.org/mkurnikov/djangorestframework-stubs)
+[![Build Status](https://travis-ci.com/typeddjango/djangorestframework-stubs.svg?branch=master)](https://travis-ci.com/typeddjango/djangorestframework-stubs)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 
 
