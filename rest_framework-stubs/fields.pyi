@@ -54,9 +54,21 @@ class Field:
     default_validators: List[Callable] = ...
     default_empty_html: Any = ...
     initial: Optional[Any] = ...
+    read_only: bool = ...
+    write_only: bool = ...
+    required: bool = ...
+    default: Any = ...
+    initial: Any = ...
+    source: Optional[str] = ...
+    label: Optional[str] = ...
+    help_text: Optional[str] = ...
+    style: Optional[Mapping[str, Any]] = ...
+    error_messages: Optional[Mapping[str, str]] = ...
+    validators: Optional[List[_Validator]] = ...
+    allow_null: bool = ...
+    field_name: Optional[str] = ...
     # TODO: add Generic/Plugin support for parent
-    parent: Optional[Any]
-    validators: Optional[List[_Validator]]
+    parent: Optional[Any] = ...
     def __init__(
         self,
         read_only: bool = ...,
@@ -64,13 +76,13 @@ class Field:
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
     def get_validators(self) -> List[Callable]: ...
@@ -102,6 +114,7 @@ class NullBooleanField(Field):
 class CharField(Field):
     _pyi_field_actual_type: str
     _pyi_field_primitive_type: str
+    allow_blank: bool = ...
     def __init__(
         self,
         read_only: bool = ...,
@@ -109,7 +122,7 @@ class CharField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -133,7 +146,7 @@ class RegexField(CharField):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -155,7 +168,7 @@ class SlugField(CharField):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -183,7 +196,7 @@ class UUIDField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -201,7 +214,7 @@ class IPAddressField(CharField):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -229,7 +242,7 @@ class IntegerField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -252,7 +265,7 @@ class FloatField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -277,7 +290,7 @@ class DecimalField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -303,7 +316,7 @@ class DateTimeField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -328,7 +341,7 @@ class DateField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -351,7 +364,7 @@ class TimeField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -372,7 +385,7 @@ class DurationField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -387,6 +400,7 @@ class ChoiceField(Field):
     choices: Sequence[Any]
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
+    allow_blank: bool = ...
     def __init__(
         self,
         choices: Sequence[Any],
@@ -398,7 +412,7 @@ class ChoiceField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -411,6 +425,7 @@ class ChoiceField(Field):
     def _set_choices(self, choices: Sequence[Any]) -> None: ...
 
 class MultipleChoiceField(ChoiceField):
+    allow_empty: bool = ...
     def __init__(
         self,
         choices: Sequence[Any],
@@ -423,7 +438,7 @@ class MultipleChoiceField(ChoiceField):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -446,7 +461,7 @@ class FilePathField(ChoiceField):
         required: Optional[bool] = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -468,7 +483,7 @@ class FileField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -482,6 +497,7 @@ class SupportsToPython(Protocol):
 
 class ImageField(FileField):
     _DjangoImageField: SupportsToPython
+    allow_empty: bool = ...
     def __init__(
         self,
         _DjangoImageField: Type[SupportsToPython] = ...,
@@ -493,7 +509,7 @@ class ImageField(FileField):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -520,7 +536,7 @@ class ListField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -540,7 +556,7 @@ class DictField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -562,7 +578,7 @@ class JSONField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -584,7 +600,7 @@ class SerializerMethodField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
@@ -604,7 +620,7 @@ class ModelField(Field):
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        source: Optional[str] = ...,
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
