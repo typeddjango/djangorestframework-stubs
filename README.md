@@ -29,6 +29,6 @@ in your `mypy.ini` file.
 
 ## To get help
 
-We have Gitter here https://gitter.im/mypy-django/Lobby.
+We have Gitter here: <https://gitter.im/mypy-django/Lobby>
 
-If you think you have more generic typing issue, please refer to https://github.com/python/mypy and their Gitter.
+If you think you have more generic typing issue, please refer to <https://github.com/python/mypy> and their Gitter.
