@@ -20,8 +20,8 @@ with open('README.md', 'r') as f:
     readme = f.read()
 
 dependencies = [
-    'mypy>=0.720,<0.730',
-    'django-stubs>=1.0.0',
+    'mypy>=0.730',
+    'django-stubs>=1.2.0',
     'typing-extensions'
 ]
 

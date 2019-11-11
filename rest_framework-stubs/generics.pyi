@@ -13,7 +13,7 @@ from rest_framework import mixins, views
 _T = TypeVar("_T", bound=Model)
 
 def get_object_or_404(
-    queryset: Union[Type[_T], Manager[_T], QuerySet[_T, _T]], *filter_args: Any, **filter_kwargs: Any
+    queryset: Union[Type[_T], Manager[_T], QuerySet[_T]], *filter_args: Any, **filter_kwargs: Any
 ) -> _T: ...
 
 class GenericAPIView(views.APIView):

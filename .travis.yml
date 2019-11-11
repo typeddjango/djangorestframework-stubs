@@ -9,32 +9,27 @@ jobs:
   include:
     - name: Run plugin test suite with python 3.7
       python: 3.7
-      script: |
-        set -e
-        pytest
+      script: pytest
 
     - name: Run plugin test suite with python 3.6
       python: 3.6
-      script: |
-        set -e
-        pytest
+      script: pytest
 
     - name: Mypy for plugin code
       python: 3.7
-      script: 'mypy ./mypy_drf_plugin'
+      script: mypy ./mypy_drf_plugin
 
     - name: Lint plugin code with flake8
       python: 3.7
-      script: 'flake8'
+      script: flake8
 
     - name: Lint with black
       python: 3.7
-      script: |
-        black --check --line-length=120 rest_framework-stubs/
+      script: black --check --line-length=120 rest_framework-stubs/
 
     - name: Lint plugin code with isort
       python: 3.7
-      script: 'isort --check'
+      script: isort --check
 
 before_install: |
   # Upgrade pip, setuptools, and wheel
