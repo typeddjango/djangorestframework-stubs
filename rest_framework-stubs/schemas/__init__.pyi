@@ -16,4 +16,5 @@ def get_schema_view(
     generator_class: Type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
+    version: Optional[str] = ...,
 ) -> Callable[..., Any]: ...
