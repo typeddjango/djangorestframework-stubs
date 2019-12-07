@@ -38,6 +38,7 @@ class SchemaGenerator(object):
     urlconf: Optional[str]
     title: Optional[str]
     description: Optional[str]
+    version: Optional[str]
     patterns: List[Any]
     url: Optional[str]
     endpoints: Optional[Sequence[_APIEndpoint]]
@@ -54,6 +55,7 @@ class SchemaGenerator(object):
         description: Optional[str] = ...,
         patterns: Optional[List[Any]] = ...,
         urlconf: Optional[str] = ...,
+        version: Optional[str] = ...,
     ) -> None: ...
     def get_schema(self, request: Optional[HttpRequest] = ..., public: bool = ...) -> Optional[coreapi.Document]: ...
     def get_links(self, request: Optional[HttpRequest] = ...) -> Optional[LinkNode]: ...
