@@ -291,8 +291,8 @@ class DecimalField(Field):
 class DateTimeField(Field):
     _pyi_field_actual_type: datetime.datetime
     _pyi_field_primitive_type: str
-
-    datetime_parser: Callable = ...
+    @classmethod
+    def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
@@ -317,8 +317,8 @@ class DateTimeField(Field):
 class DateField(Field):
     _pyi_field_actual_type: datetime.date
     _pyi_field_primitive_type: str
-
-    datetime_parser: Callable = ...
+    @classmethod
+    def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
@@ -340,8 +340,8 @@ class DateField(Field):
 class TimeField(Field):
     _pyi_field_actual_type: datetime.time
     _pyi_field_primitive_type: str
-
-    datetime_parser: Callable = ...
+    @classmethod
+    def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
