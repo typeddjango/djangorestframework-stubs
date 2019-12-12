@@ -72,7 +72,7 @@ if __name__ == '__main__':
     PROJECT_DIRECTORY = Path(__file__).parent.parent
 
     MYPY_CONFIG_FILE = (PROJECT_DIRECTORY / 'scripts' / 'mypy.ini').absolute()
-    REPO_DIRECTORY = PROJECT_DIRECTORY / 'drf-sources'
+    REPO_DIRECTORY = PROJECT_DIRECTORY / 'drf-sources' / 'tests'
 
     global_rc = 0
     tests_root = REPO_DIRECTORY
