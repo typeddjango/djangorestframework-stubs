@@ -111,7 +111,7 @@ class SerializerMetaclass(type):
 
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
-class Serializer(BaseSerializer, Mapping[str, BoundField]):
+class Serializer(BaseSerializer):
     @property
     def fields(self) -> Dict[str, Field]: ...
     @property
