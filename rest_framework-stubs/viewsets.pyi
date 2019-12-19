@@ -8,6 +8,7 @@ from rest_framework import generics, mixins, views
 def _is_extra_action(attr: Any) -> bool: ...
 
 class ViewSetMixin(object):
+    action: str
     basename: str
     request: Any
     @classmethod
