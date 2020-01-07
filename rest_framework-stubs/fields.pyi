@@ -490,9 +490,9 @@ class ImageField(FileField):
     def __init__(
         self,
         _DjangoImageField: Type[SupportsToPython] = ...,
-        allow_empty: bool = ...,
+        allow_empty_file: bool = ...,
         max_length: int = ...,
-        min_length: int = ...,
+        use_url: bool = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
