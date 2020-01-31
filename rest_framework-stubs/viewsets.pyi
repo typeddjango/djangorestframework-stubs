@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from django.http.response import HttpResponseBase
 
@@ -12,11 +12,17 @@ def _is_extra_action(attr: Any) -> bool: ...
 _ViewFunc = Callable[..., HttpResponseBase]
 
 class ViewSetMixin(object):
+    # Classvars assigned in as_view()
     name: Optional[str]
     description: Optional[str]
     suffix: Optional[str]
     detail: bool
     basename: str
+    # Instance attributes assigned in view wrapper
+    action_map: Dict[str, str]
+    args: Tuple[Any, ...]
+    kwargs: Dict[str, Any]
+    # Assigned in initialize_request()
     action: str
     @classmethod
     def as_view(cls, actions: Optional[Dict[str, str]] = ..., **initkwargs: Any) -> Callable: ...
