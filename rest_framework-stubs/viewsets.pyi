@@ -17,6 +17,7 @@ class ViewSetMixin(object):
     suffix: Optional[str]
     detail: bool
     basename: str
+    action: str
     @classmethod
     def as_view(cls, actions: Optional[Dict[str, str]] = ..., **initkwargs: Any) -> Callable: ...
     def initialize_request(self, request: Request, *args: Any, **kwargs: Any) -> Request: ...
