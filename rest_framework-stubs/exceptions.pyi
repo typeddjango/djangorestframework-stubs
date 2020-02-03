@@ -1,4 +1,4 @@
-from typing import Any, Union, Dict, Optional, Sequence
+from typing import Any, Union, List, Dict, Optional, Sequence
 
 from django.http import JsonResponse, HttpRequest
 from rest_framework.renderers import BaseRenderer
@@ -11,7 +11,7 @@ class ErrorDetail(str):
     code: Optional[str] = None
     def __new__(cls, string: str, code: Optional[str] = ...): ...
 
-_Detail = Union[str, Dict[str, Any]]
+_Detail = Union[str, List[Any], Dict[str, Any]]
 
 class APIException(Exception):
     status_code: int = ...
