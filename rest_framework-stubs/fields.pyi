@@ -1,11 +1,12 @@
 import datetime
 import decimal
 import uuid
+from decimal import Decimal
+from json import JSONEncoder
 from typing import (
     Any,
     Callable,
     Dict,
-    Generic,
     List,
     NoReturn,
     Optional,
@@ -28,7 +29,6 @@ from django.db import models
 from django.db.models import Model
 from django.forms import FilePathField as DjangoFilePathField, ImageField as DjangoImageField
 from rest_framework.serializers import BaseSerializer
-
 from rest_framework.relations import Option
 
 class empty: ...
@@ -61,7 +61,18 @@ class Field:
     initial: Optional[Any] = ...
     # TODO: add Generic/Plugin support for parent
     parent: Optional[Any]
+    # From constructor
+    read_only: bool
+    write_only: bool
+    required: bool
+    default: Any
+    source: Optional[Union[Callable, str]]
+    label: Optional[str]
+    help_text: Optional[str]
     validators: Optional[List[_Validator]]
+    error_messages: Optional[Mapping[str, str]]
+    style: Optional[Mapping[str, Any]]
+    allow_null: bool
     def __init__(
         self,
         read_only: bool = ...,
@@ -71,11 +82,11 @@ class Field:
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
     def get_validators(self) -> List[Callable]: ...
@@ -107,8 +118,15 @@ class NullBooleanField(Field):
 class CharField(Field):
     _pyi_field_actual_type: str
     _pyi_field_primitive_type: str
+    # From constructor
+    allow_blank: bool
+    trim_whitespace: bool
+    max_length: Optional[int]
+    min_length: Optional[int]
     def __init__(
         self,
+        *,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -116,8 +134,12 @@ class CharField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
+        help_text: Optional[str] = ...,
+        style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
         allow_null: bool = ...,
+        # kwargs.pop() in CharField
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
         min_length: Optional[int] = ...,
@@ -133,6 +155,13 @@ class RegexField(CharField):
     def __init__(
         self,
         regex: Union[str, Pattern],
+        *,
+        # **kwargs passed to CharField
+        allow_blank: bool = ...,
+        trim_whitespace: bool = ...,
+        max_length: Optional[int] = ...,
+        min_length: Optional[int] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -140,7 +169,7 @@ class RegexField(CharField):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
+        help_text: Optional[str] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
@@ -149,12 +178,24 @@ class RegexField(CharField):
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class SlugField(CharField):
+    # From constructor
+    allow_unicode: bool
     def __init__(
         self,
         allow_unicode: bool = ...,
+        *,
+        # **kwargs passed to CharField
+        allow_blank: bool = ...,
+        trim_whitespace: bool = ...,
+        max_length: Optional[int] = ...,
+        min_length: Optional[int] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -162,7 +203,7 @@ class SlugField(CharField):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
+        help_text: Optional[str] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
@@ -171,6 +212,9 @@ class SlugField(CharField):
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class URLField(CharField): ...
@@ -180,9 +224,14 @@ class UUIDField(Field):
     _pyi_field_primitive_type: str
 
     valid_formats: Sequence[str] = ...
+    # From constructor
+    uuid_format: str
     def __init__(
         self,
+        *,
+        # kwargs.pop() in UUIDField:
         format: str = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -190,17 +239,27 @@ class UUIDField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class IPAddressField(CharField):
+    # From constructor
+    protocol: str
+    unpack_ipv4: bool
     def __init__(
         self,
         protocol: str = ...,
+        *,
+        # **kwargs passed to CharField
+        allow_blank: bool = ...,
+        trim_whitespace: bool = ...,
+        max_length: Optional[int] = ...,
+        min_length: Optional[int] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -208,7 +267,7 @@ class IPAddressField(CharField):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
+        help_text: Optional[str] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
@@ -217,6 +276,9 @@ class IPAddressField(CharField):
         validators: Optional[Sequence[_Validator]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class IntegerField(Field):
@@ -225,10 +287,16 @@ class IntegerField(Field):
 
     MAX_STRING_LENGTH: str = ...
     re_decimal: Pattern = ...
+    # From constructor
+    max_value: Optional[int]
+    min_value: Optional[int]
     def __init__(
         self,
-        min_value: int = ...,
-        max_value: int = ...,
+        *,
+        # kwargs.pop() in IntegerField:
+        max_value: Optional[int] = ...,
+        min_value: Optional[int] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -236,22 +304,27 @@ class IntegerField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class FloatField(Field):
     _pyi_field_actual_type: float
     _pyi_field_primitive_type: float
-
     MAX_STRING_LENGTH: int = ...
+    # From constructor
+    max_value: Optional[Union[float, int]] = ...
+    min_value: Optional[Union[float, int]] = ...
     def __init__(
         self,
-        min_value: float = ...,
-        max_value: float = ...,
+        *,
+        # kwargs.pop() in FloatField:
+        max_value: Optional[Union[float, int]] = ...,
+        min_value: Optional[Union[float, int]] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -259,24 +332,35 @@ class FloatField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class DecimalField(Field):
     MAX_STRING_LENGTH: int = ...
+    # From constructor
+    max_digits: Optional[int]
+    decimal_places: Optional[int]
+    coerce_to_string: Optional[bool]
+    max_value: Optional[Union[Decimal, int, float]]
+    min_value: Optional[Union[Decimal, int, float]]
+    localize: bool
+    rounding: Optional[str]
+    max_whole_digits = Optional[int]
     def __init__(
         self,
         max_digits: Optional[int],
         decimal_places: Optional[int],
         coerce_to_string: Optional[bool] = ...,
-        max_value: Optional[Any] = ...,
-        min_value: Optional[Any] = ...,
+        max_value: Optional[Union[Decimal, int, float]] = ...,
+        min_value: Optional[Union[Decimal, int, float]] = ...,
         localize: bool = ...,
         rounding: Optional[str] = ...,
+        *,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -284,11 +368,11 @@ class DecimalField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
@@ -296,13 +380,18 @@ class DecimalField(Field):
 class DateTimeField(Field):
     _pyi_field_actual_type: datetime.datetime
     _pyi_field_primitive_type: str
+    # From constructor
+    format: Optional[str]
+    input_formats: Sequence[str]
+    timezone: datetime.tzinfo
     @classmethod
     def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
         input_formats: Optional[Sequence[str]] = ...,
-        default_timezone: Optional[Union[str, datetime.tzinfo]] = ...,
+        default_timezone: Optional[datetime.tzinfo] = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -310,11 +399,11 @@ class DateTimeField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
     def enforce_timezone(self, value: Any) -> Any: ...
     def default_timezone(self) -> Optional[str]: ...
@@ -322,12 +411,16 @@ class DateTimeField(Field):
 class DateField(Field):
     _pyi_field_actual_type: datetime.date
     _pyi_field_primitive_type: str
+    # From constructor
+    format: Optional[str]
+    input_formats: Sequence[str]
     @classmethod
     def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
         input_formats: Optional[Sequence[str]] = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -335,22 +428,26 @@ class DateField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class TimeField(Field):
     _pyi_field_actual_type: datetime.time
     _pyi_field_primitive_type: str
+    # From constructor
+    format: Optional[str]
+    input_formats: Sequence[str]
     @classmethod
     def datetime_parser(cls, date_string: str, format: str) -> datetime.datetime: ...
     def __init__(
         self,
         format: Optional[str] = ...,
         input_formats: Optional[Sequence[str]] = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -358,20 +455,24 @@ class TimeField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class DurationField(Field):
-    max_value: Any
-    min_value: Any
+    # From constructor
+    max_value: Optional[Any]
+    min_value: Optional[Any]
     def __init__(
         self,
-        max_value: object = ...,
-        min_value: object = ...,
+        *,
+        # kwargs.pop() in DurationField:
+        max_value: Optional[Any] = ...,
+        min_value: Optional[Any] = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -379,25 +480,30 @@ class DurationField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 # Choice types...
-
 class ChoiceField(Field):
-    choices: Sequence[Any]
+    # From constructor
+    _choices: Dict[Any, Any]
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
+    allow_blank: bool
+    grouped_choices: Dict[Any, Any]
     def __init__(
         self,
         choices: Sequence[Any],
+        *,
+        # kwargs.pop() in ChoiceField:
         html_cutoff: Optional[int] = ...,
         html_cutoff_text: Optional[str] = ...,
         allow_blank: bool = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -405,24 +511,32 @@ class ChoiceField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
-    def _get_choices(self) -> Sequence[Any]: ...
+    def _get_choices(self) -> Dict[Any, Any]: ...
     def _set_choices(self, choices: Sequence[Any]) -> None: ...
+    choices = property(_get_choices, _set_choices)
 
 class MultipleChoiceField(ChoiceField):
+    # From constructor
+    allow_empty: bool
     def __init__(
         self,
+        # *args, **kwargs passed to ChoiceField:
         choices: Sequence[Any],
+        *,
+        # kwargs.pop() in MultipleChoiceField:
+        allow_empty: bool = ...,
+        # kwargs.pop() in ChoiceField:
         html_cutoff: Optional[int] = ...,
         html_cutoff_text: Optional[str] = ...,
         allow_blank: bool = ...,
-        allow_empty: bool = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -430,11 +544,11 @@ class MultipleChoiceField(ChoiceField):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class FilePathField(ChoiceField):
@@ -442,32 +556,39 @@ class FilePathField(ChoiceField):
         self,
         path: str = ...,
         match: Optional[str] = ...,
-        choices: Sequence[Any] = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
+        required: Optional[bool] = ...,
+        *,
+        # **kwargs passed to ChoiceField:
+        # 'choices' is ignored (overwritten)
+        html_cutoff: Optional[int] = ...,
+        html_cutoff_text: Optional[str] = ...,
+        allow_blank: bool = ...,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
-        required: Optional[bool] = ...,
+        # 'required' is not passed via **kwargs
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class FileField(Field):
-    max_length: int
+    # From constructor
+    max_length: Optional[int]
     allow_empty_file: bool
+    use_url: bool
     def __init__(
         self,
-        allow_empty_file: bool = ...,
-        max_length: Optional[int] = ...,
-        use_url: bool = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -475,24 +596,27 @@ class FileField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
+        *,
+        # kwargs.pop() in FileField
+        max_length: Optional[int] = ...,
+        allow_empty_file: bool = ...,
+        use_url: bool = ...,
     ): ...
 
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
 class ImageField(FileField):
+    # From constructor
     _DjangoImageField: SupportsToPython
     def __init__(
         self,
-        _DjangoImageField: Type[SupportsToPython] = ...,
-        allow_empty_file: bool = ...,
-        max_length: Optional[int] = ...,
-        use_url: bool = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -500,26 +624,31 @@ class ImageField(FileField):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
+        *,
+        # kwargs.pop() in FileField:
+        max_length: Optional[int] = ...,
+        allow_empty_file: bool = ...,
+        use_url: bool = ...,
+        # kwargs.pop() in ImageField:
+        _DjangoImageField: Type[SupportsToPython] = ...,
     ): ...
 
 class _UnvalidatedField(Field): ...
 
 class ListField(Field):
+    # From constructor
     child: Field = ...
     allow_empty: bool = ...
-    max_length: int = ...
-    min_length: int = ...
+    max_length: Optional[int] = ...
+    min_length: Optional[int] = ...
     def __init__(
         self,
-        child: Field = ...,
-        allow_empty: bool = ...,
-        max_length: int = ...,
-        min_length: int = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -527,19 +656,27 @@ class ListField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
+        *,
+        # kwargs.pop() in ListField:
+        child: Field = ...,
+        allow_empty: bool = ...,
+        max_length: Optional[int] = ...,
+        min_length: Optional[int] = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
 class DictField(Field):
+    # From constructor
     child: Field = ...
+    allow_empty: bool
     def __init__(
         self,
-        child: Field = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -547,11 +684,15 @@ class DictField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
+        *,
+        # kwargs.pop() in DictField:
+        child: Field = ...,
+        allow_empty: bool = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
@@ -559,9 +700,12 @@ class HStoreField(DictField):
     child: CharField = ...
 
 class JSONField(Field):
+    # From constructor
+    binary: bool
+    encoder: Optional[JSONEncoder]
     def __init__(
         self,
-        binary: bool = ...,
+        # *args, **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -569,41 +713,51 @@ class JSONField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
+        *,
+        # kwargs.pop() in JSONField:
+        binary: bool = ...,
+        encoder: Optional[JSONEncoder] = ...,
     ): ...
 
 class ReadOnlyField(Field): ...
 class HiddenField(Field): ...
 
 class SerializerMethodField(Field):
+    # From constructor
     method_name: str
     def __init__(
         self,
         method_name: Optional[str] = ...,
-        read_only: bool = ...,
+        *,
+        # **kwargs passed to Field:
+        # 'read_only' is ignored (overwritten)
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
-        source: Union[Callable, str] = ...,
+        # 'source' is ignored (overwritten)
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
 
 class ModelField(Field):
+    # From constructor
     model_field: models.Field
+    max_length: Optional[int]
     def __init__(
         self,
         model_field: models.Field,
-        max_length: int = ...,
+        *,
+        # **kwargs passed to Field:
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -611,9 +765,9 @@ class ModelField(Field):
         initial: Any = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
-        help_text: str = ...,
-        allow_null: bool = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
+        error_messages: Optional[Mapping[str, str]] = ...,
+        validators: Optional[Sequence[_Validator]] = ...,
+        allow_null: bool = ...,
     ): ...
