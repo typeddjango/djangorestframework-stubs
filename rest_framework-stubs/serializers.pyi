@@ -12,6 +12,7 @@ from typing import (
     NoReturn,
     MutableMapping,
     Iterator,
+    Union,
 )
 
 from rest_framework.fields import (
@@ -149,6 +150,13 @@ class ModelSerializer(Serializer):
     serializer_url_field: Type[RelatedField] = ...
     serializer_choice_field: Type[Field] = ...
     url_field_name: Optional[str] = ...
+    class Meta:
+        model: Type[Model]
+        fields: Optional[Union[Sequence[str], str]]
+        read_only_fields: Optional[Sequence[str]]
+        exclude: Optional[Sequence[str]]
+        depth: Optional[int]
+        extra_kwargs: Dict[str, Dict[str, Any]]
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> List[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> List[str]: ...
     def build_field(
