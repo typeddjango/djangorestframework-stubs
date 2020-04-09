@@ -26,14 +26,20 @@ class ForceAuthClientHandler(ClientHandler):
 class APIClient(DjangoClient):
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: Optional[Model] = ..., token: Optional[Any] = ...) -> None: ...
-    def request(self, **request: Any) -> Response: ...
-    def get(self, path: str, data: Any = ..., secure: bool = ..., **extra: Any) -> Response: ...
-    def post(
+    def request(self, **request: Any) -> Response: ...  # type: ignore[override]
+    def get(  # type: ignore[override]
+        self, path: str, data: Any = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def post(  # type: ignore[override]
         self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Response: ...
-    def head(self, path: str, data: Any = ..., secure: bool = ..., **extra: Any) -> Response: ...
-    def trace(self, path: str, secure: bool = ..., **extra: Any) -> Response: ...
-    def options(
+    def head(  # type: ignore[override]
+        self, path: str, data: Any = ..., secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def trace(  # type: ignore[override]
+        self, path: str, secure: bool = ..., **extra: Any
+    ) -> Response: ...
+    def options(  # type: ignore[override]
         self,
         path: str,
         data: Union[Dict[str, str], str] = ...,
@@ -41,16 +47,16 @@ class APIClient(DjangoClient):
         secure: bool = ...,
         **extra: Any
     ) -> Response: ...
-    def put(
+    def put(  # type: ignore[override]
         self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Response: ...
-    def patch(
+    def patch(  # type: ignore[override]
         self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Response: ...
-    def delete(
+    def delete(  # type: ignore[override]
         self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Response: ...
-    def generic(
+    def generic(  # type: ignore[override]
         self,
         method: str,
         path: str,
