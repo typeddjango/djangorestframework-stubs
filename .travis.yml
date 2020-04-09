@@ -17,7 +17,9 @@ jobs:
 
     - name: Mypy for plugin code
       python: 3.7
-      script: mypy ./mypy_drf_plugin
+      script:
+        - mypy ./mypy_drf_plugin
+        - mypy -p rest_framework-stubs
 
     - name: Lint plugin code with flake8
       python: 3.7
@@ -25,7 +27,7 @@ jobs:
 
     - name: Lint with black
       python: 3.7
-      script: black --check --line-length=120 rest_framework-stubs/
+      script: black --check --line-length=120 scripts/ rest_framework-stubs/
 
     - name: Lint plugin code with isort
       python: 3.7
