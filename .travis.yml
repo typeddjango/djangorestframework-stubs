@@ -27,7 +27,7 @@ jobs:
 
     - name: Lint with black
       python: 3.7
-      script: black --check --line-length=120 scripts/ rest_framework-stubs/
+      script: black --check --line-length=120 setup.py scripts/ rest_framework-stubs/
 
     - name: Lint plugin code with isort
       python: 3.7
