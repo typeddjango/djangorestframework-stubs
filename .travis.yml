@@ -19,7 +19,7 @@ jobs:
       python: 3.7
       script:
         - mypy ./mypy_drf_plugin
-        - mypy rest_framework-stubs
+        - mypy -p rest_framework-stubs
 
     - name: Lint plugin code with flake8
       python: 3.7
