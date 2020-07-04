@@ -1,0 +1,8 @@
+- case: test_view_request_type
+  main: |
+    from rest_framework import generics
+
+    class MyListView(generics.ListAPIView):
+        def filter_queryset(self, queryset):
+            reveal_type(self.request)  # N: Revealed type is 'rest_framework.request.Request'
+            return queryset
