@@ -8,6 +8,7 @@ from typing import (
     Callable,
     Mapping,
     Type,
+    TypeVar,
     Tuple,
     NoReturn,
     MutableMapping,
@@ -121,7 +122,8 @@ class Serializer(BaseSerializer):
     def _readable_fields(self) -> List[Field]: ...
     def get_fields(self) -> Dict[str, Field]: ...
     def _read_only_defaults(self) -> Dict[str, Any]: ...
-    def validate(self, attrs):
+    T = TypeVar("T")
+    def validate(self, attrs: T) -> T:
         return attrs
     @property
     def data(self) -> ReturnDict: ...
