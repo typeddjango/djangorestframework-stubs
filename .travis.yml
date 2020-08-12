@@ -7,7 +7,7 @@ sudo: required
 
 jobs:
   include:
-    - name: Run plugin test suite with python 3.7
+    - name: Run plugin test suite with python 3.8
       python: 3.8
       script: pytest
       
