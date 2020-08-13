@@ -7,6 +7,10 @@ sudo: required
 
 jobs:
   include:
+    - name: Run plugin test suite with python 3.8
+      python: 3.8
+      script: pytest
+      
     - name: Run plugin test suite with python 3.7
       python: 3.7
       script: pytest
@@ -16,21 +20,21 @@ jobs:
       script: pytest
 
     - name: Mypy for plugin code
-      python: 3.7
+      python: 3.8
       script:
         - mypy ./mypy_drf_plugin
         - mypy -p rest_framework-stubs
 
     - name: Lint plugin code with flake8
-      python: 3.7
+      python: 3.8
       script: flake8
 
     - name: Lint with black
-      python: 3.7
+      python: 3.8
       script: black --check --line-length=120 setup.py scripts/ rest_framework-stubs/
 
     - name: Lint plugin code with isort
-      python: 3.7
+      python: 3.8
       script: isort --check
 
 before_install: |
