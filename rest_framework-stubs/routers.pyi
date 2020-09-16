@@ -19,7 +19,6 @@ class Route(NamedTuple):
 
 class DynamicRoute(NamedTuple):
     url: str
-    mapping: Dict[str, str]
     name: str
     detail: bool
     initkwargs: Dict[str, Any]
