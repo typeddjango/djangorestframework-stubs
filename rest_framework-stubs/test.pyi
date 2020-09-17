@@ -36,9 +36,7 @@ class APIClient(DjangoClient):
     def head(  # type: ignore[override]
         self, path: str, data: Any = ..., secure: bool = ..., **extra: Any
     ) -> Response: ...
-    def trace(  # type: ignore[override]
-        self, path: str, secure: bool = ..., **extra: Any
-    ) -> Response: ...
+    def trace(self, path: str, secure: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
     def options(  # type: ignore[override]
         self,
         path: str,
