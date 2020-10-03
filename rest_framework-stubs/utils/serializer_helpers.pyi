@@ -1,4 +1,3 @@
-import collections
 from typing import Any, Dict, Iterator, List, Mapping, MutableMapping
 
 from rest_framework.exceptions import ErrorDetail

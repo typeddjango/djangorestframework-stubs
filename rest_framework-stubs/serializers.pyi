@@ -15,65 +15,13 @@ from typing import (
     Union,
 )
 
-from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
-from django.db.models import DurationField as ModelDurationField
 from django.db.models import Model
-from django.db.models.fields import Field as DjangoModelField
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.exceptions import APIException as APIException
-from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
-from rest_framework.exceptions import MethodNotAllowed as MethodNotAllowed
-from rest_framework.exceptions import NotAcceptable as NotAcceptable
-from rest_framework.exceptions import NotAuthenticated as NotAuthenticated
-from rest_framework.exceptions import NotFound as NotFound
-from rest_framework.exceptions import ParseError as ParseError
-from rest_framework.exceptions import PermissionDenied as PermissionDenied
-from rest_framework.exceptions import Throttled as Throttled
-from rest_framework.exceptions import UnsupportedMediaType as UnsupportedMediaType
-from rest_framework.exceptions import ValidationError as ValidationError
-from rest_framework.fields import BooleanField as BooleanField
-from rest_framework.fields import CharField as CharField
-from rest_framework.fields import ChoiceField as ChoiceField
-from rest_framework.fields import CreateOnlyDefault as CreateOnlyDefault
-from rest_framework.fields import CurrentUserDefault as CurrentUserDefault
-from rest_framework.fields import DateField as DateField
-from rest_framework.fields import DateTimeField as DateTimeField
-from rest_framework.fields import DecimalField as DecimalField
-from rest_framework.fields import DictField as DictField
-from rest_framework.fields import DurationField as DurationField
-from rest_framework.fields import EmailField as EmailField
 from rest_framework.fields import Field as Field
-from rest_framework.fields import FileField as FileField
-from rest_framework.fields import FilePathField as FilePathField
-from rest_framework.fields import FloatField as FloatField
 from rest_framework.fields import HiddenField as HiddenField
-from rest_framework.fields import HStoreField as HStoreField
-from rest_framework.fields import ImageField as ImageField
-from rest_framework.fields import IntegerField as IntegerField
-from rest_framework.fields import IPAddressField as IPAddressField
-from rest_framework.fields import JSONField as JSONField
-from rest_framework.fields import ListField as ListField
-from rest_framework.fields import ModelField as ModelField
-from rest_framework.fields import MultipleChoiceField as MultipleChoiceField
-from rest_framework.fields import NullBooleanField as NullBooleanField
-from rest_framework.fields import ReadOnlyField as ReadOnlyField
-from rest_framework.fields import RegexField as RegexField
-from rest_framework.fields import SerializerMethodField as SerializerMethodField
-from rest_framework.fields import SkipField as SkipField
-from rest_framework.fields import SlugField as SlugField
-from rest_framework.fields import TimeField as TimeField
-from rest_framework.fields import URLField as URLField
-from rest_framework.fields import UUIDField as UUIDField
-from rest_framework.relations import Hyperlink as Hyperlink
-from rest_framework.relations import HyperlinkedIdentityField as HyperlinkedIdentityField
-from rest_framework.relations import HyperlinkedRelatedField as HyperlinkedRelatedField
-from rest_framework.relations import ManyRelatedField as ManyRelatedField
-from rest_framework.relations import PrimaryKeyRelatedField as PrimaryKeyRelatedField
+from rest_framework.fields import CharField as CharField  # noqa: F401
 from rest_framework.relations import RelatedField as RelatedField
-from rest_framework.relations import SlugRelatedField as SlugRelatedField
-from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BoundField, ReturnDict, ReturnList
 
