@@ -28,7 +28,7 @@ jobs:
 
     - name: Lint plugin code with flake8
       python: 3.8
-      script: flake8
+      script: flake8 --config flake8-pyi.ini
 
     - name: Lint with black
       python: 3.8
