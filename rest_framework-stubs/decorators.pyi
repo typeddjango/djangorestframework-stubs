@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Sequence, Type, TypeVar, Union
+from typing import Any, Callable, Optional, Sequence, Type, TypeVar
 
 from django.http.response import HttpResponseBase
 from rest_framework.authentication import BaseAuthentication
