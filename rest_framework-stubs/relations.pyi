@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 from rest_framework.fields import Field, _Validator
 from rest_framework.request import Request
 
-def method_overridden(method_name: Any, klass: Any, instance: Any) -> bool: ...
+def method_overridden(method_name: str, klass: type, instance: Any) -> bool: ...
 
 _Choices = Dict[Any, Any]
 
