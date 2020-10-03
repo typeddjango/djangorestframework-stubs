@@ -6,8 +6,10 @@ from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
-from rest_framework.compat import requests
 from rest_framework.response import Response
+from rest_framework.request import Request
+import requests
+import coreapi
 
 def force_authenticate(request: Any, user: Optional[Any] = ..., token: Optional[Any] = ...) -> None: ...
 
@@ -74,13 +76,13 @@ class APIRequestFactory(DjangoRequestFactory):
         secure: bool = ...,
         **extra: Any
     ) -> Response: ...
-    def request(self, **kwargs: Any) -> Response: ...
+    def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
 
 class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any): ...
     def get_response(self, request: HttpRequest) -> HttpResponse: ...
 
-class APIClient(APIRequestFactory, DjangoClient):
+class APIClient(APIRequestFactory, DjangoClient):  # type: ignore
     handler: Any = ...
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: Optional[Model] = ..., token: Optional[Any] = ...) -> None: ...

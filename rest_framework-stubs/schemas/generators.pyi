@@ -1,12 +1,14 @@
-from typing import Any, Iterable, List, Optional, Pattern, Sequence, Type, Union
+from typing import Tuple, Any, Iterable, List, Optional, Pattern, Sequence, Type, Union
 
 from django.db.models.base import Model
 from django.http.request import HttpRequest
-from rest_framework.compat import coreapi
+import coreapi
 
 def common_path(paths: Iterable[str]) -> str: ...
 def get_pk_name(model: Type[Model]) -> str: ...
 def is_api_view(callback: Any) -> bool: ...
+
+_APIEndpoint = Tuple[str, str, Any]
 
 class EndpointEnumerator:
     patterns: List[Any]
