@@ -1,42 +1,8 @@
 from typing import Any
 
 from django.conf.urls import url
-
-# django.contrib.postgres requires psycopg2
-try:
-    from django.contrib.postgres import fields as postgres_fields
-except ImportError:
-    postgres_fields = None  # type: ignore
-
-# coreapi is required for CoreAPI schema generation
-try:
-    import coreapi
-except ImportError:
-    coreapi = None
-
-# uritemplate is required for OpenAPI and CoreAPI schema generation
-try:
-    import uritemplate
-except ImportError:
-    uritemplate = None
-
-# coreschema is optional
-try:
-    import coreschema
-except ImportError:
-    coreschema = None
-
-# pyyaml is optional
-try:
-    import yaml
-except ImportError:
-    yaml = None  # type: ignore
-
-# requests is optional
-try:
-    import requests
-except ImportError:
-    requests = None  # type: ignore
+import coreapi  # noqa: F401
+import requests  # noqa: F401
 
 try:
     import pygments
