@@ -1,11 +1,10 @@
 from typing import Any, Dict, Type
 
+from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.serializers import BaseSerializer
 from rest_framework.utils.field_mapping import ClassLookupDict
 from rest_framework.views import APIView
-
-from rest_framework import serializers
 
 class BaseMetadata(object):
     def determine_metadata(self, request: Request, view: APIView) -> Dict[str, Any]: ...

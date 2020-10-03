@@ -7,29 +7,30 @@ from typing import (
     Any,
     Callable,
     Dict,
+    Iterable,
     List,
+    Mapping,
+    MutableMapping,
     NoReturn,
     Optional,
     Pattern,
+    Protocol,
     Sequence,
     Set,
     Tuple,
+    Type,
     TypeVar,
     Union,
-    Iterable,
-    Protocol,
-    Type,
-    Mapping,
-    MutableMapping,
 )
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Model
-from django.forms import FilePathField as DjangoFilePathField, ImageField as DjangoImageField
-from rest_framework.serializers import BaseSerializer
+from django.forms import FilePathField as DjangoFilePathField
+from django.forms import ImageField as DjangoImageField
 from rest_framework.relations import Option
+from rest_framework.serializers import BaseSerializer
 
 class empty: ...
 

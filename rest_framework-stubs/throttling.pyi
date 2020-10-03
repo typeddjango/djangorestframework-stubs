@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, MutableMapping, Optional, Tuple, List
+from typing import Any, Callable, Dict, List, MutableMapping, Optional, Tuple
 
 from rest_framework.request import Request
 

@@ -1,6 +1,6 @@
-from typing import Any, Union, List, Dict, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Union
 
-from django.http import JsonResponse, HttpRequest
+from django.http import HttpRequest, JsonResponse
 from rest_framework.renderers import BaseRenderer
 
 def _get_error_details(data: Any, default_code: Optional[str] = ...) -> Any: ...

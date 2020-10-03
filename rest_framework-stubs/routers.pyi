@@ -1,14 +1,13 @@
 from typing import Any, Callable, Dict, Iterable, List, Mapping, NamedTuple, Optional, Tuple, Type, Union
 
 from django.utils.deprecation import RenameMethodsBase
+from rest_framework import views
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.schemas import SchemaGenerator
 from rest_framework.schemas.views import SchemaView
 from rest_framework.viewsets import ViewSetMixin
-
-from rest_framework import views
 
 class Route(NamedTuple):
     url: str

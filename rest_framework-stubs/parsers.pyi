@@ -1,4 +1,4 @@
-from typing import Any, Dict, IO, Mapping, Optional, Type
+from typing import IO, Any, Dict, Mapping, Optional, Type
 
 from rest_framework.renderers import BaseRenderer
 

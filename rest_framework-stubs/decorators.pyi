@@ -1,7 +1,6 @@
 from typing import Any, Callable, Optional, Sequence, Type, TypeVar, Union
 
 from django.http.response import HttpResponseBase
-
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import BasePermission

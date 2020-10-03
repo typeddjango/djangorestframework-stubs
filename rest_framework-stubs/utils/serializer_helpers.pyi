@@ -1,5 +1,5 @@
 import collections
-from typing import Any, Dict, List, Mapping, MutableMapping, Iterator
+from typing import Any, Dict, Iterator, List, Mapping, MutableMapping
 
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field

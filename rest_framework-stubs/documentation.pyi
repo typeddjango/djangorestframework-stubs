@@ -1,7 +1,6 @@
 from typing import Any, Callable, Optional, Sequence, Type
 
 from rest_framework.renderers import BaseRenderer
-
 from rest_framework.schemas import SchemaGenerator
 
 def get_docs_view(

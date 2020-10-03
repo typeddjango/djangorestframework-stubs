@@ -70,8 +70,8 @@ Currently we only support two Django versions.
 To run auto-formatting:
 
 ```bash
-isort -rc .
-black ./rest-framework-stubs
+isort .
+black rest_framework-stubs
 ```
 
 To run linting:
