@@ -1,21 +1,11 @@
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    NoReturn,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-)
+from typing import Any, Callable, Dict, List, NoReturn, Optional, Sequence, Tuple, Type
 
 from django.http import HttpRequest
 from django.views.generic import View
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
-from rest_framework.permissions import _SupportsHasPermission, _PermissionClass
+from rest_framework.permissions import _PermissionClass, _SupportsHasPermission
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response

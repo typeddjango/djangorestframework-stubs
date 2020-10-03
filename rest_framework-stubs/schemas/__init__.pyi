@@ -3,7 +3,9 @@ from typing import Any, Callable, Optional, Sequence, Type
 from rest_framework.renderers import BaseRenderer
 
 from .generators import SchemaGenerator as SchemaGenerator
-from .inspectors import AutoSchema as AutoSchema, DefaultSchema as DefaultSchema, ManualSchema as ManualSchema
+from .inspectors import AutoSchema as AutoSchema
+from .inspectors import DefaultSchema as DefaultSchema
+from .inspectors import ManualSchema as ManualSchema
 
 def get_schema_view(
     title: Optional[str] = ...,

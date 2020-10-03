@@ -1,9 +1,11 @@
-from typing import Any, Optional, Sequence, Tuple, Union, Dict
+from typing import Any, Dict, Optional, Sequence, Tuple, Union
 
 from django.db.models import Model
 from django.http import HttpRequest, HttpResponse
 from django.test import testcases
-from django.test.client import Client as DjangoClient, ClientHandler, RequestFactory as DjangoRequestFactory
+from django.test.client import Client as DjangoClient
+from django.test.client import ClientHandler
+from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.compat import requests
 from rest_framework.response import Response
 

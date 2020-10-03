@@ -1,7 +1,7 @@
 from typing import Any, Optional, Tuple, Type
 
-from django.db.models import Model
 from django.contrib.auth import authenticate as authenticate
+from django.db.models import Model
 from django.middleware.csrf import CsrfViewMiddleware
 from rest_framework.request import Request
 

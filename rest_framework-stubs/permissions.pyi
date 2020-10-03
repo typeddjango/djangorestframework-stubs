@@ -2,7 +2,6 @@ from typing import Any, Dict, List, Protocol, Sequence, Type, Union
 
 from django.db.models import Model, QuerySet
 from django.views import View
-
 from rest_framework.request import Request
 
 SAFE_METHODS: Sequence[str] = ("GET", "HEAD", "OPTIONS")

@@ -10,7 +10,7 @@ jobs:
     - name: Run plugin test suite with python 3.8
       python: 3.8
       script: pytest
-      
+
     - name: Run plugin test suite with python 3.7
       python: 3.7
       script: pytest
@@ -22,12 +22,13 @@ jobs:
     - name: Mypy for plugin code
       python: 3.8
       script:
-        - mypy ./mypy_drf_plugin
-        - mypy -p rest_framework-stubs
+        # rm __init__.py is a suggested fix for the mypy crawl issue: https://github.com/python/mypy/issues/8944
+        - rm ./rest_framework-stubs/__init__.pyi && mypy rest_framework-stubs
+        - rm ./mypy_drf_plugin/__init__.py && mypy mypy_drf_plugin
 
     - name: Lint plugin code with flake8
       python: 3.8
-      script: flake8
+      script: flake8 --config flake8-pyi.ini
 
     - name: Lint with black
       python: 3.8
@@ -35,7 +36,7 @@ jobs:
 
     - name: Lint plugin code with isort
       python: 3.8
-      script: isort --check
+      script: isort **/*.py -c -v
 
 before_install: |
   # Upgrade pip, setuptools, and wheel

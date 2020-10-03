@@ -1,4 +1,4 @@
-from typing import Any, Dict, MutableMapping, Sequence, Type, TypeVar, Generic
+from typing import Any, Dict, Generic, MutableMapping, Sequence, Type, TypeVar
 
 from django.db import models
 

@@ -42,7 +42,7 @@ Here's [how we run our CI](https://github.com/typeddjango/django-stubs/blob/mast
 To run typechecking use:
 
 ```bash
-mypy ./mypy_django_plugin
+mypy ./mypy_drf_plugin
 ```
 
 ### Testing
@@ -70,8 +70,8 @@ Currently we only support two Django versions.
 To run auto-formatting:
 
 ```bash
-isort -rc .
-black django-stubs/
+isort .
+black rest_framework-stubs
 ```
 
 To run linting:

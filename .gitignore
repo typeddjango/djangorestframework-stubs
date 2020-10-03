@@ -1,9 +1,10 @@
 *.egg-info
-__pycache__/
-.pytest_cache/
-out/
-/test_sqlite.py
-/django
 .idea/
 .mypy_cache
+.pytest_cache/
+.venv/
+/django
+/test_sqlite.py
+__pycache__/
+out/
 pip-wheel-metadata/
