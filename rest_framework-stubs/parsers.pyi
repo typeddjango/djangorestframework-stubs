@@ -2,12 +2,12 @@ from typing import IO, Any, Dict, Mapping, Optional, Type
 
 from rest_framework.renderers import BaseRenderer
 
-class DataAndFiles(object):
+class DataAndFiles:
     data: Any
     files: Mapping[str, IO[Any]]
     def __init__(self, data: Any, files: Mapping[str, IO[Any]]) -> None: ...
 
-class BaseParser(object):
+class BaseParser:
     media_type: str = ...
     def parse(
         self, stream: IO[Any], media_type: Optional[str] = ..., parser_context: Optional[Mapping[str, Any]] = ...

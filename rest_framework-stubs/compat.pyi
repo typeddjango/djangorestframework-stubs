@@ -1,8 +1,8 @@
 from typing import Any
 
-from django.conf.urls import url
 import coreapi  # noqa: F401
 import requests  # noqa: F401
+from django.conf.urls import url
 
 try:
     import pygments

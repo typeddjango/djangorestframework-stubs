@@ -10,7 +10,7 @@ class ReturnDict(dict):
 class ReturnList(list):
     serializer: BaseSerializer
 
-class BoundField(object):
+class BoundField:
     """
     A field object that also includes `.value` and `.error` properties.
     Returned when iterating over a serializer instance,

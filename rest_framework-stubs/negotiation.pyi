@@ -5,7 +5,7 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.settings import api_settings
 
-class BaseContentNegotiation(object):
+class BaseContentNegotiation:
     def select_parser(self, request: Request, parsers: Iterable[BaseParser]) -> Optional[BaseParser]: ...
     def select_renderer(
         self, request: Request, renderers: Iterable[BaseRenderer], format_suffix: Optional[str] = ...

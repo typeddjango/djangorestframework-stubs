@@ -9,7 +9,7 @@ def _is_extra_action(attr: Any) -> bool: ...
 
 _ViewFunc = Callable[..., HttpResponseBase]
 
-class ViewSetMixin(object):
+class ViewSetMixin:
     # Classvars assigned in as_view()
     name: Optional[str]
     description: Optional[str]
