@@ -22,7 +22,9 @@ jobs:
     - name: Mypy for plugin code
       python: 3.8
       script:
-        - mypy -p rest_framework-stubs
+        # rm __init__.py is a suggested fix for the mypy crawl issue: https://github.com/python/mypy/issues/8944
+        - rm ./rest_framework-stubs/__init__.pyi && mypy -p rest_framework-stubs
+        - rm ./mypy_drf_plugin/__init__.py && mypy -p mypy_drf_plugin
 
     - name: Lint plugin code with flake8
       python: 3.8
