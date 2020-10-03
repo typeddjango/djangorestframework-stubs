@@ -1,4 +1,4 @@
-from typing import Protocol, Dict, Any, Callable, Iterable, List, Mapping, Optional, Sequence, Union
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Protocol, Sequence, Union
 
 from django.db.models import Model
 from django.db.models.query import QuerySet
@@ -73,7 +73,7 @@ class RelatedField(Field):
 class StringRelatedField(RelatedField): ...
 
 class PrimaryKeyRelatedField(RelatedField):
-    pk_field: Optional[str]  = ...
+    pk_field: Optional[str] = ...
 
 class HyperlinkedRelatedField(RelatedField):
     reverse: Any = ...

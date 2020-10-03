@@ -1,11 +1,15 @@
 from typing import Any, Callable, Optional, Sequence, Type
 
 from rest_framework.renderers import BaseRenderer
-from .generators import BaseSchemaGenerator as BaseSchemaGenerator
-from . import coreapi as coreapi, openapi as openapi
-from .coreapi import AutoSchema as AutoSchema, ManualSchema as ManualSchema, SchemaGenerator as SchemaGenerator
-from .inspectors import DefaultSchema as DefaultSchema
 from rest_framework.settings import api_settings as api_settings
+
+from . import coreapi as coreapi
+from . import openapi as openapi
+from .coreapi import AutoSchema as AutoSchema
+from .coreapi import ManualSchema as ManualSchema
+from .coreapi import SchemaGenerator as SchemaGenerator
+from .generators import BaseSchemaGenerator as BaseSchemaGenerator
+from .inspectors import DefaultSchema as DefaultSchema
 
 def get_schema_view(
     title: Optional[str] = ...,

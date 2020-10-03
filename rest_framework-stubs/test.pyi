@@ -1,15 +1,15 @@
 from typing import Any, Dict, Optional, Union
 
+import coreapi
+import requests
 from django.db.models import Model
 from django.http import HttpRequest, HttpResponse
 from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
-from rest_framework.response import Response
 from rest_framework.request import Request
-import requests
-import coreapi
+from rest_framework.response import Response
 
 def force_authenticate(request: Any, user: Optional[Any] = ..., token: Optional[Any] = ...) -> None: ...
 

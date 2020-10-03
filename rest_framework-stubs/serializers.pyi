@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import (
     Any,
     Callable,
@@ -14,14 +15,14 @@ from typing import (
     Type,
     Union,
 )
-from collections import OrderedDict
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import Model
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
+from rest_framework.fields import CharField as CharField  # noqa: F401
 from rest_framework.fields import Field as Field
 from rest_framework.fields import HiddenField as HiddenField
-from rest_framework.fields import CharField as CharField  # noqa: F401
 from rest_framework.relations import RelatedField as RelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BoundField, ReturnDict, ReturnList

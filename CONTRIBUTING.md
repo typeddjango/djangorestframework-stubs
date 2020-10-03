@@ -77,7 +77,6 @@ black rest_framework-stubs
 To run linting:
 
 ```bash
-flake8
 flake8 --config flake8-pyi.ini
 ```
 

@@ -1,6 +1,7 @@
+from typing import Any, Optional
+
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import ViewInspector as ViewInspector
-from typing import Any, Optional
 
 class SchemaGenerator(BaseSchemaGenerator):
     def get_info(self): ...

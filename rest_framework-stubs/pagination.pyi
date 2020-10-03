@@ -1,4 +1,5 @@
 from typing import Any, Callable, Dict, List, NamedTuple, Optional, Sequence, Tuple, Type, Union
+
 from django.core.paginator import Page, Paginator, _SupportsCount, _SupportsLen
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -101,4 +102,3 @@ class CursorPagination(BasePagination):
     def encode_cursor(self, cursor: Cursor) -> str: ...
     def _get_position_from_instance(self, instance: Any, ordering: Sequence[str]) -> str: ...
     def get_html_context(self) -> Dict[str, str]: ...
-    

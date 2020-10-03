@@ -1,5 +1,7 @@
 from typing import Any, Optional
+
 from django import template
+
 register: Any
 class_re: Any
 
@@ -39,5 +41,7 @@ simple_url_2_re: Any
 simple_email_re: Any
 
 def smart_urlquote_wrapper(matched_url: Any): ...
-def urlize_quoted_links(text: Any, trim_url_limit: Optional[Any] = ..., nofollow: bool = ..., autoescape: bool = ...): ...
+def urlize_quoted_links(
+    text: Any, trim_url_limit: Optional[Any] = ..., nofollow: bool = ..., autoescape: bool = ...
+): ...
 def break_long_headers(header: Any): ...

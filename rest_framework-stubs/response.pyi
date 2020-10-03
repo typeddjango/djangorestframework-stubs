@@ -1,4 +1,4 @@
-from typing import Any, Dict, Union, List, Mapping, Optional
+from typing import Any, Dict, List, Mapping, Optional, Union
 
 from django.template.response import SimpleTemplateResponse
 

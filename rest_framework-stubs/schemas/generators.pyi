@@ -1,8 +1,8 @@
-from typing import Tuple, Any, Iterable, List, Optional, Pattern, Sequence, Type, Union
+from typing import Any, Iterable, List, Optional, Pattern, Sequence, Tuple, Type, Union
 
+import coreapi
 from django.db.models.base import Model
 from django.http.request import HttpRequest
-import coreapi
 
 def common_path(paths: Iterable[str]) -> str: ...
 def get_pk_name(model: Type[Model]) -> str: ...

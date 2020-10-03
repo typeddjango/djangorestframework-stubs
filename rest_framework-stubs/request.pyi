@@ -1,12 +1,14 @@
 from contextlib import contextmanager
 from types import TracebackType
 from typing import Any, ContextManager, Dict, Iterator, Optional, Sequence, Tuple, Type, Union
+
 from django.db.models.base import Model
 from django.http import HttpRequest, QueryDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
 from rest_framework.views import APIView
+
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(ContextManager["Request"]):
