@@ -19,7 +19,7 @@ def find_stub_files(name):
 with open("README.md", "r") as f:
     readme = f.read()
 
-dependencies = ["mypy>=0.750", "django-stubs>=1.3.0", "typing-extensions"]
+dependencies = ["mypy>=0.782", "django-stubs>=1.6.0", "typing-extensions"]
 
 setup(
     name="djangorestframework-stubs",
@@ -39,5 +39,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
 )
