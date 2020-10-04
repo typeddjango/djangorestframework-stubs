@@ -8,10 +8,10 @@ class Response(SimpleTemplateResponse):
     content_type: Optional[str] = ...
     def __init__(
         self,
-        data: Optional[Any] = ...,
+        data: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = ...,
         status: Optional[int] = ...,
         template_name: Optional[str] = ...,
-        headers: Optional[Mapping[str, Any]] = ...,
+        headers: Optional[Mapping[str, str]] = ...,
         exception: bool = ...,
         content_type: Optional[str] = ...,
     ): ...
