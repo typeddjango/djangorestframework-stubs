@@ -8,7 +8,6 @@ from . import openapi as openapi
 from .coreapi import AutoSchema as AutoSchema
 from .coreapi import ManualSchema as ManualSchema
 from .coreapi import SchemaGenerator as SchemaGenerator
-from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import DefaultSchema as DefaultSchema
 
 def get_schema_view(
@@ -19,7 +18,7 @@ def get_schema_view(
     renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
     public: bool = ...,
     patterns: Optional[Sequence[Any]] = ...,
-    generator_class: Type[BaseSchemaGenerator] = ...,
+    generator_class: Type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
     version: Optional[str] = ...,
