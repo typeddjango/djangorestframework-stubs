@@ -5,7 +5,6 @@ import requests
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Model
-from django.http import HttpRequest, HttpResponse
 from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
@@ -84,7 +83,7 @@ class APIRequestFactory(DjangoRequestFactory):
 
 class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any): ...
-    def get_response(self, request: HttpRequest) -> HttpResponse: ...
+    def get_response(self, request: Request) -> Response: ...  # type: ignore[override]
 
 class APIClient(APIRequestFactory, DjangoClient):  # type: ignore
     handler: Any = ...

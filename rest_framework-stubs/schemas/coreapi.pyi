@@ -1,5 +1,5 @@
 from collections import Counter, OrderedDict
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from rest_frame.fields import Field
 from rest_framework.compat import coreapi
@@ -28,12 +28,13 @@ class SchemaGenerator(BaseSchemaGenerator):
     coerce_method_names: Optional[Dict[str, str]] = ...
     def __init__(
         self,
-        title: Optional[Any] = ...,
-        url: Optional[Any] = ...,
-        description: Optional[Any] = ...,
-        patterns: Optional[Any] = ...,
-        urlconf: Optional[Any] = ...,
-        version: Optional[Any] = ...,
+        urlconf: Optional[str],
+        title: Optional[str],
+        description: Optional[str],
+        version: Optional[str],
+        patterns: List[Any],
+        url: Optional[str],
+        endpoints: Optional[Sequence[Tuple[str, str, Any]]],
     ) -> None: ...
     def get_links(self, request: Optional[Request] = ...) -> Optional[LinkNode]: ...
     def get_schema(self, request: Optional[Request] = ..., public: bool = ...) -> Optional[coreapi.Document]: ...
