@@ -55,12 +55,11 @@ To run unit tests:
 pytest
 ```
 
-Type-related tests ensure that different Django versions do work correctly.
+Type-related tests ensure that different DRF versions do work correctly.
 To run type-related tests:
 
 ```bash
-python ./scripts/typecheck_tests.py --django_version=2.2
-python ./scripts/typecheck_tests.py --django_version=3.0
+python ./scripts/typecheck_tests.py --drf_version=3.12.1
 ```
 
 Currently we only support two Django versions.
