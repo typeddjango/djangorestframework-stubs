@@ -9,5 +9,5 @@ INSTALLED_APPS = [
     "django.contrib.admin.apps.SimpleAdminConfig",
     "django.contrib.staticfiles",
     "django.contrib.auth",
-    'rest_framework',
+    "rest_framework",
 ]
