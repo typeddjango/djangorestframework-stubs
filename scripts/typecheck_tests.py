@@ -12,8 +12,8 @@ from git import RemoteProgress, Repo
 from scripts.enabled_test_modules import EXTERNAL_MODULES, IGNORED_ERRORS, IGNORED_MODULES, MOCK_OBJECTS
 
 PROJECT_DIRECTORY = Path(__file__).parent.parent
-STUBS_DIRECTORY = PROJECT_DIRECTORY / "rest_framework-stubs"
-DRF_SOURCE_DIRECTORY = PROJECT_DIRECTORY / "drf_sources"  # type: Path
+STUBS_DIRECTORY = PROJECT_DIRECTORY / "rest_framework-stubs"  # type: Path
+DRF_DIRECTORY = PROJECT_DIRECTORY / "drf_source"  # type: Path
 
 
 def get_unused_ignores(ignored_message_freq: Dict[str, Dict[Union[str, Pattern], int]]) -> List[str]:
@@ -38,16 +38,14 @@ def is_pattern_fits(pattern: Union[Pattern, str], line: str):
 
 
 def is_ignored(line: str, test_filename: str, *, ignored_message_freqs: Dict[str, Dict[str, int]]) -> bool:
-    if "runtests" in line:
+    if "runtests" in line or test_filename in IGNORED_MODULES:
         return True
-
-    if test_filename in IGNORED_MODULES:
-        return True
+    print(line)
+    print(test_filename)
     for pattern in IGNORED_ERRORS.get(test_filename, []):
         if is_pattern_fits(pattern, line):
             ignored_message_freqs[test_filename][pattern] += 1
             return True
-
     return False
 
 
@@ -74,14 +72,11 @@ class ProgressPrinter(RemoteProgress):
 
 
 def checkout_target_tag(drf_version: str) -> Path:
-    target_dir = DRF_SOURCE_DIRECTORY / drf_version  # type: Path
-    if not DRF_SOURCE_DIRECTORY.exists():
-        DRF_SOURCE_DIRECTORY.mkdir(exist_ok=True, parents=False)
-    if not target_dir.exists():
-        target_dir.mkdir(exist_ok=True, parents=False)
+    if not DRF_DIRECTORY.exists():
+        DRF_DIRECTORY.mkdir(exist_ok=True, parents=False)
         repository = Repo.clone_from(
             "https://github.com/encode/django-rest-framework.git",
-            target_dir,
+            DRF_DIRECTORY,
             progress=ProgressPrinter(),
             branch="master",
             depth=100,
@@ -90,23 +85,22 @@ def checkout_target_tag(drf_version: str) -> Path:
         repository = Repo(target_dir)
         repository.remote("origin").pull("master", progress=ProgressPrinter(), depth=100)
     repository.git.checkout(drf_version)
-    return target_dir
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--drf_version", default="3.12.1")
     args = parser.parse_args()
-    target_dir = checkout_target_tag(args.drf_version)
-    shutil.copytree(STUBS_DIRECTORY, target_dir / "rest_framework", dirs_exist_ok=True)
+    checkout_target_tag(args.drf_version)
+    shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)
     mypy_config_file = (PROJECT_DIRECTORY / "scripts" / "mypy.ini").absolute()
     mypy_cache_dir = Path(__file__).parent / ".mypy_cache"
-    tests_root = target_dir / "tests"
+    tests_root = DRF_DIRECTORY / "tests"
     global_rc = 0
 
     try:
         mypy_options = [
             "--cache-dir",
-            str(mypy_config_file.parent / ".mypy_cache"),
+            str(mypy_cache_dir),
             "--config-file",
             str(mypy_config_file),
             "--show-traceback",
