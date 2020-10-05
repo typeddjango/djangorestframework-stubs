@@ -26,7 +26,6 @@ IGNORED_ERRORS = {
         'has no attribute "mapping"',
         'Response" has no attribute "view"',
         'Cannot infer type',
-        '"Model" has no attribute "name"'
     ],
     "test_request.py": ['"Request" has no attribute "inner_property"', 'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"'],
     "test_response.py": [
