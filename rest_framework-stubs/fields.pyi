@@ -51,27 +51,24 @@ def get_error_detail(exc_info: ValidationError) -> Any: ...
 _FT = TypeVar("_FT")  # Field Type
 _FPT = TypeVar("_FPT")  # Field Primitive Type
 
-_Validator = Callable[[Any], None]
-
 class Field:
+    allow_null: bool
+    default: Any
+    default_empty_html: Any = ...
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
-    default_empty_html: Any = ...
-    initial: Optional[Any] = ...
-    # TODO: add Generic/Plugin support for parent
-    parent: Optional[Any]
-    # From constructor
-    read_only: bool
-    write_only: bool
-    required: bool
-    default: Any
-    source: Optional[Union[Callable, str]]
-    label: Optional[str]
+    error_messages: Dict[str, str] = ...
+    field_name: Optional[str] = ...
     help_text: Optional[str]
-    validators: Optional[List[_Validator]]
-    error_messages: Optional[Mapping[str, str]]
+    initial: Optional[Any] = ...
+    label: Optional[str]
+    parent: Optional[Any]
+    read_only: bool
+    required: bool
+    source: Optional[Union[Callable, str]]
     style: Optional[Mapping[str, Any]]
-    allow_null: bool
+    write_only: bool
+    source_attrs: Any = ...
     def __init__(
         self,
         read_only: bool = ...,
@@ -84,10 +81,14 @@ class Field:
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
+    @property
+    def validators(self) -> List[Callable]: ...
+    @validators.setter
+    def validators(self, validators: List[Callable]) -> None: ...
     def get_validators(self) -> List[Callable]: ...
     def get_initial(self) -> Any: ...
     def get_value(self, dictionary: Any) -> Any: ...
@@ -103,6 +104,8 @@ class Field:
     def root(self) -> BaseSerializer: ...
     @property
     def context(self) -> Dict[str, Any]: ...
+    def __new__(cls, *args: Any, **kwargs: Any): ...
+    def __deepcopy__(self, memo: Any): ...
 
 class BooleanField(Field):
     TRUE_VALUES: Set[Any] = ...
@@ -136,7 +139,7 @@ class CharField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         # kwargs.pop() in CharField
         allow_blank: bool = ...,
@@ -168,7 +171,7 @@ class RegexField(CharField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -195,7 +198,7 @@ class SlugField(CharField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -224,7 +227,7 @@ class UUIDField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -252,7 +255,7 @@ class IPAddressField(CharField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -282,7 +285,7 @@ class IntegerField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -310,7 +313,7 @@ class FloatField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -346,7 +349,7 @@ class DecimalField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
@@ -377,7 +380,7 @@ class DateTimeField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
     def enforce_timezone(self, value: Any) -> Any: ...
@@ -406,7 +409,7 @@ class DateField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -433,7 +436,7 @@ class TimeField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -458,7 +461,7 @@ class DurationField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -489,7 +492,7 @@ class ChoiceField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
@@ -522,7 +525,7 @@ class MultipleChoiceField(ChoiceField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -552,7 +555,7 @@ class FilePathField(ChoiceField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -574,7 +577,7 @@ class FileField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
         # kwargs.pop() in FileField
@@ -602,7 +605,7 @@ class ImageField(FileField):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
         # kwargs.pop() in FileField:
@@ -634,7 +637,7 @@ class ListField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
         # kwargs.pop() in ListField:
@@ -662,7 +665,7 @@ class DictField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
         # kwargs.pop() in DictField:
@@ -691,7 +694,7 @@ class JSONField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
         # kwargs.pop() in JSONField:
@@ -720,7 +723,7 @@ class SerializerMethodField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
 
@@ -743,6 +746,6 @@ class ModelField(Field):
         help_text: Optional[str] = ...,
         style: Optional[Mapping[str, Any]] = ...,
         error_messages: Optional[Mapping[str, str]] = ...,
-        validators: Optional[Sequence[_Validator]] = ...,
+        validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...

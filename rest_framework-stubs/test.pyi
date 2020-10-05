@@ -4,16 +4,16 @@ import coreapi
 import requests
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Model
 from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
+from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 def force_authenticate(
-    request: Request, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Any] = ...
+    request: Request, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
 ) -> None: ...
 
 class HeaderDict(requests.packages.urllib3._collections.HTTPHeaderDict):
@@ -47,50 +47,31 @@ class APIRequestFactory(DjangoRequestFactory):
     enforce_csrf_checks: Any = ...
     renderer_classes: Any = ...
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
-    def get(  # type: ignore[override]
-        self, path: str, data: Any = ..., secure: bool = ..., **extra: Any
-    ) -> Response: ...
-    def post(  # type: ignore[override]
-        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
-    ) -> Response: ...
-    def put(  # type: ignore[override]
-        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
-    ) -> Response: ...
-    def patch(  # type: ignore[override]
-        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
-    ) -> Response: ...
-    def delete(  # type: ignore[override]
-        self, path: str, data: Any = ..., content_type: str = ..., secure: bool = ..., **extra: Any
-    ) -> Response: ...
-    def generic(  # type: ignore[override]
-        self,
-        method: str,
-        path: str,
-        data: Any = ...,
-        content_type: Optional[str] = ...,
-        secure: bool = ...,
-        **extra: Any
-    ) -> Response: ...
-    def options(  # type: ignore[override]
-        self,
-        path: str,
-        data: Union[Dict[str, str], str] = ...,
-        content_type: str = ...,
-        secure: bool = ...,
-        **extra: Any
-    ) -> Response: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
+    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...
+    def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def delete(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def options(self, path: str, data: Union[Dict[str, str], str] = ..., format: Optional[str] = ..., content_type: Optional[Any] = ..., follow: bool = ..., **extra: Any)-> Request: ...  # type: ignore[override]
+    def generic(self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any) -> Request: ...
 
 class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any): ...
     def get_response(self, request: Request) -> Response: ...  # type: ignore[override]
 
-class APIClient(APIRequestFactory, DjangoClient):  # type: ignore
+class APIClient(APIRequestFactory, DjangoClient):
     handler: Any = ...
     def credentials(self, **kwargs: Any): ...
-    def force_authenticate(self, user: Optional[Model] = ..., token: Optional[str] = ...) -> None: ...
+    def force_authenticate(self, user: Union[AnonymousUser, AbstractBaseUser] = ..., token: Optional[Token] = ...) -> None: ...
+    def request(self, **kwargs: Any) -> Response: ...  # type: ignore[override]
+    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...
+    def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any)-> Response: ...  # type: ignore[override]
+    def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any)-> Response: ...  # type: ignore[override]
+    def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any)-> Response: ...  # type: ignore[override]
+    def delete(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any)-> Response: ...  # type: ignore[override]
+    def options(self, path: str, data: Union[Dict[str, str], str] = ..., format: Optional[str] = ..., content_type: Optional[Any] = ..., follow: bool = ..., **extra: Any)-> Response: ...  # type: ignore[override]
     def logout(self) -> None: ...
-    def trace(self, path: str, secure: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
 
 class APITransactionTestCase(testcases.TransactionTestCase):
     client_class: APIClient = ...

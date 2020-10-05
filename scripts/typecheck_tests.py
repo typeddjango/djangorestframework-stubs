@@ -37,14 +37,18 @@ def is_pattern_fits(pattern: Union[Pattern, str], line: str):
     return False
 
 
-def is_ignored(line: str, test_filename: str, *, ignored_message_freqs: Dict[str, Dict[str, int]]) -> bool:
-    if "runtests" in line or test_filename in IGNORED_MODULES:
+def is_ignored(line: str, filename: str, ignored_message_dict: Dict[str, Dict[str, int]]) -> bool:
+    if "runtests" in line or filename in IGNORED_MODULES:
         return True
-    print(line)
-    print(test_filename)
-    for pattern in IGNORED_ERRORS.get(test_filename, []):
+    for pattern in IGNORED_ERRORS["__common__"]:
+        if pattern in line:
+            return True
+    for pattern in IGNORED_ERRORS.get(filename, []):
         if is_pattern_fits(pattern, line):
-            ignored_message_freqs[test_filename][pattern] += 1
+            ignored_message_dict[test_filename][pattern] += 1
+            return True
+    for mock_object in MOCK_OBJECTS:
+        if mock_object in line:
             return True
     return False
 
@@ -82,9 +86,10 @@ def checkout_target_tag(drf_version: str) -> Path:
             depth=100,
         )
     else:
-        repository = Repo(target_dir)
+        repository = Repo(DRF_DIRECTORY)
         repository.remote("origin").pull("master", progress=ProgressPrinter(), depth=100)
     repository.git.checkout(drf_version)
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -127,11 +132,11 @@ if __name__ == "__main__":
         for line in sorted_lines:
             try:
                 path_to_error = line.split(":")[0]
-                test_folder_name = path_to_error.split("/")[2]
+                test_filename = path_to_error.split("/")[2]
             except IndexError:
-                test_folder_name = "unknown"
+                test_filename = "unknown"
 
-            if not is_ignored(line, test_folder_name, ignored_message_freqs=ignored_message_freqs):
+            if not is_ignored(line, test_filename, ignored_message_dict=ignored_message_freqs):
                 global_rc = 1
                 print(line)
 

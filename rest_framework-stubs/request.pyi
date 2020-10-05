@@ -9,6 +9,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
+from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
 
 def is_form_media_type(media_type: str) -> bool: ...
@@ -47,6 +48,9 @@ class Request(HttpRequest):
     authenticators: Optional[Sequence[Union[BaseAuthentication, ForcedAuthentication]]] = ...
     negotiator: Optional[BaseContentNegotiation] = ...
     parser_context: Optional[Dict[str, Any]] = ...
+    version: Optional[str]
+    versioning_scheme: Optional[BaseVersioning]
+    _request: HttpRequest
     def __init__(
         self,
         request: HttpRequest,
@@ -66,7 +70,7 @@ class Request(HttpRequest):
     @property  # type: ignore[override]
     def user(self) -> Union[AbstractBaseUser, AnonymousUser]: ...  # type: ignore[override]
     @user.setter
-    def user(self, value: Union[AbstractBaseUser, AnonymousUser]) -> None: ...
+    def user(self, value: Optional[Union[AbstractBaseUser, AnonymousUser]]) -> None: ...
     @property
     def auth(self) -> Optional[Union[Token, Any]]: ...
     @auth.setter

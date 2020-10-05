@@ -7,6 +7,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
+from rest_framework.views import APIView  # noqa: F401
 
 _VIEW = TypeVar("_VIEW", bound=Callable[..., HttpResponseBase])
 
