@@ -9,8 +9,6 @@ from typing import (
     Dict,
     Iterable,
     List,
-    Mapping,
-    MutableMapping,
     NoReturn,
     Optional,
     Pattern,
@@ -45,7 +43,7 @@ class CurrentUserDefault:
 
 class SkipField(Exception): ...
 
-def set_value(dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
+def set_value(dictionary: MutableDict[str, Any], keys: Sequence[str], value: Any) -> None: ...
 def get_error_detail(exc_info: ValidationError) -> Any: ...
 
 _FT = TypeVar("_FT")  # Field Type
@@ -66,7 +64,7 @@ class Field:
     read_only: bool
     required: bool
     source: Optional[Union[Callable, str]]
-    style: Optional[Mapping[str, Any]]
+    style: Optional[Dict[str, Any]]
     write_only: bool
     source_attrs: Any = ...
     def __init__(
@@ -79,8 +77,8 @@ class Field:
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -137,8 +135,8 @@ class CharField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         # kwargs.pop() in CharField
@@ -169,8 +167,8 @@ class RegexField(CharField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -196,8 +194,8 @@ class SlugField(CharField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -225,8 +223,8 @@ class UUIDField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -253,8 +251,8 @@ class IPAddressField(CharField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -283,8 +281,8 @@ class IntegerField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -311,8 +309,8 @@ class FloatField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -347,8 +345,8 @@ class DecimalField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -378,8 +376,8 @@ class DateTimeField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -407,8 +405,8 @@ class DateField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -434,8 +432,8 @@ class TimeField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -459,8 +457,8 @@ class DurationField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -490,8 +488,8 @@ class ChoiceField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -523,8 +521,8 @@ class MultipleChoiceField(ChoiceField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -553,8 +551,8 @@ class FilePathField(ChoiceField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -575,8 +573,8 @@ class FileField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
@@ -603,8 +601,8 @@ class ImageField(FileField):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
@@ -635,8 +633,8 @@ class ListField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
@@ -663,8 +661,8 @@ class DictField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
@@ -692,8 +690,8 @@ class JSONField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
         *,
@@ -721,8 +719,8 @@ class SerializerMethodField(Field):
         # 'source' is ignored (overwritten)
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...
@@ -744,8 +742,8 @@ class ModelField(Field):
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
-        style: Optional[Mapping[str, Any]] = ...,
-        error_messages: Optional[Mapping[str, str]] = ...,
+        style: Optional[Dict[str, Any]] = ...,
+        error_messages: Optional[Dict[str, str]] = ...,
         validators: Optional[Sequence[Callable]] = ...,
         allow_null: bool = ...,
     ): ...

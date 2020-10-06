@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Mapping, Optional, Union
-from rest_framework.request import Request
+
 from django.template.response import SimpleTemplateResponse
+from rest_framework.request import Request
 
 class Response(SimpleTemplateResponse):
     data: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = ...

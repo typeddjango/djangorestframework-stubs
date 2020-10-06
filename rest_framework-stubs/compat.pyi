@@ -31,6 +31,7 @@ except ImportError:
 try:
     import markdown
     def apply_markdown(text: str): ...
+
 except ImportError:
     apply_markdown = None  # type: ignore
     markdown = None

@@ -13,8 +13,8 @@ from typing import (
     Sequence,
     Tuple,
     Type,
-    Union,
     TypeVar,
+    Union,
 )
 
 from django.core.exceptions import ValidationError as DjangoValidationError

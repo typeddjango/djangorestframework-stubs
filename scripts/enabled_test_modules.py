@@ -1,6 +1,7 @@
 IGNORED_MODULES = ["utils.py", "test_testing.py"]
 MOCK_OBJECTS = [
     "MockQueryset",
+    "MockRequest",
     "TypeErrorQueryset",
     "DataErrorQueryset",
     "ValueErrorQueryset",
@@ -26,8 +27,14 @@ IGNORED_ERRORS = {
         'has no attribute "mapping"',
         'Response" has no attribute "view"',
         'Cannot infer type',
+        ' has no attribute "_context',
+        '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
-    "test_request.py": ['"Request" has no attribute "inner_property"', 'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"'],
+    "test_permissions.py": ['"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"', '_SupportsHasPermission'],
+    "test_relations.py": ['Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"', 'incompatible type "tests.test_relations.QuerySet@218"', ' Incompatible return value type (got "None", expected "HttpResponseBase', 'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"'],
+    "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"'],
+    "test_renderers.py": ['(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'],
+    "test_request.py": ['"Request" has no attribute "inner_property"', 'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"', 'expression has type "Optional[AbstractBaseUser]'],
     "test_response.py": [
         'Argument 2 to "get" of "Client" has incompatible type "**Dict[str, str]"',
     ],
@@ -59,7 +66,6 @@ IGNORED_ERRORS = {
     ],
     "test_versioning.py": [
         '(expression has type "Type[FakeResolverMatch]", variable has type "ResolverMatch")',
-        '"HyperlinkedRelatedField" has no attribute "_context"',
         "rest_framework.decorators",
     ],
     "test_viewsets.py": [
