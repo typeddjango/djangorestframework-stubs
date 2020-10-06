@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Pattern, Union
+from typing import Dict, List, Pattern, Union, Optional
 
 from git import RemoteProgress, Repo
 
@@ -75,7 +75,7 @@ class ProgressPrinter(RemoteProgress):
         print(self._cur_line)
 
 
-def checkout_target_tag(drf_version: str) -> Path:
+def checkout_target_tag(drf_version: Optional[str]) -> Path:
     if not DRF_DIRECTORY.exists():
         DRF_DIRECTORY.mkdir(exist_ok=True, parents=False)
         repository = Repo.clone_from(
@@ -88,12 +88,12 @@ def checkout_target_tag(drf_version: str) -> Path:
     else:
         repository = Repo(DRF_DIRECTORY)
         repository.remote("origin").pull("master", progress=ProgressPrinter(), depth=100)
-    repository.git.checkout(drf_version)
+    repository.git.checkout(drf_version or "master")
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--drf_version", default="3.12.1")
+    parser.add_argument("--drf_version", required=False)
     args = parser.parse_args()
     checkout_target_tag(args.drf_version)
     shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)

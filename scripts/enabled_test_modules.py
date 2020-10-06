@@ -8,12 +8,12 @@ MOCK_OBJECTS = [
     "DummyView",
     "NonTimeThrottle",
     "Dict[<nothing>, <nothing>]",
-    "CursorPaginationTestsMixin",
     "TestCustomTimezoneForDateTimeField",
     "TestDefaultTZDateTimeField",
     "TestTZWithDateTimeField",
     "MockQuerySet",
     "AuthRaisesAttributeError",
+    "CursorPaginationTestsMixin",
 ]
 EXTERNAL_MODULES = ["requests"]
 IGNORED_ERRORS = {
@@ -26,20 +26,43 @@ IGNORED_ERRORS = {
         'has no attribute "initkwargs"',
         'has no attribute "mapping"',
         'Response" has no attribute "view"',
-        'Cannot infer type',
+        "Cannot infer type",
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_pagination.py": [
+        'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',
+        '(not iterable)',
+        '(expression has type "None", variable has type "List[Any]")',
+        'has incompatible type "range"',
+        'expected "Iterable[Any]"'
+    ],
     "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
-    "test_permissions.py": ['"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"', '_SupportsHasPermission'],
-    "test_relations.py": ['Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"', 'incompatible type "tests.test_relations.QuerySet@218"', ' Incompatible return value type (got "None", expected "HttpResponseBase', 'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"'],
+    "test_permissions.py": [
+        '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
+        "_SupportsHasPermission",
+    ],
+    "test_relations.py": [
+        'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
+        'incompatible type "tests.test_relations.QuerySet@218"',
+        ' Incompatible return value type (got "None", expected "HttpResponseBase',
+        'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',
+    ],
     "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"'],
-    "test_renderers.py": ['(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'],
-    "test_request.py": ['"Request" has no attribute "inner_property"', 'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"', 'expression has type "Optional[AbstractBaseUser]'],
+    "test_renderers.py": [
+        '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
+    ],
+    "test_request.py": [
+        '"Request" has no attribute "inner_property"',
+        'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"',
+        'expression has type "Optional[AbstractBaseUser]',
+    ],
     "test_response.py": [
         'Argument 2 to "get" of "Client" has incompatible type "**Dict[str, str]"',
     ],
-    "test_routers.py": ['(expression has type "List[RouterTestModel]", base class "GenericAPIView" defined the type as "Union[QuerySet[Any], Manager[Any], None]")'],
+    "test_routers.py": [
+        '(expression has type "List[RouterTestModel]", base class "GenericAPIView" defined the type as "Union[QuerySet[Any], Manager[Any], None]")'
+    ],
     "test_serializer.py": [
         '"update" of "BaseSerializer"',
         '"create" of "BaseSerializer"',
