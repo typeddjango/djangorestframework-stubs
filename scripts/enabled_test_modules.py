@@ -30,6 +30,7 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
     "test_permissions.py": ['"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"', '_SupportsHasPermission'],
     "test_relations.py": ['Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"', 'incompatible type "tests.test_relations.QuerySet@218"', ' Incompatible return value type (got "None", expected "HttpResponseBase', 'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"'],
     "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"'],
