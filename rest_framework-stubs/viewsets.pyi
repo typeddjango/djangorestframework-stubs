@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, List, Optional, Tuple, OrderedDict
+from typing import Any, Callable, Dict, List, Optional, OrderedDict, Tuple
+
 from django.http.response import HttpResponseBase
 from rest_framework import generics, mixins, views
 from rest_framework.request import Request

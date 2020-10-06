@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import (
     Any,
     Callable,
@@ -15,7 +16,7 @@ from typing import (
     TypeVar,
     Union,
 )
-from collections import OrderedDict
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import DurationField as ModelDurationField
@@ -76,7 +77,7 @@ from rest_framework.relations import RelatedField as RelatedField
 from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
-from rest_framework.utils.serializer_helpers import BoundField, ReturnDict, ReturnList, BindingDict
+from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from typing_extensions import Literal
 
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
@@ -139,7 +140,12 @@ class Serializer(BaseSerializer, metaclass=SerializerMetaclass):
     def errors(self) -> ReturnDict: ...
 
 class ListSerializer(BaseSerializer):
-    child: Optional[Union[Field, BaseSerializer, ]] = ...
+    child: Optional[
+        Union[
+            Field,
+            BaseSerializer,
+        ]
+    ] = ...
     many: bool = ...
     default_error_messages: Dict[str, Any] = ...
     allow_empty: Optional[bool] = ...

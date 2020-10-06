@@ -1,13 +1,13 @@
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, TypeVar
 
-from django.db.models.query import QuerySet
+from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-_Q = TypeVar("_Q", bound=QuerySet)
+_MT = TypeVar("_MT", bound=Model)
 
 class BaseFilterBackend:
-    def filter_queryset(self, request: Request, queryset: _Q, view) -> _Q: ...
+    def filter_queryset(self, request: Request, queryset: QuerySet[_MT], view) -> QuerySet[_MT]: ...
     def get_schema_fields(self, view) -> List[Any]: ...
     def get_schema_operation_parameters(self, view: APIView): ...
 

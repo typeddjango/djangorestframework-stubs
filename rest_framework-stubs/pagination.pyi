@@ -1,11 +1,12 @@
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Sequence, Tuple, Type, Union, TypeVar
-from typing_extensions import TypedDict
+from typing import Any, Callable, Dict, List, NamedTuple, Optional, Sequence, Tuple, Type, TypeVar, Union
+
+from coreapi import Field as CoreAPIField
 from django.core.paginator import Page, Paginator
-from django.db.models import QuerySet, Model
+from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from coreapi import Field as CoreAPIField
+from typing_extensions import TypedDict
 
 def _positive_int(integer_string: str, strict: bool = ..., cutoff: Optional[int] = ...) -> int: ...
 def _divide_with_ceil(a: int, b: int) -> int: ...

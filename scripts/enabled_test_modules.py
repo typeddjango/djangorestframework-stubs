@@ -38,6 +38,7 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_filters.py": ['Module has no attribute "coreapi"', 'has incompatible type "Options[Any]"', 'has incompatible type "None"'],
     "test_generics.py": ['has incompatible type "str"', '"Response" has no attribute "serializer"', ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")'],
     "test_htmlrenderer.py": ['to "get_template_names" of "TemplateHTMLRenderer" has incompatible type', 'Incompatible types in assignment'],
     "test_metadata.py": ['"BaseMetadata" has incompatible type "None"'],
