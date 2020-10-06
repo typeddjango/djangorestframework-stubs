@@ -14,6 +14,14 @@ MOCK_OBJECTS = [
     "MockQuerySet",
     "AuthRaisesAttributeError",
     "CursorPaginationTestsMixin",
+    "MockRenderer",
+    "MockResponse",
+    "MockView",
+    "MockView2",
+    "MockLazyStr",
+    "MockTimezone",
+    "MockAPIView",
+    "MockUser"
 ]
 EXTERNAL_MODULES = ["requests"]
 IGNORED_ERRORS = {
@@ -30,6 +38,12 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_generics.py": ['has incompatible type "str"', '"Response" has no attribute "serializer"', ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")'],
+    "test_htmlrenderer.py": ['to "get_template_names" of "TemplateHTMLRenderer" has incompatible type', 'Incompatible types in assignment'],
+    "test_metadata.py": ['"BaseMetadata" has incompatible type "None"'],
+    "test_middleware.py": ['"is_form_media_type" has incompatible type "Optional[str]"; expected "str"'],
+    "test_model_serializer.py": ['"Field" has no attribute "choices"', 'Module has no attribute "JSONField"', 'expected "OrderedDict[Any, Any]"', 'base class "Meta" defined the type as', '"Field" has no attribute'],
+    "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
         'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',
         '(not iterable)',
