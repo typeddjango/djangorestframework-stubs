@@ -1,6 +1,5 @@
 import datetime
 import decimal
-import uuid
 from collections import OrderedDict
 from decimal import Decimal
 from json import JSONDecoder, JSONEncoder
@@ -20,7 +19,6 @@ from typing import (
     Set,
     Tuple,
     Type,
-    TypeVar,
     Union,
 )
 
@@ -59,9 +57,6 @@ NOT_REQUIRED_DEFAULT: str
 USE_READONLYFIELD: str
 MISSING_ERROR_MESSAGE: str
 
-_FT = TypeVar("_FT")  # Field Type
-_FPT = TypeVar("_FPT")  # Field Primitive Type
-
 _Instance = Union[Model, Mapping[Any, Any], Dict[Any, Any], Callable]
 
 class SupportsToPython(Protocol):
@@ -75,7 +70,7 @@ class Field:
     default_validators: List[Callable] = ...
     error_messages: Dict[str, str] = ...
     field_name: Optional[str] = ...
-    help_text: Optional[str]
+    help_text: Optional[str] = ...
     initial: Any = ...
     label: Optional[str]
     parent: BaseSerializer
@@ -83,7 +78,7 @@ class Field:
     required: bool
     source: Optional[Union[Callable, str]]
     source_attrs: List[str] = ...
-    style: Optional[Dict[str, Any]]
+    style: Dict[str, Any]
     write_only: bool
     def __init__(
         self,
@@ -93,11 +88,11 @@ class Field:
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
@@ -136,8 +131,6 @@ class NullBooleanField(Field):
     NULL_VALUES: Set[Optional[Any]] = ...
 
 class CharField(Field):
-    _pyi_field_actual_type: str
-    _pyi_field_primitive_type: str
     allow_blank: bool = ...
     trim_whitespace: bool = ...
     max_length: Optional[int] = ...
@@ -150,15 +143,15 @@ class CharField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         min_length: Optional[int] = ...,
     ): ...
 
@@ -167,23 +160,23 @@ class EmailField(CharField): ...
 class RegexField(CharField):
     def __init__(
         self,
+        regex: Union[str, Pattern],
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         min_length: Optional[int] = ...,
-        regex: Union[str, Pattern] = ...,
     ): ...
 
 class SlugField(CharField):
@@ -196,15 +189,15 @@ class SlugField(CharField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         min_length: Optional[int] = ...,
         allow_unicode: bool = ...,
     ): ...
@@ -212,8 +205,6 @@ class SlugField(CharField):
 class URLField(CharField): ...
 
 class UUIDField(Field):
-    _pyi_field_actual_type: uuid.UUID
-    _pyi_field_primitive_type: str
     valid_formats: Sequence[str] = ...
     uuid_format: str
     def __init__(
@@ -224,11 +215,11 @@ class UUIDField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         format: str = ...,
     ): ...
@@ -244,26 +235,24 @@ class IPAddressField(CharField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
         trim_whitespace: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         min_length: Optional[int] = ...,
         protocol: str = ...,
     ): ...
 
 class IntegerField(Field):
-    _pyi_field_actual_type: int
-    _pyi_field_primitive_type: int
     MAX_STRING_LENGTH: int = ...
     re_decimal: Pattern = ...
-    max_value: Optional[int]
-    min_value: Optional[int]
+    max_value: Optional[int] = ...,
+    min_value: Optional[int] = ...,
     def __init__(
         self,
         read_only: bool = ...,
@@ -272,23 +261,21 @@ class IntegerField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_value: Optional[int] = ...,
-        min_value: Optional[int] = ...,
+        max_value: int = ...,
+        min_value: int = ...,
     ): ...
 
 class FloatField(Field):
-    _pyi_field_actual_type: float
-    _pyi_field_primitive_type: float
     MAX_STRING_LENGTH: int = ...
     re_decimal: Pattern = ...
-    max_value: Optional[int]
-    min_value: Optional[int]
+    max_value: Optional[int] = ...,
+    min_value: Optional[int] = ...,
     def __init__(
         self,
         read_only: bool = ...,
@@ -297,14 +284,14 @@ class FloatField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_value: Optional[int] = ...,
-        min_value: Optional[int] = ...,
+        max_value: int = ...,
+        min_value: int = ...,
     ): ...
 
 class DecimalField(Field):
@@ -319,33 +306,31 @@ class DecimalField(Field):
     max_whole_digits = Optional[int]
     def __init__(
         self,
+        max_digits: Optional[int],
+        decimal_places: Optional[int],
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_digits: Optional[int] = ...,
-        decimal_places: Optional[int] = ...,
-        coerce_to_string: Optional[bool] = ...,
-        max_value: Optional[Union[Decimal, int, float]] = ...,
-        min_value: Optional[Union[Decimal, int, float]] = ...,
+        coerce_to_string: bool = ...,
+        max_value: Union[Decimal, int, float] = ...,
+        min_value: Union[Decimal, int, float] = ...,
         localize: bool = ...,
-        rounding: Optional[str] = ...,
+        rounding: str = ...,
     ): ...
     def validate_precision(self, value: decimal.Decimal) -> decimal.Decimal: ...
     def quantize(self, value: decimal.Decimal) -> decimal.Decimal: ...
 
 class DateTimeField(Field):
-    _pyi_field_actual_type: datetime.datetime
-    _pyi_field_primitive_type: str
-    datetime_parser: Callable[str, str, datetime.datetime] = ...
+    datetime_parser: Callable[[str, str], datetime.datetime] = ...
     format: Optional[str] = ...
     input_formats: Sequence[str] = ...
     timezone: datetime.tzinfo = ...
@@ -357,23 +342,21 @@ class DateTimeField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        format: Optional[str] = ...,
-        input_formats: Optional[Sequence[str]] = ...,
-        default_timezone: Optional[datetime.tzinfo] = ...,
+        format: str = ...,
+        input_formats: Sequence[str] = ...,
+        default_timezone: datetime.tzinfo = ...,
     ): ...
     def enforce_timezone(self, value: datetime.datetime) -> datetime.datetime: ...
     def default_timezone(self) -> Optional[str]: ...
 
 class DateField(Field):
-    _pyi_field_actual_type: datetime.date
-    _pyi_field_primitive_type: str
-    datetime_parser: Callable[str, str, datetime.datetime] = ...
+    datetime_parser: Callable[[str, str], datetime.datetime] = ...
     format: Optional[str]
     input_formats: Sequence[str]
     def __init__(
@@ -384,20 +367,18 @@ class DateField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        format: Optional[str] = ...,
-        input_formats: Optional[Sequence[str]] = ...,
+        format: str = ...,
+        input_formats: Sequence[str] = ...,
     ): ...
 
 class TimeField(Field):
-    _pyi_field_actual_type: datetime.time
-    _pyi_field_primitive_type: str
-    datetime_parser: Callable[str, str, datetime.datetime] = ...
+    datetime_parser: Callable[[str, str], datetime.datetime] = ...
     format: Optional[str]
     input_formats: Sequence[str]
     def __init__(
@@ -408,14 +389,14 @@ class TimeField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        format: Optional[str] = ...,
-        input_formats: Optional[Sequence[str]] = ...,
+        format: str = ...,
+        input_formats: Sequence[str] = ...,
     ): ...
 
 class DurationField(Field):
@@ -429,14 +410,14 @@ class DurationField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_value: Optional[datetime.timedelta] = ...,
-        min_value: Optional[datetime.timedelta] = ...,
+        max_value: datetime.timedelta = ...,
+        min_value: datetime.timedelta = ...,
     ): ...
 
 # Choice types...
@@ -449,21 +430,21 @@ class ChoiceField(Field):
     _choices: OrderedDict
     def __init__(
         self,
+        choices: Sequence[Any],
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        choices: Sequence[Any] = ...,
-        html_cutoff: Optional[int] = ...,
-        html_cutoff_text: Optional[str] = ...,
+        html_cutoff: int = ...,
+        html_cutoff_text: str = ...,
         allow_blank: bool = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
@@ -475,21 +456,21 @@ class MultipleChoiceField(ChoiceField):
     allow_empty: bool
     def __init__(
         self,
+        choices: Sequence[Any],
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        choices: Sequence[Any] = ...,
-        html_cutoff: Optional[int] = ...,
-        html_cutoff_text: Optional[str] = ...,
+        html_cutoff: int = ...,
+        html_cutoff_text: str = ...,
         allow_blank: bool = ...,
         allow_empty: bool = ...,
     ): ...
@@ -497,30 +478,30 @@ class MultipleChoiceField(ChoiceField):
 class FilePathField(ChoiceField):
     def __init__(
         self,
+        path: str,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        html_cutoff: Optional[int] = ...,
-        html_cutoff_text: Optional[str] = ...,
+        html_cutoff: int = ...,
+        html_cutoff_text: str = ...,
         allow_blank: bool = ...,
-        path: str = ...,
-        match: Optional[str] = ...,
+        match: str = ...,
         recursive: bool = ...,
         allow_files: bool = ...,
         allow_folders: bool = ...,
     ): ...
 
 class FileField(Field):
-    max_length: Optional[int]
+    max_length: int
     allow_empty_file: bool
     use_url: bool
     def __init__(
@@ -531,13 +512,13 @@ class FileField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         allow_empty_file: bool = ...,
         use_url: bool = ...,
     ): ...
@@ -552,13 +533,13 @@ class ImageField(FileField):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        max_length: Optional[int] = ...,
+        max_length: int = ...,
         allow_empty_file: bool = ...,
         use_url: bool = ...,
         _DjangoImageField: Type[SupportsToPython] = ...,
@@ -579,16 +560,16 @@ class ListField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         child: Field = ...,
         allow_empty: bool = ...,
-        max_length: Optional[int] = ...,
-        min_length: Optional[int] = ...,
+        max_length: int = ...,
+        min_length: int = ...,
     ): ...
     def run_child_validation(self, data: Any) -> Any: ...
 
@@ -603,11 +584,11 @@ class DictField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         child: Field = ...,
         allow_empty: bool = ...,
@@ -629,15 +610,15 @@ class JSONField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
         binary: bool = ...,
-        encoder: Optional[JSONEncoder] = ...,
-        decoder: Optional[JSONDecoder] = ...,
+        encoder: JSONEncoder = ...,
+        decoder: JSONDecoder = ...,
     ): ...
 
 class ReadOnlyField(Field): ...
@@ -653,31 +634,32 @@ class SerializerMethodField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        method_name: Optional[str] = ...,
+        method_name: str = ...,
     ): ...
 
 class ModelField(Field):
     model_field: models.Field = ...
-    max_length: Optional[int] = ...
+    max_length: int = ...
     def __init__(
         self,
+        model_field: models.Field,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
         default: Any = ...,
         initial: Any = ...,
         source: Union[Callable, str] = ...,
-        label: Optional[str] = ...,
-        help_text: Optional[str] = ...,
-        style: Optional[Dict[str, Any]] = ...,
-        error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
-        model_field: models.Field = ...,
+        max_length: int = ...
     ): ...

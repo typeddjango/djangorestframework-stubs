@@ -21,7 +21,8 @@ MOCK_OBJECTS = [
     "MockLazyStr",
     "MockTimezone",
     "MockAPIView",
-    "MockUser"
+    "MockUser",
+    "MockObject",
 ]
 EXTERNAL_MODULES = ["requests"]
 IGNORED_ERRORS = {
@@ -38,6 +39,7 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_fields.py": ['"ChoiceModel"', 'Argument "validators" to "CharField" has incompatible type', 'Dict entry', '"FieldValues"', 'base class "Field" defined the type as "bool"'],
     "test_filters.py": ['Module has no attribute "coreapi"', 'has incompatible type "Options[Any]"', 'has incompatible type "None"'],
     "test_generics.py": ['has incompatible type "str"', '"Response" has no attribute "serializer"', ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")'],
     "test_htmlrenderer.py": ['to "get_template_names" of "TemplateHTMLRenderer" has incompatible type', 'Incompatible types in assignment'],
@@ -63,7 +65,7 @@ IGNORED_ERRORS = {
         ' Incompatible return value type (got "None", expected "HttpResponseBase',
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',
     ],
-    "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"'],
+    "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"', 'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type'],
     "test_renderers.py": [
         '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
     ],
@@ -79,8 +81,8 @@ IGNORED_ERRORS = {
         '(expression has type "List[RouterTestModel]", base class "GenericAPIView" defined the type as "Union[QuerySet[Any], Manager[Any], None]")'
     ],
     "test_serializer.py": [
-        '"update" of "BaseSerializer"',
-        '"create" of "BaseSerializer"',
+        '"update" of "SerializerProtocol" has incompatible type "None"',
+        '"create" of "SerializerProtocol" has incompatible type "None"',
         "base class",
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
