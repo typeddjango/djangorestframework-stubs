@@ -78,14 +78,14 @@ class SupportsToPython(Protocol):
 
 class Field(Generic[_VT, _DT, _PT]):
     allow_null: bool
-    default: Any
+    default: Optional[_VT]
     default_empty_html: Any = ...
     default_error_messages: Dict[str, str] = ...
     default_validators: List[Callable] = ...
     error_messages: Dict[str, str] = ...
     field_name: Optional[str] = ...
     help_text: Optional[str] = ...
-    initial: Any = ...
+    initial: Optional[Union[_VT, Callable[[Any], _VT]]] = ...
     label: Optional[str]
     parent: BaseSerializer
     read_only: bool
@@ -99,7 +99,7 @@ class Field(Generic[_VT, _DT, _PT]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[_VT, Callable[[Any], _VT]] = ...,
+        default: _VT = ...,
         initial: Union[_VT, Callable[[Any], _VT]] = ...,
         source: str = ...,
         label: str = ...,
@@ -171,14 +171,13 @@ class BooleanField(
         bool,
     ]
 ):
-    initial: bool = ...
-    TRUE_VALUES: Set[Any] = ...
-    FALSE_VALUES: Set[Any] = ...
-    NULL_VALUES: Set[Optional[Any]] = ...
+    TRUE_VALUES: Set[str, bool, int] = ...
+    FALSE_VALUES: Set[str, bool, int, float] = ...
+    NULL_VALUES: Set[str, None] = ...
 
 class NullBooleanField(
     Field[
-        bool,
+        Union[bool, None],
         Union[
             bool,
             None,
@@ -219,10 +218,9 @@ class NullBooleanField(
         bool,
     ]
 ):
-    initial: Optional[bool] = ...
-    TRUE_VALUES: Set[Any] = ...
-    FALSE_VALUES: Set[Any] = ...
-    NULL_VALUES: Set[Optional[Any]] = ...
+    TRUE_VALUES: Set[str, bool, int] = ...
+    FALSE_VALUES: Set[str, bool, int, float] = ...
+    NULL_VALUES: Set[str, None] = ...
 
 class CharField(Field[str, str, str]):
     allow_blank: bool = ...
@@ -234,8 +232,8 @@ class CharField(Field[str, str, str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -258,8 +256,8 @@ class RegexField(CharField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -280,8 +278,8 @@ class SlugField(CharField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -306,8 +304,8 @@ class UUIDField(Field[uuid.UUID, Union[uuid.UUID, str, int], str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: uuid.UUID = ...,
+        initial: Union[uuid.UUID, Callable[[Any], uuid.UUID]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -326,8 +324,8 @@ class IPAddressField(CharField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -352,8 +350,8 @@ class IntegerField(Field[int, Union[float, int, str], int]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: int = ...,
+        initial: Union[int, Callable[[Any], int]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -375,8 +373,8 @@ class FloatField(Field[float, Union[float, int, str], str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: float = ...,
+        initial: Union[float, Callable[[Any], float]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -405,8 +403,8 @@ class DecimalField(Field[Decimal, Union[int, float, str, Decimal], str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: Decimal = ...,
+        initial: Union[Decimal, Callable[[Any], Decimal]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -433,8 +431,8 @@ class DateTimeField(Field[datetime.datetime, Union[datetime.datetime, str], str]
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: datetime.datetime = ...,
+        initial: Union[datetime.datetime, Callable[[Any], datetime.datetime]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -458,8 +456,8 @@ class DateField(Field[datetime.date, Union[datetime.date, str], str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: datetime.date = ...,
+        initial: Union[datetime.date, Callable[[Any], datetime.date]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -480,8 +478,8 @@ class TimeField(Field[datetime.time, Union[datetime.time, str], str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: datetime.time = ...,
+        initial: Union[datetime.time, Callable[[Any], datetime.time]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -501,8 +499,8 @@ class DurationField(Field[datetime.timedelta, Union[datetime.timedelta, str], st
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: datetime.timedelta = ...,
+        initial: Union[datetime.timedelta, Callable[[Any], datetime.timedelta]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -527,8 +525,8 @@ class ChoiceField(Field[str, str, str]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -553,8 +551,8 @@ class MultipleChoiceField(ChoiceField, Field[str, Sequence[str], Sequence[str]])
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: Sequence[str] = ...,
+        initial: Union[Sequence[str], Callable[[Any], Sequence[str]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -575,8 +573,8 @@ class FilePathField(ChoiceField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: str = ...,
+        initial: Union[str, Callable[[Any], str]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -602,8 +600,8 @@ class FileField(Field[File, File, Union[str, None]]): # this field can return No
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: File = ...,
+        initial: Union[File, Callable[[Any], File]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -623,8 +621,8 @@ class ImageField(FileField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: File = ...,
+        initial: Union[File, Callable[[Any], File]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -650,8 +648,8 @@ class ListField(Field[List[Mapping[Any, Any]], List[Dict[Any, Any]], List[Mappin
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: List[Dict[Any, Any]] = ...,
+        initial: Union[List[Dict[Any, Any]], Callable[[Any], List[Dict[Any, Any]]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -674,8 +672,8 @@ class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any]]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: Dict[Any, Any]= ...,
+        initial: Union[Dict[Any, Any], Callable[[Any], Dict[Any, Any]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -700,8 +698,8 @@ class JSONField(Field[Union[Dict[str, Any], List[Dict[str, Any]]], Union[Dict[st
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
+        default: Dict[Any, Any]= ...,
+        initial: Union[Dict[Any, Any], Callable[[Any], Dict[Any, Any]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
