@@ -16,17 +16,10 @@ from typing import (
 )
 
 from django.db.models import Manager, Model, QuerySet
-from rest_framework.fields import Field
+from rest_framework.fields import Field, Option
 from rest_framework.request import Request
 
 def method_overridden(method_name: str, klass: type, instance: Model) -> bool: ...
-
-class Option(Protocol):
-    start_option_group: bool = ...
-    end_option_group: bool = ...
-    label: str
-    value: Any
-    display_text: str
 
 class ObjectValueError(ValueError): ...
 class ObjectTypeError(TypeError): ...
