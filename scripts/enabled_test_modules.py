@@ -39,20 +39,50 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
-    "test_fields.py": ['"ChoiceModel"', 'Argument "validators" to "CharField" has incompatible type', 'Dict entry', '"FieldValues"', 'base class "Field" defined the type as "bool"'],
-    "test_filters.py": ['Module has no attribute "coreapi"', 'has incompatible type "Options[Any]"', 'has incompatible type "None"'],
-    "test_generics.py": ['has incompatible type "str"', '"Response" has no attribute "serializer"', ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")'],
-    "test_htmlrenderer.py": ['to "get_template_names" of "TemplateHTMLRenderer" has incompatible type', 'Incompatible types in assignment'],
+    "test_fields.py": [
+        '"ChoiceModel"',
+        'Argument "validators" to "CharField" has incompatible type',
+        "Dict entry",
+        '"FieldValues"',
+        'base class "Field" defined the type as "bool"',
+        'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
+        'Item "str" of "Union[str, Any]" has no attribute "code"',
+        'Argument "default" to "CharField" has incompatible type',
+        '"MultipleChoiceField" has no attribute "partial"',
+        '"Field[Any, Any, Any, Any]" has no attribute "method_name"',
+        'Argument 1 to "ModelField" has incompatible type "None"',
+        'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"'
+    ],
+    "test_filters.py": [
+        'Module has no attribute "coreapi"',
+        'has incompatible type "Options[Any]"',
+        'has incompatible type "None"',
+    ],
+    "test_generics.py": [
+        'has incompatible type "str"',
+        '"Response" has no attribute "serializer"',
+        ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',
+    ],
+    "test_htmlrenderer.py": [
+        'to "get_template_names" of "TemplateHTMLRenderer" has incompatible type',
+        "Incompatible types in assignment",
+    ],
     "test_metadata.py": ['"BaseMetadata" has incompatible type "None"'],
     "test_middleware.py": ['"is_form_media_type" has incompatible type "Optional[str]"; expected "str"'],
-    "test_model_serializer.py": ['"Field" has no attribute "choices"', 'Module has no attribute "JSONField"', 'expected "OrderedDict[Any, Any]"', 'base class "Meta" defined the type as', '"Field" has no attribute'],
+    "test_model_serializer.py": [
+        '"Field[Any, Any, Any, Any]" has no attribute',
+        'Module has no attribute "JSONField"',
+        'expected "OrderedDict[Any, Any]"',
+        'base class "Meta" defined the type as',
+        '"Field" has no attribute',
+    ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
         'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',
-        '(not iterable)',
+        "(not iterable)",
         '(expression has type "None", variable has type "List[Any]")',
         'has incompatible type "range"',
-        'expected "Iterable[Any]"'
+        'expected "Iterable[Any]"',
     ],
     "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
     "test_permissions.py": [
@@ -61,11 +91,16 @@ IGNORED_ERRORS = {
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
-        'incompatible type "tests.test_relations.QuerySet@218"',
-        ' Incompatible return value type (got "None", expected "HttpResponseBase',
+        'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type',
+        'Incompatible return value type (got "None", expected "HttpResponseBase',
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',
     ],
-    "test_relations_pk.py": ['"Field" has no attribute "get_queryset"', '"OneToOneTarget" has no attribute "id"', 'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type'],
+    "test_relations_pk.py": [
+        '"Field" has no attribute "get_queryset"',
+        '"OneToOneTarget" has no attribute "id"',
+        '"Field[Any, Any, Any, Any]" has no attribute "get_queryset',
+        'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type',
+    ],
     "test_renderers.py": [
         '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
     ],
@@ -86,12 +121,12 @@ IGNORED_ERRORS = {
         "base class",
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
-        "Name 'foo' is not defined"
+        "Name 'foo' is not defined",
     ],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
-        '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")'
+        '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',
     ],
     "test_templatetags.py": ['Module has no attribute "smart_urlquote"'],
     "test_throttling.py": [

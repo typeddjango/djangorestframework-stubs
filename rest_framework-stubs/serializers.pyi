@@ -87,12 +87,29 @@ ALL_FIELDS: str = ...
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN", Model, Mapping[str, Any], Sequence[Any], covariant=True)  # Instance Type
-_DT = TypeVar("_DT", Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Data Type
+_DT = TypeVar("_DT", List[Any],Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Data Type
 _VT = TypeVar("_VT", Model, Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Value Type
 _RP = TypeVar("_RP", Dict[str, Any], List[Dict[str, Any]], covariant=True)  # Representation Type
 
 class SerializerProtocol(Protocol[_IN, _DT, _VT, _RP]):
-    def __init__(self, instance: Optional[_IN] = ..., data: _DT = ..., partial: bool = ..., **kwargs: Any): ...
+    def __init__(
+        self,
+        instance: _IN = ...,
+        data: _DT = ...,
+        partial: bool = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[_VT, Callable[[], _VT]] = ...,
+        initial: Union[_VT, Callable[[], _VT]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
+    ): ...
     def update(self, instance: _IN, validated_data: OrderedDict) -> _IN: ...
     def create(self, validated_data: OrderedDict) -> _IN: ...
     def save(self, **kwargs: Any) -> _IN: ...
@@ -165,6 +182,30 @@ class ListSerializer(
     many: bool = ...
     default_error_messages: Dict[str, Any] = ...
     allow_empty: Optional[bool] = ...
+    def __init__(
+        self,
+        instance: _IN = ...,
+        data: _DT = ...,
+        partial: bool = ...,
+        child: Optional[
+            Union[
+                Field,
+                BaseSerializer,
+            ]
+        ] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[List[Mapping[Any, Any]], Callable[[], List[Mapping[Any, Any]]]] = ...,
+        initial: Union[List[Mapping[Any, Any]], Callable[[], List[Mapping[Any, Any]]]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
+    ): ...
     def get_initial(self) -> List[Any]: ...
     def validate(self, attrs: OrderedDict) -> OrderedDict: ...
     @property

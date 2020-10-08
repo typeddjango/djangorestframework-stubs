@@ -25,7 +25,6 @@ class PKOnlyObject:
 MANY_RELATION_KWARGS: Sequence[str]
 
 _MT = TypeVar("_MT", bound=Model)
-_VT = TypeVar("_VT", covariant=True)  # Value Type
 _DT = TypeVar("_DT", covariant=True)  # Data Type
 _PT = TypeVar("_PT", covariant=True)  # Primitive Type
 
