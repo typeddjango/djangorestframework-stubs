@@ -1,5 +1,5 @@
-from typing import Any, Callable, Optional, Sequence, Type, Union, List, Mapping
-from typing_extensions import Literal
+from typing import Any, Callable, List, Mapping, Optional, Sequence, Type, Union
+
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import BasePermission
@@ -7,6 +7,7 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, _View  # noqa: F401
+from typing_extensions import Literal
 
 class MethodMapper(dict):
     def __init__(self, action: Callable, methods: Sequence[str]) -> None: ...
@@ -20,32 +21,65 @@ class MethodMapper(dict):
     def options(self, func: Callable) -> Callable: ...
     def trace(self, func: Callable) -> Callable: ...
 
-
-class _ACTION(Callable):
+class ViewSetAction:
     detail: bool
     methods: List[
-        Union[Literal["get"], Literal["post"], Literal["delete"], Literal["put"], Literal["patch"], Literal["trace"], Literal["options"]]
+        Union[
+            Literal["get"],
+            Literal["post"],
+            Literal["delete"],
+            Literal["put"],
+            Literal["patch"],
+            Literal["trace"],
+            Literal["options"],
+        ]
     ]
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
     mapping: MethodMapper
+    def __call__(self, *args, **kwargs): ...
 
 def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[Callable], _View]: ...
-def renderer_classes(renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]) -> Callable[[Callable], Callable]: ...
+def renderer_classes(
+    renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]
+) -> Callable[[Callable], Callable]: ...
 def parser_classes(parser_classes: Sequence[Union[BaseParser, Type[BaseParser]]]) -> Callable[[Callable], Callable]: ...
-def authentication_classes(authentication_classes: Sequence[Union[BaseAuthentication, Type[BaseAuthentication]]]) -> Callable[[Callable], Callable]: ...
-def throttle_classes(throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]) -> Callable[[Callable], Callable]: ...
-def permission_classes(permission_classes: Sequence[Union[BasePermission, Type[BasePermission]]]) -> Callable[[Callable], Callable]: ...
+def authentication_classes(
+    authentication_classes: Sequence[Union[BaseAuthentication, Type[BaseAuthentication]]]
+) -> Callable[[Callable], Callable]: ...
+def throttle_classes(
+    throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]
+) -> Callable[[Callable], Callable]: ...
+def permission_classes(
+    permission_classes: Sequence[Union[BasePermission, Type[BasePermission]]]
+) -> Callable[[Callable], Callable]: ...
 def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[Callable], Callable]: ...
 def action(
-    methods: Optional[List[
-        Union[Literal["get"], Literal["GET"], Literal["post"], Literal["POST"], Literal["delete"], Literal["DELETE"], Literal["put"], Literal["PUT"], Literal["PATCH"], Literal["patch"], Literal["trace"], Literal["TRACE"], Literal["OPTIONS"], Literal["options"]]
-    ]] = ...,
+    methods: Optional[
+        List[
+            Union[
+                Literal["get"],
+                Literal["GET"],
+                Literal["post"],
+                Literal["POST"],
+                Literal["delete"],
+                Literal["DELETE"],
+                Literal["put"],
+                Literal["PUT"],
+                Literal["PATCH"],
+                Literal["patch"],
+                Literal["trace"],
+                Literal["TRACE"],
+                Literal["OPTIONS"],
+                Literal["options"],
+            ]
+        ]
+    ] = ...,
     detail: bool = ...,
     url_path: Optional[str] = ...,
     url_name: Optional[str] = ...,
     suffix: Optional[str] = ...,
     name: Optional[str] = ...,
     **kwargs: Any,
-) -> Callable[[Callable], _ACTION]: ...
+) -> Callable[[Callable], ViewSetAction]: ...

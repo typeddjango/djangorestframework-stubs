@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, TypeVar, Union, Generic
+from typing import Any, Callable, Dict, Generic, Iterable, List, Mapping, Optional, Sequence, TypeVar, Union
 
 from django.db.models import Manager, Model, QuerySet
 from rest_framework.fields import Field, Option
@@ -25,8 +25,8 @@ class PKOnlyObject:
 MANY_RELATION_KWARGS: Sequence[str]
 
 _MT = TypeVar("_MT", bound=Model)
-_DT = TypeVar("_DT", covariant=True)  # Data Type
-_PT = TypeVar("_PT", covariant=True)  # Primitive Type
+_DT = TypeVar("_DT")  # Data Type
+_PT = TypeVar("_PT")  # Primitive Type
 
 class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT]):
     queryset: Optional[Union[QuerySet[_MT], Manager[_MT]]] = ...

@@ -1,5 +1,5 @@
-from typing import Any, Dict, Iterator, List, Tuple, MutableMapping, Union, Mapping
 from collections import OrderedDict
+from typing import Any, Dict, Iterator, List, Mapping, MutableMapping, Tuple, Union
 
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field

@@ -1,4 +1,5 @@
-from typing import Any, Mapping, Dict, Optional, Sequence, Type, Union, Callable
+from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Type, Union
+
 from typing_extensions import TypedDict
 
 class DefaultsSettings(TypedDict, total=False):

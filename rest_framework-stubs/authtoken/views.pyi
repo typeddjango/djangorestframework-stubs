@@ -3,7 +3,7 @@ from typing import Any, Callable
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView, _VIEW
+from rest_framework.views import _VIEW, APIView
 
 class ObtainAuthToken(APIView):
     serializer_class = AuthTokenSerializer

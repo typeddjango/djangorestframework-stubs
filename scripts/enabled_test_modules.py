@@ -23,6 +23,7 @@ MOCK_OBJECTS = [
     "MockAPIView",
     "MockUser",
     "MockObject",
+    "MockFile"
 ]
 EXTERNAL_MODULES = ["requests"]
 IGNORED_ERRORS = {
@@ -39,7 +40,11 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
-    "test_openapi.py": ['Incompatible types in assignment (expression has type "CharField", base class "Field" defined the type as "bool")'],
+    "authentication": ['Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str', ' base class "BaseTokenAuthTests" defined the type as "None"', 'No overload variant of "__getitem__" of "list" matches argument type "str"', 'is not indexable', 'def __getitem__', 'Possible overload variant', '"None" has no attribute "objects"', '"BaseTokenAuthTests" has no attribute "assertNumQueries"'],
+    "schema": ['Incompatible types in assignment (expression has type "CharField", base class "Field" defined the type as "bool")', 'SchemaGenerator" has no attribute "_initialise_endpoints"'],
+    "browsable_api": ['(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")'],
+    "conftest.py": ['Unsupported operand types for'],
+    "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
     "test_authtoken.py": ['Item "None" of "Optional[Token]" has no attribute "key"', 'Argument 1 to "get_fields" of "BaseModelAdmin" has incompatible type "object"; expected "HttpRequest"', 'Argument 1 to "TokenAdmin" has incompatible type "Token"; expected "Type[Model]"'],
     "test_bound_fields.py": ['Value of type "BoundField" is not indexable'],
     "test_decorators.py": ['Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"'],
@@ -56,7 +61,9 @@ IGNORED_ERRORS = {
         '"MultipleChoiceField" has no attribute "partial"',
         '"Field[Any, Any, Any, Any]" has no attribute "method_name"',
         'Argument 1 to "ModelField" has incompatible type "None"',
-        'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"'
+        'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"',
+        '"MultipleChoiceField[Model]" has no attribute "partial"',
+        'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"'
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
@@ -122,8 +129,7 @@ IGNORED_ERRORS = {
         'expression has type "List[RouterTestModel]"'
     ],
     "test_serializer.py": [
-        '"update" of "SerializerProtocol" has incompatible type "None"',
-        '"create" of "SerializerProtocol" has incompatible type "None"',
+        'of "BaseSerializer" has incompatible type "None"',
         "base class",
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
@@ -145,7 +151,7 @@ IGNORED_ERRORS = {
         'Type[NonTimeThrottle]" has no attribute "called"',
     ],
     "test_utils.py": ["Unsupported left operand type for %"],
-    "test_validation.py": ['Value of type "object" is not indexable'],
+    "test_validation.py": ['Value of type "object" is not indexable', 'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"'],
     "test_validators.py": [
         'has incompatible type "object"; expected "QuerySet[Any]"',
         'to "filter_queryset" of "BaseUniqueForValidator" has incompatible type "None"',

@@ -1,4 +1,5 @@
 from typing import Any, Callable, Mapping, Optional, Sequence
+
 from rest_framework.request import Request
 
 def preserve_builtin_query_params(url: str, request: Optional[Request] = ...) -> str: ...

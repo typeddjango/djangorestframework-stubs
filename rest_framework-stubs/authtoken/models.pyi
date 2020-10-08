@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 
 class Token(models.Model):

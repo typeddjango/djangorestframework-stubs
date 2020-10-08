@@ -1,4 +1,5 @@
 from typing import Any, Mapping, Optional, Pattern, Sequence
+
 from rest_framework.request import Request
 
 class BaseVersioning:

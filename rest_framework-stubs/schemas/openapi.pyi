@@ -1,11 +1,17 @@
-from .generators import BaseSchemaGenerator as BaseSchemaGenerator
-from .inspectors import ViewInspector as ViewInspector
-from .utils import get_pk_description as get_pk_description, is_list_view as is_list_view
-from rest_framework import RemovedInDRF314Warning as RemovedInDRF314Warning, exceptions as exceptions, renderers as renderers, serializers as serializers
+from typing import Any, Optional
+
+from rest_framework import RemovedInDRF314Warning as RemovedInDRF314Warning
+from rest_framework import exceptions as exceptions
+from rest_framework import renderers as renderers
+from rest_framework import serializers as serializers
 from rest_framework.compat import uritemplate as uritemplate
 from rest_framework.fields import empty as empty
 from rest_framework.settings import api_settings as api_settings
-from typing import Any, Optional
+
+from .generators import BaseSchemaGenerator as BaseSchemaGenerator
+from .inspectors import ViewInspector as ViewInspector
+from .utils import get_pk_description as get_pk_description
+from .utils import is_list_view as is_list_view
 
 class SchemaGenerator(BaseSchemaGenerator):
     def get_info(self): ...
@@ -15,7 +21,9 @@ class SchemaGenerator(BaseSchemaGenerator):
 class AutoSchema(ViewInspector):
     operation_id_base: Any = ...
     component_name: Any = ...
-    def __init__(self, tags: Optional[Any] = ..., operation_id_base: Optional[Any] = ..., component_name: Optional[Any] = ...) -> None: ...
+    def __init__(
+        self, tags: Optional[Any] = ..., operation_id_base: Optional[Any] = ..., component_name: Optional[Any] = ...
+    ) -> None: ...
     request_media_types: Any = ...
     response_media_types: Any = ...
     method_mapping: Any = ...
