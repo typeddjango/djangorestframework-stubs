@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterator, List, Tuple, MutableMapping, Union
+from typing import Any, Dict, Iterator, List, Tuple, MutableMapping, Union, Mapping
 from collections import OrderedDict
 
 from rest_framework.exceptions import ErrorDetail
@@ -27,6 +27,7 @@ class BoundField:
     fields: Dict[str, Field]
     errors: List[ErrorDetail]
     def __init__(self, field: Field, value: Any, errors: List[ErrorDetail], prefix: str = ...): ...
+    def __getattr__(self, attr_name: str) -> Any: ...
     def as_form_field(self) -> BoundField: ...
 
 class JSONBoundField(BoundField): ...

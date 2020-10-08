@@ -39,6 +39,9 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_openapi.py": ['Incompatible types in assignment (expression has type "CharField", base class "Field" defined the type as "bool")'],
+    "test_authtoken.py": ['Item "None" of "Optional[Token]" has no attribute "key"', 'Argument 1 to "get_fields" of "BaseModelAdmin" has incompatible type "object"; expected "HttpRequest"', 'Argument 1 to "TokenAdmin" has incompatible type "Token"; expected "Type[Model]"'],
+    "test_bound_fields.py": ['Value of type "BoundField" is not indexable'],
     "test_decorators.py": ['Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"'],
     "test_encoders.py": ['Argument "serializer" to "ReturnList" has incompatible type "None'],
     "test_fields.py": [
@@ -106,6 +109,7 @@ IGNORED_ERRORS = {
     "test_renderers.py": [
         '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
     ],
+    "test_requests_client.py": ["Module 'rest_framework.compat' has no attribute 'requests'"],
     "test_request.py": [
         '"Request" has no attribute "inner_property"',
         'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"',
@@ -125,6 +129,7 @@ IGNORED_ERRORS = {
         '"CharField" has incompatible type "Collection[Any]"',
         "Name 'foo' is not defined",
     ],
+    "test_serializer_lists.py": ['The type "Type[ListSerializer]" is not generic and not indexable'],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
