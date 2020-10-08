@@ -39,6 +39,8 @@ IGNORED_ERRORS = {
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
     ],
+    "test_decorators.py": ['Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"'],
+    "test_encoders.py": ['Argument "serializer" to "ReturnList" has incompatible type "None'],
     "test_fields.py": [
         '"ChoiceModel"',
         'Argument "validators" to "CharField" has incompatible type',
@@ -113,7 +115,7 @@ IGNORED_ERRORS = {
         'Argument 2 to "get" of "Client" has incompatible type "**Dict[str, str]"',
     ],
     "test_routers.py": [
-        '(expression has type "List[RouterTestModel]", base class "GenericAPIView" defined the type as "Union[QuerySet[Any], Manager[Any], None]")'
+        'expression has type "List[RouterTestModel]"'
     ],
     "test_serializer.py": [
         '"update" of "SerializerProtocol" has incompatible type "None"',
@@ -128,6 +130,7 @@ IGNORED_ERRORS = {
         "self.Serializer",
         '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',
     ],
+    "test_settings.py": ['Argument 1 to "APISettings" has incompatible type "Dict[str, int]"; expected "Optional[DefaultsSettings]'],
     "test_templatetags.py": ['Module has no attribute "smart_urlquote"'],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',

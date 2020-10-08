@@ -87,7 +87,7 @@ ALL_FIELDS: str = ...
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN", Model, Mapping[str, Any], Sequence[Any], covariant=True)  # Instance Type
-_DT = TypeVar("_DT", List[Any],Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Data Type
+_DT = TypeVar("_DT", List[Any], Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Data Type
 _VT = TypeVar("_VT", Model, Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Value Type
 _RP = TypeVar("_RP", Dict[str, Any], List[Dict[str, Any]], covariant=True)  # Representation Type
 

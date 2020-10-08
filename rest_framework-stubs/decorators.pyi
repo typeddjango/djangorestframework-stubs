@@ -1,30 +1,12 @@
-from typing import Any, Callable, Optional, Sequence, Type, TypeVar
-
-from django.http.response import HttpResponseBase
+from typing import Any, Callable, Optional, Sequence, Type, Union, List, Mapping
+from typing_extensions import Literal
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import BasePermission
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
-from rest_framework.views import APIView  # noqa: F401
-
-_VIEW = TypeVar("_VIEW", bound=Callable[..., HttpResponseBase])
-
-def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[_VIEW], _VIEW]: ...
-def renderer_classes(renderer_classes: Sequence[Type[BaseRenderer]]) -> Callable[[_VIEW], _VIEW]: ...
-def parser_classes(parser_classes: Sequence[Type[BaseParser]]) -> Callable[[_VIEW], _VIEW]: ...
-def authentication_classes(authentication_classes: Sequence[Type[BaseAuthentication]]) -> Callable[[_VIEW], _VIEW]: ...
-def throttle_classes(throttle_classes: Sequence[Type[BaseThrottle]]) -> Callable[[_VIEW], _VIEW]: ...
-def permission_classes(permission_classes: Sequence[Type[BasePermission]]) -> Callable[[_VIEW], _VIEW]: ...
-def schema(view_inspector: Optional[Type[ViewInspector]]) -> Callable[[_VIEW], _VIEW]: ...
-def action(
-    methods: Optional[Sequence[str]] = ...,
-    detail: Optional[bool] = ...,
-    url_path: Optional[str] = ...,
-    url_name: Optional[str] = ...,
-    **kwargs: Any
-) -> Callable[[_VIEW], _VIEW]: ...
+from rest_framework.views import APIView, _View  # noqa: F401
 
 class MethodMapper(dict):
     def __init__(self, action: Callable, methods: Sequence[str]) -> None: ...
@@ -37,3 +19,33 @@ class MethodMapper(dict):
     def head(self, func: Callable) -> Callable: ...
     def options(self, func: Callable) -> Callable: ...
     def trace(self, func: Callable) -> Callable: ...
+
+
+class _ACTION(Callable):
+    detail: bool
+    methods: List[
+        Union[Literal["get"], Literal["post"], Literal["delete"], Literal["put"], Literal["patch"], Literal["trace"], Literal["options"]]
+    ]
+    url_path: str
+    url_name: str
+    kwargs: Mapping[str, Any]
+    mapping: MethodMapper
+
+def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[Callable], _View]: ...
+def renderer_classes(renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]) -> Callable[[Callable], Callable]: ...
+def parser_classes(parser_classes: Sequence[Union[BaseParser, Type[BaseParser]]]) -> Callable[[Callable], Callable]: ...
+def authentication_classes(authentication_classes: Sequence[Union[BaseAuthentication, Type[BaseAuthentication]]]) -> Callable[[Callable], Callable]: ...
+def throttle_classes(throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]) -> Callable[[Callable], Callable]: ...
+def permission_classes(permission_classes: Sequence[Union[BasePermission, Type[BasePermission]]]) -> Callable[[Callable], Callable]: ...
+def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[Callable], Callable]: ...
+def action(
+    methods: Optional[List[
+        Union[Literal["get"], Literal["GET"], Literal["post"], Literal["POST"], Literal["delete"], Literal["DELETE"], Literal["put"], Literal["PUT"], Literal["PATCH"], Literal["patch"], Literal["trace"], Literal["TRACE"], Literal["OPTIONS"], Literal["options"]]
+    ]] = ...,
+    detail: bool = ...,
+    url_path: Optional[str] = ...,
+    url_name: Optional[str] = ...,
+    suffix: Optional[str] = ...,
+    name: Optional[str] = ...,
+    **kwargs: Any,
+) -> Callable[[Callable], _ACTION]: ...
