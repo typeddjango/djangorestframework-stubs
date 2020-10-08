@@ -85,10 +85,10 @@ LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
-_IN = TypeVar("_IN", Model, Mapping[str, Any], Sequence[Any])  # Instance Type
-_DT = TypeVar("_DT", List[Any], Mapping[str, Any], Sequence[Mapping[str, Any]], contravariant=True)  # Data Type
-_VT = TypeVar("_VT", Model, Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Value Type
-_RP = TypeVar("_RP", Dict[str, Any], List[Dict[str, Any]], covariant=True)  # Representation Type
+_IN = TypeVar("_IN")  # Instance Type
+_DT = TypeVar("_DT")  # Data Type
+_VT = TypeVar("_VT")  # Value Type
+_RP = TypeVar("_RP")  # Representation Type
 
 class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
     partial: bool
@@ -131,8 +131,7 @@ class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
     def update(self, instance: _IN, validated_data: OrderedDict) -> _IN: ...
     def create(self, validated_data: OrderedDict) -> _IN: ...
     def save(self, **kwargs: Any) -> _IN: ...
-    def to_internal_value(self, data: _DT) -> _VT: ...
-    def to_representation(self, instance: _IN) -> _RP: ...
+    def to_representation(self, instance: _IN) -> _RP: ...  # type: ignore[override]
 
 class SerializerMetaclass(type):
     def __new__(cls, name: Any, bases: Any, attrs: Any): ...
@@ -142,9 +141,7 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer[
-        Union[_MT, Mapping[str, Any]], Mapping[str, Any], Dict[str, Any], Dict[str, Any], Union[_MT, Mapping[str, Any]]
-    ],
+    BaseSerializer[Union[_MT, Mapping[str, Any]], Mapping[str, Any], Dict[str, Any], Union[_MT, Mapping[str, Any]]],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]
@@ -172,7 +169,6 @@ class ListSerializer(
         List[Mapping[Any, Any]],
         List[Dict[str, Any]],
         List[Dict[str, Any]],
-        List[Mapping[Any, Any]],
     ]
 ):
     child: Optional[
@@ -219,14 +215,14 @@ class ListSerializer(
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> NoReturn: ...
 
-class ModelSerializer(Serializer):
+class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[str, Any], _MT]):
     serializer_field_mapping: Dict[Type[models.Field], Field] = ...
     serializer_related_field: RelatedField = ...
     serializer_related_to_field: RelatedField = ...
     serializer_url_field: RelatedField = ...
     serializer_choice_field: Field = ...
     url_field_name: Optional[str] = ...
-    instance: Optional[_MT] = ...
+
     class Meta:
         model: _MT  # type: ignore
         fields: Union[Sequence[str], Literal["__all__"]]
@@ -234,31 +230,31 @@ class ModelSerializer(Serializer):
         exclude: Optional[Sequence[str]]
         depth: Optional[int]
         extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
+
     def __init__(
-            self,
-            instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
-            data: _DT = ...,
-            partial: bool = ...,
-            many: bool = ...,
-            context: Dict[str, Any] = ...,
-            read_only: bool = ...,
-            write_only: bool = ...,
-            required: bool = ...,
-            default: Union[_VT, Callable[[], _VT]] = ...,
-            initial: Union[_VT, Callable[[], _VT]] = ...,
-            source: str = ...,
-            label: str = ...,
-            help_text: str = ...,
-            style: Dict[str, Any] = ...,
-            error_messages: Dict[str, str] = ...,
-            validators: Sequence[Callable] = ...,
-            allow_null: bool = ...,
+        self,
+        instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
+        data: _DT = ...,
+        partial: bool = ...,
+        many: bool = ...,
+        context: Dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[_VT, Callable[[], _VT]] = ...,
+        initial: Union[_VT, Callable[[], _VT]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
     ): ...
-    def update(self, instance: _MT, validated_data: OrderedDict) -> _MT: ...
-    def create(self, validated_data: OrderedDict) -> _MT: ...
-    def save(self, **kwargs: Any) -> _MT: ...
-    def to_internal_value(self, data: _DT) -> _VT: ...
-    def to_representation(self, instance: _MT) -> _RP: ...
+    def update(self, instance: _MT, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
+    def create(self, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
+    def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
+    def to_representation(self, instance: _MT) -> _RP: ...  # type: ignore[override]
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> List[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> List[str]: ...
     def build_field(

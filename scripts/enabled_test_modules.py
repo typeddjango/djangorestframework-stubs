@@ -42,7 +42,7 @@ IGNORED_ERRORS = {
     ],
     "authentication": ['Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str', ' base class "BaseTokenAuthTests" defined the type as "None"', 'No overload variant of "__getitem__" of "list" matches argument type "str"', 'is not indexable', 'def __getitem__', 'Possible overload variant', '"None" has no attribute "objects"', '"BaseTokenAuthTests" has no attribute "assertNumQueries"'],
     "schema": ['Incompatible types in assignment (expression has type "CharField", base class "Field" defined the type as "bool")', 'SchemaGenerator" has no attribute "_initialise_endpoints"'],
-    "browsable_api": ['(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")'],
+    "browsable_api": ['(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")', 'expression has type "List[Dict[str, Dict[str, int]]]"'],
     "conftest.py": ['Unsupported operand types for'],
     "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
     "test_authtoken.py": ['Item "None" of "Optional[Token]" has no attribute "key"', 'Argument 1 to "get_fields" of "BaseModelAdmin" has incompatible type "object"; expected "HttpRequest"', 'Argument 1 to "TokenAdmin" has incompatible type "Token"; expected "Type[Model]"'],

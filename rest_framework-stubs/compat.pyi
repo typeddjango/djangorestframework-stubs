@@ -7,34 +7,34 @@ from django.db.models import QuerySet
 try:
     from django.contrib.postgres import fields as postgres_fields
 except ImportError:
-    postgres_fields = None
+    postgres_fields = None  # type: ignore
 try:
     import uritemplate
 except ImportError:
-    uritemplate = None
+    uritemplate = None  # type: ignore
 try:
     import coreschema
 except ImportError:
-    coreschema = None
+    coreschema = None  # type: ignore
 try:
     import yaml
 except ImportError:
-    yaml = None
+    yaml = None  # type: ignore
 try:
     import requests
 except ImportError:
-    requests = None
+    requests = None  # type: ignore
 try:
     import pygments
 except ImportError:
-    pygments = None
+    pygments = None  # type: ignore
 try:
     import markdown
     def apply_markdown(text: str): ...
 
 except ImportError:
     apply_markdown = None  # type: ignore
-    markdown = None
+    markdown = None  # type: ignore
 
 if markdown is not None and pygments is not None:
     from markdown.preprocessors import Preprocessor

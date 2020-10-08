@@ -48,13 +48,13 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any = ...
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...
+    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
     def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def delete(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def options(self, path: str, data: Union[Dict[str, str], str] = ..., format: Optional[str] = ..., content_type: Optional[Any] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def generic(
+    def generic(  # type: ignore[override]
         self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Request: ...
 
@@ -69,7 +69,7 @@ class APIClient(APIRequestFactory, DjangoClient):
         self, user: Union[AnonymousUser, AbstractBaseUser] = ..., token: Optional[Token] = ...
     ) -> None: ...
     def request(self, **kwargs: Any) -> Response: ...  # type: ignore[override]
-    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...
+    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
     def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
     def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
     def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]

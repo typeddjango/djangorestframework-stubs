@@ -1,9 +1,9 @@
-from typing import Callable, List, Optional, Pattern, Union
+from typing import List, Optional, Pattern, Union
 
-from django.urls.resolvers import RoutePattern, URLPattern
+from django.urls.resolvers import RoutePattern, URLPattern, URLResolver
 
 def apply_suffix_patterns(
-    urlpatterns: List[Union[URLResolve, RoutePattern, URLPattern, Pattern]],
+    urlpatterns: List[Union[URLResolver, RoutePattern, URLPattern, Pattern]],
     suffix_pattern: Union[str, Pattern],
     suffix_required: bool,
     suffix_route: Optional[str] = ...,

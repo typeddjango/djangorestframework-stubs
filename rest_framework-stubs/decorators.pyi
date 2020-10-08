@@ -6,7 +6,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
-from rest_framework.views import APIView, _View  # noqa: F401
+from rest_framework.views import APIView, AsView  # noqa: F401
 from typing_extensions import Literal
 
 class MethodMapper(dict):
@@ -40,7 +40,7 @@ class ViewSetAction:
     mapping: MethodMapper
     def __call__(self, *args, **kwargs): ...
 
-def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[Callable], _View]: ...
+def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[Callable], AsView]: ...
 def renderer_classes(
     renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]
 ) -> Callable[[Callable], Callable]: ...
