@@ -3,7 +3,6 @@ from typing import (
     Any,
     Callable,
     Dict,
-    Generic,
     Iterable,
     Iterator,
     List,
@@ -17,6 +16,7 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    Generic,
 )
 
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -85,23 +85,23 @@ from typing_extensions import Literal
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
 
-_MT = TypeVar("_MT", bound=Model)
-_IT = TypeVar("_IT", Mapping[str, Any], List[Any], _MT, covariant=True)
-_DT = TypeVar("_DT", Mapping[str, Any], List[Mapping[str, Any]], covariant=True)
-_INV = TypeVar("_INV", Mapping[str, Any], List[Mapping[str, Any]], covariant=True)
-_REP = TypeVar("_REP", Dict[str, Any], List[Dict[str, Any]], covariant=True)
+_MT = TypeVar("_MT", bound=Model)  # Model Type
+_IN = TypeVar("_IN", Model, Mapping[str, Any], Sequence[Any], covariant=True)  # Instance Type
+_DT = TypeVar("_DT", Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Data Type
+_VT = TypeVar("_VT", Model, Mapping[str, Any], Sequence[Mapping[str, Any]], covariant=True)  # Value Type
+_RP = TypeVar("_RP", Dict[str, Any], List[Dict[str, Any]], covariant=True)  # Representation Type
 
-class SerializerProtocol(Protocol[_IT, _DT, _INV, _REP]):
-    def __init__(self, instance: Optional[_IT] = ..., data: _DT = ..., partial: bool = ..., **kwargs: Any): ...
-    def update(self, instance: _IT, validated_data: OrderedDict) -> _IT: ...
-    def create(self, validated_data: OrderedDict) -> _IT: ...
-    def save(self, **kwargs: Any) -> _IT: ...
-    def to_internal_value(self, data: _DT) -> _INV: ...
-    def to_representation(self, instance: _IT) -> _REP: ...
+class SerializerProtocol(Protocol[_IN, _DT, _VT, _RP]):
+    def __init__(self, instance: Optional[_IN] = ..., data: _DT = ..., partial: bool = ..., **kwargs: Any): ...
+    def update(self, instance: _IN, validated_data: OrderedDict) -> _IN: ...
+    def create(self, validated_data: OrderedDict) -> _IN: ...
+    def save(self, **kwargs: Any) -> _IN: ...
+    def to_internal_value(self, data: _DT) -> _VT: ...
+    def to_representation(self, instance: _IN) -> _RP: ...
 
-class BaseSerializer(Field, SerializerProtocol):
+class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN], SerializerProtocol[_VT, _DT, _RP, _IN]):
     partial: bool
-    instance: Optional[_IT]
+    instance: Optional[_IN]
     initial_data: Optional[_DT]
     def __new__(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def __class_getitem__(cls, *args, **kwargs): ...
@@ -123,8 +123,9 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer,
-    SerializerProtocol[Mapping[str, Any], Mapping[str, Any], Dict[str, Any], Dict[str, Any]],
+    BaseSerializer[
+        Union[_MT, Mapping[str, Any]], Mapping[str, Any], Dict[str, Any], Dict[str, Any], Union[_MT, Mapping[str, Any]]
+    ],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]
@@ -147,7 +148,13 @@ class Serializer(
     def errors(self) -> ReturnDict: ...
 
 class ListSerializer(
-    BaseSerializer, SerializerProtocol[List[Any], List[Mapping[str, Any]], List[Dict[str, Any]], List[Dict[str, Any]]]
+    BaseSerializer[
+        List[Mapping[Any, Any]],
+        List[Mapping[Any, Any]],
+        List[Dict[str, Any]],
+        List[Dict[str, Any]],
+        List[Mapping[Any, Any]],
+    ]
 ):
     child: Optional[
         Union[
@@ -158,7 +165,6 @@ class ListSerializer(
     many: bool = ...
     default_error_messages: Dict[str, Any] = ...
     allow_empty: Optional[bool] = ...
-    instance: Optional[List[Any]] = ...
     def get_initial(self) -> List[Any]: ...
     def validate(self, attrs: OrderedDict) -> OrderedDict: ...
     @property
@@ -166,7 +172,7 @@ class ListSerializer(
     @property
     def errors(self) -> ReturnList: ...
 
-def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
+def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> NoReturn: ...
 
 class ModelSerializer(Serializer, SerializerProtocol[_MT, Mapping[str, Any], Dict[str, Any], Dict[str, Any]]):
     serializer_field_mapping: Dict[Type[models.Field], Field] = ...
@@ -183,11 +189,6 @@ class ModelSerializer(Serializer, SerializerProtocol[_MT, Mapping[str, Any], Dic
         exclude: Optional[Sequence[str]]
         depth: Optional[int]
         extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
-    def to_internal_value(self, data: Dict[str, Any]) -> Dict[str, Any]: ...  # type: ignore[override]
-    def to_representation(self, instance: _MT) -> Dict[str, Any]: ...  # type: ignore[override]
-    def update(self, instance: _MT, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
-    def create(self, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
-    def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> List[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> List[str]: ...
     def build_field(

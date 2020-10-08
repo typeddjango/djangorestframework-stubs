@@ -86,10 +86,12 @@ IGNORED_ERRORS = {
         "base class",
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
+        "Name 'foo' is not defined"
     ],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
+        '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")'
     ],
     "test_templatetags.py": ['Module has no attribute "smart_urlquote"'],
     "test_throttling.py": [

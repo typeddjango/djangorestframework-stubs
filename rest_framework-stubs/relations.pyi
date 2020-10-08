@@ -1,20 +1,5 @@
 from collections import OrderedDict
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    Iterable,
-    List,
-    Mapping,
-    Optional,
-    Protocol,
-    Sequence,
-    Type,
-    TypeVar,
-    Union,
-    Generic
-)
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, TypeVar, Union, Generic
 
 from django.db.models import Manager, Model, QuerySet
 from rest_framework.fields import Field, Option
@@ -44,12 +29,8 @@ _VT = TypeVar("_VT", covariant=True)  # Value Type
 _DT = TypeVar("_DT", covariant=True)  # Data Type
 _PT = TypeVar("_PT", covariant=True)  # Primitive Type
 
-class UsesQuerySet(Protocol[_MT]):
+class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT]):
     queryset: Optional[Union[QuerySet[_MT], Manager[_MT]]] = ...
-    def get_queryset(self) -> QuerySet[_MT]: ...
-
-class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT], UsesQuerySet):
-    queryset: Optional[QuerySet[_MT]] = ...
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
     def __init__(
@@ -75,7 +56,7 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT], UsesQuerySet):
     def __new__(cls, *args: Any, **kwargs: Any) -> Union[RelatedField[_MT, _DT, _PT], ManyRelatedField[_MT]]: ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> ManyRelatedField[_MT]: ...
-    def get_queryset(self) -> QuerySet: ...
+    def get_queryset(self) -> QuerySet[_MT]: ...
     def use_pk_only_optimization(self) -> bool: ...
     def get_choices(self, cutoff: Optional[int] = ...) -> OrderedDict: ...
     @property
@@ -173,19 +154,19 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
     def to_internal_value(self, data: Any) -> _MT: ...
     def to_representation(self, value: _MT) -> str: ...
 
-class ManyRelatedField(Field[Sequence[_MT], List[Any], List[Any]]):
+class ManyRelatedField(Field[Sequence[Any], Sequence[Any], List[Any]]):
     default_empty_html: List[object] = ...
     html_cutoff: Optional[int] = ...
     html_cutoff_text: Optional[str] = ...
-    child_relation: RelatedField[_MT, Any, Any] = ...
+    child_relation: RelatedField = ...
     allow_empty: bool = ...
     def __init__(
         self,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Any = ...,
-        initial: Union[_MT, Callable[[Any], _MT]] = ...,
+        default: Sequence[Any] = ...,
+        initial: Union[Sequence[Any], Callable[[Any], Sequence[Any]]] = ...,
         source: Union[Callable, str] = ...,
         label: Optional[str] = ...,
         help_text: Optional[str] = ...,
@@ -195,8 +176,7 @@ class ManyRelatedField(Field[Sequence[_MT], List[Any], List[Any]]):
         allow_null: bool = ...,
         child_relation: RelatedField = ...,
     ): ...
-    def get_value(self, dictionary: Mapping[Any, Any]) -> List[_MT]: ...  # type: ignore[override]
-    def get_attribute(self, instance: _MT) -> Any: ...  # type: ignore[override]
+    def get_value(self, dictionary: Mapping[Any, Any]) -> List[Any]: ...  # type: ignore[override]
     def get_choices(self, cutoff: Optional[int] = ...) -> OrderedDict: ...
     @property
     def choices(self) -> OrderedDict: ...
