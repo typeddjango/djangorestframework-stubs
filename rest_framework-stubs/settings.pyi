@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Type, Union
+from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Union
 
 from typing_extensions import TypedDict
 
