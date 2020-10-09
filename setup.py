@@ -36,7 +36,6 @@ setup(
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
     python_requires=">=3.6",
     classifiers=[
-        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
