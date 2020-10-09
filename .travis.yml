@@ -7,17 +7,17 @@ sudo: required
 
 jobs:
   include:
-    - name: Run typecheck on DRF master test suite with Python 3.8
-      python: 3.8
-      script: python ./scripts/typecheck_tests.py
-
-    - name: Run typecheck on DRF master test suite with Python 3.7
-      python: 3.7
-      script: python ./scripts/typecheck_tests.py
-
-    - name: Run typecheck on DRF master test suite with Python 3.6
-      python: 3.6
-      script: python ./scripts/typecheck_tests.py
+#    - name: Run typecheck on DRF master test suite with Python 3.8
+#      python: 3.8
+#      script: python ./scripts/typecheck_tests.py
+#
+#    - name: Run typecheck on DRF master test suite with Python 3.7
+#      python: 3.7
+#      script: python ./scripts/typecheck_tests.py
+#
+#    - name: Run typecheck on DRF master test suite with Python 3.6
+#      python: 3.6
+#      script: python ./scripts/typecheck_tests.py
 
     - name: Run plugin test suite with python 3.8
       python: 3.8
