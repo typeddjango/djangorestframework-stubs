@@ -16,10 +16,10 @@ def find_stub_files(name):
     return result
 
 
-with open("README.md", "r") as f:
+with open("README.md") as f:
     readme = f.read()
 
-dependencies = ["mypy>=0.782", "django-stubs>=1.6.0", "typing-extensions", "requests>=2.0.0", "coreapi>=2.0.0"]
+dependencies = ["mypy>=0.782", "django-stubs>=1.6.0", "typing-extensions>=3.7.2", "requests>=2.0.0", "coreapi>=2.0.0"]
 
 setup(
     name="djangorestframework-stubs",
@@ -34,11 +34,15 @@ setup(
     install_requires=dependencies,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
+    python_requires=">=3.6",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Typing :: Typed",
     ],
 )

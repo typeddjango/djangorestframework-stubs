@@ -7,7 +7,7 @@
 [![Gitter](https://badges.gitter.im/mypy-django/Lobby.svg)](https://gitter.im/mypy-django/Lobby)
 
 
-Mypy stubs for [DRF 3.12.x](https://pypi.org/project/djangorestframework/). 
+Mypy stubs for [DRF 3.12.x](https://pypi.org/project/djangorestframework/).
 Supports Python 3.6, 3.7 and 3.8.
 
 ## Installation

@@ -1,7 +1,5 @@
 language: python
-# cache package wheels (1 cache per python version)
 cache: pip
-# newer python versions are available only on xenial (while some older only on trusty) Ubuntu distribution
 dist: xenial
 sudo: required
 
@@ -19,6 +17,11 @@ jobs:
       python: 3.6
       script: python ./scripts/typecheck_tests.py
 
+    - name: Lint using pre-commit
+      python: 3.8
+      script:
+        - pre-commit install && pre-commit run --all-files
+
     - name: Run plugin test suite with python 3.8
       python: 3.8
       script: pytest
@@ -31,28 +34,8 @@ jobs:
       python: 3.6
       script: pytest
 
-    - name: Mypy for plugin code
-      python: 3.8
-      script:
-        # rm __init__.py is a suggested fix for the mypy crawl issue: https://github.com/python/mypy/issues/8944
-        - rm ./rest_framework-stubs/__init__.pyi && mypy rest_framework-stubs
-        - rm ./mypy_drf_plugin/__init__.py && mypy mypy_drf_plugin
-
-    - name: Lint plugin code with flake8
-      python: 3.8
-      script: flake8 --config flake8-pyi.ini
-
-    - name: Lint with black
-      python: 3.8
-      script: black --check --line-length=120 setup.py scripts/ rest_framework-stubs/
-
-    - name: Lint plugin code with isort
-      python: 3.8
-      script: isort **/*.py -c -v
-
 before_install: |
-  # Upgrade pip, setuptools, and wheel
-  pip install -U pip setuptools wheel djangorestframework
+  pip install -U pip setuptools djangorestframework
 
 install: |
   pip install -r ./dev-requirements.txt
