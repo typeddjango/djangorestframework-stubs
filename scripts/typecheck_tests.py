@@ -2,9 +2,9 @@ import itertools
 import shutil
 import subprocess
 import sys
-from distutils import dir_util
 from argparse import ArgumentParser
 from collections import defaultdict
+from distutils import dir_util
 from pathlib import Path
 from typing import Dict, List, Optional, Pattern, Union
 
