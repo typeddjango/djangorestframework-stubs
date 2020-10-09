@@ -21,7 +21,7 @@ class MethodMapper(dict):
     def options(self, func: Callable) -> Callable: ...
     def trace(self, func: Callable) -> Callable: ...
 
-LOWER_CASE_HTTP_VERBS = List[
+_LOWER_CASE_HTTP_VERBS = List[
     Union[
         Literal["get"],
         Literal["post"],
@@ -33,7 +33,7 @@ LOWER_CASE_HTTP_VERBS = List[
     ]
 ]
 
-MIXED_CASE_HTTP_VERBS = List[
+_MIXED_CASE_HTTP_VERBS = List[
     Union[
         Literal["GET"],
         Literal["POST"],
@@ -54,7 +54,7 @@ MIXED_CASE_HTTP_VERBS = List[
 
 class ViewSetAction:
     detail: bool
-    methods: LOWER_CASE_HTTP_VERBS
+    methods: _LOWER_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
@@ -77,7 +77,7 @@ def permission_classes(
 ) -> Callable[[Callable], Callable]: ...
 def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[Callable], Callable]: ...
 def action(
-    methods: Optional[MIXED_CASE_HTTP_VERBS] = ...,
+    methods: Optional[_MIXED_CASE_HTTP_VERBS] = ...,
     detail: bool = ...,
     url_path: Optional[str] = ...,
     url_name: Optional[str] = ...,
