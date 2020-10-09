@@ -96,7 +96,10 @@ if __name__ == "__main__":
     parser.add_argument("--drf_version", required=False)
     args = parser.parse_args()
     checkout_target_tag(args.drf_version)
-    shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)
+    if sys.version_info[1] > 7:
+        shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)
+    else:
+        shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework")
     mypy_config_file = (PROJECT_DIRECTORY / "scripts" / "mypy.ini").absolute()
     mypy_cache_dir = Path(__file__).parent / ".mypy_cache"
     tests_root = DRF_DIRECTORY / "tests"
