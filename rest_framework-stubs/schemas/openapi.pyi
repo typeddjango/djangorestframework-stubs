@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Optional, Sequence, Type, TypedDict
+from typing import Any, Dict, List, Optional, Sequence, Type
+from typing_extensions import TypedDict
 
 from rest_framework.fields import Field
 from rest_framework.pagination import BasePagination
