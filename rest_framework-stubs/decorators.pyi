@@ -21,19 +21,40 @@ class MethodMapper(dict):
     def options(self, func: Callable) -> Callable: ...
     def trace(self, func: Callable) -> Callable: ...
 
+LOWER_CASE_HTTP_VERBS = List[
+    Union[
+        Literal["get"],
+        Literal["post"],
+        Literal["delete"],
+        Literal["put"],
+        Literal["patch"],
+        Literal["trace"],
+        Literal["options"],
+    ]
+]
+
+MIXED_CASE_HTTP_VERBS = List[
+    Union[
+        Literal["GET"],
+        Literal["POST"],
+        Literal["DELETE"],
+        Literal["PUT"],
+        Literal["PATCH"],
+        Literal["TRACE"],
+        Literal["OPTIONS"],
+        Literal["get"],
+        Literal["post"],
+        Literal["delete"],
+        Literal["put"],
+        Literal["patch"],
+        Literal["trace"],
+        Literal["options"],
+    ]
+]
+
 class ViewSetAction:
     detail: bool
-    methods: List[
-        Union[
-            Literal["get"],
-            Literal["post"],
-            Literal["delete"],
-            Literal["put"],
-            Literal["patch"],
-            Literal["trace"],
-            Literal["options"],
-        ]
-    ]
+    methods: LOWER_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
@@ -56,26 +77,7 @@ def permission_classes(
 ) -> Callable[[Callable], Callable]: ...
 def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[Callable], Callable]: ...
 def action(
-    methods: Optional[
-        List[
-            Union[
-                Literal["get"],
-                Literal["GET"],
-                Literal["post"],
-                Literal["POST"],
-                Literal["delete"],
-                Literal["DELETE"],
-                Literal["put"],
-                Literal["PUT"],
-                Literal["PATCH"],
-                Literal["patch"],
-                Literal["trace"],
-                Literal["TRACE"],
-                Literal["OPTIONS"],
-                Literal["options"],
-            ]
-        ]
-    ] = ...,
+    methods: Optional[MIXED_CASE_HTTP_VERBS] = ...,
     detail: bool = ...,
     url_path: Optional[str] = ...,
     url_name: Optional[str] = ...,
