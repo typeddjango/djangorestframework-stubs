@@ -2,6 +2,7 @@ import itertools
 import shutil
 import subprocess
 import sys
+from distutils import dir_util
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     if sys.version_info[1] > 7:
         shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)
     else:
-        shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework")
+        dir_util.copy_tree(str(STUBS_DIRECTORY), str(DRF_DIRECTORY / "rest_framework"))
     mypy_config_file = (PROJECT_DIRECTORY / "scripts" / "mypy.ini").absolute()
     mypy_cache_dir = Path(__file__).parent / ".mypy_cache"
     tests_root = DRF_DIRECTORY / "tests"
