@@ -222,7 +222,6 @@ class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[st
     serializer_url_field: RelatedField = ...
     serializer_choice_field: Field = ...
     url_field_name: Optional[str] = ...
-
     class Meta:
         model: _MT  # type: ignore
         fields: Union[Sequence[str], Literal["__all__"]]
@@ -230,7 +229,6 @@ class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[st
         exclude: Optional[Sequence[str]]
         depth: Optional[int]
         extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
-
     def __init__(
         self,
         instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
