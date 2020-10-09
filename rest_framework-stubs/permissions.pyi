@@ -1,4 +1,4 @@
-from typing import Dict, List, Protocol, Sequence, Type, Union
+from typing import Dict, List, Protocol, Sequence, Type, Union, Any
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -11,7 +11,6 @@ class _SupportsHasPermission(Protocol):
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
 _PermissionClass = Union[Type[BasePermission], OperandHolder, SingleOperandHolder]
-_OperationClass = Union[AND, OR, NOT]
 
 class OperationHolderMixin:
     def __and__(self, other: _PermissionClass) -> OperandHolder: ...
@@ -21,16 +20,16 @@ class OperationHolderMixin:
     def __invert__(self) -> SingleOperandHolder: ...
 
 class SingleOperandHolder(OperationHolderMixin):
-    operator_class: _OperationClass
+    operator_class: _SupportsHasPermission
     op1_class: _PermissionClass
-    def __init__(self, operator_class: _OperationClass, op1_class: _PermissionClass): ...
+    def __init__(self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass): ...
     def __call__(self, *args, **kwargs) -> _SupportsHasPermission: ...
 
 class OperandHolder(OperationHolderMixin):
-    operator_class: _OperationClass
+    operator_class: _SupportsHasPermission
     op1_class: _PermissionClass
     op2_class: _PermissionClass
-    def __init__(self, operator_class: _OperationClass, op1_class: _PermissionClass, op2_class: _PermissionClass): ...
+    def __init__(self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass, op2_class: _PermissionClass): ...
     def __call__(self, *args, **kwargs) -> _SupportsHasPermission: ...
 
 class AND(_SupportsHasPermission):
