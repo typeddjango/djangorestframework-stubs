@@ -11,7 +11,7 @@ jobs:
       python: 3.8
       script: python ./scripts/typecheck_tests.py
 
-    - name: Run typecheck on DRF master test suite with Python 3.8
+    - name: Run typecheck on DRF master test suite with Python 3.7
       python: 3.7
       script: python ./scripts/typecheck_tests.py
 
