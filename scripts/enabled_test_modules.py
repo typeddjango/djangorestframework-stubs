@@ -119,6 +119,7 @@ IGNORED_ERRORS = {
         'expected "OrderedDict[Any, Any]"',
         'base class "Meta" defined the type as',
         '"Field" has no attribute',
+        '"Dict[str, Any]" has no attribute "name"'
     ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
@@ -164,12 +165,16 @@ IGNORED_ERRORS = {
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
         "Name 'foo' is not defined",
+        'Argument "data" has incompatible type "None"'
     ],
+    "test_serializer_bulk_update.py": ['Argument "data" has incompatible type "int"', 'Argument "data" has incompatible type "List[object]"', 'Argument "data" has incompatible type "List[str]"'],
     "test_serializer_lists.py": ['The type "Type[ListSerializer]" is not generic and not indexable'],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
         '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',
+        'Argument "data" has incompatible type "None"; expected "Mapping[str, Any]"',
+        'Argument "data" has incompatible type "None"'
     ],
     "test_settings.py": [
         'Argument 1 to "APISettings" has incompatible type "Dict[str, int]"; expected "Optional[DefaultsSettings]'
@@ -186,6 +191,8 @@ IGNORED_ERRORS = {
     "test_validation.py": [
         'Value of type "object" is not indexable',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"',
+        'Argument "data" to "ValidationSerializer" has incompatible type "str"; expected "Mapping[str, Any]"',
+        'Argument "data" to "ValidationSerializer" has incompatible type "str"'
     ],
     "test_validators.py": [
         'has incompatible type "object"; expected "QuerySet[Any]"',

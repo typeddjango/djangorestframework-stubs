@@ -80,7 +80,7 @@ from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from typing_extensions import Literal
-
+from django.utils.datastructures import MultiValueDict
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
 
@@ -141,7 +141,7 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer[Union[_MT, Mapping[str, Any]], Mapping[str, Any], Dict[str, Any], Union[_MT, Mapping[str, Any]]],
+    BaseSerializer[Union[_MT, Mapping[str, Any]], Union[Mapping[str, Any], Sequence[Mapping[str, Any]]], Dict[str, Any], Union[_MT, Mapping[str, Any]]],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]
@@ -165,11 +165,11 @@ class Serializer(
 
 class ListSerializer(
     BaseSerializer[
-        List[Mapping[Any, Any]],
-        List[Mapping[Any, Any]],
+        List[Any],
+        Union[MultiValueDict, List[Any]],
         List[Dict[str, Any]],
         List[Dict[str, Any]],
-    ]
+    ],
 ):
     child: Optional[
         Union[
@@ -182,8 +182,8 @@ class ListSerializer(
     allow_empty: Optional[bool] = ...
     def __init__(
         self,
-        instance: _IN = ...,
-        data: _DT = ...,
+        instance: Union[MultiValueDict, Sequence[Any]] = ...,
+        data: Union[MultiValueDict, Sequence[Any]] = ...,
         partial: bool = ...,
         context: Dict[str, Any] = ...,
         allow_empty: bool = ...,
@@ -196,8 +196,8 @@ class ListSerializer(
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[List[Mapping[Any, Any]], Callable[[], List[Mapping[Any, Any]]]] = ...,
-        initial: Union[List[Mapping[Any, Any]], Callable[[], List[Mapping[Any, Any]]]] = ...,
+        default: Union[MultiValueDict, List[Any], Callable[[], Union[MultiValueDict, List[Any]]]] = ...,
+        initial: Union[Sequence[Any], Callable[[], Sequence[Any]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -206,7 +206,7 @@ class ListSerializer(
         validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
     ): ...
-    def get_initial(self) -> List[Any]: ...
+    def get_initial(self) -> List[Mapping[Any, Any]]: ...
     def validate(self, attrs: OrderedDict) -> OrderedDict: ...
     @property
     def data(self) -> ReturnList: ...
@@ -232,15 +232,15 @@ class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[st
     def __init__(
         self,
         instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
-        data: _DT = ...,
+        data: Union[Mapping[str, Any], Sequence[Mapping[str, Any]]] = ...,
         partial: bool = ...,
         many: bool = ...,
         context: Dict[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[_VT, Callable[[], _VT]] = ...,
-        initial: Union[_VT, Callable[[], _VT]] = ...,
+        default: Union[_MT, Callable[[], _MT]] = ...,
+        initial: Union[_MT, Callable[[], _MT]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
