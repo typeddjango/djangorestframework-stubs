@@ -1,22 +1,12 @@
-from typing import Any, Optional, Dict, Type, TypedDict, List, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Type, TypedDict
 
-from rest_framework import RemovedInDRF314Warning as RemovedInDRF314Warning
-from rest_framework import exceptions as exceptions
-from rest_framework import renderers as renderers
-from rest_framework import serializers as serializers
-from rest_framework.compat import uritemplate as uritemplate
-from rest_framework.fields import empty as empty
-from rest_framework.settings import api_settings as api_settings
+from rest_framework.fields import Field
+from rest_framework.pagination import BasePagination
+from rest_framework.request import Request
+from rest_framework.serializers import BaseSerializer
 
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import ViewInspector as ViewInspector
-from .utils import get_pk_description as get_pk_description
-from .utils import is_list_view as is_list_view
-
-from rest_framework.pagination import BasePagination
-from rest_framework.fields import Field
-from rest_framework.serializers import BaseSerializer
-from rest_framework.request import Request
 
 # OpenAPI requires its own typings. Below are minimal typing.
 # TODO: evaluate using a 3rd party typing package for this, e.g.: https://github.com/meeshkan/openapi-typed

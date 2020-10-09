@@ -1,9 +1,9 @@
-from typing import Any, Callable
+from typing import Any
 
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import AsView, APIView
+from rest_framework.views import APIView, AsView
 
 class ObtainAuthToken(APIView):
     serializer_class = AuthTokenSerializer

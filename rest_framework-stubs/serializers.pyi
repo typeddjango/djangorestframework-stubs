@@ -21,8 +21,9 @@ from typing import (
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import DurationField as ModelDurationField
-from django.db.models import Model, QuerySet, Manager
+from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
+from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
@@ -80,7 +81,7 @@ from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from typing_extensions import Literal
-from django.utils.datastructures import MultiValueDict
+
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
 
@@ -141,7 +142,12 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer[Union[_MT, Mapping[str, Any]], Union[Mapping[str, Any], Sequence[Mapping[str, Any]]], Dict[str, Any], Union[_MT, Mapping[str, Any]]],
+    BaseSerializer[
+        Union[_MT, Mapping[str, Any]],
+        Union[Mapping[str, Any], Sequence[Mapping[str, Any]]],
+        Dict[str, Any],
+        Union[_MT, Mapping[str, Any]],
+    ],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]

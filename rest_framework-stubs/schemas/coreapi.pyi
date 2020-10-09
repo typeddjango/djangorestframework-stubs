@@ -1,12 +1,12 @@
 from collections import Counter, OrderedDict
-from typing import Any, Dict, List, Optional, Iterable, Sequence, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
+from django.urls import URLPattern, URLResolver
 from rest_frame.fields import Field
 from rest_framework.compat import coreapi
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-from django.urls import URLPattern, URLResolver
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import ViewInspector as ViewInspector
 

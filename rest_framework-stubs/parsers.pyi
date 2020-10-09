@@ -1,4 +1,4 @@
-from typing import IO, Any, Dict, Generic, Mapping, Optional, Type, TypeVar, Union
+from typing import IO, Any, Dict, Generic, Mapping, Optional, Type, TypeVar
 
 from django.core.files.uploadedfile import UploadedFile
 from django.http import QueryDict
