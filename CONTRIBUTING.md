@@ -7,30 +7,34 @@ you will need to get familiar with these projects:
 
 - [Django docs](https://docs.djangoproject.com/en/dev/)
 - [Typing in Python](https://inventwithpython.com/blog/2019/11/24/type-hints-for-busy-python-programmers/)
-- [How to write custom mypy plugins](https://mypy.readthedocs.io/en/stable/extending_mypy.html)
-- [Typechecking Django and DRF](https://sobolevn.me/2019/08/typechecking-django-and-drf) guide
-- [Testing mypy stubs, plugins, and types](https://sobolevn.me/2019/08/testing-mypy-types) guide
 
 It is also recommended to take a look at these resources:
 
+- [How to write custom mypy plugins](https://mypy.readthedocs.io/en/stable/extending_mypy.html)
+- [Typechecking Django and DRF](https://sobolevn.me/2019/08/typechecking-django-and-drf) guide
+- [Testing mypy stubs, plugins, and types](https://sobolevn.me/2019/08/testing-mypy-types) guide
 - [Awesome Python Typing](https://github.com/typeddjango/awesome-python-typing)
 
+## Dev setup
 
-## Dev documentation
+As a first step you will need to install pre-commit globally (see [this guide](https://codeburst.io/tool-your-django-project-pre-commit-hooks-e1799d84551f) for more info), and then run in the repos root the command:
 
-TODO
+```bash
+pre-commit install
+```
 
+You will then need to create and activate a git ignored virtual env, e.g.:
 
-## Dependencies
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-We use `pip` to manage the dependencies.
-
-To install them you would need to activate your `virtualenv` and run `install` command:
+After doing this you can install the dev requirements:
 
 ```bash
 pip install -r ./dev-requirements.txt
 ```
-
 
 ## Tests and linters
 
@@ -47,38 +51,19 @@ mypy ./mypy_drf_plugin
 
 ### Testing
 
-There are unit tests and type-related tests.
-
 To run unit tests:
 
 ```bash
 pytest
 ```
 
-Type-related tests ensure that different DRF versions do work correctly.
-To run type-related tests:
+To ensure there are not formatting or typing issues in the entire repository you can afterwards run:
 
 ```bash
-python ./scripts/typecheck_tests.py --drf_version=3.12.1
+pre-commit run --all-files
 ```
 
-Currently we only support two Django versions.
-
-### Linting
-
-To run auto-formatting:
-
-```bash
-isort .
-black rest_framework-stubs
-```
-
-To run linting:
-
-```bash
-flake8 --config flake8-pyi.ini
-```
-
+This command will not only lint but also modify files - so make sure to commit whatever changes you've made before hand.
 
 ## Submitting your code
 
@@ -99,7 +84,6 @@ So, this way we achieve an easy and scalable development process
 which frees us from merging hell and long-living branches.
 
 In this method, the latest version of the app is always in the `master` branch.
-
 
 ## Other help
 
