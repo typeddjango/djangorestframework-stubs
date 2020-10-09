@@ -1,4 +1,4 @@
-from typing import Dict, List, Protocol, Sequence, Type, Union, Any
+from typing import Any, Dict, List, Protocol, Sequence, Type, Union
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -29,7 +29,9 @@ class OperandHolder(OperationHolderMixin):
     operator_class: _SupportsHasPermission
     op1_class: _PermissionClass
     op2_class: _PermissionClass
-    def __init__(self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass, op2_class: _PermissionClass): ...
+    def __init__(
+        self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass, op2_class: _PermissionClass
+    ): ...
     def __call__(self, *args, **kwargs) -> _SupportsHasPermission: ...
 
 class AND(_SupportsHasPermission):

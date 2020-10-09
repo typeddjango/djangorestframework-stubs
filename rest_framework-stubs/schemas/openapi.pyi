@@ -1,10 +1,10 @@
 from typing import Any, Dict, List, Optional, Sequence, Type
-from typing_extensions import TypedDict
 
 from rest_framework.fields import Field
 from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.serializers import BaseSerializer
+from typing_extensions import TypedDict
 
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import ViewInspector as ViewInspector
