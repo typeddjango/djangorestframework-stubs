@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Pattern, Sequence
+from typing import Any, Mapping, Optional, Pattern, Sequence
 
 from rest_framework.request import Request
 
@@ -10,8 +10,8 @@ class BaseVersioning:
     def reverse(
         self,
         viewname: str,
-        args: Optional[Any] = ...,
-        kwargs: Optional[Dict[str, Any]] = ...,
+        args: Optional[Sequence[Any]] = ...,
+        kwargs: Optional[Mapping[str, Any]] = ...,
         request: Optional[Request] = ...,
         format: Optional[str] = ...,
         **extra: Any

@@ -1,13 +1,13 @@
 from typing import Any, Callable, Mapping, Optional, Sequence
 
-from django.http import HttpRequest
+from rest_framework.request import Request
 
-def preserve_builtin_query_params(url: str, request: Optional[HttpRequest] = ...) -> str: ...
+def preserve_builtin_query_params(url: str, request: Optional[Request] = ...) -> str: ...
 def reverse(
     viewname: str,
     args: Optional[Sequence[Any]] = ...,
     kwargs: Optional[Mapping[str, Any]] = ...,
-    request: Optional[HttpRequest] = ...,
+    request: Optional[Request] = ...,
     format: Optional[str] = ...,
     **extra: Any
 ) -> str: ...
@@ -15,7 +15,7 @@ def _reverse(
     viewname: str,
     args: Optional[Sequence[Any]] = ...,
     kwargs: Optional[Mapping[str, Any]] = ...,
-    request: Optional[HttpRequest] = ...,
+    request: Optional[Request] = ...,
     format: Optional[str] = ...,
     **extra: Any
 ) -> str: ...
