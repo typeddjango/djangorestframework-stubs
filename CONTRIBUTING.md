@@ -3,18 +3,18 @@
 This project is open source and community driven. As such we encourage code contributions of all kinds. Some areas you can contribute in:
 
 1. Improve the stubs
-2. Sync stubs with the latest version of the DRF 
+2. Sync stubs with the latest version of the DRF
 3. Improve plugin code and extend its capabilities
 4. Write tests
 5. Update dependencies
 
 ## Tutorials
 
-If you want to start working on this project, you will need to get familiar with python typings. 
+If you want to start working on this project, you will need to get familiar with python typings.
 The Mypy documentation offers an excellent resource for this, as well as the python official documentation:
 
 - [Mypy typing documentation](https://mypy.readthedocs.io/en/stable/#overview-type-system-reference)
-- [Python official typing documentation](https://docs.python.org/3/library/typing.html) 
+- [Python official typing documentation](https://docs.python.org/3/library/typing.html)
 - [Typing in Python](https://inventwithpython.com/blog/2019/11/24/type-hints-for-busy-python-programmers/) article
 
 Additionally, the following resources might be useful:
@@ -50,7 +50,7 @@ Finally, install the pre-commit hooks:
 
 ```bash
 pre-commit install
-``` 
+```
 
 ### Testing and Linting
 
@@ -70,7 +70,7 @@ To execute the unit tests, simply run:
 pytest
 ```
 
-We also test the stubs against the DRF's own test suite. This is done in CI but you can also do this locally. 
+We also test the stubs against the DRF's own test suite. This is done in CI but you can also do this locally.
 To execute the script run:
 
 ```bash

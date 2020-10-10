@@ -1,8 +1,10 @@
-from mypy.stubgen import generate_stubs, parse_options
-from scripts.paths import DRF_SOURCE_DIRECTORY, STUBGEN_TARGET_DIRECTORY
-from scripts.git_helpers import checkout_target_tag
-from argparse import ArgumentParser
 import shutil
+from argparse import ArgumentParser
+
+from mypy.stubgen import generate_stubs, parse_options
+
+from scripts.git_helpers import checkout_target_tag
+from scripts.paths import DRF_SOURCE_DIRECTORY
 
 if __name__ == "__main__":
     parser = ArgumentParser()

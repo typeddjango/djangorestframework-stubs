@@ -23,6 +23,12 @@ repos:
     rev: 20.8b1
     hooks:
       - id: black
+  - repo: https://github.com/prettier/pre-commit
+    rev: 6f167fa569210e8e759f09b76c576a08fc9b5e22
+    hooks:
+      - id: prettier
+        args: ["--parser markdown"]
+        files: '\.md?$'
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.4
     hooks:

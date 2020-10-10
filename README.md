@@ -36,8 +36,8 @@ If you think you have more generic typing issue, please refer to <https://github
 
 This project is open source and community driven. As such we encourage contributions big and small. You can contribute by doing any of the following:
 
-1. Contribute code (e.g. improve stubs, add plugin capabilities, write tests etc) - to do so please follow the [contribution guide](./CONTRIBUTING.md). 
-2. Assist in code reviews and discussions in issues. 
+1. Contribute code (e.g. improve stubs, add plugin capabilities, write tests etc) - to do so please follow the [contribution guide](./CONTRIBUTING.md).
+2. Assist in code reviews and discussions in issues.
 3. Identify bugs and issues and report these
 
 You can always also reach out in gitter to discuss your contributions!
