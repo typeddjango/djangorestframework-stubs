@@ -1,7 +1,13 @@
 #!/bin/bash
 set -ex
 
-pip install wheel twine
-python setup.py sdist bdist_wheel
-twine upload dist/*
-rm -rf dist/ build/
+if [[ "$VIRTUAL_ENV" != "" ]]
+then
+  pip install --upgrade setuptools wheel twine
+  python setup.py sdist bdist_wheel
+  twine upload dist/*
+  rm -rf dist/ build/
+else
+  echo "this script must be executed inside an active virtual env"
+fi
+
