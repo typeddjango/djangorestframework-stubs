@@ -1,9 +1,0 @@
--   case: api_client_returns_proper_responses
-    main: |
-        from rest_framework import test
-        class MyTestCase(test.APITestCase):
-            client: test.APIClient
-
-            def test_my_code(self):
-                client = test.APIClient()
-                reveal_type(client.post('http://google.com'))  # N: Revealed type is 'rest_framework.response.Response'

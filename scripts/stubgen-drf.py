@@ -13,6 +13,5 @@ if __name__ == "__main__":
     if DRF_SOURCE_DIRECTORY.exists():
         shutil.rmtree(DRF_SOURCE_DIRECTORY)
     checkout_target_tag(args.drf_version)
-    stubgen_options = parse_options([f"{DRF_SOURCE_DIRECTORY}", "-o stubgen"])
-    print(stubgen_options)
+    stubgen_options = parse_options([f"{DRF_SOURCE_DIRECTORY}", "-o=stubgen"])
     generate_stubs(stubgen_options)

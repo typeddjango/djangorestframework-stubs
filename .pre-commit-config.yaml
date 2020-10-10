@@ -35,5 +35,5 @@ repos:
         entry: mypy
         language: system
         types: [ python ]
-        exclude: "script/*"
+        exclude: "scripts/*"
         args: [ "--cache-dir=/dev/null", "--no-incremental" ]
