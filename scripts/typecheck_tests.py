@@ -5,10 +5,9 @@ import sys
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils import dir_util, spawn
-from pathlib import Path
-from typing import Dict, List, Optional, Pattern, Union
-
-from git import RemoteProgress, Repo
+from typing import Dict, List, Pattern, Union
+from scripts.git_helpers import checkout_target_tag
+from scripts.paths import PROJECT_DIRECTORY, DRF_SOURCE_DIRECTORY, STUBS_DIRECTORY
 
 IGNORED_MODULES = ["utils.py", "test_testing.py"]
 MOCK_OBJECTS = [
@@ -224,11 +223,6 @@ IGNORED_ERRORS = {
     ],
 }
 
-PROJECT_DIRECTORY = Path(__file__).parent.parent
-STUBS_DIRECTORY = PROJECT_DIRECTORY / "rest_framework-stubs"  # type: Path
-DRF_DIRECTORY = PROJECT_DIRECTORY / "drf_source"  # type: Path
-
-
 def get_unused_ignores(ignored_message_freq: Dict[str, Dict[Union[str, Pattern], int]]) -> List[str]:
     unused_ignores = []
     for root_key, patterns in IGNORED_ERRORS.items():
@@ -266,42 +260,18 @@ def is_ignored(line: str, filename: str, ignored_message_dict: Dict[str, Dict[st
     return False
 
 
-class ProgressPrinter(RemoteProgress):
-    def line_dropped(self, line: str) -> None:
-        print(line)
-
-    def update(self, op_code, cur_count, max_count=None, message=""):
-        print(self._cur_line)
-
-
-def checkout_target_tag(drf_version: Optional[str]) -> Path:
-    if not DRF_DIRECTORY.exists():
-        DRF_DIRECTORY.mkdir(exist_ok=True, parents=False)
-        repository = Repo.clone_from(
-            "https://github.com/encode/django-rest-framework.git",
-            DRF_DIRECTORY,
-            progress=ProgressPrinter(),
-            branch="master",
-            depth=100,
-        )
-    else:
-        repository = Repo(DRF_DIRECTORY)
-        repository.remote("origin").pull("master", progress=ProgressPrinter(), depth=100)
-    repository.git.checkout(drf_version or "master")
-
-
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--drf_version", required=False)
     args = parser.parse_args()
     checkout_target_tag(args.drf_version)
     if sys.version_info[1] > 7:
-        shutil.copytree(STUBS_DIRECTORY, DRF_DIRECTORY / "rest_framework", dirs_exist_ok=True)
+        shutil.copytree(STUBS_DIRECTORY, DRF_SOURCE_DIRECTORY / "rest_framework", dirs_exist_ok=True)
     else:
-        dir_util.copy_tree(str(STUBS_DIRECTORY), str(DRF_DIRECTORY / "rest_framework"))
+        dir_util.copy_tree(str(STUBS_DIRECTORY), str(DRF_SOURCE_DIRECTORY / "rest_framework"))
     mypy_config_file = (PROJECT_DIRECTORY / "mypy.ini").absolute()
     mypy_cache_dir = PROJECT_DIRECTORY / ".mypy_cache"
-    tests_root = DRF_DIRECTORY / "tests"
+    tests_root = DRF_SOURCE_DIRECTORY / "tests"
     global_rc = 0
 
     try:
