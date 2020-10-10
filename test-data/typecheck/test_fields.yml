@@ -1,11 +1,10 @@
 -   case: no_positional_args_fields
     main: |
         from rest_framework.fields import IntegerField, FloatField, UUIDField, CharField, DurationField
-
+        CharField(True)  # E: Too many positional arguments for "CharField"
         IntegerField(1)  # E: Too many positional arguments for "IntegerField"
         FloatField(1)  # E: Too many positional arguments for "FloatField"
         UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"
-        CharField(True)  # E: Too many positional arguments for "CharField"
         DurationField(1)  # E: Too many positional arguments for "DurationField"
 
 -   case: some_positional_args_fields
@@ -33,16 +32,16 @@
         ModelField(mf, True)  # E: Too many positional arguments for "ModelField"
 
         ChoiceField([])
-        ChoiceField([], 1)  # E: Too many positional arguments for "ChoiceField"
+        ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"
 
 -   case: most_positional_args_fields
     main: |
         from rest_framework.fields import Field, ListField, DictField, JSONField
         f: Field = Field()
 
-        ListField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
-        ListField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, f)  # E: Too many positional arguments for "ListField"
-        ListField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, child=f, allow_empty=True, max_length=1, min_length=1)
+        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True)
+        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True, f)  # E: Too many positional arguments for "ListField"
+        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True, child=f, allow_empty=True, max_length=1, min_length=1)
 
         DictField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
         DictField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, f)  # E: Too many positional arguments for "DictField"
@@ -50,11 +49,11 @@
 
         JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
         JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, True)  # E: Too many positional arguments for "JSONField"
-        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, binary=True, encoder=None)
+        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, binary=True)
 
 -   case: all_positional_args_fields
     main: |
-        from datetime import datetime
+        from datetime import datetime, time
         from rest_framework.fields import DateTimeField, DateField, TimeField
 
         d: datetime = datetime.now()
@@ -64,5 +63,5 @@
         DateField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True)
         DateField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "DateField"
 
-        TimeField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True)
-        TimeField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "TimeField"
+        TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True)
+        TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "TimeField"

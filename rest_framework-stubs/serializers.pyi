@@ -1,7 +1,9 @@
+from collections import OrderedDict
 from typing import (
     Any,
     Callable,
     Dict,
+    Generic,
     Iterable,
     Iterator,
     List,
@@ -12,14 +14,16 @@ from typing import (
     Sequence,
     Tuple,
     Type,
+    TypeVar,
     Union,
 )
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import DurationField as ModelDurationField
-from django.db.models import Model
+from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
+from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
@@ -34,7 +38,7 @@ from rest_framework.exceptions import Throttled as Throttled
 from rest_framework.exceptions import UnsupportedMediaType as UnsupportedMediaType
 from rest_framework.exceptions import ValidationError as ValidationError
 from rest_framework.fields import BooleanField as BooleanField
-from rest_framework.fields import CharField as CharField
+from rest_framework.fields import CharField as CharField  # noqa: F401
 from rest_framework.fields import ChoiceField as ChoiceField
 from rest_framework.fields import CreateOnlyDefault as CreateOnlyDefault
 from rest_framework.fields import CurrentUserDefault as CurrentUserDefault
@@ -75,100 +79,201 @@ from rest_framework.relations import RelatedField as RelatedField
 from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
-from rest_framework.utils.serializer_helpers import BoundField, ReturnDict, ReturnList
+from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
+from typing_extensions import Literal
 
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
 
-class BaseSerializer(Field):
-    _declared_fields: Dict[str, Field]
-    instance: Optional[Any]
-    initial_data: Any
+_MT = TypeVar("_MT", bound=Model)  # Model Type
+_IN = TypeVar("_IN")  # Instance Type
+_DT = TypeVar("_DT")  # Data Type
+_VT = TypeVar("_VT")  # Value Type
+_RP = TypeVar("_RP")  # Representation Type
+
+class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
     partial: bool
-    def __init__(self, instance: Optional[Any] = ..., data: Any = ..., **kwargs: Any): ...
+    many: bool
+    instance: Optional[_IN]
+    initial_data: Optional[_DT]
+    _context: Dict[str, Any]
+    def __new__(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
+    def __class_getitem__(cls, *args, **kwargs): ...
+    def __init__(
+        self,
+        instance: _IN = ...,
+        data: _DT = ...,
+        partial: bool = ...,
+        many: bool = ...,
+        allow_empty: bool = ...,
+        context: Dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[_VT, Callable[[], _VT]] = ...,
+        initial: Union[_VT, Callable[[], _VT]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
+    ): ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
-    def to_internal_value(self, data: Any) -> Any: ...
-    def to_representation(self, instance: Any) -> Any: ...
-    def update(self, instance: Model, validated_data: Any) -> Any: ...
-    def create(self, validated_data: Any) -> Any: ...
-    def save(self, **kwargs: Any) -> Any: ...
     def is_valid(self, raise_exception: bool = ...) -> bool: ...
     @property
     def data(self) -> Any: ...
     @property
     def errors(self) -> Iterable[Any]: ...
     @property
-    def validated_data(self) -> Any: ...
+    def validated_data(self) -> OrderedDict: ...
+    def update(self, instance: _IN, validated_data: OrderedDict) -> _IN: ...
+    def create(self, validated_data: OrderedDict) -> _IN: ...
+    def save(self, **kwargs: Any) -> _IN: ...
+    def to_representation(self, instance: _IN) -> _RP: ...  # type: ignore[override]
 
 class SerializerMetaclass(type):
+    def __new__(cls, name: Any, bases: Any, attrs: Any): ...
     @classmethod
     def _get_declared_fields(cls, bases: Sequence[type], attrs: Dict[str, Any]) -> Dict[str, Field]: ...
 
 def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
-class Serializer(BaseSerializer):
+class Serializer(
+    BaseSerializer[
+        Union[_MT, Mapping[str, Any]],
+        Union[Mapping[str, Any], Sequence[Mapping[str, Any]]],
+        Dict[str, Any],
+        Union[_MT, Mapping[str, Any]],
+    ],
+    metaclass=SerializerMetaclass,
+):
+    _declared_fields: Dict[str, Field]
+    default_error_messages: Dict[str, Any] = ...
+    def get_initial(self) -> OrderedDict: ...
     @property
-    def fields(self) -> Dict[str, Field]: ...
+    def fields(self) -> BindingDict: ...
+    def get_fields(self) -> Dict[str, Field]: ...
+    def validate(self, attrs: OrderedDict) -> OrderedDict: ...
+    def __iter__(self) -> Iterator[str]: ...
+    def __getitem__(self, key: str) -> BoundField: ...
+    def _read_only_defaults(self) -> Dict[str, Any]: ...
     @property
     def _writable_fields(self) -> List[Field]: ...
     @property
     def _readable_fields(self) -> List[Field]: ...
-    def get_fields(self) -> Dict[str, Field]: ...
-    def _read_only_defaults(self) -> Dict[str, Any]: ...
-    def validate(self, attrs):
-        return attrs
     @property
     def data(self) -> ReturnDict: ...
     @property
     def errors(self) -> ReturnDict: ...
-    def __iter__(self) -> Iterator[str]: ...
-    def __getitem__(self, key: str) -> BoundField: ...
-    def __len__(self) -> int: ...
 
-class ListSerializer(BaseSerializer):
-    child: BaseSerializer = ...
+class ListSerializer(
+    BaseSerializer[
+        List[Any],
+        Union[MultiValueDict, List[Any]],
+        List[Dict[str, Any]],
+        List[Dict[str, Any]],
+    ],
+):
+    child: Optional[
+        Union[
+            Field,
+            BaseSerializer,
+        ]
+    ] = ...
     many: bool = ...
-    def validate(self, attrs):
-        return attrs
+    default_error_messages: Dict[str, Any] = ...
+    allow_empty: Optional[bool] = ...
+    def __init__(
+        self,
+        instance: Union[MultiValueDict, Sequence[Any]] = ...,
+        data: Union[MultiValueDict, Sequence[Any]] = ...,
+        partial: bool = ...,
+        context: Dict[str, Any] = ...,
+        allow_empty: bool = ...,
+        child: Optional[
+            Union[
+                Field,
+                BaseSerializer,
+            ]
+        ] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[MultiValueDict, List[Any], Callable[[], Union[MultiValueDict, List[Any]]]] = ...,
+        initial: Union[Sequence[Any], Callable[[], Sequence[Any]]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
+    ): ...
+    def get_initial(self) -> List[Mapping[Any, Any]]: ...
+    def validate(self, attrs: OrderedDict) -> OrderedDict: ...
     @property
     def data(self) -> ReturnList: ...
     @property
     def errors(self) -> ReturnList: ...
 
-def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
+def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> NoReturn: ...
 
-class ModelSerializer(Serializer):
-    serializer_field_mapping: Dict[Type[models.Field], Type[Field]] = ...
-    serializer_related_field: Type[RelatedField] = ...
-    serializer_related_to_field: Type[RelatedField] = ...
-    serializer_url_field: Type[RelatedField] = ...
-    serializer_choice_field: Type[Field] = ...
+class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[str, Any], _MT]):
+    serializer_field_mapping: Dict[Type[models.Field], Field] = ...
+    serializer_related_field: RelatedField = ...
+    serializer_related_to_field: RelatedField = ...
+    serializer_url_field: RelatedField = ...
+    serializer_choice_field: Field = ...
     url_field_name: Optional[str] = ...
     class Meta:
-        model: Type[Model]
-        fields: Optional[Union[Sequence[str], str]]
+        model: _MT  # type: ignore
+        fields: Union[Sequence[str], Literal["__all__"]]
         read_only_fields: Optional[Sequence[str]]
         exclude: Optional[Sequence[str]]
         depth: Optional[int]
-        extra_kwargs: Dict[str, Dict[str, Any]]
+        extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
+    def __init__(
+        self,
+        instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
+        data: Union[Mapping[str, Any], Sequence[Mapping[str, Any]]] = ...,
+        partial: bool = ...,
+        many: bool = ...,
+        context: Dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Union[_MT, Callable[[], _MT]] = ...,
+        initial: Union[_MT, Callable[[], _MT]] = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: Dict[str, Any] = ...,
+        error_messages: Dict[str, str] = ...,
+        validators: Sequence[Callable] = ...,
+        allow_null: bool = ...,
+    ): ...
+    def update(self, instance: _MT, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
+    def create(self, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
+    def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
+    def to_representation(self, instance: _MT) -> _RP: ...  # type: ignore[override]
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> List[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> List[str]: ...
     def build_field(
-        self, field_name: str, info: FieldInfo, model_class: Type[Model], nested_depth: int
-    ) -> Tuple[Type[Field], Dict[str, Any]]: ...
+        self, field_name: str, info: FieldInfo, model_class: _MT, nested_depth: int
+    ) -> Tuple[Field, Dict[str, Any]]: ...
     def build_standard_field(
         self, field_name: str, model_field: Type[models.Field]
-    ) -> Tuple[Type[Field], Dict[str, Any]]: ...
-    def build_relational_field(
-        self, field_name: str, relation_info: RelationInfo
-    ) -> Tuple[Type[Field], Dict[str, Any]]: ...
+    ) -> Tuple[Field, Dict[str, Any]]: ...
+    def build_relational_field(self, field_name: str, relation_info: RelationInfo) -> Tuple[Field, Dict[str, Any]]: ...
     def build_nested_field(
         self, field_name: str, relation_info: RelationInfo, nested_depth: int
-    ) -> Tuple[Type[Field], Dict[str, Any]]: ...
-    def build_property_field(self, field_name: str, model_class: Type[Model]) -> Tuple[Type[Field], Dict[str, Any]]: ...
-    def build_url_field(self, field_name: str, model_class: Type[Model]) -> Tuple[Type[Field], Dict[str, Any]]: ...
-    def build_unknown_field(self, field_name: str, model_class: Type[Model]) -> NoReturn: ...
+    ) -> Tuple[Field, Dict[str, Any]]: ...
+    def build_property_field(self, field_name: str, model_class: _MT) -> Tuple[Field, Dict[str, Any]]: ...
+    def build_url_field(self, field_name: str, model_class: _MT) -> Tuple[Field, Dict[str, Any]]: ...
+    def build_unknown_field(self, field_name: str, model_class: _MT) -> NoReturn: ...
     def include_extra_kwargs(
         self, kwargs: MutableMapping[str, Any], extra_kwargs: MutableMapping[str, Any]
     ) -> MutableMapping[str, Any]: ...

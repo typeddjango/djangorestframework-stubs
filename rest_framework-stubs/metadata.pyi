@@ -6,7 +6,7 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.utils.field_mapping import ClassLookupDict
 from rest_framework.views import APIView
 
-class BaseMetadata(object):
+class BaseMetadata:
     def determine_metadata(self, request: Request, view: APIView) -> Dict[str, Any]: ...
 
 class SimpleMetadata(BaseMetadata):

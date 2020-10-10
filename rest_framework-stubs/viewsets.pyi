@@ -1,15 +1,17 @@
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from django.http.response import HttpResponseBase
 from rest_framework import generics, mixins, views
+from rest_framework.decorators import ViewSetAction
 from rest_framework.request import Request
+from rest_framework.views import AsView
 
 def _is_extra_action(attr: Any) -> bool: ...
 
 _ViewFunc = Callable[..., HttpResponseBase]
 
-class ViewSetMixin(object):
+class ViewSetMixin:
     # Classvars assigned in as_view()
     name: Optional[str]
     description: Optional[str]
@@ -23,7 +25,7 @@ class ViewSetMixin(object):
     # Assigned in initialize_request()
     action: str
     @classmethod
-    def as_view(cls, actions: Optional[Dict[str, str]] = ..., **initkwargs: Any) -> Callable: ...
+    def as_view(cls, actions: Optional[Dict[str, Union[str, ViewSetAction]]] = ..., **initkwargs: Any) -> AsView: ...
     def initialize_request(self, request: Request, *args: Any, **kwargs: Any) -> Request: ...
     def reverse_action(self, url_name: str, *args: Any, **kwargs: Any) -> str: ...
     @classmethod
