@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-include = 'rest_framework-stubs/.*.pyi$'
+include = '\.pyi?$'
 
 [tool.isort]
 line_length = 120
