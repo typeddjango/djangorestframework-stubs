@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 set -ex
 
-if [[ "$VIRTUAL_ENV" != "" ]]
+if [[ -z $(git status -s) ]]
 then
-  pip install --upgrade setuptools wheel twine
-  python setup.py sdist bdist_wheel
-  twine upload dist/*
-  rm -rf dist/ build/
+  if [[ "$VIRTUAL_ENV" != ""  ]]
+  then
+    pip install --upgrade setuptools wheel twine
+    python setup.py sdist bdist_wheel
+    twine upload dist/*
+    rm -rf dist/ build/
+  else
+    echo "this script must be executed inside an active virtual env, aborting"
+  fi
 else
-  echo "this script must be executed inside an active virtual env"
+  echo "git working tree is not clean, aborting"
 fi
-
