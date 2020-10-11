@@ -8,7 +8,7 @@
 
 
 Mypy stubs for [DRF 3.12.x](https://pypi.org/project/djangorestframework/).
-Supports Python 3.6, 3.7 and 3.8.
+Supports Python 3.6, 3.7, 3.8 and 3.9.
 
 ## Installation
 
