@@ -22,7 +22,7 @@ jobs:
       script: python ./scripts/typecheck_tests.py
 
     - name: Lint using pre-commit
-      python: 3.8
+      python: 3.9-dev
       script:
         - pre-commit install && pre-commit run --all-files
 
