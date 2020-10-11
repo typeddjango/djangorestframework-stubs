@@ -87,22 +87,19 @@ ALL_FIELDS: str = ...
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
-_DT = TypeVar("_DT")  # Data Type
-_VT = TypeVar("_VT")  # Value Type
-_RP = TypeVar("_RP")  # Representation Type
 
-class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
+class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     partial: bool
     many: bool
     instance: Optional[_IN]
-    initial_data: Optional[_DT]
+    initial_data: Any
     _context: Dict[str, Any]
     def __new__(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def __class_getitem__(cls, *args, **kwargs): ...
     def __init__(
         self,
         instance: _IN = ...,
-        data: _DT = ...,
+        data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
         allow_empty: bool = ...,
@@ -110,8 +107,8 @@ class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[_VT, Callable[[], _VT]] = ...,
-        initial: Union[_VT, Callable[[], _VT]] = ...,
+        default: Any = ...,
+        initial: Any = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -128,11 +125,11 @@ class BaseSerializer(Generic[_VT, _DT, _RP, _IN], Field[_VT, _DT, _RP, _IN]):
     @property
     def errors(self) -> Iterable[Any]: ...
     @property
-    def validated_data(self) -> OrderedDict: ...
-    def update(self, instance: _IN, validated_data: OrderedDict) -> _IN: ...
-    def create(self, validated_data: OrderedDict) -> _IN: ...
+    def validated_data(self) -> Any: ...
+    def update(self, instance: _IN, validated_data: Any) -> _IN: ...
+    def create(self, validated_data: Any) -> _IN: ...
     def save(self, **kwargs: Any) -> _IN: ...
-    def to_representation(self, instance: _IN) -> _RP: ...  # type: ignore[override]
+    def to_representation(self, instance: _IN) -> Any: ...  # type: ignore[override]
 
 class SerializerMetaclass(type):
     def __new__(cls, name: Any, bases: Any, attrs: Any): ...
@@ -144,19 +141,16 @@ def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 class Serializer(
     BaseSerializer[
         Union[_MT, Mapping[str, Any]],
-        Union[Mapping[str, Any], Sequence[Mapping[str, Any]]],
-        Dict[str, Any],
-        Union[_MT, Mapping[str, Any]],
     ],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]
     default_error_messages: Dict[str, Any] = ...
-    def get_initial(self) -> OrderedDict: ...
+    def get_initial(self) -> Any: ...
     @property
     def fields(self) -> BindingDict: ...
     def get_fields(self) -> Dict[str, Field]: ...
-    def validate(self, attrs: OrderedDict) -> OrderedDict: ...
+    def validate(self, attrs: Any) -> Any: ...
     def __iter__(self) -> Iterator[str]: ...
     def __getitem__(self, key: str) -> BoundField: ...
     def _read_only_defaults(self) -> Dict[str, Any]: ...
@@ -171,9 +165,6 @@ class Serializer(
 
 class ListSerializer(
     BaseSerializer[
-        List[Any],
-        Union[MultiValueDict, List[Any]],
-        List[Dict[str, Any]],
         List[Dict[str, Any]],
     ],
 ):
@@ -213,7 +204,7 @@ class ListSerializer(
         allow_null: bool = ...,
     ): ...
     def get_initial(self) -> List[Mapping[Any, Any]]: ...
-    def validate(self, attrs: OrderedDict) -> OrderedDict: ...
+    def validate(self, attrs: Any) -> Any: ...
     @property
     def data(self) -> ReturnList: ...
     @property
@@ -221,13 +212,14 @@ class ListSerializer(
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> NoReturn: ...
 
-class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[str, Any], _MT]):
+class ModelSerializer(Serializer, BaseSerializer[_MT]):
     serializer_field_mapping: Dict[Type[models.Field], Field] = ...
     serializer_related_field: RelatedField = ...
     serializer_related_to_field: RelatedField = ...
     serializer_url_field: RelatedField = ...
     serializer_choice_field: Field = ...
     url_field_name: Optional[str] = ...
+    instance: Optional[Union[_MT, Sequence[_MT]]]  # type: ignore[override]
     class Meta:
         model: _MT  # type: ignore
         fields: Union[Sequence[str], Literal["__all__"]]
@@ -238,15 +230,15 @@ class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[st
     def __init__(
         self,
         instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
-        data: Union[Mapping[str, Any], Sequence[Mapping[str, Any]]] = ...,
+        data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
         context: Dict[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[_MT, Callable[[], _MT]] = ...,
-        initial: Union[_MT, Callable[[], _MT]] = ...,
+        default: Union[Union[_MT, Sequence[_MT]], Callable[[], Union[_MT, Sequence[_MT]]]] = ...,
+        initial: Union[Union[_MT, Sequence[_MT]], Callable[[], Union[_MT, Sequence[_MT]]]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
@@ -255,10 +247,10 @@ class ModelSerializer(Serializer, BaseSerializer[_MT, Mapping[str, Any], Dict[st
         validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
     ): ...
-    def update(self, instance: _MT, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
-    def create(self, validated_data: OrderedDict) -> _MT: ...  # type: ignore[override]
+    def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
+    def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
-    def to_representation(self, instance: _MT) -> _RP: ...  # type: ignore[override]
+    def to_representation(self, instance: _MT) -> Any: ...  # type: ignore[override]
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> List[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> List[str]: ...
     def build_field(

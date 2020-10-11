@@ -13,4 +13,4 @@
 - Improved and improved  typings for decorators and resolved bug with @action decorator not repsecting HTTP methods
 - Improved and improved  for throttling and pagination
 - Fully typed the DRF settings using TypedDict
-- Added updating for the DRF OpenAPI schema related logic
+- Added typing for the DRF OpenAPI schema related logic
