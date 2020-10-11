@@ -77,7 +77,7 @@ IGNORED_ERRORS = {
         "Module 'rest_framework.compat' has no attribute 'yaml'",
     ],
     "browsable_api": [
-        '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',
+        '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
         'expression has type "List[Dict[str, Dict[str, int]]]"',
     ],
     "conftest.py": ["Unsupported operand types for"],
@@ -117,7 +117,7 @@ IGNORED_ERRORS = {
     "test_generics.py": [
         'has incompatible type "str"',
         '"Response" has no attribute "serializer"',
-        ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',
+        ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
     ],
     "test_htmlrenderer.py": [
         'to "get_template_names" of "TemplateHTMLRenderer" has incompatible type',
@@ -135,7 +135,7 @@ IGNORED_ERRORS = {
     ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
-        'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',
+        'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',  # noqa: E501
         "(not iterable)",
         '(expression has type "None", variable has type "List[Any]")',
         'has incompatible type "range"',
@@ -150,7 +150,7 @@ IGNORED_ERRORS = {
         'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
         'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type',
         'Incompatible return value type (got "None", expected "HttpResponseBase',
-        'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',
+        'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',  # noqa: E501
     ],
     "test_relations_pk.py": [
         '"Field" has no attribute "get_queryset"',
@@ -188,7 +188,7 @@ IGNORED_ERRORS = {
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
-        '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',
+        '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',  # noqa: E501
         'Argument "data" has incompatible type "None"; expected "Mapping[str, Any]"',
         'Argument "data" has incompatible type "None"',
     ],
