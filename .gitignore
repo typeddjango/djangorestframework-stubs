@@ -1,12 +1,11 @@
 *.egg-info
+.DS_Store
 .idea/
-.mypy_cache
+.mypy_cache/
 .pytest_cache/
 .venv/
-/django
-/test_sqlite.py
 __pycache__/
+drf_source/
 out/
 pip-wheel-metadata/
-drf_source/
-.DS_Store
+stubgen/

@@ -1,11 +1,11 @@
-black==20.8b1
-pytest-mypy-plugins==1.2.1
-flake8==3.8.3
-isort==5.5.4
+wheel
 mypy==0.782
-pytest==5.4.3
 requests==2.24.0
 coreapi==2.3.3
+typing-extensions==3.7.4.3
 gitpython==3.1.9
-psycopg2-binary
+pre-commit==2.7.1
+pytest==6.1.1
+pytest-mypy-plugins==1.5.0
+djangorestframework==3.12.1
 -e .
