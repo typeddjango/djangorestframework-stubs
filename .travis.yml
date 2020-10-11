@@ -26,7 +26,11 @@ jobs:
       script:
         - pre-commit install && pre-commit run --all-files
 
-    - name: Run plugin test suite with python 3.8
+    - name: Run plugin test suite with Python 3.9-dev
+      python: 3.9-dev
+      script: pytest
+
+    - name: Run plugin test suite with Python 3.8
       python: 3.8
       script: pytest
 
