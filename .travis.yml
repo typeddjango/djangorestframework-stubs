@@ -34,11 +34,11 @@ jobs:
       python: 3.8
       script: pytest
 
-    - name: Run plugin test suite with python 3.7
+    - name: Run plugin test suite with Python 3.7
       python: 3.7
       script: pytest
 
-    - name: Run plugin test suite with python 3.6
+    - name: Run plugin test suite with Python 3.6
       python: 3.6
       script: pytest
 
