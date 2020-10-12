@@ -164,9 +164,7 @@ class Serializer(
     def errors(self) -> ReturnDict: ...
 
 class ListSerializer(
-    BaseSerializer[
-        List[Dict[str, Any]],
-    ],
+    BaseSerializer[_IN],
 ):
     child: Optional[
         Union[
@@ -179,8 +177,8 @@ class ListSerializer(
     allow_empty: Optional[bool] = ...
     def __init__(
         self,
-        instance: Union[MultiValueDict, Sequence[Any]] = ...,
-        data: Union[MultiValueDict, Sequence[Any]] = ...,
+        instance: _IN = ...,
+        data: Any = ...,
         partial: bool = ...,
         context: Dict[str, Any] = ...,
         allow_empty: bool = ...,
@@ -193,8 +191,8 @@ class ListSerializer(
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[MultiValueDict, List[Any], Callable[[], Union[MultiValueDict, List[Any]]]] = ...,
-        initial: Union[Sequence[Any], Callable[[], Sequence[Any]]] = ...,
+        default: Any = ...,
+        initial: Any = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
