@@ -25,6 +25,8 @@ from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
 from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext_lazy as _
+from typing_extensions import Literal
+
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -70,6 +72,7 @@ from rest_framework.fields import SlugField as SlugField
 from rest_framework.fields import TimeField as TimeField
 from rest_framework.fields import URLField as URLField
 from rest_framework.fields import UUIDField as UUIDField
+from rest_framework.fields import empty as empty
 from rest_framework.relations import Hyperlink as Hyperlink
 from rest_framework.relations import HyperlinkedIdentityField as HyperlinkedIdentityField
 from rest_framework.relations import HyperlinkedRelatedField as HyperlinkedRelatedField
@@ -80,7 +83,6 @@ from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from typing_extensions import Literal
 
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
@@ -98,7 +100,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     def __class_getitem__(cls, *args, **kwargs): ...
     def __init__(
         self,
-        instance: _IN = ...,
+        instance: Optional[_IN] = ...,
         data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
@@ -177,7 +179,7 @@ class ListSerializer(
     allow_empty: Optional[bool] = ...
     def __init__(
         self,
-        instance: _IN = ...,
+        instance: Optional[_IN] = ...,
         data: Any = ...,
         partial: bool = ...,
         context: Dict[str, Any] = ...,
@@ -227,7 +229,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
     def __init__(
         self,
-        instance: Union[_MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
+        instance: Union[None, _MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
         data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
@@ -244,6 +246,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         error_messages: Dict[str, str] = ...,
         validators: Sequence[Callable] = ...,
         allow_null: bool = ...,
+        allow_empty: bool = ...,
     ): ...
     def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
@@ -257,7 +260,9 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     def build_standard_field(
         self, field_name: str, model_field: Type[models.Field]
     ) -> Tuple[Field, Dict[str, Any]]: ...
-    def build_relational_field(self, field_name: str, relation_info: RelationInfo) -> Tuple[Field, Dict[str, Any]]: ...
+    def build_relational_field(
+        self, field_name: str, relation_info: RelationInfo
+    ) -> Tuple[Type[Field], Dict[str, Any]]: ...
     def build_nested_field(
         self, field_name: str, relation_info: RelationInfo, nested_depth: int
     ) -> Tuple[Field, Dict[str, Any]]: ...

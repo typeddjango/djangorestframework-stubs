@@ -65,3 +65,14 @@
 
         TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True)
         TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "TimeField"
+
+-   case: default_and_inital_args_fields
+    main: |
+        from rest_framework.fields import DictField, CharField, empty
+        from typing import Optional, Dict, Any
+
+        CharField(initial='', default=lambda: '')
+        CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[str, Callable[[], str], None, _Empty]"
+        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"
+
+        x: Optional[str] = CharField().get_initial()
