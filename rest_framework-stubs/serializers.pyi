@@ -140,7 +140,7 @@ def as_serializer_error(exc: Exception) -> Dict[str, List[ErrorDetail]]: ...
 
 class Serializer(
     BaseSerializer[
-        Union[_MT, Mapping[str, Any]],
+        _IN,
     ],
     metaclass=SerializerMetaclass,
 ):
