@@ -184,7 +184,10 @@ IGNORED_ERRORS = {
         'Argument "data" has incompatible type "List[object]"',
         'Argument "data" has incompatible type "List[str]"',
     ],
-    "test_serializer_lists.py": ['The type "Type[ListSerializer]" is not generic and not indexable'],
+    "test_serializer_lists.py": [
+        'The type "Type[ListSerializer]" is not generic and not indexable',
+        "Name 'foo' is not defined",
+    ],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
