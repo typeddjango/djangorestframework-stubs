@@ -17,7 +17,7 @@ repos:
       - id: pyupgrade
         args: ["--py36-plus"]
   - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.6.1
+    rev: v5.6.3
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
