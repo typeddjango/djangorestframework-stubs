@@ -85,7 +85,7 @@ IGNORED_ERRORS = {
     "test_authtoken.py": [
         'Item "None" of "Optional[Token]" has no attribute "key"',
         'Argument 1 to "get_fields" of "BaseModelAdmin" has incompatible type "object"; expected "HttpRequest"',
-        'Argument 1 to "TokenAdmin" has incompatible type "Token"; expected "Type[Model]"',
+        'Argument 1 to "TokenAdmin" has incompatible type "Token"',
     ],
     "test_bound_fields.py": ['Value of type "BoundField" is not indexable'],
     "test_decorators.py": [
