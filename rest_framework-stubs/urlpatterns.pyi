@@ -9,7 +9,7 @@ def apply_suffix_patterns(
     suffix_route: Optional[str] = ...,
 ) -> List[URLPattern]: ...
 def format_suffix_patterns(
-    urlpatterns: List[URLPattern],
+    urlpatterns: List[Union[URLResolver, RoutePattern, URLPattern, Pattern]],
     suffix_required: bool = ...,
     allowed: Optional[List[Union[URLPattern, Pattern, str]]] = ...,
 ) -> List[URLPattern]: ...
