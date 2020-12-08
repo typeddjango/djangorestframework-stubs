@@ -76,3 +76,10 @@
         CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"
 
         x: Optional[str] = CharField().get_initial()
+
+-   case: float_field_args_fields
+    main: |
+      from rest_framework.fields import FloatField
+
+      FloatField(min_value=1, max_value=1.0)
+      FloatField(min_value=1.2, max_value=1)
