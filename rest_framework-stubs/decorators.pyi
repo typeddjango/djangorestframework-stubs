@@ -22,33 +22,33 @@ class MethodMapper(dict):
     def trace(self, func: Callable) -> Callable: ...
 
 _LOWER_CASE_HTTP_VERBS = List[
-    Union[
-        Literal["get"],
-        Literal["post"],
-        Literal["delete"],
-        Literal["put"],
-        Literal["patch"],
-        Literal["trace"],
-        Literal["options"],
+    Literal[
+        "get",
+        "post",
+        "delete",
+        "put",
+        "patch",
+        "trace",
+        "options",
     ]
 ]
 
 _MIXED_CASE_HTTP_VERBS = List[
-    Union[
-        Literal["GET"],
-        Literal["POST"],
-        Literal["DELETE"],
-        Literal["PUT"],
-        Literal["PATCH"],
-        Literal["TRACE"],
-        Literal["OPTIONS"],
-        Literal["get"],
-        Literal["post"],
-        Literal["delete"],
-        Literal["put"],
-        Literal["patch"],
-        Literal["trace"],
-        Literal["options"],
+    Literal[
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT",
+        "PATCH",
+        "TRACE",
+        "OPTIONS",
+        "get",
+        "post",
+        "delete",
+        "put",
+        "patch",
+        "trace",
+        "options",
     ]
 ]
 
