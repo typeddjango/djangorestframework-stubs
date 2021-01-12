@@ -49,7 +49,7 @@
 
         JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
         JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, True)  # E: Too many positional arguments for "JSONField"
-        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, binary=True)
+        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, binary=True, encoder=None, decoder=None)
 
 -   case: all_positional_args_fields
     main: |

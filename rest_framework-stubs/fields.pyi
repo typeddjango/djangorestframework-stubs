@@ -28,7 +28,6 @@ from typing import (
 
 from django.core.files.base import File
 from django.db import models
-from django.db.models import Model
 from django.forms import ImageField as DjangoImageField  # noqa: F401
 from typing_extensions import Literal, Final
 
@@ -748,8 +747,8 @@ class JSONField(
         allow_null: bool = ...,
         *,
         binary: bool = ...,
-        encoder: JSONEncoder = ...,
-        decoder: JSONDecoder = ...,
+        encoder: Optional[JSONEncoder] = ...,
+        decoder: Optional[JSONDecoder] = ...,
     ): ...
 
 class ReadOnlyField(Field): ...
