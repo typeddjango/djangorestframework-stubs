@@ -213,6 +213,9 @@ IGNORED_ERRORS = {
         'Argument "data" to "ValidationSerializer" has incompatible type "str"; expected "Mapping[str, Any]"',
         'Argument "data" to "ValidationSerializer" has incompatible type "str"',
     ],
+    "test_validation_error.py": [
+        'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Union[str, List[Any], Dict[str, Any], None]"',  # noqa: E501
+    ],
     "test_validators.py": [
         'has incompatible type "object"; expected "QuerySet[Any]"',
         'to "filter_queryset" of "BaseUniqueForValidator" has incompatible type "None"',

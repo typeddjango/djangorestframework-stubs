@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from typing import (
     Any,
     Callable,
@@ -23,7 +22,6 @@ from django.db import models
 from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
-from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext_lazy as _
 from typing_extensions import Literal
 
@@ -83,6 +81,7 @@ from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
+from rest_framework.validators import Validator, UniqueTogetherValidator, BaseUniqueForValidator
 
 LIST_SERIALIZER_KWARGS: Sequence[str] = ...
 ALL_FIELDS: str = ...
@@ -116,7 +115,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Sequence[Callable] = ...,
+        validators: Optional[Sequence[Validator[Any]]] = ...,
         allow_null: bool = ...,
     ): ...
     @classmethod
@@ -200,7 +199,7 @@ class ListSerializer(
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Sequence[Callable] = ...,
+        validators: Optional[Sequence[Validator[List[Any]]]] = ...,
         allow_null: bool = ...,
     ): ...
     def get_initial(self) -> List[Mapping[Any, Any]]: ...
@@ -210,7 +209,7 @@ class ListSerializer(
     @property
     def errors(self) -> ReturnList: ...
 
-def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> NoReturn: ...
+def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
 class ModelSerializer(Serializer, BaseSerializer[_MT]):
     serializer_field_mapping: Dict[Type[models.Field], Field] = ...
@@ -244,7 +243,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Sequence[Callable] = ...,
+        validators: Optional[Sequence[Validator[_MT]]] = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ): ...
@@ -279,7 +278,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     def _get_model_fields(
         self, field_names: Iterable[str], declared_fields: Mapping[str, Field], extra_kwargs: MutableMapping[str, Any]
     ) -> Dict[str, models.Field]: ...
-    def get_unique_together_validators(self) -> List[Callable]: ...
-    def get_unique_for_date_validators(self) -> List[Callable]: ...
+    def get_unique_together_validators(self) -> List[UniqueTogetherValidator]: ...
+    def get_unique_for_date_validators(self) -> List[BaseUniqueForValidator]: ...
 
 class HyperlinkedModelSerializer(ModelSerializer): ...
