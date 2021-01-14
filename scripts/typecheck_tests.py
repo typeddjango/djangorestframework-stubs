@@ -55,10 +55,6 @@ IGNORED_ERRORS = {
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
         ' base class "BaseTokenAuthTests" defined the type as "None"',
-        'No overload variant of "__getitem__" of "list" matches argument type "str"',
-        "is not indexable",
-        "def __getitem__",
-        "Possible overload variant",
         '"None" has no attribute "objects"',
         '"BaseTokenAuthTests" has no attribute "assertNumQueries"',
     ],
@@ -75,6 +71,7 @@ IGNORED_ERRORS = {
         'error: Module has no attribute "coreapi"',
         'Value of type "Optional[str]" is not indexable',
         "Module 'rest_framework.compat' has no attribute 'yaml'",
+        'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[Any], Any]]")',  # noqa: E501
     ],
     "browsable_api": [
         '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
@@ -90,7 +87,7 @@ IGNORED_ERRORS = {
     "test_bound_fields.py": ['Value of type "BoundField" is not indexable'],
     "test_decorators.py": [
         'Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"',
-        '"AsView" has no attribute "cls"',
+        '"AsView[Callable[[Any], Any]]" has no attribute "cls"',
     ],
     "test_encoders.py": ['Argument "serializer" to "ReturnList" has incompatible type "None'],
     "test_fields.py": [
@@ -212,6 +209,9 @@ IGNORED_ERRORS = {
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"',
         'Argument "data" to "ValidationSerializer" has incompatible type "str"; expected "Mapping[str, Any]"',
         'Argument "data" to "ValidationSerializer" has incompatible type "str"',
+    ],
+    "test_validation_error.py": [
+        'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Union[str, List[Any], Dict[str, Any], None]"',  # noqa: E501
     ],
     "test_validators.py": [
         'has incompatible type "object"; expected "QuerySet[Any]"',
