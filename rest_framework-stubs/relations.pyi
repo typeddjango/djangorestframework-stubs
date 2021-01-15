@@ -4,6 +4,7 @@ from typing import Any, Callable, Dict, Generic, Iterable, List, Mapping, Option
 from django.db.models import Manager, Model, QuerySet
 from rest_framework.fields import Field, Option
 from rest_framework.request import Request
+from rest_framework.validators import Validator
 
 def method_overridden(method_name: str, klass: type, instance: Model) -> bool: ...
 
@@ -48,7 +49,7 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        validators: Optional[Sequence[Validator[_MT]]] = ...,
         error_messages: Optional[Dict[str, str]] = ...,
         style: Optional[Dict[str, str]] = ...,
     ): ...
@@ -87,7 +88,7 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        validators: Optional[Sequence[Validator[_MT]]] = ...,
         error_messages: Optional[Dict[str, str]] = ...,
         style: Optional[Dict[str, str]] = ...,
         pk_field: Optional[Union[str, Field]] = ...,
@@ -115,7 +116,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        validators: Optional[Sequence[Validator[_MT]]] = ...,
         error_messages: Optional[Dict[str, str]] = ...,
         style: Optional[Dict[str, str]] = ...,
         view_name: Optional[str] = ...,
@@ -146,7 +147,7 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         label: Optional[str] = ...,
         help_text: str = ...,
         allow_null: bool = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        validators: Optional[Sequence[Validator[_MT]]] = ...,
         error_messages: Optional[Dict[str, str]] = ...,
         style: Optional[Dict[str, str]] = ...,
         slug_field: Optional[str] = ...,
@@ -172,7 +173,7 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], List[Any], Any]):
         help_text: Optional[str] = ...,
         style: Optional[Dict[str, str]] = ...,
         error_messages: Optional[Dict[str, str]] = ...,
-        validators: Optional[Sequence[Callable]] = ...,
+        validators: Optional[Sequence[Validator[Sequence[Any]]]] = ...,
         allow_null: bool = ...,
         child_relation: RelatedField = ...,
     ): ...
