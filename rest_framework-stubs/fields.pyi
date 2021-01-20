@@ -146,7 +146,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
 class BooleanField(
     Field[
         bool,
-        Union[bool, str],
+        Union[str, bool, int],
         bool,
         Any,
     ]
@@ -158,7 +158,7 @@ class BooleanField(
 class NullBooleanField(
     Field[
         Union[bool, None],
-        Optional[Union[bool, str]],
+        Optional[Union[str, bool, int]],
         bool,
         Any,
     ]
