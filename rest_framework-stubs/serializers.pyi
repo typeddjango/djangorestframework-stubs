@@ -220,7 +220,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     url_field_name: Optional[str] = ...
     instance: Optional[Union[_MT, Sequence[_MT]]]  # type: ignore[override]
     class Meta:
-        model: Type[_MT]
+        model: Type[_MT] # type: ignore
         fields: Union[Sequence[str], Literal["__all__"]]
         read_only_fields: Optional[Sequence[str]]
         exclude: Optional[Sequence[str]]
