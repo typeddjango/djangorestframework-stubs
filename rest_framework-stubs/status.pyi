@@ -8,7 +8,7 @@ def is_server_error(code: int) -> bool: ...
 
 HTTP_100_CONTINUE: Literal[100]
 HTTP_101_SWITCHING_PROTOCOLS: Literal[101]
-HTTP_200_OK: Literal[202]
+HTTP_200_OK: Literal[200]
 HTTP_201_CREATED: Literal[201]
 HTTP_202_ACCEPTED: Literal[202]
 HTTP_203_NON_AUTHORITATIVE_INFORMATION: Literal[203]
