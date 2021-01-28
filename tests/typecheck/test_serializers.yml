@@ -14,7 +14,7 @@
   main: |
     from rest_framework import serializers
 
-    reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is '_MT?'
+    reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is 'Type[_MT?]'
     reveal_type(serializers.ModelSerializer.Meta.fields) # N: Revealed type is 'typing.Sequence[builtins.str]'
     reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is 'Union[typing.Sequence[builtins.str], None]'
     reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is 'Union[typing.Sequence[builtins.str], None]'
