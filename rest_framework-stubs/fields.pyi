@@ -29,7 +29,7 @@ from typing import (
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
-from typing_extensions import Literal, Final
+from typing_extensions import Final
 
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator

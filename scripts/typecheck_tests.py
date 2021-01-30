@@ -70,7 +70,6 @@ IGNORED_ERRORS = {
         'List item 0 has incompatible type "Type[',
         'error: Module has no attribute "coreapi"',
         'Value of type "Optional[str]" is not indexable',
-        "Module 'rest_framework.compat' has no attribute 'yaml'",
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[Any], Any]]")',  # noqa: E501
     ],
     "browsable_api": [
@@ -105,6 +104,7 @@ IGNORED_ERRORS = {
         'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"',
         '"MultipleChoiceField[Model]" has no attribute "partial"',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
+        "Module 'rest_framework.fields' has no attribute 'DjangoImageField'",
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
@@ -158,7 +158,6 @@ IGNORED_ERRORS = {
     "test_renderers.py": [
         '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
     ],
-    "test_requests_client.py": ["Module 'rest_framework.compat' has no attribute 'requests'"],
     "test_request.py": [
         '"Request" has no attribute "inner_property"',
         'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"',
