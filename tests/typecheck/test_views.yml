@@ -6,3 +6,16 @@
         def filter_queryset(self, queryset):
             reveal_type(self.request)  # N: Revealed type is 'rest_framework.request.Request'
             return queryset
+
+- case: test_destroy_api_view
+  main: |
+    from rest_framework import generics
+    from django.db.models import Model
+
+    class MyModel(Model):
+        pass
+
+    class MyView(generics.DestroyAPIView):
+        queryset = MyModel.objects.all()
+
+        def perform_destroy(self, instance: MyModel) -> None: ...
