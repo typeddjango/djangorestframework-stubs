@@ -18,7 +18,7 @@ def get_schema_view(
     renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
     public: bool = ...,
     patterns: Optional[Sequence[Any]] = ...,
-    generator_class: Type[SchemaGenerator] = ...,
+    generator_class: Type[Union[openapi.SchemaGenerator, coreapi.SchemaGenerator]] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
     version: Optional[str] = ...,
