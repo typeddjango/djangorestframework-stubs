@@ -68,7 +68,7 @@
 
 -   case: default_and_inital_args_fields
     main: |
-        from rest_framework.fields import DictField, CharField, empty
+        from rest_framework.fields import DictField, CharField, MultipleChoiceField, empty
         from typing import Optional, Dict, Any
 
         CharField(initial='', default=lambda: '')
@@ -77,6 +77,12 @@
 
         x: Optional[str] = CharField().get_initial()
         y: Optional[int] = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "Optional[str]", variable has type "Optional[int]")
+
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[_Empty, Set[str], Set[int], Callable[[], Set[str]], Callable[[], Set[int]]]"
+
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[_Empty, Set[str], Set[int], Callable[[], Set[str]], Callable[[], Set[int]]]"
 
 -   case: float_field_args_fields
     main: |
