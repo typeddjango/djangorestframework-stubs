@@ -515,10 +515,10 @@ class MultipleChoiceField(
         write_only: bool = ...,
         required: bool = ...,
         default: Union[
-            _Empty, Sequence[str], Sequence[int], Callable[[], Sequence[str]], Callable[[], Sequence[int]]
+            _Empty, Set[str], Set[int], Callable[[], Set[str]], Callable[[], Set[int]]
         ] = ...,
         initial: Union[
-            _Empty, Sequence[str], Sequence[int], Callable[[], Sequence[str]], Callable[[], Sequence[int]]
+            _Empty, Set[str], Set[int], Callable[[], Set[str]], Callable[[], Set[int]]
         ] = ...,
         source: str = ...,
         label: str = ...,
