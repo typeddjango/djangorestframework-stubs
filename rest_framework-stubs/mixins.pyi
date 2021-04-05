@@ -1,4 +1,4 @@
-from typing import Any, Dict, TypeVar
+from typing import Any, Dict, Protocol, TypeVar
 
 from django.db.models import Model
 
@@ -7,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
 
+_MT = TypeVar("_MT", bound=Model)
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 
 class CreateModelMixin:
@@ -25,6 +26,6 @@ class UpdateModelMixin:
     def perform_update(self: UsesQuerySet[_MT_co], serializer: BaseSerializer[_MT_co]) -> None: ...
     def partial_update(self, request: Request, *args: Any, **kwargs: Any) -> Response: ...
 
-class DestroyModelMixin:
+class DestroyModelMixin(Protocol[_MT]):
     def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response: ...
-    def perform_destroy(self: UsesQuerySet[_MT_co], instance: _MT_co) -> None: ...
+    def perform_destroy(self: UsesQuerySet[_MT_co], instance: _MT) -> None: ...
