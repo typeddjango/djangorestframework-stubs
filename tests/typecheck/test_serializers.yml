@@ -35,3 +35,17 @@
         return bool(serializer.Meta.model)
 
     reveal_type(is_meta_model(TestSerializer)) # N: Revealed type is 'builtins.bool'
+
+- case: test_model_serializer_with_custom_default_field_types
+  main: |
+    from rest_framework import serializers
+    from django.contrib.auth.models import User
+
+    class TestSerializer(serializers.ModelSerializer):
+        serializer_related_field = serializers.PrimaryKeyRelatedField
+        serializer_related_to_field = serializers.SlugRelatedField
+        serializer_url_field = serializers.HyperlinkedIdentityField
+        serializer_choice_field = serializers.ChoiceField
+
+        class Meta:
+            model = User
