@@ -19,3 +19,14 @@
         queryset = MyModel.objects.all()
 
         def perform_destroy(self, instance: MyModel) -> None: ...
+
+- case: test_build_api_request
+  main: |
+    from django.http.request import HttpRequest
+    from rest_framework.views import APIView
+
+    request = HttpRequest()
+    view = APIView()
+    api_request = view.initialize_request(request)
+    reveal_type(api_request)  # N: Revealed type is 'rest_framework.request.Request'
+
