@@ -26,7 +26,7 @@
     from rest_framework.views import APIView
 
     request: HttpRequest
-    view = APIView()
+    view: APIView
     api_request = view.initialize_request(request)
     reveal_type(api_request)  # N: Revealed type is 'rest_framework.request.Request'
 
