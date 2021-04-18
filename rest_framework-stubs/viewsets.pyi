@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
+from django.http.request import HttpRequest
 from django.http.response import HttpResponseBase
 from rest_framework import generics, mixins, views
 from rest_framework.decorators import ViewSetAction
@@ -28,7 +29,7 @@ class ViewSetMixin:
     def as_view(
         cls, actions: Optional[Dict[str, Union[str, ViewSetAction]]] = ..., **initkwargs: Any
     ) -> AsView[GenericView]: ...
-    def initialize_request(self, request: Request, *args: Any, **kwargs: Any) -> Request: ...
+    def initialize_request(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Request: ...
     def reverse_action(self, url_name: str, *args: Any, **kwargs: Any) -> str: ...
     @classmethod
     def get_extra_actions(cls) -> List[_ViewFunc]: ...
