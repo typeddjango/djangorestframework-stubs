@@ -27,6 +27,7 @@ class AsView(Protocol[_View]):
     self: APIView
     view_class: Type[APIView]
     view_initkwargs: Mapping[str, Any]
+    csrf_exempt: bool
     __call__: _View
 
 # Call signature for view function that's returned by as_view()
