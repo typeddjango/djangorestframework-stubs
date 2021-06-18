@@ -25,6 +25,9 @@ dependencies = [
     "typing-extensions>=3.7.2",
     "requests>=2.0.0",
     "coreapi>=2.0.0",
+    "types-requests>=0.1.12",
+    "types-PyYAML>=5.4.3",
+    "types-Markdown>=0.1.5",
 ]
 
 setup(

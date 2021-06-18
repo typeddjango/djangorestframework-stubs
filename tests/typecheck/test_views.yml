@@ -4,7 +4,7 @@
 
     class MyListView(generics.ListAPIView):
         def filter_queryset(self, queryset):
-            reveal_type(self.request)  # N: Revealed type is 'rest_framework.request.Request'
+            reveal_type(self.request)  # N: Revealed type is "rest_framework.request.Request"
             return queryset
 
 - case: test_destroy_api_view
@@ -28,5 +28,5 @@
     request: HttpRequest
     view: APIView
     api_request = view.initialize_request(request)
-    reveal_type(api_request)  # N: Revealed type is 'rest_framework.request.Request'
+    reveal_type(api_request)  # N: Revealed type is "rest_framework.request.Request"
 

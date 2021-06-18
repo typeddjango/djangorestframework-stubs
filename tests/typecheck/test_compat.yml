@@ -2,5 +2,5 @@
   main: |
     from rest_framework.compat import postgres_fields
 
-    reveal_type(postgres_fields)  # N: Revealed type is '_importlib_modulespec.ModuleType'
-    reveal_type(postgres_fields.hstore.HStoreField())  # N: Revealed type is 'django.contrib.postgres.fields.hstore.HStoreField'
+    reveal_type(postgres_fields)  # N: Revealed type is "types.ModuleType"
+    reveal_type(postgres_fields.hstore.HStoreField())  # N: Revealed type is "django.contrib.postgres.fields.hstore.HStoreField"
