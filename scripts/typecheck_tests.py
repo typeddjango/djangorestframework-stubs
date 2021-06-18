@@ -104,7 +104,7 @@ IGNORED_ERRORS = {
         'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"',
         '"MultipleChoiceField[Model]" has no attribute "partial"',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
-        "Module 'rest_framework.fields' has no attribute 'DjangoImageField'",
+        'Module "rest_framework.fields" has no attribute "DjangoImageField"; maybe "ImageField"?',
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
@@ -172,7 +172,7 @@ IGNORED_ERRORS = {
         "base class",
         '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
-        "Name 'foo' is not defined",
+        'Name "foo" is not defined',
         'Argument "data" has incompatible type "None"',
     ],
     "test_serializer_bulk_update.py": [
@@ -182,7 +182,7 @@ IGNORED_ERRORS = {
     ],
     "test_serializer_lists.py": [
         'The type "Type[ListSerializer]" is not generic and not indexable',
-        "Name 'foo' is not defined",
+        'Name "foo" is not defined',
     ],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
