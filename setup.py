@@ -19,7 +19,14 @@ def find_stub_files(name):
 with open("README.md") as f:
     readme = f.read()
 
-dependencies = ["mypy>=0.790", "django-stubs>=1.7.0", "typing-extensions>=3.7.2", "requests>=2.0.0", "coreapi>=2.0.0"]
+dependencies = [
+    "mypy>=0.790",
+    "django-stubs>=1.7.0",
+    "typing-extensions>=3.7.2",
+    "requests>=2.0.0",
+    "coreapi>=2.0.0",
+    "django-filter>=2.0.0",
+]
 
 setup(
     name="djangorestframework-stubs",
