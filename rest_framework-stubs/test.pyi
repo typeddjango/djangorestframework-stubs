@@ -4,6 +4,7 @@ import coreapi
 import requests
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
+from django.http import HttpRequest
 from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
@@ -13,7 +14,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 def force_authenticate(
-    request: Request, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
+    request: HttpRequest, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
 ) -> None: ...
 
 class HeaderDict(requests.packages.urllib3._collections.HTTPHeaderDict):

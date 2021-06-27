@@ -14,12 +14,12 @@
   main: |
     from rest_framework import serializers
 
-    reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is '_MT?'
-    reveal_type(serializers.ModelSerializer.Meta.fields) # N: Revealed type is 'typing.Sequence[builtins.str]'
-    reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is 'Union[typing.Sequence[builtins.str], None]'
-    reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is 'Union[typing.Sequence[builtins.str], None]'
-    reveal_type(serializers.ModelSerializer.Meta.depth) # N: Revealed type is 'Union[builtins.int, None]'
-    reveal_type(serializers.ModelSerializer.Meta.extra_kwargs) # N: Revealed type is 'builtins.dict[builtins.str, builtins.dict[builtins.str, Any]]'
+    reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is "Type[_MT?]"
+    reveal_type(serializers.ModelSerializer.Meta.fields) # N: Revealed type is "typing.Sequence[builtins.str]"
+    reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
+    reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
+    reveal_type(serializers.ModelSerializer.Meta.depth) # N: Revealed type is "Union[builtins.int, None]"
+    reveal_type(serializers.ModelSerializer.Meta.extra_kwargs) # N: Revealed type is "builtins.dict[builtins.str, builtins.dict[builtins.str, Any]]"
 
 - case: test_model_serializer_passes_check
   main: |
@@ -34,4 +34,29 @@
     def is_meta_model(serializer: Type[serializers.ModelSerializer]) -> bool:
         return bool(serializer.Meta.model)
 
-    reveal_type(is_meta_model(TestSerializer)) # N: Revealed type is 'builtins.bool'
+    reveal_type(is_meta_model(TestSerializer)) # N: Revealed type is "builtins.bool"
+
+- case: test_model_serializer_with_customized_serializer_field_mapping
+  main: |
+    from rest_framework import serializers
+    from django.contrib.auth.models import User
+
+    class TestSerializer(serializers.ModelSerializer):
+        serializer_related_field = serializers.PrimaryKeyRelatedField
+        serializer_related_to_field = serializers.SlugRelatedField
+        serializer_url_field = serializers.HyperlinkedIdentityField
+        serializer_choice_field = serializers.ChoiceField
+
+        class Meta:
+            model = User
+
+- case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
+  main: |
+    from rest_framework import serializers
+    from django.contrib.auth.models import User
+
+    class TestSerializer(serializers.HyperlinkedModelSerializer):
+        serializer_related_field = serializers.HyperlinkedRelatedField
+
+        class Meta:
+            model = User

@@ -1,0 +1,88 @@
+name: test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-lint-${{ hashFiles('./dev-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-lint-
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ./dev-requirements.txt
+
+      - name: Run pre-commit
+        run: pre-commit install && pre-commit run --all-files
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup system dependencies
+        run: sudo apt-get install binutils libproj-dev gdal-bin
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-test-${{ hashFiles('./dev-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-test-
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ./dev-requirements.txt
+
+      - name: Run tests
+        run: pytest
+
+  typecheck:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup system dependencies
+        run: sudo apt-get install binutils libproj-dev gdal-bin
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-typecheck-${{ hashFiles('./dev-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-typecheck-
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ./dev-requirements.txt
+
+      - name: Run tests
+        run: python ./scripts/typecheck_tests.py

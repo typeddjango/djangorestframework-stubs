@@ -4,5 +4,6 @@ pre-commit==2.7.1
 pytest==6.1.1
 pytest-mypy-plugins==1.6.1
 djangorestframework==3.12.1
+types-pytz==0.1.2
 django-filter==2.4.0
 -e .
