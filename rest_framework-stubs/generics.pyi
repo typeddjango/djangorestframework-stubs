@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
+_MT_inv = TypeVar("_MT_inv", bound=Model)
 
 def get_object_or_404(
     queryset: Union[Type[_MT_co], Manager[_MT_co], QuerySet[_MT_co]], *filter_args: Any, **filter_kwargs: Any
@@ -21,8 +22,8 @@ class UsesQuerySet(Protocol[_MT_co]):
 
 # Can't just use BaseFilterBackend because there's also things like django_filters.rest_framework.DjangoFilterBackend that are
 # valid options but don't extend it
-class BaseFilterProtocol(Protocol[_MT_co]):
-    def filter_queryset(self, request: Request, queryset: QuerySet[_MT_co], view: views.APIView) -> QuerySet[_MT_co]: ...
+class BaseFilterProtocol(Protocol[_MT_inv]):
+    def filter_queryset(self, request: Request, queryset: QuerySet[_MT_inv], view: views.APIView) -> QuerySet[_MT_inv]: ...
     def get_schema_fields(self, view: views.APIView) -> List[Any]: ...
     def get_schema_operation_parameters(self, view: views.APIView): ...
 
