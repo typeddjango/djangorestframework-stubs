@@ -28,7 +28,7 @@ class DRFOpenAPISchema(TypedDict, total=False):
     components: Dict[str, Dict[str, Any]]
     security: List[Dict[str, List[Any]]]
     tags: List[Dict[str, Any]]
-    externalDocs: externalDocumentationObject
+    externalDocs: ExternalDocumentationObject
     servers: List[Dict[str, Any]]
 
 class SchemaGenerator(BaseSchemaGenerator):
