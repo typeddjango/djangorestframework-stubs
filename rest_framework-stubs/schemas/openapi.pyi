@@ -17,7 +17,7 @@ class DRFOpenAPIInfo(TypedDict, total=False):
     version: str
     description: str
 
-class externalDocumentationObject(TypedDict, total=False):
+class ExternalDocumentationObject(TypedDict, total=False):
     description: str
     url: str
 
