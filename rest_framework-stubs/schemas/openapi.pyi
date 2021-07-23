@@ -17,11 +17,19 @@ class DRFOpenAPIInfo(TypedDict, total=False):
     version: str
     description: str
 
+class ExternalDocumentationObject(TypedDict, total=False):
+    description: str
+    url: str
+
 class DRFOpenAPISchema(TypedDict, total=False):
     openapi: str
     info: DRFOpenAPIInfo
     paths: Dict[str, Dict[str, Any]]
     components: Dict[str, Dict[str, Any]]
+    security: List[Dict[str, List[Any]]]
+    tags: List[Dict[str, Any]]
+    externalDocs: ExternalDocumentationObject
+    servers: List[Dict[str, Any]]
 
 class SchemaGenerator(BaseSchemaGenerator):
     def get_info(self) -> DRFOpenAPIInfo: ...
