@@ -3,7 +3,7 @@ from typing import Any, Callable, List, Mapping, Optional, Sequence, Type, Union
 from django.http.response import HttpResponseBase
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.parsers import BaseParser
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
@@ -75,9 +75,7 @@ def authentication_classes(
 def throttle_classes(
     throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]
 ) -> Callable[[_View], _View]: ...
-def permission_classes(
-    permission_classes: Sequence[Union[BasePermission, Type[BasePermission]]]
-) -> Callable[[_View], _View]: ...
+def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
 def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[_View], _View]: ...
 def action(
     methods: Optional[_MIXED_CASE_HTTP_VERBS] = ...,

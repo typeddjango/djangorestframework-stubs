@@ -24,3 +24,20 @@
         from rest_framework.decorators import api_view
         @api_view()  # E: Value of type variable "_View" of function cannot be "Callable[[Any], List[Any]]"
         def view_func2(request) -> list: ...
+
+-   case: permission_classes
+    main: |
+        from rest_framework.decorators import permission_classes
+        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[Union[Type[rest_framework.permissions.BasePermission], rest_framework.permissions.OperandHolder, rest_framework.permissions.SingleOperandHolder]]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View`-1) -> _View`-1"
+
+-   case: permission_classes_with_operators
+    main: |
+        from rest_framework.permissions import BasePermission, IsAuthenticated
+        from rest_framework.decorators import permission_classes
+
+        class Permission(BasePermission):
+            pass
+
+        permission_classes([IsAuthenticated & Permission])
+        permission_classes([IsAuthenticated | Permission])
+        permission_classes([~Permission])
