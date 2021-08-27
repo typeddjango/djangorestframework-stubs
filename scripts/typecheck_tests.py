@@ -105,6 +105,7 @@ IGNORED_ERRORS = {
         '"MultipleChoiceField[Model]" has no attribute "partial"',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
         'Module "rest_framework.fields" has no attribute "DjangoImageField"; maybe "ImageField"?',
+        'Argument 1 to "ListField" has incompatible type "CharField"; expected "bool"',
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
