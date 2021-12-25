@@ -1,4 +1,18 @@
-from typing import Any, Callable, Dict, List, Mapping, NoReturn, Optional, Sequence, Tuple, Type, Union, Protocol, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    NoReturn,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    Union,
+    Protocol,
+    TypeVar,
+)
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -58,7 +72,9 @@ class APIView(View):
     @classmethod
     def as_view(cls, **initkwargs: Any) -> AsView[GenericView]: ...
     def http_method_not_allowed(self, request: Request, *args: Any, **kwargs: Any) -> Response: ...  # type: ignore[override]
-    def permission_denied(self, request: Request, message: Optional[str] = ..., code: Optional[str] = ...) -> NoReturn: ...
+    def permission_denied(
+        self, request: Request, message: Optional[str] = ..., code: Optional[str] = ...
+    ) -> NoReturn: ...
     def throttled(self, request: Request, wait: float) -> NoReturn: ...
     def get_authenticate_header(self, request: Request) -> str: ...
     def get_parser_context(self, http_request: HttpRequest) -> Dict[str, Any]: ...
