@@ -2,6 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import coreapi
 import requests
+import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
@@ -17,7 +18,7 @@ def force_authenticate(
     request: HttpRequest, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
 ) -> None: ...
 
-class HeaderDict(requests.packages.urllib3._collections.HTTPHeaderDict):
+class HeaderDict(urllib3._collections.HTTPHeaderDict):
     def get_all(self, key: Any, default: Any): ...
 
 class MockOriginalResponse:

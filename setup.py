@@ -26,6 +26,7 @@ dependencies = [
     "requests>=2.0.0",
     "coreapi>=2.0.0",
     "types-requests>=0.1.12",
+    "types-urllib3<1.27",  # keep in sync with requests's setup.py
     "types-PyYAML>=5.4.3",
     "types-Markdown>=0.1.5",
 ]
