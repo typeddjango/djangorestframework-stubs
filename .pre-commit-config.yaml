@@ -27,12 +27,13 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
-  - repo: local
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.931
     hooks:
       - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        types: [ python ]
-        exclude: "scripts/*"
         args: [ "--cache-dir=/dev/null", "--no-incremental" ]
+        exclude: "scripts/*"
+        additional_dependencies:
+          - pytest
+          - djangorestframework
+          - types-pytz
