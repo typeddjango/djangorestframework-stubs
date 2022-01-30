@@ -37,3 +37,10 @@ repos:
           - pytest
           - djangorestframework
           - types-pytz
+          - django-stubs
+          - typing-extensions
+          - requests
+          - coreapi
+          - types-requests
+          - types-PyYAML
+          - types-Markdown
