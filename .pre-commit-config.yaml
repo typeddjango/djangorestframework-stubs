@@ -32,15 +32,8 @@ repos:
     hooks:
       - id: mypy
         args: [ "--cache-dir=/dev/null", "--no-incremental" ]
-        exclude: "scripts/*"
+        exclude: "scripts/"
+        types: [python]
         additional_dependencies:
-          - pytest
           - djangorestframework
-          - types-pytz
           - django-stubs
-          - typing-extensions
-          - requests
-          - coreapi
-          - types-requests
-          - types-PyYAML
-          - types-Markdown
