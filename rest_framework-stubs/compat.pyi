@@ -38,6 +38,7 @@ except ImportError:
 
 if markdown is not None and pygments is not None:
     from markdown.preprocessors import Preprocessor
+
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any = ...
         formatter: Any = ...
