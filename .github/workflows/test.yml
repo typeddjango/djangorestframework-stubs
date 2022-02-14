@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint:
-    uses: less-action/reusables/.github/workflows/pre-commit.yaml@v1
+    uses: less-action/reusables/.github/workflows/pre-commit.yaml@459cad5ac9877a76911718423b348249a20ce75d
     with:
       python-version: '3.9'
 
