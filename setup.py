@@ -20,8 +20,8 @@ with open("README.md") as f:
     readme = f.read()
 
 dependencies = [
-    "mypy>=0.790",
-    "django-stubs>=1.7.0",
+    "mypy>=0.930,<0.950",
+    "django-stubs>=1.10.0",
     "typing-extensions>=3.7.2",
     "requests>=2.0.0",
     "coreapi>=2.0.0",
@@ -43,11 +43,10 @@ setup(
     install_requires=dependencies,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
