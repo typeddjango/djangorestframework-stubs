@@ -57,6 +57,8 @@ IGNORED_ERRORS = {
         ' base class "BaseTokenAuthTests" defined the type as "None"',
         '"None" has no attribute "objects"',
         '"BaseTokenAuthTests" has no attribute "assertNumQueries"',
+        'Module "django.middleware.csrf" has no attribute "_mask_cipher_secret"; maybe "_salt_cipher_secret"?',
+        "All conditional function variants must have identical signatures",
     ],
     "schemas": [
         '(expression has type "CharField", base class "Field" defined the type as "bool")',
@@ -78,6 +80,9 @@ IGNORED_ERRORS = {
     ],
     "conftest.py": ["Unsupported operand types for"],
     "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
+    "serializers.pyi": [
+        'note: "IntegerSerializer" defined here',
+    ],
     "test_authtoken.py": [
         'Item "None" of "Optional[Token]" has no attribute "key"',
         'Argument 1 to "get_fields" of "BaseModelAdmin" has incompatible type "object"; expected "HttpRequest"',
@@ -143,6 +148,7 @@ IGNORED_ERRORS = {
     "test_permissions.py": [
         '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
         "_SupportsHasPermission",
+        "Invalid type alias: expression is not a valid type",
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
@@ -175,6 +181,8 @@ IGNORED_ERRORS = {
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
         'Argument "data" has incompatible type "None"',
+        'Unsupported left operand type for | ("ReturnDict")',
+        'Unsupported left operand type for | ("Dict[str, str]")',
     ],
     "test_serializer_bulk_update.py": [
         'Argument "data" has incompatible type "int"',
@@ -184,6 +192,8 @@ IGNORED_ERRORS = {
     "test_serializer_lists.py": [
         'The type "Type[ListSerializer]" is not generic and not indexable',
         'Name "foo" is not defined',
+        'Unexpected keyword argument "max_length" for "IntegerSerializer"',
+        'Unexpected keyword argument "min_length" for "IntegerSerializer"',
     ],
     "test_serializer_nested.py": [
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
@@ -214,7 +224,8 @@ IGNORED_ERRORS = {
         'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Union[str, List[Any], Dict[str, Any], None]"',  # noqa: E501
     ],
     "test_validators.py": [
-        'has incompatible type "object"; expected "QuerySet[Any]"',
+        'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object";'
+        ' expected "_QuerySet[Any, Any]"',
         'to "filter_queryset" of "BaseUniqueForValidator" has incompatible type "None"',
     ],
     "test_versioning.py": [
