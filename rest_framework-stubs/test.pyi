@@ -81,14 +81,18 @@ class APIClient(APIRequestFactory, DjangoClient):
 
 class APITransactionTestCase(testcases.TransactionTestCase):
     client_class: Type[APIClient] = ...
+    client: APIClient
 
 class APITestCase(testcases.TestCase):
     client_class: Type[APIClient] = ...
+    client: APIClient
 
 class APISimpleTestCase(testcases.SimpleTestCase):
     client_class: Type[APIClient] = ...
+    client: APIClient
 
 class APILiveServerTestCase(testcases.LiveServerTestCase):
     client_class: Type[APIClient] = ...
+    client: APIClient
 
 class URLPatternsTestCase(testcases.SimpleTestCase): ...
