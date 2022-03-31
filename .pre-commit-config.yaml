@@ -20,11 +20,9 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
-    rev: 21.12b0
+    rev: 22.3.0
     hooks:
       - id: black
-        # https://github.com/psf/black/issues/2964#issuecomment-1080974737
-        additional_dependencies: ['click==8.0.4']
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.9.2
     hooks:
