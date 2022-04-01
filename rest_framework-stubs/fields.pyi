@@ -689,7 +689,7 @@ class SerializerMethodField(Field):
     method_name: str = ...
     def __init__(
         self,
-        method_name: str = ...,
+        method_name: Optional[str] = ...,
         *,
         read_only: bool = ...,
         write_only: bool = ...,
