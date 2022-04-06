@@ -1,12 +1,11 @@
 import os
-from distutils.core import setup
 
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
 
 def find_stub_files(name):
     result = []
-    for root, dirs, files in os.walk(name):
+    for root, _dirs, files in os.walk(name):
         for file in files:
             if file.endswith(".pyi"):
                 if os.path.sep in root:
@@ -32,7 +31,7 @@ dependencies = [
 
 setup(
     name="djangorestframework-stubs",
-    version="1.4.0",
+    version="1.5.0",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
