@@ -12,7 +12,7 @@ class ErrorDetail(str):
     code: Optional[str] = None
     def __new__(cls, string: str, code: Optional[str] = ...): ...
 
-_Detail = Union[str, List[Any], Dict[str, Any]]
+_Detail = Union[ErrorDetail, List[ErrorDetail], Dict[str, ErrorDetail]]
 
 class APIException(Exception):
     status_code: int = ...
