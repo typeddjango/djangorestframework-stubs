@@ -23,6 +23,7 @@ from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 from typing_extensions import Literal
 
 from rest_framework.exceptions import APIException as APIException
@@ -148,7 +149,7 @@ class Serializer(
     _declared_fields: Dict[str, Field]
     default_error_messages: Dict[str, Any] = ...
     def get_initial(self) -> Any: ...
-    @property
+    @cached_property
     def fields(self) -> BindingDict: ...
     def get_fields(self) -> Dict[str, Field]: ...
     def validate(self, attrs: Any) -> Any: ...

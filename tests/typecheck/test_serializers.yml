@@ -60,3 +60,18 @@
 
         class Meta:
             model = User
+
+- case: test_model_serializer_with_overriden_fields_property
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import BindingDict
+    from django.contrib.auth.models import User
+    from django.utils.functional import cached_property
+
+    class TestSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = User
+
+        @cached_property
+        def fields(self) -> BindingDict:
+            return super().fields
