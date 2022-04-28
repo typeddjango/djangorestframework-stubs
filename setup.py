@@ -20,7 +20,8 @@ with open("README.md") as f:
 
 dependencies = [
     "mypy>=0.930,<0.950",
-    "django-stubs>=1.10.1",
+    # FIXME revert when django-stubs is released
+    "django-stubs @ git+https://github.com/typeddjango/django-stubs@master#egg=django-stubs",
     "typing-extensions>=3.7.2",
     "requests>=2.0.0",
     "coreapi>=2.0.0",

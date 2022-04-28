@@ -1,7 +1,8 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Type, Union
 
 import coreapi
 import requests
+import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest
@@ -12,7 +13,6 @@ from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import Response
-import urllib3
 
 def force_authenticate(
     request: HttpRequest, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
@@ -80,15 +80,15 @@ class APIClient(APIRequestFactory, DjangoClient):
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):
-    client_class: APIClient = ...
+    client_class: Type[APIClient] = ...
 
 class APITestCase(testcases.TestCase):
-    client_class: APIClient = ...
+    client_class: Type[APIClient] = ...
 
 class APISimpleTestCase(testcases.SimpleTestCase):
-    client_class: APIClient = ...
+    client_class: Type[APIClient] = ...
 
 class APILiveServerTestCase(testcases.LiveServerTestCase):
-    client_class: APIClient = ...
+    client_class: Type[APIClient] = ...
 
 class URLPatternsTestCase(testcases.SimpleTestCase): ...
