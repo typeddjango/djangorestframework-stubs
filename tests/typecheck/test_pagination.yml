@@ -9,4 +9,4 @@
     request: Request
     queryset: QuerySet[User]
     page = paginator.paginate_queryset(queryset, request)
-    reveal_type(page)  # N: Revealed type is "Union[builtins.list[django.contrib.auth.models.User*], None]"
+    reveal_type(page)  # N: Revealed type is "Union[builtins.list[django.contrib.auth.models.User], None]"
