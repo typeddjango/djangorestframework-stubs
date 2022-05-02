@@ -1,0 +1,17 @@
+- case: test_exception_declaration
+  main: |
+    from rest_framework import exceptions
+
+    class MyException(exceptions.APIException):
+        status_code = 200
+        default_detail = "Everything is a okay"
+        default_code = "ok"
+
+- case: test_exception_declaration_dict_detail
+  main: |
+    from rest_framework import exceptions
+
+    class MyException(exceptions.APIException):
+        status_code = 200
+        default_detail = {"ok": "everything"}
+        default_code = "ok"
