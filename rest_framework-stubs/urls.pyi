@@ -1,2 +1,6 @@
+from typing import List, Union
+
+from django.urls import URLPattern, URLResolver
+
 app_name: str
-urlpatterns: list
+urlpatterns: List[Union[URLPattern, URLResolver]]

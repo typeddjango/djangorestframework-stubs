@@ -33,7 +33,7 @@ class SchemaGenerator(BaseSchemaGenerator):
         title: Optional[str] = ...,
         description: Optional[str] = ...,
         version: Optional[str] = ...,
-        patterns: Sequence[Union[URLPattern, URLResolver, Any]] = ...,
+        patterns: Optional[Sequence[Union[URLPattern, URLResolver]]] = ...,
         url: Optional[str] = ...,
         endpoints: Optional[Sequence[Tuple[str, str, Any]]] = ...,
     ) -> None: ...
