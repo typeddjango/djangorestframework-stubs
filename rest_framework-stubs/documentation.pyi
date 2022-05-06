@@ -2,6 +2,7 @@ from typing import Any, Callable, Optional, Sequence, Type
 
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas import SchemaGenerator
+from rest_framework.urlpatterns import _AnyURL
 
 def get_docs_view(
     title: Optional[str] = ...,
@@ -10,7 +11,7 @@ def get_docs_view(
     urlconf: Optional[str] = ...,
     renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
     public: bool = ...,
-    patterns: Optional[Sequence[Any]] = ...,
+    patterns: Optional[Sequence[_AnyURL]] = ...,
     generator_class: Type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
@@ -22,7 +23,7 @@ def get_schemajs_view(
     urlconf: Optional[str] = ...,
     renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
     public: bool = ...,
-    patterns: Optional[Sequence[Any]] = ...,
+    patterns: Optional[Sequence[_AnyURL]] = ...,
     generator_class: Type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
@@ -34,7 +35,7 @@ def include_docs_urls(
     urlconf: Optional[str] = ...,
     renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
     public: bool = ...,
-    patterns: Optional[Sequence[Any]] = ...,
+    patterns: Optional[Sequence[_AnyURL]] = ...,
     generator_class: Type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,

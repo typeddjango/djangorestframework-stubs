@@ -1,10 +1,10 @@
 from collections import Counter, OrderedDict
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from django.urls import URLPattern, URLResolver
 from rest_frame.fields import Field
 from rest_framework.compat import coreapi
 from rest_framework.request import Request
+from rest_framework.urlpatterns import _AnyURL
 from rest_framework.views import APIView
 
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
@@ -33,7 +33,7 @@ class SchemaGenerator(BaseSchemaGenerator):
         title: Optional[str] = ...,
         description: Optional[str] = ...,
         version: Optional[str] = ...,
-        patterns: Sequence[Union[URLPattern, URLResolver, Any]] = ...,
+        patterns: Optional[Sequence[_AnyURL]] = ...,
         url: Optional[str] = ...,
         endpoints: Optional[Sequence[Tuple[str, str, Any]]] = ...,
     ) -> None: ...

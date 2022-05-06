@@ -73,6 +73,7 @@ IGNORED_ERRORS = {
         'error: Module has no attribute "coreapi"',
         'Value of type "Optional[str]" is not indexable',
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[Any], Any]]")',  # noqa: E501
+        'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
     ],
     "browsable_api": [
         '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
@@ -173,7 +174,11 @@ IGNORED_ERRORS = {
     "test_response.py": [
         'Argument 2 to "get" of "Client" has incompatible type "**Dict[str, str]"',
     ],
-    "test_routers.py": ['expression has type "List[RouterTestModel]"'],
+    "test_routers.py": [
+        'expression has type "List[RouterTestModel]"',
+        'Item "URLResolver" of "Union[URLPattern, URLResolver]" has no attribute "name"',
+        '"None" not callable',
+    ],
     "test_serializer.py": [
         'of "BaseSerializer" has incompatible type "None"',
         "base class",
@@ -213,7 +218,10 @@ IGNORED_ERRORS = {
         "Cannot assign to a method",
         'Type[NonTimeThrottle]" has no attribute "called"',
     ],
-    "test_utils.py": ["Unsupported left operand type for %"],
+    "test_utils.py": [
+        "Unsupported left operand type for %",
+        'incompatible type "List[Union[URLPattern, URLResolver]]"; expected "Iterable[URLPattern]"',
+    ],
     "test_validation.py": [
         'Value of type "object" is not indexable',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"',

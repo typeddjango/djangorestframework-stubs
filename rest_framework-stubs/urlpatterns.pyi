@@ -1,15 +1,17 @@
-from typing import List, Optional, Pattern, Union
+from typing import Iterable, List, Optional, Sequence, Union
 
-from django.urls.resolvers import RoutePattern, URLPattern, URLResolver
+from django.urls.resolvers import URLPattern, URLResolver
+
+_AnyURL = Union[URLPattern, URLResolver]
 
 def apply_suffix_patterns(
-    urlpatterns: List[Union[URLResolver, RoutePattern, URLPattern, Pattern]],
-    suffix_pattern: Union[str, Pattern],
+    urlpatterns: Iterable[_AnyURL],
+    suffix_pattern: str,
     suffix_required: bool,
     suffix_route: Optional[str] = ...,
-) -> List[URLPattern]: ...
+) -> List[Union[URLResolver, URLPattern]]: ...
 def format_suffix_patterns(
-    urlpatterns: List[Union[URLResolver, RoutePattern, URLPattern, Pattern]],
+    urlpatterns: Iterable[_AnyURL],
     suffix_required: bool = ...,
-    allowed: Optional[List[Union[URLPattern, Pattern, str]]] = ...,
-) -> List[URLPattern]: ...
+    allowed: Optional[Sequence[str]] = ...,
+) -> List[Union[URLResolver, URLPattern]]: ...
