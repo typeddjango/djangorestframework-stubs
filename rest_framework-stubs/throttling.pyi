@@ -1,8 +1,8 @@
-from typing import Any, Callable, Dict, List, MutableMapping, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from django.core.cache.backends.base import BaseCache
 from rest_framework.request import Request
 from rest_framework.views import APIView
-from django.core.cache.backends.base import BaseCache
 
 class BaseThrottle:
     def allow_request(self, request: Request, view: APIView) -> bool: ...
