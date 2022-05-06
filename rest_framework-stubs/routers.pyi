@@ -1,6 +1,5 @@
 from typing import Any, Callable, Dict, Iterable, List, Mapping, NamedTuple, Optional, Tuple, Type, Union
 
-from django.urls import URLPattern, URLResolver
 from django.utils.deprecation import RenameMethodsBase
 from rest_framework import views
 from rest_framework.renderers import BaseRenderer
@@ -8,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.schemas import SchemaGenerator
 from rest_framework.schemas.views import SchemaView
+from rest_framework.urlpatterns import _AnyURL
 from rest_framework.viewsets import ViewSetMixin
 
 class Route(NamedTuple):
@@ -35,9 +35,9 @@ class BaseRouter(metaclass=RenameRouterMethods):
         self, prefix: str, viewset: Type[ViewSetMixin], basename: Optional[str] = ..., base_name: Optional[str] = ...
     ) -> None: ...
     def get_default_basename(self, viewset: Type[ViewSetMixin]) -> str: ...
-    def get_urls(self) -> List[Union[URLPattern, URLResolver]]: ...
+    def get_urls(self) -> List[_AnyURL]: ...
     @property
-    def urls(self) -> List[Union[URLPattern, URLResolver]]: ...
+    def urls(self) -> List[_AnyURL]: ...
 
 class SimpleRouter(BaseRouter):
     routes: List[Union[Route, DynamicRoute]] = ...

@@ -1,6 +1,6 @@
-from typing import List, Union
+from typing import List
 
-from django.urls import URLPattern, URLResolver
+from rest_framework.urlpatterns import _AnyURL
 
 app_name: str
-urlpatterns: List[Union[URLPattern, URLResolver]]
+urlpatterns: List[_AnyURL]
