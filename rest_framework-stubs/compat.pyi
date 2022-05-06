@@ -1,6 +1,6 @@
 from typing import Any, Optional, Tuple, Union
 
-import coreapi
+import coreapi  # noqa: F401
 import requests  # noqa: F401
 from django.db.models import QuerySet
 
