@@ -74,6 +74,7 @@ IGNORED_ERRORS = {
         'Value of type "Optional[str]" is not indexable',
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[Any], Any]]")',  # noqa: E501
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
+        'Argument 1 to "field_to_schema" has incompatible type "object"; expected "Field[Any, Any, Any, Any]"',
     ],
     "browsable_api": [
         '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
