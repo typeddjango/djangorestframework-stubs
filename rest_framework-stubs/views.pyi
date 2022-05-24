@@ -6,12 +6,12 @@ from typing import (
     Mapping,
     NoReturn,
     Optional,
+    Protocol,
     Sequence,
     Tuple,
     Type,
-    Union,
-    Protocol,
     TypeVar,
+    Union,
 )
 
 from django.http import HttpRequest
@@ -38,7 +38,7 @@ def exception_handler(exc: Exception, context) -> Optional[Response]: ...
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 
 class AsView(Protocol[_View]):
-    self: APIView
+    cls: Type[APIView]
     view_class: Type[APIView]
     view_initkwargs: Mapping[str, Any]
     csrf_exempt: bool
