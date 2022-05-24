@@ -1,16 +1,20 @@
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Type, Union, Protocol, TypeVar
+from typing import Any, Callable, List, Mapping, Optional, Protocol, Sequence, Type, TypeVar, Union
 
+from django.http import HttpRequest
 from django.http.response import HttpResponseBase
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
+from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import Literal
+from typing_extensions import Concatenate, Literal, ParamSpec
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
+_P = ParamSpec("_P")
+_RESP = TypeVar("_RESP", bound=HttpResponseBase)
 
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...
@@ -64,7 +68,9 @@ class ViewSetAction(Protocol[_View]):
     mapping: MethodMapper
     __call__: _View
 
-def api_view(http_method_names: Optional[Sequence[str]] = ...) -> Callable[[_View], AsView[_View]]: ...
+def api_view(
+    http_method_names: Optional[Sequence[str]] = ...,
+) -> Callable[[Callable[Concatenate[Request, _P], _RESP]], AsView[Callable[Concatenate[HttpRequest, _P], _RESP]]]: ...
 def renderer_classes(
     renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]
 ) -> Callable[[_View], _View]: ...
