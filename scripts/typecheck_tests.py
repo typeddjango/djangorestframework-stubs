@@ -73,7 +73,7 @@ IGNORED_ERRORS = {
         'List item 0 has incompatible type "Type[',
         'error: Module has no attribute "coreapi"',
         'Value of type "Optional[str]" is not indexable',
-        'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[Any], Any]]")',  # noqa: E501
+        'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[HttpRequest], Any]]")',  # noqa: E501
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
         'Argument 1 to "field_to_schema" has incompatible type "object"; expected "Field[Any, Any, Any, Any]"',
     ],
