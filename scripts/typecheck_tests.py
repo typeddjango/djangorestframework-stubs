@@ -247,6 +247,7 @@ IGNORED_ERRORS = {
     "test_versioning.py": [
         '(expression has type "Type[FakeResolverMatch]", variable has type "ResolverMatch")',
         "rest_framework.decorators",
+        'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "HttpRequest")',
