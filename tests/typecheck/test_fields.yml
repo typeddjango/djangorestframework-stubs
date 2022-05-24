@@ -129,12 +129,12 @@
         FileField(allow_null=True, default=None)
         FileField(allow_null=True, default=file_callback)
         FileField(allow_null=True, default=file_callback())
-        FileField(allow_null=True, default=123) # E: Argument "default" to "FileField" has incompatible type "int"; expected "Union[File, Callable[[], File], None, _Empty]"
+        FileField(allow_null=True, default=123) # E: Argument "default" to "FileField" has incompatible type "int"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"
 
         ImageField(allow_null=True, default=None)
         ImageField(default=file_callback)
         ImageField(default=file_callback())
-        ImageField(default='a') # E: Argument "default" to "ImageField" has incompatible type "str"; expected "Union[File, Callable[[], File], None, _Empty]"
+        ImageField(default='a') # E: Argument "default" to "ImageField" has incompatible type "str"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"
 
 -   case: DictField_default
     main: |

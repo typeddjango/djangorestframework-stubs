@@ -44,20 +44,21 @@ IGNORED_ERRORS = {
         "Need type annotation for",
         "Cannot assign to a method",
         "Cannot determine type of",
-        '"HttpResponse" has no attribute "data"',
         'has no attribute "initkwargs"',
         'has no attribute "mapping"',
         'Response" has no attribute "view"',
         "Cannot infer type",
         ' has no attribute "_context',
         '(expression has type "None", variable has type "ForeignKeyTarget")',
+        '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
+        '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
         ' base class "BaseTokenAuthTests" defined the type as "None"',
         '"None" has no attribute "objects"',
         '"BaseTokenAuthTests" has no attribute "assertNumQueries"',
-        'Module "django.middleware.csrf" has no attribute "_mask_cipher_secret"; maybe "_salt_cipher_secret"?',
+        'Module "django.middleware.csrf" has no attribute "_mask_cipher_secret"',
         "All conditional function variants must have identical signatures",
     ],
     "schemas": [
@@ -113,6 +114,10 @@ IGNORED_ERRORS = {
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
         'Module "rest_framework.fields" has no attribute "DjangoImageField"; maybe "ImageField"?',
         'Argument 1 to "ListField" has incompatible type "CharField"; expected "bool"',
+        "Possible overload variants:",
+        "def __init__(self, *, mutable: Literal[True], query_string: Union[str, bytes, None] = ..., encoding: Optional[str] = ...) -> QueryDict",  # noqa: E501
+        "def __init__(self, query_string: Union[str, bytes, None] = ..., mutable: bool = ..., encoding: Optional[str] = ...) -> _ImmutableQueryDict",  # noqa: E501
+        "def __init__(self, query_string: Union[str, bytes, None], mutable: Literal[True], encoding: Optional[str] = ...) -> QueryDict",  # noqa: E501
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
@@ -236,10 +241,13 @@ IGNORED_ERRORS = {
         'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object";'
         ' expected "_QuerySet[Any, Any]"',
         'to "filter_queryset" of "BaseUniqueForValidator" has incompatible type "None"',
+        'Item "ForeignObjectRel" of "Union[Field[Any, Any], ForeignObjectRel, GenericForeignKey]" has no attribute "validators"',  # noqa: E501
+        'Item "GenericForeignKey" of "Union[Field[Any, Any], ForeignObjectRel, GenericForeignKey]" has no attribute "validators"',  # noqa: E501
     ],
     "test_versioning.py": [
         '(expression has type "Type[FakeResolverMatch]", variable has type "ResolverMatch")',
         "rest_framework.decorators",
+        'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "HttpRequest")',
