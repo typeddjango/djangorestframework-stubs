@@ -1,0 +1,9 @@
+- case: test_api_test_case
+  main: |
+    from rest_framework import test, status
+
+    class MyTest(test.APITestCase):
+        def test_example(self) -> None:
+            response = self.client.get('/', format="json")
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+            self.assertEqual(response.data, {"detail": {"not_found"}})
