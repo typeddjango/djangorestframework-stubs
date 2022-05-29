@@ -1,9 +1,28 @@
-- case: test_api_test_case
+- case: test_testcases_client_api
+  parametrized:
+  - test_class: APITransactionTestCase
+  - test_class: APITestCase
+  - test_class: APISimpleTestCase
+  - test_class: APILiveServerTestCase
   main: |
     from rest_framework import test, status
 
-    class MyTest(test.APITestCase):
+    class MyTest(test.{{ test_class }}):
         def test_example(self) -> None:
+            reveal_type(self.client) # N: Revealed type is "rest_framework.test.APIClient"
             response = self.client.get('/', format="json")
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
             self.assertEqual(response.data, {"detail": {"not_found"}})
+
+- case: test_testcases_client_api_urlpatterns
+  main: |
+    from typing import Union, List
+    from django.urls import URLPattern, URLResolver
+    from rest_framework import test, status
+
+    class MyTest(test.URLPatternsTestCase):
+        urlpatterns : List[Union[URLPattern, URLResolver]] = []
+        def test_example(self) -> None:
+            reveal_type(self.client) # N: Revealed type is "django.test.client.Client"
+            response = self.client.get('/', format="json")
+            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
