@@ -80,6 +80,7 @@ IGNORED_ERRORS = {
     "browsable_api": [
         '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
         'expression has type "List[Dict[str, Dict[str, int]]]"',
+        'List item 0 has incompatible type "Type[IsAuthenticated]',
     ],
     "conftest.py": ["Unsupported operand types for"],
     "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
