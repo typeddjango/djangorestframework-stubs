@@ -13,7 +13,7 @@ Supports Python 3.6, 3.7, 3.8 and 3.9.
 ## Installation
 
 ```bash
-pip install djangorestframework-stubs
+pip install djangorestframework-stubs[compatible-mypy]
 ```
 
 To make mypy aware of the plugin, you need to add

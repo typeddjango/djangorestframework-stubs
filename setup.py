@@ -19,7 +19,7 @@ with open("README.md") as f:
     readme = f.read()
 
 dependencies = [
-    "mypy>=0.950,<0.970",
+    "mypy>=0.950",
     "django-stubs>=1.11.0",
     "typing-extensions>=3.10.0",
     "requests>=2.0.0",
@@ -28,6 +28,10 @@ dependencies = [
     "types-PyYAML>=5.4.3",
     "types-Markdown>=0.1.5",
 ]
+
+extras_require = {
+    "compatible-mypy": ["mypy>=0.950,<0.970"],
+}
 
 setup(
     name="djangorestframework-stubs",
@@ -40,6 +44,7 @@ setup(
     author_email="maxim.kurnikov@gmail.com",
     license="MIT",
     install_requires=dependencies,
+    extras_require=extras_require,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
     python_requires=">=3.7",
