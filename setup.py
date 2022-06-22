@@ -35,7 +35,7 @@ extras_require = {
 
 setup(
     name="djangorestframework-stubs",
-    version="1.6.0",
+    version="1.7.0",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -54,6 +54,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Typing :: Typed",
     ],
 )
