@@ -1,0 +1,7 @@
+-   case: request_querydict
+    main: |
+        from rest_framework.request import Request
+
+        def some_view(request: Request) -> None:
+            reveal_type(request.query_params['field'])  # N: Revealed type is "builtins.str"
+            reveal_type(request.POST['field'])          # N: Revealed type is "builtins.str"
