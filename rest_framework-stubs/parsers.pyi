@@ -1,7 +1,7 @@
 from typing import IO, Any, Dict, Generic, Mapping, Optional, Type, TypeVar, Union
 
 from django.core.files.uploadedfile import UploadedFile
-from django.http import QueryDict
+from django.http.request import _ImmutableQueryDict
 from django.utils.datastructures import MultiValueDict
 from rest_framework.renderers import JSONRenderer
 
@@ -29,12 +29,12 @@ class JSONParser(BaseParser):
 class FormParser(BaseParser):
     def parse(
         self, stream: IO[Any], media_type: Optional[str] = ..., parser_context: Optional[Mapping[str, Any]] = ...
-    ) -> QueryDict: ...
+    ) -> _ImmutableQueryDict: ...
 
 class MultiPartParser(BaseParser):
     def parse(
         self, stream: IO[Any], media_type: Optional[str] = ..., parser_context: Optional[Mapping[str, Any]] = ...
-    ) -> DataAndFiles[QueryDict, MultiValueDict]: ...
+    ) -> DataAndFiles[_ImmutableQueryDict, MultiValueDict]: ...
 
 class FileUploadParser(BaseParser):
     errors: Dict[str, str] = ...

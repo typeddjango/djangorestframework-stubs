@@ -4,7 +4,8 @@ from typing import Any, ContextManager, Dict, Iterator, Optional, Sequence, Tupl
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpRequest, QueryDict
+from django.http import HttpRequest
+from django.http.request import _ImmutableQueryDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
@@ -64,7 +65,7 @@ class Request(HttpRequest):
     @property
     def stream(self) -> Any: ...
     @property
-    def query_params(self) -> QueryDict: ...
+    def query_params(self) -> _ImmutableQueryDict: ...
     @property
     def data(self) -> Dict[str, Any]: ...
     @property  # type: ignore[override]
@@ -81,7 +82,7 @@ class Request(HttpRequest):
     @property
     def DATA(self) -> None: ...
     @property
-    def POST(self) -> QueryDict: ...  # type: ignore[override]
+    def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
     def FILES(self): ...
     @property
