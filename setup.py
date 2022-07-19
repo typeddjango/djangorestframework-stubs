@@ -23,14 +23,14 @@ dependencies = [
     "django-stubs>=1.11.0",
     "typing-extensions>=3.10.0",
     "requests>=2.0.0",
-    "coreapi>=2.0.0",
     "types-requests>=0.1.12",
     "types-PyYAML>=5.4.3",
-    "types-Markdown>=0.1.5",
 ]
 
 extras_require = {
     "compatible-mypy": ["mypy>=0.950,<0.970"],
+    "coreapi": ["coreapi>=2.0.0"],
+    "markdown": ["types-Markdown>=0.1.5"],
 }
 
 setup(

@@ -1,6 +1,5 @@
 from typing import Any, Optional, Tuple, Union
 
-import coreapi  # noqa: F401
 import requests  # noqa: F401
 from django.db.models import QuerySet
 
@@ -8,6 +7,10 @@ try:
     from django.contrib.postgres import fields as postgres_fields
 except ImportError:
     postgres_fields = None  # type: ignore
+try:
+    import coreapi
+except ImportError:
+    coreapi = None  # type: ignore
 try:
     import uritemplate
 except ImportError:
@@ -29,7 +32,7 @@ try:
 except ImportError:
     pygments = None  # type: ignore
 try:
-    import markdown
+    import markdown  # type: ignore
     def apply_markdown(text: str): ...
 
 except ImportError:
@@ -37,7 +40,7 @@ except ImportError:
     markdown = None  # type: ignore
 
 if markdown is not None and pygments is not None:
-    from markdown.preprocessors import Preprocessor
+    from markdown.preprocessors import Preprocessor  # type: ignore
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any = ...
