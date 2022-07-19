@@ -30,7 +30,7 @@ dependencies = [
 extras_require = {
     "compatible-mypy": ["mypy>=0.950,<0.970"],
     "coreapi": ["coreapi>=2.0.0"],
-    "markdown": ["types-Markdown>=0.1.5"]
+    "markdown": ["types-Markdown>=0.1.5"],
 }
 
 setup(
