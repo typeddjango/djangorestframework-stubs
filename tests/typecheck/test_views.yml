@@ -41,7 +41,7 @@
     class MyRetrieveView(generics.RetrieveAPIView[MyModel]):
         pass
 
-    reveal_type(MyRetrieveView().get_object())  # N: Revealed type is "main.MyModel*"
+    reveal_type(MyRetrieveView().get_object())  # N: Revealed type is "main.MyModel"
 
 - case: test_generics_of_extended_generic_view_set
   main: |
@@ -54,4 +54,4 @@
     class MyRetrieveViewSet(viewsets.GenericViewSet[MyModel]):
         pass
 
-    reveal_type(MyRetrieveViewSet().get_object())  # N: Revealed type is "main.MyModel*"
+    reveal_type(MyRetrieveViewSet().get_object())  # N: Revealed type is "main.MyModel"
