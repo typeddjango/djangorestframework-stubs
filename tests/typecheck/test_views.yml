@@ -29,3 +29,29 @@
     view: APIView
     api_request = view.initialize_request(request)
     reveal_type(api_request)  # N: Revealed type is "rest_framework.request.Request"
+
+- case: test_generics_of_extended_generic_view
+  main: |
+    from rest_framework import generics
+    from django.db.models import Model
+
+    class MyModel(Model):
+        pass
+
+    class MyRetrieveView(generics.RetrieveAPIView[MyModel]):
+        pass
+
+    reveal_type(MyRetrieveView().get_object())  # N: Revealed type is "main.MyModel*"
+
+- case: test_generics_of_extended_generic_view_set
+  main: |
+    from rest_framework import viewsets
+    from django.db.models import Model
+
+    class MyModel(Model):
+        pass
+
+    class MyRetrieveViewSet(viewsets.GenericViewSet[MyModel]):
+        pass
+
+    reveal_type(MyRetrieveViewSet().get_object())  # N: Revealed type is "main.MyModel*"
