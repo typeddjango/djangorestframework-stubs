@@ -4,5 +4,5 @@ pre-commit==2.20.0
 pytest==7.1.2
 pytest-mypy-plugins==1.9.3
 djangorestframework==3.13.1
-types-pytz==2022.1.2
+types-pytz==2022.2.1.0
 -e .[compatible-mypy,coreapi,markdown]
