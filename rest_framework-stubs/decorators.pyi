@@ -48,6 +48,7 @@ _MIXED_CASE_HTTP_VERBS = List[
         "PUT",
         "PATCH",
         "TRACE",
+        "HEAD",
         "OPTIONS",
         "get",
         "post",
@@ -55,6 +56,7 @@ _MIXED_CASE_HTTP_VERBS = List[
         "put",
         "patch",
         "trace",
+        "head",
         "options",
     ]
 ]
