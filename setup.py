@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 extras_require = {
-    "compatible-mypy": ["mypy>=0.950,<0.970"],
+    "compatible-mypy": ["mypy>=0.980,<0.990"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
