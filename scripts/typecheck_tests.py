@@ -157,6 +157,8 @@ IGNORED_ERRORS = {
         '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
         "_SupportsHasPermission",
         "Invalid type alias: expression is not a valid type",
+        '"object" not callable',
+        'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
