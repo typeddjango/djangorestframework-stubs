@@ -7,3 +7,8 @@
             def test_my_code(self):
                 client = test.APIClient()
                 reveal_type(client.post('http://google.com'))  # N: Revealed type is "rest_framework.response.Response"
+
+            def test_json_attribute_on_response(self):
+                client = test.APIClient()
+                resp = client.get('http://someapi.com/1')
+                self.assertTrue(resp.json())

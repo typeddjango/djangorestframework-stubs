@@ -1,10 +1,10 @@
 from typing import Any, Mapping, Optional
 
-from django.template.response import SimpleTemplateResponse
+from django.template.response import TemplateResponse
 
 from rest_framework.request import Request
 
-class Response(SimpleTemplateResponse):
+class Response(TemplateResponse):
     data: Any = ...
     exception: bool = ...
     content_type: Optional[str] = ...
