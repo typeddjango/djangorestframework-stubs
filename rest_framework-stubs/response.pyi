@@ -1,12 +1,12 @@
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from django.template.base import Template
-from django.test.client import Client as DjangoClient
 from django.test.utils import ContextList
 from django.template.response import SimpleTemplateResponse
 from django.urls import ResolverMatch
 
 from rest_framework.request import Request
+from rest_framework.test import APIClient
 
 class Response(SimpleTemplateResponse):
     data: Any = ...
@@ -29,7 +29,7 @@ class Response(SimpleTemplateResponse):
     def status_text(self) -> str: ...
 
 class _MonkeyPatchedResponse(Response):
-    client: DjangoClient
+    client: APIClient
     context: ContextList | Dict[str, Any]
     redirect_chain: List[Tuple[str, int]]
     request: Dict[str, Any]
