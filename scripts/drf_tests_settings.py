@@ -1,7 +1,7 @@
 SECRET_KEY = "1"
 SITE_ID = 1
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     "django.contrib.contenttypes",
     "django.contrib.sites",
     "django.contrib.sessions",
@@ -11,4 +11,4 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "rest_framework",
     "rest_framework.authtoken",
-]
+)
