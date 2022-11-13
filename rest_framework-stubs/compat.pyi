@@ -1,4 +1,4 @@
-from typing import Any, Tuple
+from typing import Any
 
 import requests  # noqa: F401
 from django.db.models import QuerySet
@@ -53,9 +53,9 @@ def md_filter_add_syntax_highlight(md: Any) -> bool: ...
 def unicode_http_header(value: str | bytes) -> str: ...
 def distinct(queryset: QuerySet, base: QuerySet | None) -> QuerySet: ...
 
-SHORT_SEPARATORS: Tuple[str, str]
-LONG_SEPARATORS: Tuple[str, str]
-INDENT_SEPARATORS: Tuple[str, str]
+SHORT_SEPARATORS: tuple[str, str]
+LONG_SEPARATORS: tuple[str, str]
+INDENT_SEPARATORS: tuple[str, str]
 
 __all__ = [
     "coreapi",

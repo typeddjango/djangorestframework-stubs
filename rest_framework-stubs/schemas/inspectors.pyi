@@ -1,4 +1,5 @@
-from typing import Any, Mapping, Pattern
+from collections.abc import Mapping, Pattern
+from typing import Any
 
 class ViewInspector:
     header_regex: Pattern

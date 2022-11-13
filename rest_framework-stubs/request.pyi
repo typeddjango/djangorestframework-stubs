@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from types import TracebackType
-from typing import Any, ContextManager, Dict, Iterator, Sequence, Tuple, Type
+from collections.abc import ContextManager, Iterator, Sequence
+from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
@@ -20,7 +21,7 @@ class override_method(ContextManager["Request"]):
     def __enter__(self) -> Request: ...
     def __exit__(
         self,
-        exc_type: Type[BaseException] | None,
+        exc_type: type[BaseException] | None,
         exc_value: BaseException | None,
         traceback: TracebackType | None,
     ) -> bool | None: ...
@@ -38,13 +39,13 @@ class ForcedAuthentication:
     force_user: AnonymousUser | AbstractBaseUser | None
     force_token: str | None
     def __init__(self, force_user: AnonymousUser | AbstractBaseUser | None, force_token: str | None) -> None: ...
-    def authenticate(self, request: Request) -> Tuple[AnonymousUser | AbstractBaseUser | None, Any | None]: ...
+    def authenticate(self, request: Request) -> tuple[AnonymousUser | AbstractBaseUser | None, Any | None]: ...
 
 class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
-    parser_context: Dict[str, Any] | None
+    parser_context: dict[str, Any] | None
     version: str | None
     versioning_scheme: BaseVersioning | None
     _request: HttpRequest
@@ -54,7 +55,7 @@ class Request(HttpRequest):
         parsers: Sequence[BaseParser] | None = ...,
         authenticators: Sequence[BaseAuthentication] | None = ...,
         negotiator: BaseContentNegotiation | None = ...,
-        parser_context: Dict[str, Any] | None = ...,
+        parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
@@ -63,7 +64,7 @@ class Request(HttpRequest):
     @property
     def query_params(self) -> _ImmutableQueryDict: ...
     @property
-    def data(self) -> Dict[str, Any]: ...
+    def data(self) -> dict[str, Any]: ...
     @property  # type: ignore[override]
     def user(self) -> AbstractBaseUser | AnonymousUser: ...  # type: ignore[override]
     @user.setter

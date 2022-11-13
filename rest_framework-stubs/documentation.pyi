@@ -1,4 +1,5 @@
-from typing import Any, Callable, Sequence, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from rest_framework.renderers import BaseRenderer
 from rest_framework.schemas import SchemaGenerator
@@ -9,10 +10,10 @@ def get_docs_view(
     url: str | None = ...,
     description: str | None = ...,
     urlconf: str | None = ...,
-    renderer_classes: Sequence[Type[BaseRenderer]] | None = ...,
+    renderer_classes: Sequence[type[BaseRenderer]] | None = ...,
     public: bool = ...,
     patterns: Sequence[_AnyURL] | None = ...,
-    generator_class: Type[SchemaGenerator] = ...,
+    generator_class: type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
 ) -> Callable[..., Any]: ...
@@ -21,10 +22,10 @@ def get_schemajs_view(
     url: str | None = ...,
     description: str | None = ...,
     urlconf: str | None = ...,
-    renderer_classes: Sequence[Type[BaseRenderer]] | None = ...,
+    renderer_classes: Sequence[type[BaseRenderer]] | None = ...,
     public: bool = ...,
     patterns: Sequence[_AnyURL] | None = ...,
-    generator_class: Type[SchemaGenerator] = ...,
+    generator_class: type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
 ) -> Callable[..., Any]: ...
@@ -33,10 +34,10 @@ def include_docs_urls(
     url: str | None = ...,
     description: str | None = ...,
     urlconf: str | None = ...,
-    renderer_classes: Sequence[Type[BaseRenderer]] | None = ...,
+    renderer_classes: Sequence[type[BaseRenderer]] | None = ...,
     public: bool = ...,
     patterns: Sequence[_AnyURL] | None = ...,
-    generator_class: Type[SchemaGenerator] = ...,
+    generator_class: type[SchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
 ) -> Any: ...

@@ -1,4 +1,5 @@
-from typing import Any, Container, Iterable, MutableMapping, TypeVar, Protocol, Callable
+from collections.abc import Callable, Container, Iterable, MutableMapping
+from typing import Any, TypeVar, Protocol
 
 from django.db.models import Model, QuerySet
 from rest_framework.fields import Field

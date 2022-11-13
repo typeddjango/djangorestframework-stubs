@@ -1,4 +1,5 @@
-from typing import Any, Dict, List, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from django.http import HttpRequest, JsonResponse
 from rest_framework.renderers import BaseRenderer
@@ -12,7 +13,7 @@ class ErrorDetail(str):
     code: str | None
     def __new__(cls, string: str, code: str | None = ...): ...
 
-_Detail = str | List[Any] | Dict[str, Any]
+_Detail = str | list[Any] | dict[str, Any]
 
 class APIException(Exception):
     status_code: int

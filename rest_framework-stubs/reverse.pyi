@@ -1,4 +1,5 @@
-from typing import Any, Callable, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from django.http import HttpRequest
 

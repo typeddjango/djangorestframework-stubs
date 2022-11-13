@@ -1,4 +1,5 @@
-from typing import IO, Any, Dict, Generic, Mapping, Type, TypeVar
+from collections.abc import Mapping
+from typing import IO, Any, Generic, TypeVar
 
 from django.core.files.uploadedfile import UploadedFile
 from django.http.request import _ImmutableQueryDict
@@ -20,11 +21,11 @@ class BaseParser:
     ) -> Mapping[Any, Any] | DataAndFiles: ...
 
 class JSONParser(BaseParser):
-    renderer_class: Type[JSONRenderer]
+    renderer_class: type[JSONRenderer]
     strict: bool
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
-    ) -> Dict[str, Any]: ...
+    ) -> dict[str, Any]: ...
 
 class FormParser(BaseParser):
     def parse(
@@ -37,7 +38,7 @@ class MultiPartParser(BaseParser):
     ) -> DataAndFiles[_ImmutableQueryDict, MultiValueDict]: ...
 
 class FileUploadParser(BaseParser):
-    errors: Dict[str, str]
+    errors: dict[str, str]
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
     ) -> DataAndFiles[None, Mapping[str, UploadedFile]]: ...
