@@ -84,8 +84,8 @@ from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from rest_framework.validators import Validator, UniqueTogetherValidator, BaseUniqueForValidator
 
-LIST_SERIALIZER_KWARGS: Sequence[str] = ...
-ALL_FIELDS: str = ...
+LIST_SERIALIZER_KWARGS: Sequence[str]
+ALL_FIELDS: str
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
@@ -147,7 +147,7 @@ class Serializer(
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: Dict[str, Field]
-    default_error_messages: Dict[str, Any] = ...
+    default_error_messages: Dict[str, Any]
     def get_initial(self) -> Any: ...
     @cached_property
     def fields(self) -> BindingDict: ...
@@ -173,10 +173,10 @@ class ListSerializer(
             Field,
             BaseSerializer,
         ]
-    ] = ...
-    many: bool = ...
-    default_error_messages: Dict[str, Any] = ...
-    allow_empty: Optional[bool] = ...
+    ]
+    many: bool
+    default_error_messages: Dict[str, Any]
+    allow_empty: Optional[bool]
     def __init__(
         self,
         instance: Optional[_IN] = ...,
@@ -213,12 +213,12 @@ class ListSerializer(
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
 class ModelSerializer(Serializer, BaseSerializer[_MT]):
-    serializer_field_mapping: Dict[Type[models.Field], Type[Field]] = ...
-    serializer_related_field: Type[RelatedField] = ...
-    serializer_related_to_field: Type[RelatedField] = ...
-    serializer_url_field: Type[RelatedField] = ...
-    serializer_choice_field: Type[Field] = ...
-    url_field_name: Optional[str] = ...
+    serializer_field_mapping: Dict[Type[models.Field], Type[Field]]
+    serializer_related_field: Type[RelatedField]
+    serializer_related_to_field: Type[RelatedField]
+    serializer_url_field: Type[RelatedField]
+    serializer_choice_field: Type[Field]
+    url_field_name: Optional[str]
     instance: Optional[Union[_MT, Sequence[_MT]]]  # type: ignore[override]
 
     class Meta:

@@ -9,9 +9,9 @@ from rest_framework.request import Request
 from rest_framework.test import APIClient
 
 class Response(SimpleTemplateResponse):
-    data: Any = ...
-    exception: bool = ...
-    content_type: Optional[str] = ...
+    data: Any
+    exception: bool
+    content_type: Optional[str]
     _request: Request
     def __init__(
         self,

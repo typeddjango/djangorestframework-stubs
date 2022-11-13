@@ -2,7 +2,7 @@ from typing import Any, Dict, Generic, MutableMapping, Sequence, Type, TypeVar
 
 from django.db import models
 
-NUMERIC_FIELD_TYPES: Sequence[Type[models.Field]] = ...
+NUMERIC_FIELD_TYPES: Sequence[Type[models.Field]]
 
 _K = TypeVar("_K", bound=type)
 _V = TypeVar("_V")
