@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Mapping, Optional, Protocol, Sequence, Type, TypeVar, Union
+from typing import Any, Callable, List, Mapping, Protocol, Sequence, Type, TypeVar
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -71,26 +71,22 @@ class ViewSetAction(Protocol[_View]):
     __call__: _View
 
 def api_view(
-    http_method_names: Optional[Sequence[str]] = ...,
+    http_method_names: Sequence[str] | None = ...,
 ) -> Callable[[Callable[Concatenate[Request, _P], _RESP]], AsView[Callable[Concatenate[HttpRequest, _P], _RESP]]]: ...
-def renderer_classes(
-    renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]
-) -> Callable[[_View], _View]: ...
-def parser_classes(parser_classes: Sequence[Union[BaseParser, Type[BaseParser]]]) -> Callable[[_View], _View]: ...
+def renderer_classes(renderer_classes: Sequence[BaseRenderer | Type[BaseRenderer]]) -> Callable[[_View], _View]: ...
+def parser_classes(parser_classes: Sequence[BaseParser | Type[BaseParser]]) -> Callable[[_View], _View]: ...
 def authentication_classes(
-    authentication_classes: Sequence[Union[BaseAuthentication, Type[BaseAuthentication]]]
+    authentication_classes: Sequence[BaseAuthentication | Type[BaseAuthentication]],
 ) -> Callable[[_View], _View]: ...
-def throttle_classes(
-    throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]
-) -> Callable[[_View], _View]: ...
+def throttle_classes(throttle_classes: Sequence[BaseThrottle | Type[BaseThrottle]]) -> Callable[[_View], _View]: ...
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
-def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[_View], _View]: ...
+def schema(view_inspector: ViewInspector | Type[ViewInspector] | None) -> Callable[[_View], _View]: ...
 def action(
-    methods: Optional[_MIXED_CASE_HTTP_VERBS] = ...,
+    methods: _MIXED_CASE_HTTP_VERBS | None = ...,
     detail: bool = ...,
-    url_path: Optional[str] = ...,
-    url_name: Optional[str] = ...,
-    suffix: Optional[str] = ...,
-    name: Optional[str] = ...,
+    url_path: str | None = ...,
+    url_name: str | None = ...,
+    suffix: str | None = ...,
+    name: str | None = ...,
     **kwargs: Any,
 ) -> Callable[[_View], ViewSetAction[_View]]: ...

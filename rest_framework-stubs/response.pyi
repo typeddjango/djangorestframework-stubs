@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Mapping
 
 from django.template.base import Template
 from django.test.utils import ContextList
@@ -11,16 +11,16 @@ from rest_framework.test import APIClient
 class Response(SimpleTemplateResponse):
     data: Any
     exception: bool
-    content_type: Optional[str]
+    content_type: str | None
     _request: Request
     def __init__(
         self,
         data: Any = ...,
-        status: Optional[int] = ...,
-        template_name: Optional[str] = ...,
-        headers: Optional[Mapping[str, str]] = ...,
+        status: int | None = ...,
+        template_name: str | None = ...,
+        headers: Mapping[str, str] | None = ...,
         exception: bool = ...,
-        content_type: Optional[str] = ...,
+        content_type: str | None = ...,
     ): ...
     @property
     def rendered_content(self) -> Any: ...
@@ -30,9 +30,9 @@ class Response(SimpleTemplateResponse):
 
 class _MonkeyPatchedResponse(Response):
     client: APIClient
-    context: ContextList | Dict[str, Any]
-    redirect_chain: List[Tuple[str, int]]
-    request: Dict[str, Any]
+    context: ContextList | dict[str, Any]
+    redirect_chain: list[tuple[str, int]]
+    request: dict[str, Any]
     resolver_match: ResolverMatch
-    templates: List[Template]
+    templates: list[Template]
     def json(self) -> Any: ...

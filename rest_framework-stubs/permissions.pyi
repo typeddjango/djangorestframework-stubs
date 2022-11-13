@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Protocol, Sequence, Type, Union
+from typing import Any, Dict, List, Protocol, Sequence, Type
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -10,7 +10,7 @@ class _SupportsHasPermission(Protocol):
     def has_permission(self, request: Request, view: APIView) -> bool: ...
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
-_PermissionClass = Union[Type[BasePermission], OperandHolder, SingleOperandHolder]
+_PermissionClass = Type[BasePermission] | OperandHolder | SingleOperandHolder
 
 class OperationHolderMixin:
     def __and__(self, other: _PermissionClass) -> OperandHolder: ...
