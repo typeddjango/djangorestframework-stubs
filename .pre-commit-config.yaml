@@ -27,6 +27,10 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
+        additional_dependencies:
+        - flake8-pyi==22.10.0
+        types: []
+        files: ^.*.pyi?$
   - repo: local
     hooks:
       - id: mypy
