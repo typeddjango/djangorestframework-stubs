@@ -1,5 +1,6 @@
 from collections import OrderedDict
-from typing import Any, Callable, Dict, Generic, Iterable, List, Mapping, Sequence, TypeVar
+from collections.abc import Callable, Iterable, Mapping, Sequence
+from typing import Any, Generic, TypeVar
 
 from django.db.models import Manager, Model, QuerySet
 from rest_framework.fields import Field, Option
@@ -50,8 +51,8 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
         help_text: str = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: Dict[str, str] | None = ...,
-        style: Dict[str, str] | None = ...,
+        error_messages: dict[str, str] | None = ...,
+        style: dict[str, str] | None = ...,
     ): ...
     # mypy doesn't accept the typing below, although its accurate to what this class is doing, hence the ignore
     def __new__(cls, *args: Any, **kwargs: Any) -> RelatedField[_MT, _DT, _PT] | ManyRelatedField: ...  # type: ignore
@@ -89,8 +90,8 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         help_text: str = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: Dict[str, str] | None = ...,
-        style: Dict[str, str] | None = ...,
+        error_messages: dict[str, str] | None = ...,
+        style: dict[str, str] | None = ...,
         pk_field: str | Field | None = ...,
     ): ...
 
@@ -117,8 +118,8 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         help_text: str = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: Dict[str, str] | None = ...,
-        style: Dict[str, str] | None = ...,
+        error_messages: dict[str, str] | None = ...,
+        style: dict[str, str] | None = ...,
         view_name: str | None = ...,
         lookup_field: str | None = ...,
         lookup_url_kwarg: str | None = ...,
@@ -148,15 +149,15 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         help_text: str = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: Dict[str, str] | None = ...,
-        style: Dict[str, str] | None = ...,
+        error_messages: dict[str, str] | None = ...,
+        style: dict[str, str] | None = ...,
         slug_field: str | None = ...,
     ): ...
     def to_internal_value(self, data: Any) -> _MT: ...
     def to_representation(self, value: _MT) -> str: ...
 
-class ManyRelatedField(Field[Sequence[Any], Sequence[Any], List[Any], Any]):
-    default_empty_html: List[object]
+class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
+    default_empty_html: list[object]
     html_cutoff: int | None
     html_cutoff_text: str | None
     child_relation: RelatedField
@@ -171,13 +172,13 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], List[Any], Any]):
         source: Callable | str = ...,
         label: str | None = ...,
         help_text: str | None = ...,
-        style: Dict[str, str] | None = ...,
-        error_messages: Dict[str, str] | None = ...,
+        style: dict[str, str] | None = ...,
+        error_messages: dict[str, str] | None = ...,
         validators: Sequence[Validator[Sequence[Any]]] | None = ...,
         allow_null: bool = ...,
         child_relation: RelatedField = ...,
     ): ...
-    def get_value(self, dictionary: Mapping[Any, Any]) -> List[Any]: ...  # type: ignore[override]
+    def get_value(self, dictionary: Mapping[Any, Any]) -> list[Any]: ...  # type: ignore[override]
     def get_choices(self, cutoff: int | None = ...) -> OrderedDict: ...
     @property
     def choices(self) -> OrderedDict: ...

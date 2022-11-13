@@ -1,4 +1,5 @@
-from typing import Any, Mapping, Pattern, Sequence
+from collections.abc import Mapping, Pattern, Sequence
+from typing import Any
 
 from rest_framework.request import Request
 

@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from typing_extensions import TypedDict
 
@@ -14,7 +15,7 @@ class DefaultsSettings(TypedDict, total=False):
     DEFAULT_PAGINATION_CLASS: str | None
     DEFAULT_FILTER_BACKENDS: Sequence[str]
     DEFAULT_SCHEMA_CLASS: str
-    DEFAULT_THROTTLE_RATES: Dict[str, float | int | None]
+    DEFAULT_THROTTLE_RATES: dict[str, float | int | None]
     NUM_PROXIES: int | None
     PAGE_SIZE: int | None
     SEARCH_PARAM: str
@@ -47,7 +48,7 @@ class DefaultsSettings(TypedDict, total=False):
     HTML_SELECT_CUTOFF: int
     HTML_SELECT_CUTOFF_TEXT: str
     SCHEMA_COERCE_PATH_PK: bool
-    SCHEMA_COERCE_METHOD_NAMES: Dict[str, str]
+    SCHEMA_COERCE_METHOD_NAMES: dict[str, str]
 
 DEFAULTS: DefaultsSettings
 IMPORT_STRINGS: Sequence[str]
@@ -83,7 +84,7 @@ class _Settings(APISettings):
     DEFAULT_PAGINATION_CLASS: str | None
     DEFAULT_FILTER_BACKENDS: Sequence[str]
     DEFAULT_SCHEMA_CLASS: str
-    DEFAULT_THROTTLE_RATES: Dict[str, float | int | None]
+    DEFAULT_THROTTLE_RATES: dict[str, float | int | None]
     NUM_PROXIES: int | None
     PAGE_SIZE: int | None
     SEARCH_PARAM: str
@@ -116,7 +117,7 @@ class _Settings(APISettings):
     HTML_SELECT_CUTOFF: int
     HTML_SELECT_CUTOFF_TEXT: str
     SCHEMA_COERCE_PATH_PK: bool
-    SCHEMA_COERCE_METHOD_NAMES: Dict[str, str]
+    SCHEMA_COERCE_METHOD_NAMES: dict[str, str]
 
 api_settings: _Settings
 

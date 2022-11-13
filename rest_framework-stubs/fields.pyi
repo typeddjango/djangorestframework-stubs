@@ -4,25 +4,8 @@ from collections import OrderedDict
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generator,
-    Generic,
-    Iterable,
-    List,
-    Mapping,
-    MutableMapping,
-    NoReturn,
-    Pattern,
-    Protocol,
-    Sequence,
-    Set,
-    Tuple,
-    Type,
-    TypeVar,
-)
+from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Pattern, Sequence
+from typing import Any, Generic, NoReturn, Protocol, TypeVar
 
 from django.core.files.base import File
 from django.db import models
@@ -59,10 +42,10 @@ class Option(Protocol):
     display_text: str
 
 def is_simple_callable(obj: Callable) -> bool: ...
-def get_attribute(instance: Any, attrs: List[str] | None) -> Any: ...
+def get_attribute(instance: Any, attrs: list[str] | None) -> Any: ...
 def set_value(dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
 def to_choices_dict(choices: Iterable[Any]) -> OrderedDict: ...
-def flatten_choices_dict(choices: Dict[Any, Any]) -> OrderedDict: ...
+def flatten_choices_dict(choices: dict[Any, Any]) -> OrderedDict: ...
 def iter_options(
     grouped_choices: OrderedDict, cutoff: int | None = ..., cutoff_text: str | None = ...
 ) -> Generator[Option, None, None]: ...
@@ -89,9 +72,9 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
     default: _VT | None
     default_empty_html: Any
-    default_error_messages: Dict[str, str]
-    default_validators: List[Validator[_VT]]
-    error_messages: Dict[str, str]
+    default_error_messages: dict[str, str]
+    default_validators: list[Validator[_VT]]
+    error_messages: dict[str, str]
     field_name: str | None
     help_text: str | None
     initial: _VT | Callable[[], _VT] | None
@@ -100,8 +83,8 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     read_only: bool
     required: bool
     source: Callable | str | None
-    source_attrs: List[str]
-    style: Dict[str, Any]
+    source_attrs: list[str]
+    style: dict[str, Any]
     write_only: bool
     def __init__(
         self,
@@ -113,22 +96,22 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[_VT]] | None = ...,
         allow_null: bool = ...,
     ): ...
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
     @property
-    def validators(self) -> List[Validator[_VT]]: ...
+    def validators(self) -> list[Validator[_VT]]: ...
     @validators.setter
-    def validators(self, validators: List[Validator[_VT]]) -> None: ...
-    def get_validators(self) -> List[Validator[_VT]]: ...
+    def validators(self, validators: list[Validator[_VT]]) -> None: ...
+    def get_validators(self) -> list[Validator[_VT]]: ...
     def get_initial(self) -> _VT | None: ...
     def get_value(self, dictionary: Mapping[Any, Any]) -> Any: ...
     def get_attribute(self, instance: _IN) -> _RP | None: ...
     def get_default(self) -> _VT | None: ...
-    def validate_empty_values(self, data: Any) -> Tuple[bool, Any]: ...
+    def validate_empty_values(self, data: Any) -> tuple[bool, Any]: ...
     def run_validation(self, data: Any = ...) -> Any: ...
     def run_validators(self, value: Any) -> None: ...
     def to_internal_value(self, data: _DT) -> _VT: ...
@@ -137,7 +120,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     @property
     def root(self) -> BaseSerializer: ...
     @property
-    def context(self) -> Dict[str, Any]: ...
+    def context(self) -> dict[str, Any]: ...
     def __new__(cls, *args: Any, **kwargs: Any) -> Field: ...
     def __deepcopy__(self, memo: Mapping[Any, Any]) -> Field: ...
 
@@ -149,9 +132,9 @@ class BooleanField(
         Any,
     ]
 ):
-    TRUE_VALUES: Set[str | bool | int]
-    FALSE_VALUES: Set[str | bool | int | float]
-    NULL_VALUES: Set[str | None]
+    TRUE_VALUES: set[str | bool | int]
+    FALSE_VALUES: set[str | bool | int | float]
+    NULL_VALUES: set[str | None]
 
 class NullBooleanField(
     Field[
@@ -161,9 +144,9 @@ class NullBooleanField(
         Any,
     ]
 ):
-    TRUE_VALUES: Set[str | bool | int]
-    FALSE_VALUES: Set[str | bool | int | float]
-    NULL_VALUES: Set[str | None]
+    TRUE_VALUES: set[str | bool | int]
+    FALSE_VALUES: set[str | bool | int | float]
+    NULL_VALUES: set[str | None]
 
 class CharField(Field[str, str, str, Any]):
     allow_blank: bool
@@ -181,8 +164,8 @@ class CharField(Field[str, str, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -206,8 +189,8 @@ class RegexField(CharField):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -230,8 +213,8 @@ class SlugField(CharField):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -257,8 +240,8 @@ class UUIDField(Field[uuid.UUID, uuid.UUID | str | int, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[uuid.UUID]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -278,8 +261,8 @@ class IPAddressField(CharField):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -306,8 +289,8 @@ class IntegerField(Field[int, float | int | str, int, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[int]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -330,8 +313,8 @@ class FloatField(Field[float, float | int | str, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[float]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -364,8 +347,8 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Decimal]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -390,8 +373,8 @@ class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any])
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[datetime.datetime]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -414,8 +397,8 @@ class DateField(Field[datetime.date, datetime.date | str, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[datetime.date]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -436,8 +419,8 @@ class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[datetime.time]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -458,18 +441,18 @@ class DurationField(Field[datetime.timedelta, datetime.timedelta | str, str, Any
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[datetime.timedelta]] | None = ...,
         allow_null: bool = ...,
     ): ...
 
-class ChoiceField(Field[str, str | int | Tuple[str | int, str | int | tuple], str, Any]):
+class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], str, Any]):
     html_cutoff: int | None
     html_cutoff_text: str | None
     allow_blank: bool
     grouped_choices: OrderedDict
-    choice_strings_to_values: Dict[str, Any]
+    choice_strings_to_values: dict[str, Any]
     _choices: OrderedDict
     def __init__(
         self,
@@ -483,8 +466,8 @@ class ChoiceField(Field[str, str | int | Tuple[str | int, str | int | tuple], st
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
@@ -492,7 +475,7 @@ class ChoiceField(Field[str, str | int | Tuple[str | int, str | int | tuple], st
         allow_blank: bool = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
-    def _get_choices(self) -> Dict[Any, Any]: ...
+    def _get_choices(self) -> dict[Any, Any]: ...
     def _set_choices(self, choices: Iterable[Any]) -> None: ...
     choices = property(_get_choices, _set_choices)
 
@@ -500,8 +483,8 @@ class MultipleChoiceField(
     ChoiceField,
     Field[
         str,
-        Sequence[str | int | Tuple[str | int, str | int]],
-        Sequence[str | Tuple[str | int, str | int]],
+        Sequence[str | int | tuple[str | int, str | int]],
+        Sequence[str | tuple[str | int, str | int]],
         Any,
     ],
 ):
@@ -512,13 +495,13 @@ class MultipleChoiceField(
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[Set[str | int] | Set[str] | Set[int]] = ...,
-        initial: _DefaultInitial[Set[str | int] | Set[str] | Set[int]] = ...,
+        default: _DefaultInitial[set[str | int] | set[str] | set[int]] = ...,
+        initial: _DefaultInitial[set[str | int] | set[str] | set[int]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
@@ -543,8 +526,8 @@ class FilePathField(ChoiceField):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
@@ -567,8 +550,8 @@ class FileField(Field[File, File, str | None, Any]):  # this field can return No
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[File]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,
@@ -589,19 +572,19 @@ class ImageField(FileField):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[File]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,
         allow_empty_file: bool = ...,
         use_url: bool = ...,
-        _DjangoImageField: Type[SupportsToPython] = ...,
+        _DjangoImageField: type[SupportsToPython] = ...,
     ): ...
 
 class _UnvalidatedField(Field): ...
 
-class ListField(Field[List[Any], List[Any], List[Any], Any]):
+class ListField(Field[list[Any], list[Any], list[Any], Any]):
     child: Field
     allow_empty: bool
     max_length: int | None
@@ -611,14 +594,14 @@ class ListField(Field[List[Any], List[Any], List[Any], Any]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[List[Any]] = ...,
-        initial: _DefaultInitial[List[Any]] = ...,
+        default: _DefaultInitial[list[Any]] = ...,
+        initial: _DefaultInitial[list[Any]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
-        validators: Sequence[Validator[List[Any]]] | None = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
         *,
         child: Field = ...,
@@ -626,9 +609,9 @@ class ListField(Field[List[Any], List[Any], List[Any], Any]):
         max_length: int = ...,
         min_length: int = ...,
     ): ...
-    def run_child_validation(self, data: List[Mapping[Any, Any]]) -> Any: ...
+    def run_child_validation(self, data: list[Mapping[Any, Any]]) -> Any: ...
 
-class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any], Any]):
+class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
     child: Field
     allow_empty: bool
     def __init__(
@@ -636,14 +619,14 @@ class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any], Any]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[Dict[Any, Any]] = ...,
-        initial: _DefaultInitial[Dict[Any, Any]] = ...,
+        default: _DefaultInitial[dict[Any, Any]] = ...,
+        initial: _DefaultInitial[dict[Any, Any]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
-        validators: Sequence[Validator[Dict[Any, Any]]] | None = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[dict[Any, Any]]] | None = ...,
         allow_null: bool = ...,
         *,
         child: Field = ...,
@@ -654,7 +637,7 @@ class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any], Any]):
 class HStoreField(DictField):
     child: CharField
 
-class JSONField(Field[Dict[str, Any] | List[Dict[str, Any]], Dict[str, Any] | List[Dict[str, Any]], str, Any]):
+class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
     binary: bool
     encoder: JSONEncoder | None
     decoder: JSONDecoder | None
@@ -668,8 +651,8 @@ class JSONField(Field[Dict[str, Any] | List[Dict[str, Any]], Dict[str, Any] | Li
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         *,
@@ -695,8 +678,8 @@ class SerializerMethodField(Field):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -716,8 +699,8 @@ class ModelField(Field):
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
-        style: Dict[str, Any] = ...,
-        error_messages: Dict[str, str] = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,

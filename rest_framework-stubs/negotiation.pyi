@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from collections.abc import Iterable
 
 from rest_framework.parsers import BaseParser
 from rest_framework.renderers import BaseRenderer
@@ -11,5 +11,5 @@ class BaseContentNegotiation:
 
 class DefaultContentNegotiation(BaseContentNegotiation):
     settings = api_settings
-    def filter_renderers(self, renderers: Iterable[BaseRenderer], format: str) -> List[BaseRenderer]: ...
-    def get_accept_list(self, request: Request) -> List[str]: ...
+    def filter_renderers(self, renderers: Iterable[BaseRenderer], format: str) -> list[BaseRenderer]: ...
+    def get_accept_list(self, request: Request) -> list[str]: ...

@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, List, Tuple
+from collections.abc import Callable
+from typing import Any
 
 from django.core.cache.backends.base import BaseCache
 from rest_framework.request import Request
@@ -12,17 +13,17 @@ class BaseThrottle:
 class SimpleRateThrottle(BaseThrottle):
     cache: BaseCache
     cache_format: str
-    history: List[Any]
+    history: list[Any]
     key: str | None
     now: float
     rate: str | None
     scope: str | None
-    THROTTLE_RATES: Dict[str, str | None]
+    THROTTLE_RATES: dict[str, str | None]
     timer: Callable[..., float]
     def __init__(self) -> None: ...
     def get_cache_key(self, request: Request, view: APIView) -> str | None: ...
     def get_rate(self) -> str | None: ...
-    def parse_rate(self, rate) -> Tuple[int | None, int | None]: ...
+    def parse_rate(self, rate) -> tuple[int | None, int | None]: ...
     def throttle_failure(self) -> bool: ...
     def throttle_success(self) -> bool: ...
 

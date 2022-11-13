@@ -1,4 +1,4 @@
-from typing import Iterable, List, Sequence
+from collections.abc import Iterable, Sequence
 
 from django.urls.resolvers import URLPattern, URLResolver
 
@@ -9,9 +9,9 @@ def apply_suffix_patterns(
     suffix_pattern: str,
     suffix_required: bool,
     suffix_route: str | None = ...,
-) -> List[URLResolver | URLPattern]: ...
+) -> list[URLResolver | URLPattern]: ...
 def format_suffix_patterns(
     urlpatterns: Iterable[_AnyURL],
     suffix_required: bool = ...,
     allowed: Sequence[str] | None = ...,
-) -> List[URLResolver | URLPattern]: ...
+) -> list[URLResolver | URLPattern]: ...
