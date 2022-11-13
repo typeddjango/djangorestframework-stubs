@@ -37,25 +37,25 @@ from rest_framework.validators import Validator
 class _Empty(Enum):
     sentinel = 0
 
-empty: Final = _Empty.sentinel
+empty: Final
 
 class BuiltinSignatureError(Exception): ...
 
 class CreateOnlyDefault:
-    requires_context: bool = ...
-    default: Any = ...
+    requires_context: bool
+    default: Any
     def __init__(self, default: Any) -> None: ...
     def __call__(self, serializer_field: Field): ...
 
 class CurrentUserDefault:
-    requires_context: bool = ...
+    requires_context: bool
     def __call__(self, serializer_field: Field): ...
 
 class SkipField(Exception): ...
 
 class Option(Protocol):
-    start_option_group: bool = ...
-    end_option_group: bool = ...
+    start_option_group: bool
+    end_option_group: bool
     label: str
     value: str
     display_text: str
@@ -88,21 +88,21 @@ class SupportsToPython(Protocol):
 _DefaultInitial = Union[_VT, Callable[[], _VT], None, _Empty]
 
 class Field(Generic[_VT, _DT, _RP, _IN]):
-    allow_null: bool = ...
-    default: Optional[_VT] = ...
-    default_empty_html: Any = ...
-    default_error_messages: Dict[str, str] = ...
-    default_validators: List[Validator[_VT]] = ...
-    error_messages: Dict[str, str] = ...
-    field_name: Optional[str] = ...
-    help_text: Optional[str] = ...
-    initial: Optional[Union[_VT, Callable[[], _VT]]] = ...
+    allow_null: bool
+    default: Optional[_VT]
+    default_empty_html: Any
+    default_error_messages: Dict[str, str]
+    default_validators: List[Validator[_VT]]
+    error_messages: Dict[str, str]
+    field_name: Optional[str]
+    help_text: Optional[str]
+    initial: Optional[Union[_VT, Callable[[], _VT]]]
     label: Optional[str]
     parent: BaseSerializer
     read_only: bool
     required: bool
     source: Optional[Union[Callable, str]]
-    source_attrs: List[str] = ...
+    source_attrs: List[str]
     style: Dict[str, Any]
     write_only: bool
     def __init__(
@@ -151,9 +151,9 @@ class BooleanField(
         Any,
     ]
 ):
-    TRUE_VALUES: Set[Union[str, bool, int]] = ...
-    FALSE_VALUES: Set[Union[str, bool, int, float]] = ...
-    NULL_VALUES: Set[Union[str, None]] = ...
+    TRUE_VALUES: Set[Union[str, bool, int]]
+    FALSE_VALUES: Set[Union[str, bool, int, float]]
+    NULL_VALUES: Set[Union[str, None]]
 
 class NullBooleanField(
     Field[
@@ -163,15 +163,15 @@ class NullBooleanField(
         Any,
     ]
 ):
-    TRUE_VALUES: Set[Union[str, bool, int]] = ...
-    FALSE_VALUES: Set[Union[str, bool, int, float]] = ...
-    NULL_VALUES: Set[Union[str, None]] = ...
+    TRUE_VALUES: Set[Union[str, bool, int]]
+    FALSE_VALUES: Set[Union[str, bool, int, float]]
+    NULL_VALUES: Set[Union[str, None]]
 
 class CharField(Field[str, str, str, Any]):
-    allow_blank: bool = ...
-    trim_whitespace: bool = ...
-    max_length: Optional[int] = ...
-    min_length: Optional[int] = ...
+    allow_blank: bool
+    trim_whitespace: bool
+    max_length: Optional[int]
+    min_length: Optional[int]
     def __init__(
         self,
         *,
@@ -219,7 +219,7 @@ class RegexField(CharField):
     ): ...
 
 class SlugField(CharField):
-    allow_unicode: bool = ...
+    allow_unicode: bool
     def __init__(
         self,
         allow_unicode: bool = ...,
@@ -245,7 +245,7 @@ class SlugField(CharField):
 class URLField(CharField): ...
 
 class UUIDField(Field[uuid.UUID, Union[uuid.UUID, str, int], str, Any]):
-    valid_formats: Sequence[str] = ...
+    valid_formats: Sequence[str]
     uuid_format: str
     def __init__(
         self,
@@ -291,10 +291,10 @@ class IPAddressField(CharField):
     ): ...
 
 class IntegerField(Field[int, Union[float, int, str], int, Any]):
-    MAX_STRING_LENGTH: int = ...
-    re_decimal: Pattern = ...
-    max_value: Optional[int] = ...
-    min_value: Optional[int] = ...
+    MAX_STRING_LENGTH: int
+    re_decimal: Pattern
+    max_value: Optional[int]
+    min_value: Optional[int]
     def __init__(
         self,
         *,
@@ -315,10 +315,10 @@ class IntegerField(Field[int, Union[float, int, str], int, Any]):
     ): ...
 
 class FloatField(Field[float, Union[float, int, str], str, Any]):
-    MAX_STRING_LENGTH: int = ...
-    re_decimal: Pattern = ...
-    max_value: Optional[float] = ...
-    min_value: Optional[float] = ...
+    MAX_STRING_LENGTH: int
+    re_decimal: Pattern
+    max_value: Optional[float]
+    min_value: Optional[float]
     def __init__(
         self,
         *,
@@ -339,7 +339,7 @@ class FloatField(Field[float, Union[float, int, str], str, Any]):
     ): ...
 
 class DecimalField(Field[Decimal, Union[int, float, str, Decimal], str, Any]):
-    MAX_STRING_LENGTH: int = ...
+    MAX_STRING_LENGTH: int
     max_digits: Optional[int]
     decimal_places: Optional[int]
     coerce_to_string: Optional[bool]
@@ -375,10 +375,10 @@ class DecimalField(Field[Decimal, Union[int, float, str, Decimal], str, Any]):
     def quantize(self, value: Decimal) -> Decimal: ...
 
 class DateTimeField(Field[datetime.datetime, Union[datetime.datetime, str], str, Any]):
-    datetime_parser: Callable[[str, str], datetime.datetime] = ...
-    format: Optional[str] = ...
-    input_formats: Sequence[str] = ...
-    timezone: datetime.tzinfo = ...
+    datetime_parser: Callable[[str, str], datetime.datetime]
+    format: Optional[str]
+    input_formats: Sequence[str]
+    timezone: datetime.tzinfo
     def __init__(
         self,
         format: Optional[str] = ...,
@@ -401,9 +401,9 @@ class DateTimeField(Field[datetime.datetime, Union[datetime.datetime, str], str,
     def default_timezone(self) -> Optional[str]: ...
 
 class DateField(Field[datetime.date, Union[datetime.date, str], str, Any]):
-    datetime_parser: Callable[[str, str], datetime.datetime] = ...
-    format: Optional[str] = ...
-    input_formats: Sequence[str] = ...
+    datetime_parser: Callable[[str, str], datetime.datetime]
+    format: Optional[str]
+    input_formats: Sequence[str]
     def __init__(
         self,
         format: Optional[str] = ...,
@@ -423,9 +423,9 @@ class DateField(Field[datetime.date, Union[datetime.date, str], str, Any]):
     ): ...
 
 class TimeField(Field[datetime.time, Union[datetime.time, str], str, Any]):
-    datetime_parser: Callable[[str, str], datetime.datetime] = ...
-    format: Optional[str] = ...
-    input_formats: Sequence[str] = ...
+    datetime_parser: Callable[[str, str], datetime.datetime]
+    format: Optional[str]
+    input_formats: Sequence[str]
     def __init__(
         self,
         format: Optional[str] = ...,
@@ -445,8 +445,8 @@ class TimeField(Field[datetime.time, Union[datetime.time, str], str, Any]):
     ): ...
 
 class DurationField(Field[datetime.timedelta, Union[datetime.timedelta, str], str, Any]):
-    max_value: Optional[datetime.timedelta] = ...
-    min_value: Optional[datetime.timedelta] = ...
+    max_value: Optional[datetime.timedelta]
+    min_value: Optional[datetime.timedelta]
     def __init__(
         self,
         *,
@@ -467,12 +467,12 @@ class DurationField(Field[datetime.timedelta, Union[datetime.timedelta, str], st
     ): ...
 
 class ChoiceField(Field[str, Union[str, int, Tuple[Union[str, int], Union[str, int, tuple]]], str, Any]):
-    html_cutoff: Optional[int] = ...
-    html_cutoff_text: Optional[str] = ...
-    allow_blank: bool = ...
-    grouped_choices: OrderedDict = ...
-    choice_strings_to_values: Dict[str, Any] = ...
-    _choices: OrderedDict = ...
+    html_cutoff: Optional[int]
+    html_cutoff_text: Optional[str]
+    allow_blank: bool
+    grouped_choices: OrderedDict
+    choice_strings_to_values: Dict[str, Any]
+    _choices: OrderedDict
     def __init__(
         self,
         choices: Iterable[Any],
@@ -507,7 +507,7 @@ class MultipleChoiceField(
         Any,
     ],
 ):
-    allow_empty: bool = ...
+    allow_empty: bool
     def __init__(
         self,
         choices: Iterable[Any],
@@ -555,9 +555,9 @@ class FilePathField(ChoiceField):
     ): ...
 
 class FileField(Field[File, File, Union[str, None], Any]):  # this field can return None without raising!
-    max_length: int = ...
-    allow_empty_file: bool = ...
-    use_url: bool = ...
+    max_length: int
+    allow_empty_file: bool
+    use_url: bool
     def __init__(
         self,
         *,
@@ -579,7 +579,7 @@ class FileField(Field[File, File, Union[str, None], Any]):  # this field can ret
     ): ...
 
 class ImageField(FileField):
-    _DjangoImageField: SupportsToPython = ...
+    _DjangoImageField: SupportsToPython
     def __init__(
         self,
         *,
@@ -604,10 +604,10 @@ class ImageField(FileField):
 class _UnvalidatedField(Field): ...
 
 class ListField(Field[List[Any], List[Any], List[Any], Any]):
-    child: Field = ...
-    allow_empty: bool = ...
-    max_length: Optional[int] = ...
-    min_length: Optional[int] = ...
+    child: Field
+    allow_empty: bool
+    max_length: Optional[int]
+    min_length: Optional[int]
     def __init__(
         self,
         read_only: bool = ...,
@@ -631,8 +631,8 @@ class ListField(Field[List[Any], List[Any], List[Any], Any]):
     def run_child_validation(self, data: List[Mapping[Any, Any]]) -> Any: ...
 
 class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any], Any]):
-    child: Field = ...
-    allow_empty: bool = ...
+    child: Field
+    allow_empty: bool
     def __init__(
         self,
         read_only: bool = ...,
@@ -654,14 +654,14 @@ class DictField(Field[Dict[Any, Any], Dict[Any, Any], Dict[Any, Any], Any]):
     def run_child_validation(self, data: Any) -> Any: ...
 
 class HStoreField(DictField):
-    child: CharField = ...
+    child: CharField
 
 class JSONField(
     Field[Union[Dict[str, Any], List[Dict[str, Any]]], Union[Dict[str, Any], List[Dict[str, Any]]], str, Any]
 ):
-    binary: bool = ...
-    encoder: Optional[JSONEncoder] = ...
-    decoder: Optional[JSONDecoder] = ...
+    binary: bool
+    encoder: Optional[JSONEncoder]
+    decoder: Optional[JSONDecoder]
     def __init__(
         self,
         read_only: bool = ...,
@@ -686,7 +686,7 @@ class ReadOnlyField(Field): ...
 class HiddenField(Field): ...
 
 class SerializerMethodField(Field):
-    method_name: str = ...
+    method_name: str
     def __init__(
         self,
         method_name: Optional[str] = ...,
@@ -706,8 +706,8 @@ class SerializerMethodField(Field):
     ): ...
 
 class ModelField(Field):
-    model_field: models.Field = ...
-    max_length: int = ...
+    model_field: models.Field
+    max_length: int
     def __init__(
         self,
         model_field: models.Field,
