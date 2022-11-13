@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, TypeVar
+from typing import Any, Dict, Iterable, List, Mapping, Sequence, Tuple, TypeVar
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -25,7 +25,7 @@ class SearchFilter(BaseFilterBackend):
 
 class OrderingFilter(BaseFilterBackend):
     ordering_param: str
-    ordering_fields: Optional[Sequence[str]]
+    ordering_fields: Sequence[str] | None
     ordering_title: str
     ordering_description: str
     template: str

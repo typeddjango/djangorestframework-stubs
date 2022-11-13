@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Type, Union
+from typing import Any, Dict, Type
 
 import coreapi
 import requests
@@ -12,10 +12,10 @@ from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
-from rest_framework.response import _MonkeyPatchedResponse
+from rest_framework.response import Response
 
 def force_authenticate(
-    request: HttpRequest, user: Optional[Union[AnonymousUser, AbstractBaseUser]] = ..., token: Optional[Token] = ...
+    request: HttpRequest, user: AnonymousUser | AbstractBaseUser | None = ..., token: Token | None = ...
 ) -> None: ...
 
 class HeaderDict(urllib3._collections.HTTPHeaderDict):
@@ -50,33 +50,31 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
-    def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def delete(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def options(self, path: str, data: Union[Dict[str, str], str] = ..., format: Optional[str] = ..., content_type: Optional[Any] = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def get(self, path: str, data: Dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
+    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def options(self, path: str, data: Dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def generic(  # type: ignore[override]
         self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Request: ...
 
 class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any): ...
-    def get_response(self, request: Request) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def get_response(self, request: Request) -> Response: ...  # type: ignore[override]
 
 class APIClient(APIRequestFactory, DjangoClient):
     handler: Any
     def credentials(self, **kwargs: Any): ...
-    def force_authenticate(
-        self, user: Union[AnonymousUser, AbstractBaseUser] = ..., token: Optional[Token] = ...
-    ) -> None: ...
-    def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def get(self, path: str, data: Optional[Union[Dict[str, Any], str]] = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
-    def post(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def put(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def patch(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def delete(self, path: str, data: Optional[Any] = ..., format: Optional[str] = ..., content_type: Optional[str] = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def options(self, path: str, data: Union[Dict[str, str], str] = ..., format: Optional[str] = ..., content_type: Optional[Any] = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def force_authenticate(self, user: AnonymousUser | AbstractBaseUser = ..., token: Token | None = ...) -> None: ...
+    def request(self, **kwargs: Any) -> Response: ...  # type: ignore[override]
+    def get(self, path: str, data: Dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
+    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
+    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
+    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
+    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
+    def options(self, path: str, data: Dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):

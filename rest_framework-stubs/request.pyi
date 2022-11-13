@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from types import TracebackType
-from typing import Any, ContextManager, Dict, Iterator, Optional, Sequence, Tuple, Type, Union
+from typing import Any, ContextManager, Dict, Iterator, Sequence, Tuple, Type
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
@@ -20,10 +20,10 @@ class override_method(ContextManager["Request"]):
     def __enter__(self) -> Request: ...
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
-    ) -> Optional[bool]: ...
+        exc_type: Type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> bool | None: ...
 
 class WrappedAttributeError(Exception): ...
 
@@ -35,30 +35,26 @@ class Empty: ...
 def clone_request(request: Request, method: str) -> Request: ...
 
 class ForcedAuthentication:
-    force_user: Optional[Union[AnonymousUser, AbstractBaseUser]]
-    force_token: Optional[str]
-    def __init__(
-        self, force_user: Optional[Union[AnonymousUser, AbstractBaseUser]], force_token: Optional[str]
-    ) -> None: ...
-    def authenticate(
-        self, request: Request
-    ) -> Tuple[Optional[Union[AnonymousUser, AbstractBaseUser]], Optional[Any]]: ...
+    force_user: AnonymousUser | AbstractBaseUser | None
+    force_token: str | None
+    def __init__(self, force_user: AnonymousUser | AbstractBaseUser | None, force_token: str | None) -> None: ...
+    def authenticate(self, request: Request) -> Tuple[AnonymousUser | AbstractBaseUser | None, Any | None]: ...
 
 class Request(HttpRequest):
-    parsers: Optional[Sequence[BaseParser]]
-    authenticators: Optional[Sequence[Union[BaseAuthentication, ForcedAuthentication]]]
-    negotiator: Optional[BaseContentNegotiation]
-    parser_context: Optional[Dict[str, Any]]
-    version: Optional[str]
-    versioning_scheme: Optional[BaseVersioning]
+    parsers: Sequence[BaseParser] | None
+    authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
+    negotiator: BaseContentNegotiation | None
+    parser_context: Dict[str, Any] | None
+    version: str | None
+    versioning_scheme: BaseVersioning | None
     _request: HttpRequest
     def __init__(
         self,
         request: HttpRequest,
-        parsers: Optional[Sequence[BaseParser]] = ...,
-        authenticators: Optional[Sequence[BaseAuthentication]] = ...,
-        negotiator: Optional[BaseContentNegotiation] = ...,
-        parser_context: Optional[Dict[str, Any]] = ...,
+        parsers: Sequence[BaseParser] | None = ...,
+        authenticators: Sequence[BaseAuthentication] | None = ...,
+        negotiator: BaseContentNegotiation | None = ...,
+        parser_context: Dict[str, Any] | None = ...,
     ) -> None: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
@@ -69,15 +65,15 @@ class Request(HttpRequest):
     @property
     def data(self) -> Dict[str, Any]: ...
     @property  # type: ignore[override]
-    def user(self) -> Union[AbstractBaseUser, AnonymousUser]: ...  # type: ignore[override]
+    def user(self) -> AbstractBaseUser | AnonymousUser: ...  # type: ignore[override]
     @user.setter
-    def user(self, value: Union[AbstractBaseUser, AnonymousUser]) -> None: ...
+    def user(self, value: AbstractBaseUser | AnonymousUser) -> None: ...
     @property
-    def auth(self) -> Union[Token, Any]: ...
+    def auth(self) -> Token | Any: ...
     @auth.setter
-    def auth(self, value: Union[Token, Any]) -> None: ...
+    def auth(self, value: Token | Any) -> None: ...
     @property
-    def successful_authenticator(self) -> Optional[Union[BaseAuthentication, ForcedAuthentication]]: ...
+    def successful_authenticator(self) -> BaseAuthentication | ForcedAuthentication | None: ...
     def __getattr__(self, attr: str) -> Any: ...
     @property
     def DATA(self) -> None: ...

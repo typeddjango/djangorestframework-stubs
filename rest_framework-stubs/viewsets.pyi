@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple
 
 from django.http.request import HttpRequest
 from django.http.response import HttpResponseBase
@@ -15,9 +15,9 @@ _ViewFunc = Callable[..., HttpResponseBase]
 
 class ViewSetMixin:
     # Classvars assigned in as_view()
-    name: Optional[str]
-    description: Optional[str]
-    suffix: Optional[str]
+    name: str | None
+    description: str | None
+    suffix: str | None
     detail: bool
     basename: str
     # Instance attributes assigned in view wrapper
@@ -28,7 +28,7 @@ class ViewSetMixin:
     action: str
     @classmethod
     def as_view(
-        cls, actions: Optional[Dict[str, Union[str, ViewSetAction]]] = ..., **initkwargs: Any
+        cls, actions: Dict[str, str | ViewSetAction] | None = ..., **initkwargs: Any
     ) -> AsView[GenericView]: ...
     def initialize_request(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Request: ...
     def reverse_action(self, url_name: str, *args: Any, **kwargs: Any) -> str: ...

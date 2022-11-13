@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Mapping, Optional, Sequence, Union
+from typing import Any, Callable, Dict, Mapping, Sequence
 
 from typing_extensions import TypedDict
 
@@ -10,23 +10,23 @@ class DefaultsSettings(TypedDict, total=False):
     DEFAULT_THROTTLE_CLASSES: Sequence[str]
     DEFAULT_CONTENT_NEGOTIATION_CLASS: str
     DEFAULT_METADATA_CLASS: str
-    DEFAULT_VERSIONING_CLASS: Optional[str]
-    DEFAULT_PAGINATION_CLASS: Optional[str]
+    DEFAULT_VERSIONING_CLASS: str | None
+    DEFAULT_PAGINATION_CLASS: str | None
     DEFAULT_FILTER_BACKENDS: Sequence[str]
     DEFAULT_SCHEMA_CLASS: str
-    DEFAULT_THROTTLE_RATES: Dict[str, Optional[Union[float, int]]]
-    NUM_PROXIES: Optional[int]
-    PAGE_SIZE: Optional[int]
+    DEFAULT_THROTTLE_RATES: Dict[str, float | int | None]
+    NUM_PROXIES: int | None
+    PAGE_SIZE: int | None
     SEARCH_PARAM: str
     ORDERING_PARAM: str
-    DEFAULT_VERSION: Optional[str]
-    ALLOWED_VERSIONS: Optional[str]
+    DEFAULT_VERSION: str | None
+    ALLOWED_VERSIONS: str | None
     VERSION_PARAM: str
     UNAUTHENTICATED_USER: str
-    UNAUTHENTICATED_TOKEN: Optional[str]
+    UNAUTHENTICATED_TOKEN: str | None
     VIEW_NAME_FUNCTION: str
     VIEW_DESCRIPTION_FUNCTION: str
-    EXCEPTION_HANDLER: Union[str, Callable[[Any, Any], Any]]
+    EXCEPTION_HANDLER: str | Callable[[Any, Any], Any]
     NON_FIELD_ERRORS_KEY: str
     TEST_REQUEST_RENDERER_CLASSES: Sequence[str]
     TEST_REQUEST_DEFAULT_FORMAT: str
@@ -53,17 +53,17 @@ DEFAULTS: DefaultsSettings
 IMPORT_STRINGS: Sequence[str]
 REMOVED_SETTINGS: Sequence[str]
 
-def perform_import(val: Optional[Any], setting_name: str) -> Optional[Any]: ...
-def import_from_string(val: Optional[Any], setting_name: str) -> Any: ...
+def perform_import(val: Any | None, setting_name: str) -> Any | None: ...
+def import_from_string(val: Any | None, setting_name: str) -> Any: ...
 
 class APISettings:
     defaults: DefaultsSettings
     import_strings: Sequence[str]
     def __init__(
         self,
-        user_settings: Optional[DefaultsSettings] = ...,
-        defaults: Optional[DefaultsSettings] = ...,
-        import_strings: Optional[Sequence[str]] = ...,
+        user_settings: DefaultsSettings | None = ...,
+        defaults: DefaultsSettings | None = ...,
+        import_strings: Sequence[str] | None = ...,
     ): ...
     @property
     def user_settings(self) -> Mapping[str, Any]: ...
@@ -79,23 +79,23 @@ class _Settings(APISettings):
     DEFAULT_THROTTLE_CLASSES: Sequence[str]
     DEFAULT_CONTENT_NEGOTIATION_CLASS: str
     DEFAULT_METADATA_CLASS: str
-    DEFAULT_VERSIONING_CLASS: Optional[str]
-    DEFAULT_PAGINATION_CLASS: Optional[str]
+    DEFAULT_VERSIONING_CLASS: str | None
+    DEFAULT_PAGINATION_CLASS: str | None
     DEFAULT_FILTER_BACKENDS: Sequence[str]
     DEFAULT_SCHEMA_CLASS: str
-    DEFAULT_THROTTLE_RATES: Dict[str, Optional[Union[float, int]]]
-    NUM_PROXIES: Optional[int]
-    PAGE_SIZE: Optional[int]
+    DEFAULT_THROTTLE_RATES: Dict[str, float | int | None]
+    NUM_PROXIES: int | None
+    PAGE_SIZE: int | None
     SEARCH_PARAM: str
     ORDERING_PARAM: str
-    DEFAULT_VERSION: Optional[str]
-    ALLOWED_VERSIONS: Optional[str]
+    DEFAULT_VERSION: str | None
+    ALLOWED_VERSIONS: str | None
     VERSION_PARAM: str
     UNAUTHENTICATED_USER: str
-    UNAUTHENTICATED_TOKEN: Optional[str]
+    UNAUTHENTICATED_TOKEN: str | None
     VIEW_NAME_FUNCTION: str
     VIEW_DESCRIPTION_FUNCTION: str
-    EXCEPTION_HANDLER: Union[str, Callable[[Any, Any], Any]]
+    EXCEPTION_HANDLER: str | Callable[[Any, Any], Any]
     NON_FIELD_ERRORS_KEY: str
     TEST_REQUEST_RENDERER_CLASSES: Sequence[str]
     TEST_REQUEST_DEFAULT_FORMAT: str

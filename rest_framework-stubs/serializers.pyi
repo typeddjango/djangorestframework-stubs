@@ -9,12 +9,10 @@ from typing import (
     Mapping,
     MutableMapping,
     NoReturn,
-    Optional,
     Sequence,
     Tuple,
     Type,
     TypeVar,
-    Union,
 )
 
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -93,14 +91,14 @@ _IN = TypeVar("_IN")  # Instance Type
 class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     partial: bool
     many: bool
-    instance: Optional[_IN]
+    instance: _IN | None
     initial_data: Any
     _context: Dict[str, Any]
     def __new__(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def __class_getitem__(cls, *args, **kwargs): ...
     def __init__(
         self,
-        instance: Optional[_IN] = ...,
+        instance: _IN | None = ...,
         data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
@@ -116,7 +114,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Optional[Sequence[Validator[Any]]] = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ): ...
     @classmethod
@@ -168,28 +166,18 @@ class Serializer(
 class ListSerializer(
     BaseSerializer[_IN],
 ):
-    child: Optional[
-        Union[
-            Field,
-            BaseSerializer,
-        ]
-    ]
+    child: Field | BaseSerializer | None
     many: bool
     default_error_messages: Dict[str, Any]
-    allow_empty: Optional[bool]
+    allow_empty: bool | None
     def __init__(
         self,
-        instance: Optional[_IN] = ...,
+        instance: _IN | None = ...,
         data: Any = ...,
         partial: bool = ...,
         context: Dict[str, Any] = ...,
         allow_empty: bool = ...,
-        child: Optional[
-            Union[
-                Field,
-                BaseSerializer,
-            ]
-        ] = ...,
+        child: Field | BaseSerializer | None = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -200,7 +188,7 @@ class ListSerializer(
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Optional[Sequence[Validator[List[Any]]]] = ...,
+        validators: Sequence[Validator[List[Any]]] | None = ...,
         allow_null: bool = ...,
     ): ...
     def get_initial(self) -> List[Mapping[Any, Any]]: ...
@@ -218,19 +206,19 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     serializer_related_to_field: Type[RelatedField]
     serializer_url_field: Type[RelatedField]
     serializer_choice_field: Type[Field]
-    url_field_name: Optional[str]
-    instance: Optional[Union[_MT, Sequence[_MT]]]  # type: ignore[override]
+    url_field_name: str | None
+    instance: _MT | Sequence[_MT] | None  # type: ignore[override]
 
     class Meta:
         model: Type[_MT]  # type: ignore
-        fields: Union[Sequence[str], Literal["__all__"]]
-        read_only_fields: Optional[Sequence[str]]
-        exclude: Optional[Sequence[str]]
-        depth: Optional[int]
+        fields: Sequence[str] | Literal["__all__"]
+        read_only_fields: Sequence[str] | None
+        exclude: Sequence[str] | None
+        depth: int | None
         extra_kwargs: Dict[str, Dict[str, Any]]  # type: ignore[override]
     def __init__(
         self,
-        instance: Union[None, _MT, Sequence[_MT], QuerySet[_MT], Manager[_MT]] = ...,
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
         data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
@@ -238,14 +226,14 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: Union[Union[_MT, Sequence[_MT]], Callable[[], Union[_MT, Sequence[_MT]]]] = ...,
-        initial: Union[Union[_MT, Sequence[_MT]], Callable[[], Union[_MT, Sequence[_MT]]]] = ...,
+        default: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
+        initial: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
         style: Dict[str, Any] = ...,
         error_messages: Dict[str, str] = ...,
-        validators: Optional[Sequence[Validator[_MT]]] = ...,
+        validators: Sequence[Validator[_MT]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ): ...

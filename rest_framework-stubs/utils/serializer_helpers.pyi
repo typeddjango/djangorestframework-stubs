@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Any, Dict, Iterator, List, MutableMapping, Tuple, Union
+from typing import Any, Dict, Iterator, List, MutableMapping, Tuple
 
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
@@ -34,7 +34,7 @@ class JSONBoundField(BoundField): ...
 
 class NestedBoundField(BoundField):
     def __iter__(self) -> Iterator[str]: ...
-    def __getitem__(self, key: str) -> Union[BoundField, NestedBoundField]: ...
+    def __getitem__(self, key: str) -> BoundField | NestedBoundField: ...
 
 class BindingDict(MutableMapping[str, Field]):
     serializer: BaseSerializer

@@ -1,11 +1,11 @@
-from typing import Dict, NamedTuple, Optional, Type
+from typing import Dict, NamedTuple, Type
 
 from django.db.models import Model
 from django.db.models.fields import Field
 from django.db.models.fields.related import RelatedField
 
 class RelationInfo(NamedTuple):
-    model_field: Optional[RelatedField]
+    model_field: RelatedField | None
     related_model: Type[Model]
     to_many: bool
     to_field: str
