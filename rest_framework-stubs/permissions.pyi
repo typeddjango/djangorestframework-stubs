@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Protocol
+from typing import Any, Protocol, Union  # noqa: Y037  # https://github.com/python/mypy/issues/12392
 from typing_extensions import TypeAlias
 
 from django.db.models import Model, QuerySet
@@ -12,8 +12,7 @@ class _SupportsHasPermission(Protocol):
     def has_permission(self, request: Request, view: APIView) -> bool: ...
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
-#_PermissionClass: TypeAlias = type[BasePermission] | OperandHolder | SingleOperandHolder
-from typing import Union
+# https://github.com/python/mypy/issues/12392
 _PermissionClass: TypeAlias = Union[type[BasePermission], OperandHolder, SingleOperandHolder]
 
 class OperationHolderMixin:
