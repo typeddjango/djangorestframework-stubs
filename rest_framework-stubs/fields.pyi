@@ -4,13 +4,15 @@ from collections import OrderedDict
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
-from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Pattern, Sequence
+from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
+from re import Pattern
 from typing import Any, Generic, NoReturn, Protocol, TypeVar
+from _typeshed import Self
 
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
-from typing_extensions import Final
+from typing_extensions import Final, TypeAlias
 
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
@@ -18,7 +20,7 @@ from rest_framework.validators import Validator
 class _Empty(Enum):
     sentinel = 0
 
-empty: Final
+empty: Final = _Empty.sentinel
 
 class BuiltinSignatureError(Exception): ...
 
@@ -66,7 +68,7 @@ _RP = TypeVar("_RP")  # Representation Type
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
-_DefaultInitial = _VT | Callable[[], _VT] | None | _Empty
+_DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | None | _Empty
 
 class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
@@ -121,7 +123,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     def root(self) -> BaseSerializer: ...
     @property
     def context(self) -> dict[str, Any]: ...
-    def __new__(cls, *args: Any, **kwargs: Any) -> Field: ...
+    def __new__(cls: type[Self], *args: Any, **kwargs: Any) -> Self: ...
     def __deepcopy__(self, memo: Mapping[Any, Any]) -> Field: ...
 
 class BooleanField(
