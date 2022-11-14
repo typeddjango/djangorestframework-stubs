@@ -1,6 +1,7 @@
 from types import ModuleType
 from collections.abc import Iterable, Sequence
 from typing import Any
+from typing_extensions import TypeAlias
 
 from django.db.models.base import Model
 from rest_framework.compat import coreapi
@@ -12,7 +13,7 @@ def common_path(paths: Iterable[str]) -> str: ...
 def get_pk_name(model: type[Model]) -> str: ...
 def is_api_view(callback: Any) -> bool: ...
 
-_APIEndpoint = tuple[str, str, Any]
+_APIEndpoint: TypeAlias = tuple[str, str, Any]
 
 class EndpointEnumerator:
     patterns: Sequence[_AnyURL] | None

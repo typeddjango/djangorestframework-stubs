@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from collections.abc import Callable
 from typing import Any
+from typing_extensions import TypeAlias
 
 from django.http.request import HttpRequest
 from django.http.response import HttpResponseBase
@@ -12,7 +13,7 @@ from rest_framework.views import AsView, GenericView
 
 def _is_extra_action(attr: Any) -> bool: ...
 
-_ViewFunc = Callable[..., HttpResponseBase]
+_ViewFunc: TypeAlias = Callable[..., HttpResponseBase]
 
 class ViewSetMixin:
     # Classvars assigned in as_view()

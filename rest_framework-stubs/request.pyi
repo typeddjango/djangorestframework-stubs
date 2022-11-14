@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from types import TracebackType
-from collections.abc import ContextManager, Iterator, Sequence
+from collections.abc import Iterator, Sequence
+from contextlib import AbstractContextManager
 from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -16,7 +17,7 @@ from rest_framework.views import APIView
 
 def is_form_media_type(media_type: str) -> bool: ...
 
-class override_method(ContextManager["Request"]):
+class override_method(AbstractContextManager[Request]):
     def __init__(self, view: APIView, request: Request, method: str): ...
     def __enter__(self) -> Request: ...
     def __exit__(

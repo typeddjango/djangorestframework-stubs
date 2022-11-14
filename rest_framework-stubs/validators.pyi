@@ -1,5 +1,6 @@
 from collections.abc import Callable, Container, Iterable, MutableMapping
 from typing import Any, TypeVar, Protocol
+from typing_extensions import TypeAlias
 
 from django.db.models import Model, QuerySet
 from rest_framework.fields import Field
@@ -12,7 +13,7 @@ class ContextValidator(Protocol[_V]):
     requires_context: bool
     def __call__(self, __value: _V, __context: Field) -> None: ...
 
-Validator = Callable[[_V], None] | ContextValidator[_V]
+Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
 
 def qs_exists(queryset: QuerySet) -> bool: ...
 def qs_filter(queryset: QuerySet[_T], **kwargs: Any) -> QuerySet[_T]: ...

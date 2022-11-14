@@ -1,5 +1,6 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, Generic, NoReturn, TypeVar
+from _typeshed import Self
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
@@ -80,7 +81,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     instance: _IN | None
     initial_data: Any
     _context: dict[str, Any]
-    def __new__(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
+    def __new__(cls: type[Self], *args: Any, **kwargs: Any) -> Self: ...
     def __class_getitem__(cls, *args, **kwargs): ...
     def __init__(
         self,

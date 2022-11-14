@@ -11,7 +11,7 @@ from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import Concatenate, Literal, ParamSpec
+from typing_extensions import Concatenate, Literal, ParamSpec, TypeAlias
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
@@ -29,7 +29,7 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS = list[
+_LOWER_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
         "get",
         "post",
@@ -41,7 +41,7 @@ _LOWER_CASE_HTTP_VERBS = list[
     ]
 ]
 
-_MIXED_CASE_HTTP_VERBS = list[
+_MIXED_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
         "GET",
         "POST",
