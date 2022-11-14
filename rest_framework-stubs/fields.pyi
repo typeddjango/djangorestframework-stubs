@@ -18,7 +18,7 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
 
 class _Empty(Enum):
-    sentinel = 0
+    sentinel = 0  # noqa: Y015
 
 empty: Final = _Empty.sentinel
 
@@ -330,7 +330,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     min_value: Decimal | int | float | None
     localize: bool
     rounding: str | None
-    max_whole_digits = int | None
+    max_whole_digits = int | None  # noqa: Y026
     def __init__(
         self,
         max_digits: int | None,
