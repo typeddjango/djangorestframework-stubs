@@ -10,7 +10,7 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
-from rest_framework.views import APIView, AsView  # noqa: F401
+from rest_framework.views import APIView, AsView
 from typing_extensions import Concatenate, Literal, ParamSpec, TypeAlias
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])

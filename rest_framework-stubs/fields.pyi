@@ -1,21 +1,20 @@
 import datetime
 import uuid
 from collections import OrderedDict
+from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
-from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
 from re import Pattern
 from typing import Any, Generic, NoReturn, Protocol, TypeVar
-from _typeshed import Self
 
+from _typeshed import Self
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
-from typing_extensions import Final, TypeAlias
-
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
+from typing_extensions import Final, TypeAlias
 
 class _Empty(Enum):
     sentinel = 0  # noqa: Y015
@@ -330,7 +329,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     min_value: Decimal | int | float | None
     localize: bool
     rounding: str | None
-    max_whole_digits = int | None  # noqa: Y026
+    max_whole_digits = int | None
     def __init__(
         self,
         max_digits: int | None,
