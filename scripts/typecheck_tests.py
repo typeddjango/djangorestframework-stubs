@@ -60,6 +60,9 @@ IGNORED_ERRORS = {
         '"BaseTokenAuthTests" has no attribute "assertNumQueries"',
         'Module "django.middleware.csrf" has no attribute "_mask_cipher_secret"',
         "All conditional function variants must have identical signatures",
+        "note:     def _get_new_csrf_token() ->",
+        "note: Original:",
+        "note: Redefinition:",
     ],
     "schemas": [
         '(expression has type "CharField", base class "Field" defined the type as "bool")',
@@ -77,6 +80,7 @@ IGNORED_ERRORS = {
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
         'Argument 1 to "field_to_schema" has incompatible type "object"; expected "Field[Any, Any, Any, Any]"',
         'Argument "help_text" to "CharField" has incompatible type "_StrPromise"',
+        '"Module rest_framework.schemas.coreapi" does not explicitly export attribute "coreapi"',
     ],
     "browsable_api": [
         '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
@@ -114,7 +118,7 @@ IGNORED_ERRORS = {
         'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"',
         '"MultipleChoiceField[Model]" has no attribute "partial"',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
-        'Module "rest_framework.fields" has no attribute "DjangoImageField"; maybe "ImageField"?',
+        'Module "rest_framework.fields" does not explicitly export attribute "DjangoImageField"',
         'Argument 1 to "ListField" has incompatible type "CharField"; expected "bool"',
         "Possible overload variants:",
         "def __init__(self, *, mutable: Literal[True], query_string: Union[str, bytes, None] = ..., encoding: Optional[str] = ...) -> QueryDict",  # noqa: E501
