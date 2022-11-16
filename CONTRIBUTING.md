@@ -8,6 +8,9 @@ This project is open source and community driven. As such we encourage code cont
 4. Write tests
 5. Update dependencies
 
+Type stubs in `.pyi` files should follow
+[coding conventions from typeshed project](https://github.com/python/typeshed/blob/main/CONTRIBUTING.md#conventions).
+
 ## Tutorials
 
 If you want to start working on this project, you will need to get familiar with python typings.
