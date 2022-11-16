@@ -1,4 +1,5 @@
-from typing import Any, Callable, Optional, Sequence, Type
+from collections.abc import Callable, Sequence
+from typing import Any
 
 from rest_framework.renderers import BaseRenderer
 from rest_framework.urlpatterns import _AnyURL
@@ -12,15 +13,15 @@ from .generators import BaseSchemaGenerator
 from .inspectors import DefaultSchema as DefaultSchema
 
 def get_schema_view(
-    title: Optional[str] = ...,
-    url: Optional[str] = ...,
-    description: Optional[str] = ...,
-    urlconf: Optional[str] = ...,
-    renderer_classes: Optional[Sequence[Type[BaseRenderer]]] = ...,
+    title: str | None = ...,
+    url: str | None = ...,
+    description: str | None = ...,
+    urlconf: str | None = ...,
+    renderer_classes: Sequence[type[BaseRenderer]] | None = ...,
     public: bool = ...,
-    patterns: Optional[Sequence[_AnyURL]] = ...,
-    generator_class: Type[BaseSchemaGenerator] = ...,
+    patterns: Sequence[_AnyURL] | None = ...,
+    generator_class: type[BaseSchemaGenerator] = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
-    version: Optional[str] = ...,
+    version: str | None = ...,
 ) -> Callable[..., Any]: ...

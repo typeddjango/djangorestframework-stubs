@@ -1,4 +1,5 @@
-from typing import Any, Callable, List, Mapping, Optional, Protocol, Sequence, Type, TypeVar, Union
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any, Protocol, TypeVar
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -10,7 +11,7 @@ from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import Concatenate, Literal, ParamSpec
+from typing_extensions import Concatenate, Literal, ParamSpec, TypeAlias
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
@@ -28,7 +29,7 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS = List[
+_LOWER_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
         "get",
         "post",
@@ -40,7 +41,7 @@ _LOWER_CASE_HTTP_VERBS = List[
     ]
 ]
 
-_MIXED_CASE_HTTP_VERBS = List[
+_MIXED_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
         "GET",
         "POST",
@@ -71,26 +72,22 @@ class ViewSetAction(Protocol[_View]):
     __call__: _View
 
 def api_view(
-    http_method_names: Optional[Sequence[str]] = ...,
+    http_method_names: Sequence[str] | None = ...,
 ) -> Callable[[Callable[Concatenate[Request, _P], _RESP]], AsView[Callable[Concatenate[HttpRequest, _P], _RESP]]]: ...
-def renderer_classes(
-    renderer_classes: Sequence[Union[BaseRenderer, Type[BaseRenderer]]]
-) -> Callable[[_View], _View]: ...
-def parser_classes(parser_classes: Sequence[Union[BaseParser, Type[BaseParser]]]) -> Callable[[_View], _View]: ...
+def renderer_classes(renderer_classes: Sequence[BaseRenderer | type[BaseRenderer]]) -> Callable[[_View], _View]: ...
+def parser_classes(parser_classes: Sequence[BaseParser | type[BaseParser]]) -> Callable[[_View], _View]: ...
 def authentication_classes(
-    authentication_classes: Sequence[Union[BaseAuthentication, Type[BaseAuthentication]]]
+    authentication_classes: Sequence[BaseAuthentication | type[BaseAuthentication]],
 ) -> Callable[[_View], _View]: ...
-def throttle_classes(
-    throttle_classes: Sequence[Union[BaseThrottle, Type[BaseThrottle]]]
-) -> Callable[[_View], _View]: ...
+def throttle_classes(throttle_classes: Sequence[BaseThrottle | type[BaseThrottle]]) -> Callable[[_View], _View]: ...
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
-def schema(view_inspector: Optional[Union[ViewInspector, Type[ViewInspector]]]) -> Callable[[_View], _View]: ...
+def schema(view_inspector: ViewInspector | type[ViewInspector] | None) -> Callable[[_View], _View]: ...
 def action(
-    methods: Optional[_MIXED_CASE_HTTP_VERBS] = ...,
+    methods: _MIXED_CASE_HTTP_VERBS | None = ...,
     detail: bool = ...,
-    url_path: Optional[str] = ...,
-    url_name: Optional[str] = ...,
-    suffix: Optional[str] = ...,
-    name: Optional[str] = ...,
+    url_path: str | None = ...,
+    url_name: str | None = ...,
+    suffix: str | None = ...,
+    name: str | None = ...,
     **kwargs: Any,
 ) -> Callable[[_View], ViewSetAction[_View]]: ...

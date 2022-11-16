@@ -1,23 +1,24 @@
-from typing import Any, Callable, Mapping, Optional, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from django.http import HttpRequest
 
-def preserve_builtin_query_params(url: str, request: Optional[HttpRequest] = ...) -> str: ...
+def preserve_builtin_query_params(url: str, request: HttpRequest | None = ...) -> str: ...
 def reverse(
     viewname: str,
-    args: Optional[Sequence[Any]] = ...,
-    kwargs: Optional[Mapping[str, Any]] = ...,
-    request: Optional[HttpRequest] = ...,
-    format: Optional[str] = ...,
+    args: Sequence[Any] | None = ...,
+    kwargs: Mapping[str, Any] | None = ...,
+    request: HttpRequest | None = ...,
+    format: str | None = ...,
     **extra: Any
 ) -> str: ...
 def _reverse(
     viewname: str,
-    args: Optional[Sequence[Any]] = ...,
-    kwargs: Optional[Mapping[str, Any]] = ...,
-    request: Optional[HttpRequest] = ...,
-    format: Optional[str] = ...,
+    args: Sequence[Any] | None = ...,
+    kwargs: Mapping[str, Any] | None = ...,
+    request: HttpRequest | None = ...,
+    format: str | None = ...,
     **extra: Any
 ) -> str: ...
 
-reverse_lazy: Callable[..., str] = ...
+reverse_lazy: Callable[..., str]

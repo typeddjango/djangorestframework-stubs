@@ -1,12 +1,12 @@
-from typing import Dict, NamedTuple, Optional, Type
+from typing import NamedTuple
 
 from django.db.models import Model
 from django.db.models.fields import Field
 from django.db.models.fields.related import RelatedField
 
 class RelationInfo(NamedTuple):
-    model_field: Optional[RelatedField]
-    related_model: Type[Model]
+    model_field: RelatedField | None
+    related_model: type[Model]
     to_many: bool
     to_field: str
     has_through_model: bool
@@ -14,11 +14,11 @@ class RelationInfo(NamedTuple):
 
 class FieldInfo(NamedTuple):
     pk: Field
-    fields: Dict[str, Field]
-    forward_relations: Dict[str, RelationInfo]
-    reverse_relations: Dict[str, RelationInfo]
-    fields_and_pk: Dict[str, Field]
-    relations: Dict[str, RelationInfo]
+    fields: dict[str, Field]
+    forward_relations: dict[str, RelationInfo]
+    reverse_relations: dict[str, RelationInfo]
+    fields_and_pk: dict[str, Field]
+    relations: dict[str, RelationInfo]
 
-def get_field_info(model: Type[Model]) -> FieldInfo: ...
-def is_abstract_model(model: Type[Model]) -> bool: ...
+def get_field_info(model: type[Model]) -> FieldInfo: ...
+def is_abstract_model(model: type[Model]) -> bool: ...
