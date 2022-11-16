@@ -37,6 +37,7 @@ _LOWER_CASE_HTTP_VERBS: TypeAlias = list[
         "put",
         "patch",
         "trace",
+        "head",
         "options",
     ]
 ]
