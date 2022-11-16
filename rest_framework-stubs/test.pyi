@@ -67,13 +67,13 @@ class ForceAuthClientHandler(ClientHandler):
 class APIClient(APIRequestFactory, DjangoClient):
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: AnonymousUser | AbstractBaseUser = ..., token: Token | None = ...) -> None: ...
-    def request(self, **kwargs: Any) -> Response: ...  # type: ignore[override]
+    def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
-    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
-    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
-    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
-    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
-    def options(self, path: str, data: dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> Response: ...  # type: ignore[override]
+    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def options(self, path: str, data: dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):
