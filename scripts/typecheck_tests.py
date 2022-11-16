@@ -177,6 +177,8 @@ IGNORED_ERRORS = {
         "base class",
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
+        'Unsupported left operand type for | ("ReturnDict")',
+        'Unsupported left operand type for | ("Dict[str, str]")',
     ],
     "test_serializer_lists.py": [
         'Name "foo" is not defined',
@@ -195,6 +197,7 @@ IGNORED_ERRORS = {
     "test_testing.py": [
         '"Client" has no attribute "force_authenticate"',
         '"Client" has no attribute "credentials"',
+        'has no attribute "addClassCleanup"',
     ],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',
