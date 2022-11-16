@@ -10,7 +10,7 @@ from typing import Dict, List, Pattern, Union
 from scripts.git_helpers import checkout_target_tag
 from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTORY
 
-IGNORED_MODULES = ["utils.py", "test_testing.py"]
+IGNORED_MODULES = []
 MOCK_OBJECTS = [
     "MockQueryset",
     "MockRequest",
@@ -40,12 +40,11 @@ MOCK_OBJECTS = [
 EXTERNAL_MODULES = ["requests"]
 IGNORED_ERRORS = {
     "__common__": [
-        "already defined",
+        "already defined on line",
         "Need type annotation for",
         "Cannot assign to a method",
         "Cannot determine type of",
         'has no attribute "initkwargs"',
-        'has no attribute "mapping"',
         'Response" has no attribute "view"',
         "Cannot infer type",
         ' has no attribute "_context',
@@ -74,7 +73,6 @@ IGNORED_ERRORS = {
         'Value of type "Optional[Any]" is not indexable',
         'Item "None" of "Optional[Any]" has no attribute',
         'List item 0 has incompatible type "Type[',
-        'error: Module has no attribute "coreapi"',
         'Value of type "Optional[str]" is not indexable',
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[HttpRequest], Any]]")',  # noqa: E501
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
@@ -83,11 +81,8 @@ IGNORED_ERRORS = {
         '"Module rest_framework.schemas.coreapi" does not explicitly export attribute "coreapi"',
     ],
     "browsable_api": [
-        '(expression has type "List[Dict[str, Dict[str, int]]]", base class "GenericAPIView" defined the type as "Union[QuerySet[_MT?], Manager[_MT?], None]")',  # noqa: E501
         'expression has type "List[Dict[str, Dict[str, int]]]"',
-        'List item 0 has incompatible type "Type[IsAuthenticated]',
     ],
-    "conftest.py": ["Unsupported operand types for"],
     "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
     "serializers.pyi": [
         'note: "IntegerSerializer" defined here',
@@ -100,7 +95,6 @@ IGNORED_ERRORS = {
     "test_bound_fields.py": ['Value of type "BoundField" is not indexable'],
     "test_decorators.py": [
         'Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"',
-        '"AsView[Callable[[Any], Any]]" has no attribute "cls"',
     ],
     "test_encoders.py": ['Argument "serializer" to "ReturnList" has incompatible type "None'],
     "test_fields.py": [
@@ -116,14 +110,9 @@ IGNORED_ERRORS = {
         '"Field[Any, Any, Any, Any]" has no attribute "method_name"',
         'Argument 1 to "ModelField" has incompatible type "None"',
         'Argument "params" to "ValidationError" has incompatible type "Tuple[str]"',
-        '"MultipleChoiceField[Model]" has no attribute "partial"',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "Dict[str, str]"; expected "List[Any]"',
         'Module "rest_framework.fields" does not explicitly export attribute "DjangoImageField"',
         'Argument 1 to "ListField" has incompatible type "CharField"; expected "bool"',
-        "Possible overload variants:",
-        "def __init__(self, *, mutable: Literal[True], query_string: Union[str, bytes, None] = ..., encoding: Optional[str] = ...) -> QueryDict",  # noqa: E501
-        "def __init__(self, query_string: Union[str, bytes, None] = ..., mutable: bool = ..., encoding: Optional[str] = ...) -> _ImmutableQueryDict",  # noqa: E501
-        "def __init__(self, query_string: Union[str, bytes, None], mutable: Literal[True], encoding: Optional[str] = ...) -> QueryDict",  # noqa: E501
     ],
     "test_filters.py": [
         'Module has no attribute "coreapi"',
@@ -143,17 +132,11 @@ IGNORED_ERRORS = {
     "test_middleware.py": ['"is_form_media_type" has incompatible type "Optional[str]"; expected "str"'],
     "test_model_serializer.py": [
         '"Field[Any, Any, Any, Any]" has no attribute',
-        'Module has no attribute "JSONField"',
-        'expected "OrderedDict[Any, Any]"',
         'base class "Meta" defined the type as',
-        '"Field" has no attribute',
-        '"Dict[str, Any]" has no attribute "name"',
     ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
-        'Incompatible types in assignment (expression has type "None", base class "LimitOffsetPagination" defined the type as "int")',  # noqa: E501
         "(not iterable)",
-        '(expression has type "None", variable has type "List[Any]")',
         'has incompatible type "range"',
         'expected "Iterable[Any]"',
     ],
@@ -172,17 +155,14 @@ IGNORED_ERRORS = {
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',  # noqa: E501
     ],
     "test_relations_pk.py": [
-        '"Field" has no attribute "get_queryset"',
         '"OneToOneTarget" has no attribute "id"',
         '"Field[Any, Any, Any, Any]" has no attribute "get_queryset',
-        'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type',
     ],
     "test_renderers.py": [
         '(expression has type "Callable[[], str]", variable has type "Callable[[Optional[str]], str]")'
     ],
     "test_request.py": [
         '"Request" has no attribute "inner_property"',
-        'Argument 2 to "login" has incompatible type "Optional[AbstractBaseUser]"; expected "AbstractBaseUser"',
         'expression has type "Optional[AbstractBaseUser]',
     ],
     "test_response.py": [
@@ -194,22 +174,11 @@ IGNORED_ERRORS = {
         '"None" not callable',
     ],
     "test_serializer.py": [
-        'of "BaseSerializer" has incompatible type "None"',
         "base class",
-        '(expression has type "IntegerField", base class "Base" defined the type as "CharField")',
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
-        'Argument "data" has incompatible type "None"',
-        'Unsupported left operand type for | ("ReturnDict")',
-        'Unsupported left operand type for | ("Dict[str, str]")',
-    ],
-    "test_serializer_bulk_update.py": [
-        'Argument "data" has incompatible type "int"',
-        'Argument "data" has incompatible type "List[object]"',
-        'Argument "data" has incompatible type "List[str]"',
     ],
     "test_serializer_lists.py": [
-        'The type "Type[ListSerializer]" is not generic and not indexable',
         'Name "foo" is not defined',
         'Unexpected keyword argument "max_length" for "IntegerSerializer"',
         'Unexpected keyword argument "min_length" for "IntegerSerializer"',
@@ -218,18 +187,19 @@ IGNORED_ERRORS = {
         '(expression has type "NestedSerializer", base class "Field" defined the type as "bool")',
         "self.Serializer",
         '(expression has type "NonRelationalPersonDataSerializer", base class "Serializer" defined the type as "ReturnDict")',  # noqa: E501
-        'Argument "data" has incompatible type "None"; expected "Mapping[str, Any]"',
-        'Argument "data" has incompatible type "None"',
     ],
     "test_settings.py": [
         'Argument 1 to "APISettings" has incompatible type "Dict[str, int]"; expected "Optional[DefaultsSettings]'
     ],
     "test_templatetags.py": ['Module has no attribute "smart_urlquote"'],
+    "test_testing.py": [
+        '"Client" has no attribute "force_authenticate"',
+        '"Client" has no attribute "credentials"',
+    ],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',
         '"SimpleRateThrottle" has no attribute "num_requests',
         '"SimpleRateThrottle" has no attribute "duration"',
-        "Cannot assign to a method",
         'Type[NonTimeThrottle]" has no attribute "called"',
     ],
     "test_utils.py": [
@@ -237,10 +207,7 @@ IGNORED_ERRORS = {
         'incompatible type "List[Union[URLPattern, URLResolver]]"; expected "Iterable[URLPattern]"',
     ],
     "test_validation.py": [
-        'Value of type "object" is not indexable',
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"',
-        'Argument "data" to "ValidationSerializer" has incompatible type "str"; expected "Mapping[str, Any]"',
-        'Argument "data" to "ValidationSerializer" has incompatible type "str"',
     ],
     "test_validation_error.py": [
         'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Optional[Union[str, List[Any], Dict[str, Any]]]"',  # noqa: E501
@@ -253,14 +220,13 @@ IGNORED_ERRORS = {
         'Item "GenericForeignKey" of "Union[Field[Any, Any], ForeignObjectRel, GenericForeignKey]" has no attribute "validators"',  # noqa: E501
     ],
     "test_versioning.py": [
-        '(expression has type "Type[FakeResolverMatch]", variable has type "ResolverMatch")',
         "rest_framework.decorators",
         'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
     ],
     "test_viewsets.py": [
-        '(expression has type "None", variable has type "HttpRequest")',
         '(expression has type "None", variable has type "Request")',
     ],
+    "utils.py": ['Invalid signature "Callable[[BadType], Any]"'],
 }
 
 
