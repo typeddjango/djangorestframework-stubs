@@ -58,7 +58,7 @@ class DefaultRouter(SimpleRouter):
     include_root_view: bool
     include_format_suffixes: bool
     root_view_name: str
-    default_schema_renderers = None  # noqa: Y026
+    default_schema_renderers: Any
     APIRootView = APIRootView
     APISchemaView = SchemaView
     SchemaGenerator = SchemaGenerator
