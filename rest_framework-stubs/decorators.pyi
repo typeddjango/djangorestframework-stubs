@@ -31,20 +31,19 @@ class MethodMapper(dict):
 
 _LOWER_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
-        "head",
         "get",
         "post",
         "delete",
         "put",
         "patch",
         "trace",
+        "head",
         "options",
     ]
 ]
 
 _MIXED_CASE_HTTP_VERBS: TypeAlias = list[
     Literal[
-        "HEAD",
         "GET",
         "POST",
         "DELETE",
@@ -53,7 +52,6 @@ _MIXED_CASE_HTTP_VERBS: TypeAlias = list[
         "TRACE",
         "HEAD",
         "OPTIONS",
-        "head",
         "get",
         "post",
         "delete",
