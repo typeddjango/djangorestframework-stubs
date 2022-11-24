@@ -106,7 +106,7 @@ IGNORED_ERRORS = {
         "Dict entry",
         '"FieldValues"',
         'base class "Field" defined the type as "bool"',
-        'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
+        'Invalid index type "int" for "Union[str, _StrPromise, List[Any], Dict[str, Any]]"; expected type "str"',
         'Item "str" of "Union[str, Any]" has no attribute "code"',
         'Argument "default" to "CharField" has incompatible type',
         '"MultipleChoiceField" has no attribute "partial"',
@@ -152,7 +152,7 @@ IGNORED_ERRORS = {
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
     ],
     "test_relations.py": [
-        'Invalid index type "int" for "Union[str, List[Any], Dict[str, Any]]"; expected type "str"',
+        'Invalid index type "int" for "Union[str, _StrPromise, List[Any], Dict[str, Any]]"; expected type "str"',
         'Argument "queryset" to "HyperlinkedRelatedField" has incompatible type',
         'Incompatible return value type (got "None", expected "HttpResponseBase',
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',  # noqa: E501
@@ -216,7 +216,7 @@ IGNORED_ERRORS = {
         'Argument 1 to "to_internal_value" of "Field" has incompatible type "object"',
     ],
     "test_validation_error.py": [
-        'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Optional[Union[str, List[Any], Dict[str, Any]]]"',  # noqa: E501
+        'Argument "detail" to "ValidationError" has incompatible type "Tuple[str, str]"; expected "Optional[Union[str, _StrPromise, List[Any], Dict[str, Any]]]"',  # noqa: E501
     ],
     "test_validators.py": [
         'Argument "queryset" to "BaseUniqueForValidator" has incompatible type "object";'
