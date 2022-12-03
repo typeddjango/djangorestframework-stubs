@@ -83,7 +83,10 @@ IGNORED_ERRORS = {
     "browsable_api": [
         'expression has type "List[Dict[str, Dict[str, int]]]"',
     ],
-    "models.py": ['"ForeignKeyTarget" has no attribute "sources"'],
+    "models.py": [
+        '"ForeignKeyTarget" has no attribute "sources"',
+        '"CustomManager" not callable',
+    ],
     "serializers.pyi": [
         'note: "IntegerSerializer" defined here',
     ],
