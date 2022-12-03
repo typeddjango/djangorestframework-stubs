@@ -641,8 +641,8 @@ class HStoreField(DictField):
 
 class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
     binary: bool
-    encoder: JSONEncoder | None
-    decoder: JSONDecoder | None
+    encoder: type[JSONEncoder] | None
+    decoder: type[JSONDecoder] | None
     def __init__(
         self,
         read_only: bool = ...,
@@ -659,8 +659,8 @@ class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | li
         allow_null: bool = ...,
         *,
         binary: bool = ...,
-        encoder: JSONEncoder | None = ...,
-        decoder: JSONDecoder | None = ...,
+        encoder: type[JSONEncoder] | None = ...,
+        decoder: type[JSONDecoder] | None = ...,
     ): ...
 
 class ReadOnlyField(Field): ...
