@@ -175,6 +175,7 @@ IGNORED_ERRORS = {
         'expression has type "List[RouterTestModel]"',
         'Item "URLResolver" of "Union[URLPattern, URLResolver]" has no attribute "name"',
         '"None" not callable',
+        '"BasenameTestCase" has no attribute "router"',
     ],
     "test_serializer.py": [
         "base class",
