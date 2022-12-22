@@ -4,7 +4,7 @@ from typing import Any
 from typing_extensions import TypeAlias
 
 from django.http import HttpRequest, JsonResponse
-from django.utils.functional import _StrPromise
+from django_stubs_ext import StrOrPromise
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 
@@ -16,7 +16,7 @@ class ErrorDetail(str):
     code: str | None
     def __new__(cls, string: str, code: str | None = ...): ...
 
-_Detail: TypeAlias = str | _StrPromise | list[Any] | dict[str, Any]
+_Detail: TypeAlias = StrOrPromise | list[Any] | dict[str, Any]
 
 class APIException(Exception):
     status_code: int
