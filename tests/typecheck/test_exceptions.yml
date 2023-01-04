@@ -15,3 +15,12 @@
         status_code = 200
         default_detail = {"ok": "everything"}
         default_code = "ok"
+- case: test_exception_declaration_lazystr
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from rest_framework import exceptions
+
+    class MyException(exceptions.APIException):
+        status_code = 200
+        default_detail = _("Está tudo bem")
+        default_code = "ok"
