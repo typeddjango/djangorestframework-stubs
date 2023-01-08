@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, Generic, NoReturn, TypeVar
+from typing import Any, Generic, NoReturn, TypeVar, overload
 from _typeshed import Self
 
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -81,11 +81,55 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     instance: _IN | None
     initial_data: Any
     _context: dict[str, Any]
-    def __new__(cls: type[Self], *args: Any, **kwargs: Any) -> Self: ...
     def __class_getitem__(cls, *args, **kwargs): ...
-    def __init__(
-        self,
+    # When both __init__ and __new__ are present, mypy will prefer __init__
+    @overload
+    def __new__(
+        cls: type[Self],
+        instance: Iterable[_IN] | None = ...,
+        data: Any = ...,
+        partial: bool = ...,
+        many: Literal[True] = ...,
+        allow_empty: bool = ...,
+        context: dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> ListSerializer[_IN]: ...
+    @overload
+    def __new__(
+        cls: type[Self],
         instance: _IN | None = ...,
+        data: Any = ...,
+        partial: bool = ...,
+        many: Literal[False] = ...,
+        allow_empty: bool = ...,
+        context: dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> Self: ...
+    def __new__(
+        cls,
+        instance: _IN | Iterable[_IN] | None = ...,
         data: Any = ...,
         partial: bool = ...,
         many: bool = ...,
@@ -103,7 +147,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
-    ): ...
+    ) -> ListSerializer[_IN] | Self: ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def is_valid(self, raise_exception: bool = ...) -> bool: ...
@@ -159,7 +203,7 @@ class ListSerializer(
     allow_empty: bool | None
     def __init__(
         self,
-        instance: _IN | None = ...,
+        instance: Iterable[_IN] | None = ...,
         data: Any = ...,
         partial: bool = ...,
         context: dict[str, Any] = ...,
@@ -177,7 +221,7 @@ class ListSerializer(
         error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
-    ): ...
+    ) -> None: ...
     def get_initial(self) -> list[Mapping[Any, Any]]: ...
     def validate(self, attrs: Any) -> Any: ...
     @property
