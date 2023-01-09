@@ -247,27 +247,71 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         exclude: Sequence[str] | None
         depth: int | None
         extra_kwargs: dict[str, dict[str, Any]]  # type: ignore[override]
-    def __init__(
-        self,
+    @overload
+    def __new__(
+        cls: type[Self],
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
         data: Any = ...,
         partial: bool = ...,
-        many: bool = ...,
+        many: Literal[True] = ...,
+        allow_empty: bool = ...,
         context: dict[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
-        initial: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
+        default: Any = ...,
+        initial: Any = ...,
         source: str = ...,
         label: str = ...,
         help_text: str = ...,
         style: dict[str, Any] = ...,
         error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[_MT]] | None = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
+    ) -> ListSerializer[_IN]: ...
+    @overload
+    def __new__(
+        cls: type[Self],
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
+        data: Any = ...,
+        partial: bool = ...,
+        many: Literal[False] = ...,
         allow_empty: bool = ...,
-    ): ...
+        context: dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> Self: ...
+    def __new__(
+        cls,
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
+        data: Any = ...,
+        partial: bool = ...,
+        many: bool = ...,
+        allow_empty: bool = ...,
+        context: dict[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool = ...,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str = ...,
+        label: str = ...,
+        help_text: str = ...,
+        style: dict[str, Any] = ...,
+        error_messages: dict[str, str] = ...,
+        validators: Sequence[Validator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> ListSerializer[_MT] | Self: ...
     def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
