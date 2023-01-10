@@ -268,7 +268,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
-    ) -> ListSerializer[_IN]: ...
+    ) -> ListSerializer[_MT]: ...
     @overload
     def __new__(
         cls: type[Self],
