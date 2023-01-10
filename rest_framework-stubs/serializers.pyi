@@ -86,10 +86,8 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     @overload
     def __new__(
         cls: type[Self],
-        instance: Iterable[_IN] | None = ...,
-        data: Any = ...,
-        partial: bool = ...,
-        many: Literal[True] = ...,
+        instance: Iterable[_IN] | None,
+        many: Literal[True],
         allow_empty: bool = ...,
         context: dict[str, Any] = ...,
         read_only: bool = ...,
@@ -109,8 +107,6 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     def __new__(
         cls: type[Self],
         instance: _IN | None = ...,
-        data: Any = ...,
-        partial: bool = ...,
         many: Literal[False] = ...,
         allow_empty: bool = ...,
         context: dict[str, Any] = ...,
@@ -127,27 +123,6 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> Self: ...
-    def __new__(
-        cls,
-        instance: _IN | Iterable[_IN] | None = ...,
-        data: Any = ...,
-        partial: bool = ...,
-        many: bool = ...,
-        allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
-        read_only: bool = ...,
-        write_only: bool = ...,
-        required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
-        allow_null: bool = ...,
-    ) -> ListSerializer[_IN] | Self: ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
     def is_valid(self, raise_exception: bool = ...) -> bool: ...
@@ -248,51 +223,20 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         depth: int | None
         extra_kwargs: dict[str, dict[str, Any]]  # type: ignore[override]
     @overload
-    def __new__(
+    def __new__(  # type: ignore[misc]
         cls: type[Self],
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
-        data: Any = ...,
-        partial: bool = ...,
-        many: Literal[True] = ...,
-        allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
-        read_only: bool = ...,
-        write_only: bool = ...,
-        required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
-        allow_null: bool = ...,
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT],
+        many: Literal[True],
     ) -> ListSerializer[_MT]: ...
     @overload
     def __new__(
         cls: type[Self],
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
-        data: Any = ...,
-        partial: bool = ...,
-        many: Literal[False] = ...,
-        allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
-        read_only: bool = ...,
-        write_only: bool = ...,
-        required: bool = ...,
-        default: Any = ...,
-        initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
-        allow_null: bool = ...,
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT],
+        many: Literal[False],
     ) -> Self: ...
+    @overload
     def __new__(
-        cls,
+        cls: type[Self],
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
         data: Any = ...,
         partial: bool = ...,
@@ -311,7 +255,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         error_messages: dict[str, str] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
-    ) -> ListSerializer[_MT] | Self: ...
+    ) -> Self: ...
     def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
     def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
