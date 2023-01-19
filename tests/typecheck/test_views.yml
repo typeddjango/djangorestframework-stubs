@@ -58,9 +58,11 @@
 
 - case: test_override_get_permissions
   main: |
+    from typing import List
+
     from rest_framework.viewsets import GenericViewSet
     from rest_framework.permissions import BasePermission
 
     class MyView(GenericViewSet):
-        def get_permissions(self) -> list[BasePermission]:
+        def get_permissions(self) -> List[BasePermission]:
             ...
