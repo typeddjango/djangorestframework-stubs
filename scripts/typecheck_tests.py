@@ -51,6 +51,7 @@ IGNORED_ERRORS = {
         '(expression has type "None", variable has type "ForeignKeyTarget")',
         '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
+        'note: ".+" defined here',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -86,9 +87,6 @@ IGNORED_ERRORS = {
     "models.py": [
         '"ForeignKeyTarget" has no attribute "sources"',
         '"CustomManager" not callable',
-    ],
-    "serializers.pyi": [
-        'note: "IntegerSerializer" defined here',
     ],
     "test_authtoken.py": [
         'Item "None" of "Optional[Token]" has no attribute "key"',
@@ -176,6 +174,7 @@ IGNORED_ERRORS = {
         'Item "URLResolver" of "Union[URLPattern, URLResolver]" has no attribute "name"',
         '"None" not callable',
         '"BasenameTestCase" has no attribute "router"',
+        'Unexpected keyword argument "use_regex_path" for "SimpleRouter"',
     ],
     "test_serializer.py": [
         "base class",
