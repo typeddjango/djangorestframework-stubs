@@ -177,6 +177,7 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
         error_messages: dict[str, str] | None = ...,
         validators: Sequence[Validator[Sequence[Any]]] | None = ...,
         allow_null: bool = ...,
+        allow_empty: bool = ...,
         child_relation: RelatedField = ...,
     ): ...
     def get_value(self, dictionary: Mapping[Any, Any]) -> list[Any]: ...  # type: ignore[override]
