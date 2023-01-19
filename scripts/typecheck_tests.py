@@ -51,7 +51,7 @@ IGNORED_ERRORS = {
         '(expression has type "None", variable has type "ForeignKeyTarget")',
         '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
-        'note: ".+" defined here',
+        '" defined here',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
