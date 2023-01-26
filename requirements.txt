@@ -4,7 +4,7 @@ pre-commit==2.21.0
 pytest==7.2.0
 pytest-mypy-plugins==1.10.1
 djangorestframework==3.14.0
-types-pytz==2022.7.0.0
+types-pytz==2022.7.1.0
 django-stubs==1.13.0
 django-stubs-ext==0.7.0
 -e .[compatible-mypy,coreapi,markdown]
