@@ -33,9 +33,16 @@
     from django.urls import URLPattern, URLResolver
     from rest_framework import test, status
 
-    class MyTest(test.APITestCase):
+    client = test.APIClient()
+    response = client.get('/', format="json")
+    reveal_type(response) # N: Revealed type is "rest_framework.response._MonkeyPatchedResponse"
 
-        def test_example(self) -> None:
-            response = self.client.get('/', format="json")
-            reveal_type(response) # N: Revealed type is "rest_framework.response._MonkeyPatchedResponse"
-            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+- case: test_api_client_factory_get
+  main: |
+    from typing import Union, List
+    from django.urls import URLPattern, URLResolver
+    from rest_framework import test, status
+
+    factory = test.APIRequestFactory()
+    request = factory.get("/")
+    reveal_type(request) # N: Revealed type is "rest_framework.request.Request"
