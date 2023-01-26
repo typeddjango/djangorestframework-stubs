@@ -29,9 +29,7 @@
 
 - case: test_api_client_get
   main: |
-    from typing import Union, List
-    from django.urls import URLPattern, URLResolver
-    from rest_framework import test, status
+    from rest_framework import test
 
     client = test.APIClient()
     response = client.get('/', format="json")
@@ -39,9 +37,7 @@
 
 - case: test_api_client_factory_get
   main: |
-    from typing import Union, List
-    from django.urls import URLPattern, URLResolver
-    from rest_framework import test, status
+    from rest_framework import test
 
     factory = test.APIRequestFactory()
     request = factory.get("/")
