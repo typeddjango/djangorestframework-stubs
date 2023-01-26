@@ -75,3 +75,21 @@
         @cached_property
         def fields(self) -> BindingDict:
             return super().fields
+- case: test_serializer_many_equals_false
+  main: |
+    from rest_framework import serializers
+
+    class TestSerializer(serializers.Serializer[int]):
+      pass
+
+    test_serializer = TestSerializer(1)
+    reveal_type(test_serializer) # N: Revealed type is "main.TestSerializer"
+- case: test_serializer_many_equals_true
+  main: |
+    from rest_framework import serializers
+
+    class TestSerializer(serializers.Serializer[int]):
+      pass
+
+    test_serializer = TestSerializer(instance=[1, 2], many=True)
+    reveal_type(test_serializer) # N: Revealed type is "rest_framework.serializers.ListSerializer[builtins.int]"
