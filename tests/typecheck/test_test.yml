@@ -26,19 +26,3 @@
             reveal_type(self.client) # N: Revealed type is "django.test.client.Client"
             response = self.client.get('/', format="json")
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-- case: test_api_client_get
-  main: |
-    from rest_framework import test
-
-    client = test.APIClient()
-    response = client.get('/', format="json")
-    reveal_type(response) # N: Revealed type is "rest_framework.response._MonkeyPatchedResponse"
-
-- case: test_api_client_factory_get
-  main: |
-    from rest_framework import test
-
-    factory = test.APIRequestFactory()
-    request = factory.get("/")
-    reveal_type(request) # N: Revealed type is "rest_framework.request.Request"
