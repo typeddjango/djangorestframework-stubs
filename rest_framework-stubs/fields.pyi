@@ -12,6 +12,7 @@ from _typeshed import Self
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
+from django_stubs_ext import StrOrPromise
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
 from typing_extensions import Final, TypeAlias
@@ -38,9 +39,9 @@ class SkipField(Exception): ...
 class Option(Protocol):
     start_option_group: bool
     end_option_group: bool
-    label: str
+    label: StrOrPromise
     value: str
-    display_text: str
+    display_text: StrOrPromise
 
 def is_simple_callable(obj: Callable) -> bool: ...
 def get_attribute(instance: Any, attrs: list[str] | None) -> Any: ...
@@ -48,7 +49,7 @@ def set_value(dictionary: MutableMapping[str, Any], keys: Sequence[str], value: 
 def to_choices_dict(choices: Iterable[Any]) -> OrderedDict: ...
 def flatten_choices_dict(choices: dict[Any, Any]) -> OrderedDict: ...
 def iter_options(
-    grouped_choices: OrderedDict, cutoff: int | None = ..., cutoff_text: str | None = ...
+    grouped_choices: OrderedDict, cutoff: int | None = ..., cutoff_text: StrOrPromise | None = ...
 ) -> Generator[Option, None, None]: ...
 def get_error_detail(exc_info: Any) -> Any: ...
 
@@ -73,13 +74,13 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
     default: _VT | None
     default_empty_html: Any
-    default_error_messages: dict[str, str]
+    default_error_messages: dict[str, StrOrPromise]
     default_validators: list[Validator[_VT]]
-    error_messages: dict[str, str]
+    error_messages: dict[str, StrOrPromise]
     field_name: str | None
-    help_text: str | None
+    help_text: StrOrPromise | None
     initial: _VT | Callable[[], _VT] | None
-    label: str | None
+    label: StrOrPromise | None
     parent: BaseSerializer
     read_only: bool
     required: bool
@@ -95,10 +96,10 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
         default: _DefaultInitial[_VT] = ...,
         initial: _DefaultInitial[_VT] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[_VT]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -160,13 +161,13 @@ class CharField(Field[str, str, str, Any]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[str] = ...,
+        default: _DefaultInitial[StrOrPromise] = ...,
         initial: _DefaultInitial[str] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -185,13 +186,13 @@ class RegexField(CharField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[str] = ...,
+        default: _DefaultInitial[StrOrPromise] = ...,
         initial: _DefaultInitial[str] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -209,13 +210,13 @@ class SlugField(CharField):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[str] = ...,
+        default: _DefaultInitial[StrOrPromise] = ...,
         initial: _DefaultInitial[str] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -239,10 +240,10 @@ class UUIDField(Field[uuid.UUID, uuid.UUID | str | int, str, Any]):
         default: _DefaultInitial[uuid.UUID] = ...,
         initial: _DefaultInitial[uuid.UUID] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[uuid.UUID]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -260,10 +261,10 @@ class IPAddressField(CharField):
         default: _DefaultInitial[str] = ...,
         initial: _DefaultInitial[str] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[str]] | None = ...,
         allow_null: bool = ...,
         allow_blank: bool = ...,
@@ -288,10 +289,10 @@ class IntegerField(Field[int, float | int | str, int, Any]):
         default: _DefaultInitial[int] = ...,
         initial: _DefaultInitial[int] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[int]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -312,10 +313,10 @@ class FloatField(Field[float, float | int | str, str, Any]):
         default: _DefaultInitial[float] = ...,
         initial: _DefaultInitial[float] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[float]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -347,10 +348,10 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         default: _DefaultInitial[Decimal] = ...,
         initial: _DefaultInitial[Decimal] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Decimal]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -373,10 +374,10 @@ class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any])
         default: _DefaultInitial[datetime.datetime] = ...,
         initial: _DefaultInitial[datetime.datetime] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[datetime.datetime]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -397,10 +398,10 @@ class DateField(Field[datetime.date, datetime.date | str, str, Any]):
         default: _DefaultInitial[datetime.date] = ...,
         initial: _DefaultInitial[datetime.date] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[datetime.date]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -419,10 +420,10 @@ class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
         default: _DefaultInitial[datetime.time] = ...,
         initial: _DefaultInitial[datetime.time] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[datetime.time]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -441,17 +442,17 @@ class DurationField(Field[datetime.timedelta, datetime.timedelta | str, str, Any
         default: _DefaultInitial[datetime.timedelta] = ...,
         initial: _DefaultInitial[datetime.timedelta] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[datetime.timedelta]] | None = ...,
         allow_null: bool = ...,
     ): ...
 
 class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], str, Any]):
     html_cutoff: int | None
-    html_cutoff_text: str | None
+    html_cutoff_text: StrOrPromise | None
     allow_blank: bool
     grouped_choices: OrderedDict
     choice_strings_to_values: dict[str, Any]
@@ -463,17 +464,17 @@ class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], st
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
-        default: _DefaultInitial[str | int] = ...,
+        default: _DefaultInitial[StrOrPromise | int] = ...,
         initial: _DefaultInitial[str | int] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
-        html_cutoff_text: str = ...,
+        html_cutoff_text: StrOrPromise = ...,
         allow_blank: bool = ...,
     ): ...
     def iter_options(self) -> Iterable[Option]: ...
@@ -498,16 +499,16 @@ class MultipleChoiceField(
         write_only: bool = ...,
         required: bool = ...,
         default: _DefaultInitial[set[str | int] | set[str] | set[int]] = ...,
-        initial: _DefaultInitial[set[str | int] | set[str] | set[int]] = ...,
+        initial: _DefaultInitial[set[StrOrPromise | int] | set[StrOrPromise] | set[int]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
-        html_cutoff_text: str = ...,
+        html_cutoff_text: StrOrPromise = ...,
         allow_blank: bool = ...,
         allow_empty: bool = ...,
     ): ...
@@ -526,14 +527,14 @@ class FilePathField(ChoiceField):
         default: _DefaultInitial[str] = ...,
         initial: _DefaultInitial[str] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         html_cutoff: int = ...,
-        html_cutoff_text: str = ...,
+        html_cutoff_text: StrOrPromise = ...,
         allow_blank: bool = ...,
     ): ...
 
@@ -550,10 +551,10 @@ class FileField(Field[File, File, str | None, Any]):  # this field can return No
         default: _DefaultInitial[File] = ...,
         initial: _DefaultInitial[File] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[File]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,
@@ -572,10 +573,10 @@ class ImageField(FileField):
         default: _DefaultInitial[File] = ...,
         initial: _DefaultInitial[File] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[File]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,
@@ -599,10 +600,10 @@ class ListField(Field[list[Any], list[Any], list[Any], Any]):
         default: _DefaultInitial[list[Any]] = ...,
         initial: _DefaultInitial[list[Any]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
         *,
@@ -624,10 +625,10 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
         default: _DefaultInitial[dict[Any, Any]] = ...,
         initial: _DefaultInitial[dict[Any, Any]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[dict[Any, Any]]] | None = ...,
         allow_null: bool = ...,
         *,
@@ -651,10 +652,10 @@ class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | li
         default: _DefaultInitial[Mapping[Any, Any]] = ...,
         initial: _DefaultInitial[Mapping[Any, Any]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         *,
@@ -678,10 +679,10 @@ class SerializerMethodField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -699,10 +700,10 @@ class ModelField(Field):
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
         max_length: int = ...,

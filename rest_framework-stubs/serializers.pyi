@@ -9,6 +9,7 @@ from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -96,10 +97,10 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -129,7 +130,7 @@ class Serializer(
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: dict[str, Field]
-    default_error_messages: dict[str, Any]
+    default_error_messages: dict[str, StrOrPromise]
     def get_initial(self) -> Any: ...
     @cached_property
     def fields(self) -> BindingDict: ...
@@ -152,7 +153,7 @@ class ListSerializer(
 ):
     child: Field | BaseSerializer | None
     many: bool
-    default_error_messages: dict[str, Any]
+    default_error_messages: dict[str, StrOrPromise]
     allow_empty: bool | None
     def __init__(
         self,
@@ -168,10 +169,10 @@ class ListSerializer(
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
         min_length: int | None = ...,
@@ -215,10 +216,10 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         default: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
         initial: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
