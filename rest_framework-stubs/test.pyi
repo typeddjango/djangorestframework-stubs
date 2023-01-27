@@ -50,7 +50,7 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
+    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
@@ -68,7 +68,7 @@ class APIClient(APIRequestFactory, DjangoClient):
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: AnonymousUser | AbstractBaseUser = ..., token: Token | None = ...) -> None: ...
     def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
+    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]

@@ -176,6 +176,9 @@ IGNORED_ERRORS = {
         '"BasenameTestCase" has no attribute "router"',
         'Unexpected keyword argument "use_regex_path" for "SimpleRouter"',
     ],
+    "test_reverse.py": [
+        'Incompatible types in assignment (expression has type "MockVersioningScheme", variable has type "Optional[BaseVersioning]',  # noqa: E501
+    ],
     "test_serializer.py": [
         "base class",
         '"CharField" has incompatible type "Collection[Any]"',
@@ -228,6 +231,7 @@ IGNORED_ERRORS = {
     "test_versioning.py": [
         "rest_framework.decorators",
         'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
+        'Incompatible types in assignment (expression has type "Type[FakeResolverMatch]", variable has type "Optional[ResolverMatch]"',  # noqa: E501
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
