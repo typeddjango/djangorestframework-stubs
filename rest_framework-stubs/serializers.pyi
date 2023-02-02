@@ -1,16 +1,14 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, Generic, NoReturn, TypeVar
-from _typeshed import Self
 
+from _typeshed import Self
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
-from typing_extensions import Literal
-
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -67,7 +65,8 @@ from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from rest_framework.validators import Validator, UniqueTogetherValidator, BaseUniqueForValidator
+from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
+from typing_extensions import Literal
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
 ALL_FIELDS: str
@@ -126,9 +125,7 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer[
-        _IN,
-    ],
+    BaseSerializer[_IN],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: dict[str, Field]
