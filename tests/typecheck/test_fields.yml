@@ -72,7 +72,7 @@
         from typing import Optional, Dict, Any
 
         CharField(initial='', default=lambda: '')
-        CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[str, Callable[[], str], None, _Empty]"
+        CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[Union[str, _StrPromise], Callable[[], Union[str, _StrPromise]], None, _Empty]"
         CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"
 
         x: Optional[str] = CharField().get_initial()
@@ -97,7 +97,7 @@
         ChoiceField(['test'], allow_null=True, default=None)
         ChoiceField([1], default=int_callback)
         ChoiceField([1, 'lulz'], default=mixed_callback)
-        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[str, int, Callable[[], Union[str, int]], None, _Empty]" # E: Incompatible return value type (got "None", expected "Union[str, int]")
+        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[Union[str, _StrPromise], int, Callable[[], Union[Union[str, _StrPromise], int]], None, _Empty]" # E: Incompatible return value type (got "None", expected "Union[Union[str, _StrPromise], int]")
 
 -   case: MultipleChoiceField_default
     main: |
@@ -117,7 +117,7 @@
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int], Callable[[], Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int]]], None, _Empty]"
 
 -   case: FileField_default
     main: |
