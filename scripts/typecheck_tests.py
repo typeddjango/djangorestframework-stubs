@@ -154,6 +154,7 @@ IGNORED_ERRORS = {
     "test_permissions.py": [
         '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
         "_SupportsHasPermission",
+        "Invalid type alias: expression is not a valid type",
         '"object" not callable',
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
     ],
@@ -187,6 +188,8 @@ IGNORED_ERRORS = {
         "base class",
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
+        'Unsupported left operand type for | ("ReturnDict")',
+        'Unsupported left operand type for | ("Dict[str, str]")',
     ],
     "test_serializer_lists.py": [
         'Name "foo" is not defined',
@@ -205,6 +208,7 @@ IGNORED_ERRORS = {
     "test_testing.py": [
         '"Client" has no attribute "force_authenticate"',
         '"Client" has no attribute "credentials"',
+        'has no attribute "addClassCleanup"',
     ],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',
