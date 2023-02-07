@@ -1,7 +1,6 @@
-from contextlib import contextmanager
-from types import TracebackType
 from collections.abc import Iterator, Sequence
-from contextlib import AbstractContextManager
+from contextlib import AbstractContextManager, contextmanager
+from types import TracebackType
 from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser

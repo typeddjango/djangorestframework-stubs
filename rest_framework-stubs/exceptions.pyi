@@ -1,12 +1,11 @@
 from collections.abc import Sequence
 from typing import Any
 
-from typing_extensions import TypeAlias
-
 from django.http import HttpRequest, JsonResponse
 from django_stubs_ext import StrOrPromise
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
+from typing_extensions import TypeAlias
 
 def _get_error_details(data: Any, default_code: str | None = ...) -> Any: ...
 def _get_codes(detail: Any) -> Any: ...

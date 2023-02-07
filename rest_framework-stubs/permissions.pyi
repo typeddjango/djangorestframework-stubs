@@ -1,10 +1,10 @@
 from collections.abc import Sequence
 from typing import Any, Protocol, Union  # noqa: Y037  # https://github.com/python/mypy/issues/12392
-from typing_extensions import TypeAlias
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.views import APIView
+from typing_extensions import TypeAlias
 
 SAFE_METHODS: Sequence[str]
 

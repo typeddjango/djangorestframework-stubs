@@ -1,13 +1,13 @@
-from types import ModuleType
 from collections.abc import Iterable, Sequence
+from types import ModuleType
 from typing import Any
-from typing_extensions import TypeAlias
 
 from django.db.models.base import Model
 from rest_framework.compat import coreapi
 from rest_framework.request import Request
 from rest_framework.urlpatterns import _AnyURL
 from rest_framework.views import APIView
+from typing_extensions import TypeAlias
 
 def common_path(paths: Iterable[str]) -> str: ...
 def get_pk_name(model: type[Model]) -> str: ...
