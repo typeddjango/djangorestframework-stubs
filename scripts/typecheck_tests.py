@@ -56,6 +56,7 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
+        '" has no attribute "id"'
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -82,7 +83,6 @@ IGNORED_ERRORS = {
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[HttpRequest], Any]]")',  # noqa: E501
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
         'Argument 1 to "field_to_schema" has incompatible type "object"; expected "Field[Any, Any, Any, Any]"',
-        'Argument "help_text" to "CharField" has incompatible type "_StrPromise"',
         '"Module rest_framework.schemas.coreapi" does not explicitly export attribute "coreapi"',
     ],
     "browsable_api": [
@@ -91,6 +91,7 @@ IGNORED_ERRORS = {
     "models.py": [
         '"ForeignKeyTarget" has no attribute "sources"',
         '"CustomManager" not callable',
+        'Incompatible types in assignment (expression has type "Type[BaseManager[Any]]", variable has type "Type[CustomManager]")',  # noqa: E501
     ],
     "test_authtoken.py": [
         'Item "None" of "Optional[Token]" has no attribute "key"',
@@ -127,7 +128,8 @@ IGNORED_ERRORS = {
     "test_generics.py": [
         'has incompatible type "str"',
         '"Response" has no attribute "serializer"',
-        ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
+        'Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
+        'Incompatible types in assignment (expression has type "_QuerySet[SlugBasedModel, SlugBasedModel]", base class "InstanceView" defined the type as "_QuerySet[BasicModel, BasicModel]")'  # noqa: E501
     ],
     "test_htmlrenderer.py": [
         'to "get_template_names" of "TemplateHTMLRenderer" has incompatible type',
@@ -138,18 +140,20 @@ IGNORED_ERRORS = {
     "test_model_serializer.py": [
         '"Field[Any, Any, Any, Any]" has no attribute',
         'base class "Meta" defined the type as',
+        '"OneFieldModel" has no attribute "additional_attr"',
     ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
         "(not iterable)",
         'has incompatible type "range"',
         'expected "Iterable[Any]"',
+        'Value of type variable "_MT" of "paginate_queryset" of "CursorPagination" cannot be "object"',
+        'Value of type "Union[object, Any]" is not indexable',
     ],
     "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
     "test_permissions.py": [
         '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
         "_SupportsHasPermission",
-        "Invalid type alias: expression is not a valid type",
         '"object" not callable',
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
     ],
@@ -160,7 +164,6 @@ IGNORED_ERRORS = {
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',  # noqa: E501
     ],
     "test_relations_pk.py": [
-        '"OneToOneTarget" has no attribute "id"',
         '"Field[Any, Any, Any, Any]" has no attribute "get_queryset',
     ],
     "test_renderers.py": [
@@ -180,15 +183,10 @@ IGNORED_ERRORS = {
         '"BasenameTestCase" has no attribute "router"',
         'Unexpected keyword argument "use_regex_path" for "SimpleRouter"',
     ],
-    "test_reverse.py": [
-        'Incompatible types in assignment (expression has type "MockVersioningScheme", variable has type "Optional[BaseVersioning]',  # noqa: E501
-    ],
     "test_serializer.py": [
         "base class",
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
-        'Unsupported left operand type for | ("ReturnDict")',
-        'Unsupported left operand type for | ("Dict[str, str]")',
     ],
     "test_serializer_lists.py": [
         'Name "foo" is not defined',
@@ -207,7 +205,6 @@ IGNORED_ERRORS = {
     "test_testing.py": [
         '"Client" has no attribute "force_authenticate"',
         '"Client" has no attribute "credentials"',
-        'has no attribute "addClassCleanup"',
     ],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',
