@@ -56,7 +56,7 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
-        '" has no attribute "id"'
+        '" has no attribute "id"',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -129,7 +129,7 @@ IGNORED_ERRORS = {
         'has incompatible type "str"',
         '"Response" has no attribute "serializer"',
         'Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
-        'Incompatible types in assignment (expression has type "_QuerySet[SlugBasedModel, SlugBasedModel]", base class "InstanceView" defined the type as "_QuerySet[BasicModel, BasicModel]")'  # noqa: E501
+        'Incompatible types in assignment (expression has type "_QuerySet[SlugBasedModel, SlugBasedModel]", base class "InstanceView" defined the type as "_QuerySet[BasicModel, BasicModel]")',  # noqa: E501
     ],
     "test_htmlrenderer.py": [
         'to "get_template_names" of "TemplateHTMLRenderer" has incompatible type',
