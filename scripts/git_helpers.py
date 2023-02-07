@@ -14,7 +14,7 @@ class ProgressPrinter(RemoteProgress):
         print(self._cur_line)
 
 
-def checkout_target_tag(drf_version: Optional[str]) -> Path:
+def git_checkout_drf(commit_ref: Optional[str] = None) -> None:
     if not DRF_SOURCE_DIRECTORY.exists():
         DRF_SOURCE_DIRECTORY.mkdir(exist_ok=True, parents=False)
         repository = Repo.clone_from(
@@ -27,4 +27,4 @@ def checkout_target_tag(drf_version: Optional[str]) -> Path:
     else:
         repository = Repo(DRF_SOURCE_DIRECTORY)
         repository.remote("origin").pull("master", progress=ProgressPrinter(), depth=100)
-    repository.git.checkout(drf_version or "master")
+    repository.git.checkout(commit_ref or "master")

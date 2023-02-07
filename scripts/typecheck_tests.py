@@ -7,8 +7,12 @@ from collections import defaultdict
 from distutils import dir_util, spawn
 from typing import Dict, List, Pattern, Union
 
-from scripts.git_helpers import checkout_target_tag
+from scripts.git_helpers import git_checkout_drf
 from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTORY
+
+# django-rest-framework commit hash to check against (ignored with --drf_version)
+# This should be updated periodically or after every DRF release.
+DRF_GIT_REF = "22d206c1e0dbc03840c4d190f7eda537c0f2010a"
 
 IGNORED_MODULES = []
 MOCK_OBJECTS = [
@@ -284,7 +288,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--drf_version", required=False)
     args = parser.parse_args()
-    checkout_target_tag(args.drf_version)
+    git_checkout_drf(args.drf_version or DRF_GIT_REF)
     if sys.version_info[1] > 7:
         shutil.copytree(STUBS_DIRECTORY, DRF_SOURCE_DIRECTORY / "rest_framework", dirs_exist_ok=True)
     else:
