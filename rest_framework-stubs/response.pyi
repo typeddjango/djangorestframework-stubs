@@ -2,10 +2,9 @@ from collections.abc import Mapping
 from typing import Any
 
 from django.template.base import Template
-from django.test.utils import ContextList
 from django.template.response import SimpleTemplateResponse
+from django.test.utils import ContextList
 from django.urls import ResolverMatch
-
 from rest_framework.request import Request
 from rest_framework.test import APIClient
 

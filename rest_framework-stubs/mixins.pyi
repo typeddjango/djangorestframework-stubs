@@ -1,7 +1,6 @@
 from typing import Any, TypeVar
 
 from django.db.models import Model
-
 from rest_framework.generics import UsesQuerySet
 from rest_framework.request import Request
 from rest_framework.response import Response

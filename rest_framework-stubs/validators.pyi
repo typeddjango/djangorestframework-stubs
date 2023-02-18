@@ -1,10 +1,10 @@
 from collections.abc import Callable, Container, Iterable, MutableMapping
-from typing import Any, TypeVar, Protocol
-from typing_extensions import TypeAlias
+from typing import Any, Protocol, TypeVar
 
 from django.db.models import Model, QuerySet
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
+from typing_extensions import TypeAlias
 
 _T = TypeVar("_T", bound=Model)
 _V = TypeVar("_V", contravariant=True)

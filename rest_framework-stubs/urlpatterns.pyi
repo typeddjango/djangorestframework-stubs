@@ -1,7 +1,7 @@
 from collections.abc import Iterable, Sequence
-from typing_extensions import TypeAlias
 
 from django.urls.resolvers import URLPattern, URLResolver
+from typing_extensions import TypeAlias
 
 _AnyURL: TypeAlias = URLPattern | URLResolver
 
