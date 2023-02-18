@@ -154,9 +154,9 @@ IGNORED_ERRORS = {
     "test_permissions.py": [
         '"ResolverMatch" has incompatible type "str"; expected "Callable[..., Any]"',
         "_SupportsHasPermission",
-        "Invalid type alias: expression is not a valid type",
-        '"object" not callable',
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
+        '"<typing special form>" not callable',
+        '<nothing> not callable',
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, _StrPromise, List[Any], Dict[str, Any]]"; expected type "str"',
@@ -188,8 +188,6 @@ IGNORED_ERRORS = {
         "base class",
         '"CharField" has incompatible type "Collection[Any]"',
         'Name "foo" is not defined',
-        'Unsupported left operand type for | ("ReturnDict")',
-        'Unsupported left operand type for | ("Dict[str, str]")',
     ],
     "test_serializer_lists.py": [
         'Name "foo" is not defined',
@@ -208,7 +206,6 @@ IGNORED_ERRORS = {
     "test_testing.py": [
         '"Client" has no attribute "force_authenticate"',
         '"Client" has no attribute "credentials"',
-        'has no attribute "addClassCleanup"',
     ],
     "test_throttling.py": [
         'has incompatible type "Dict[<nothing>, <nothing>]"',
@@ -237,6 +234,7 @@ IGNORED_ERRORS = {
         "rest_framework.decorators",
         'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
         'Incompatible types in assignment (expression has type "Type[FakeResolverMatch]", variable has type "Optional[ResolverMatch]"',  # noqa: E501
+        '"None" not callable'
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
