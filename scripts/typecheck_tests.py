@@ -156,7 +156,7 @@ IGNORED_ERRORS = {
         "_SupportsHasPermission",
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
         '"<typing special form>" not callable',
-        '<nothing> not callable',
+        "<nothing> not callable",
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, _StrPromise, List[Any], Dict[str, Any]]"; expected type "str"',
@@ -234,7 +234,7 @@ IGNORED_ERRORS = {
         "rest_framework.decorators",
         'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
         'Incompatible types in assignment (expression has type "Type[FakeResolverMatch]", variable has type "Optional[ResolverMatch]"',  # noqa: E501
-        '"None" not callable'
+        '"None" not callable',
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
