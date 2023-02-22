@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Type
 
 from mypy.nodes import TypeInfo
 from mypy.options import Options
@@ -28,9 +28,10 @@ class NewSemanalDRFPlugin(Plugin):
     def _get_currently_defined_serializers(self) -> Dict[str, int]:
         base_serializer_sym = self.lookup_fully_qualified(fullnames.BASE_SERIALIZER_FULLNAME)
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):
-            return base_serializer_sym.node.metadata.setdefault("drf", {}).setdefault(
+            serializer_bases: Dict[str, int] = base_serializer_sym.node.metadata.setdefault("drf", {}).setdefault(
                 "serializer_bases", {fullnames.BASE_SERIALIZER_FULLNAME: 1}
             )
+            return serializer_bases
         else:
             return {}
 
@@ -40,5 +41,5 @@ class NewSemanalDRFPlugin(Plugin):
         return None
 
 
-def plugin(version):
+def plugin(version: str) -> Type[NewSemanalDRFPlugin]:
     return NewSemanalDRFPlugin
