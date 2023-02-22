@@ -57,7 +57,6 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
         '" has no attribute "id"',
-        'Argument 2 to "get" of "APIRequestFactory" has incompatible type "Dict[str, object]"',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -150,6 +149,7 @@ IGNORED_ERRORS = {
         'expected "Iterable[Any]"',
         'Value of type variable "_MT" of "paginate_queryset" of "CursorPagination" cannot be "object"',
         'Value of type "Union[object, Any]" is not indexable',
+        'Argument 2 to "get" of "APIRequestFactory" has incompatible type "Dict[str, object]"',
     ],
     "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
     "test_permissions.py": [
@@ -244,6 +244,7 @@ IGNORED_ERRORS = {
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
+        'Argument 2 to "get" of "APIRequestFactory" has incompatible type "str"',
         "note: Following member(s) of ",
         "note:     Expected:",
         "note:     Got:",
