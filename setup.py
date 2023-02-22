@@ -1,9 +1,10 @@
 import os
+from typing import List
 
 from setuptools import find_packages, setup
 
 
-def find_stub_files(name):
+def find_stub_files(name: str) -> List[str]:
     result = []
     for root, _dirs, files in os.walk(name):
         for file in files:
@@ -42,6 +43,8 @@ setup(
     url="https://github.com/typeddjango/djangorestframework-stubs",
     author="Maksim Kurnikov",
     author_email="maxim.kurnikov@gmail.com",
+    maintainer="Marti Raudsepp",
+    maintainer_email="marti@juffo.org",
     license="MIT",
     install_requires=dependencies,
     extras_require=extras_require,
@@ -55,6 +58,11 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Typing :: Typed",
+        "Framework :: Django",
     ],
+    project_urls={
+        "Release notes": "https://github.com/typeddjango/djangorestframework-stubs/releases",
+    },
 )
