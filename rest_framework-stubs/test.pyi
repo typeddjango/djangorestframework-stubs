@@ -1,3 +1,4 @@
+from collections.abc import Iterable, Mapping
 from typing import Any
 
 import coreapi
@@ -13,6 +14,13 @@ from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
+from typing_extensions import TypeAlias
+
+_GetDataType: TypeAlias = (
+    Mapping[str, str | bytes | int | Iterable[str | bytes | int]]
+    | Iterable[tuple[str, str | bytes | int | Iterable[str | bytes | int]]]
+    | None
+)
 
 def force_authenticate(
     request: HttpRequest, user: AnonymousUser | AbstractBaseUser | None = ..., token: Token | None = ...
@@ -50,7 +58,7 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def get(self, path: str, data: _GetDataType = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
@@ -68,7 +76,7 @@ class APIClient(APIRequestFactory, DjangoClient):
     def credentials(self, **kwargs: Any): ...
     def force_authenticate(self, user: AnonymousUser | AbstractBaseUser = ..., token: Token | None = ...) -> None: ...
     def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def get(self, path: str, data: _GetDataType = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
