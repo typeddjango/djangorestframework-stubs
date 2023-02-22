@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils import dir_util, spawn
-from typing import Dict, List, Pattern, Union
+from typing import DefaultDict, List, Pattern, Union
 
 from scripts.git_helpers import git_checkout_drf
 from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTORY
@@ -14,8 +14,8 @@ from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTO
 # This should be updated periodically or after every DRF release.
 DRF_GIT_REF = "22d206c1e0dbc03840c4d190f7eda537c0f2010a"
 
-IGNORED_MODULES = []
-MOCK_OBJECTS = [
+IGNORED_MODULES: List[str] = []
+MOCK_OBJECTS: List[str] = [
     "MockQueryset",
     "MockRequest",
     "TypeErrorQueryset",
@@ -253,8 +253,10 @@ IGNORED_ERRORS = {
     "utils.py": ['Invalid signature "Callable[[BadType], Any]"'],
 }
 
+_DictToSearch = DefaultDict[str, DefaultDict[Union[str, Pattern[str]], int]]
 
-def get_unused_ignores(ignored_message_freq: Dict[str, Dict[Union[str, Pattern], int]]) -> List[str]:
+
+def get_unused_ignores(ignored_message_freq: _DictToSearch) -> List[str]:
     unused_ignores = []
     for root_key, patterns in IGNORED_ERRORS.items():
         for pattern in patterns:
@@ -265,7 +267,7 @@ def get_unused_ignores(ignored_message_freq: Dict[str, Dict[Union[str, Pattern],
     return unused_ignores
 
 
-def is_pattern_fits(pattern: Union[Pattern, str], line: str):
+def does_pattern_fit(pattern: Union[Pattern[str], str], line: str) -> bool:
     if isinstance(pattern, Pattern):
         if pattern.search(line):
             return True
@@ -275,15 +277,15 @@ def is_pattern_fits(pattern: Union[Pattern, str], line: str):
     return False
 
 
-def is_ignored(line: str, filename: str, ignored_message_dict: Dict[str, Dict[str, int]]) -> bool:
+def is_ignored(line: str, filename: str, *, ignored_message_freqs: _DictToSearch) -> bool:
     if "runtests" in line or filename in IGNORED_MODULES:
         return True
     for pattern in IGNORED_ERRORS["__common__"]:
         if pattern in line:
             return True
     for pattern in IGNORED_ERRORS.get(filename, []):
-        if is_pattern_fits(pattern, line):
-            ignored_message_dict[test_filename][pattern] += 1
+        if does_pattern_fit(pattern, line):
+            ignored_message_freqs[test_filename][pattern] += 1
             return True
     for mock_object in MOCK_OBJECTS:
         if mock_object in line:
@@ -322,13 +324,13 @@ if __name__ == "__main__":
         mypy_executable = spawn.find_executable("mypy")
         mypy_argv = [mypy_executable, *mypy_options]
         completed = subprocess.run(
-            mypy_argv,
+            mypy_argv,  # type: ignore
             env={"PYTHONPATH": str(PROJECT_DIRECTORY)},
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
         output = completed.stdout.decode()
-        ignored_message_freqs = defaultdict(lambda: defaultdict(int))
+        ignored_message_freqs: _DictToSearch = defaultdict(lambda: defaultdict(int))
         sorted_lines = sorted(output.splitlines())
         for line in sorted_lines:
             try:
@@ -337,7 +339,7 @@ if __name__ == "__main__":
             except IndexError:
                 test_filename = "unknown"
 
-            if not is_ignored(line, test_filename, ignored_message_dict=ignored_message_freqs):
+            if not is_ignored(line, test_filename, ignored_message_freqs=ignored_message_freqs):
                 global_rc = 1
                 print(line)
 
