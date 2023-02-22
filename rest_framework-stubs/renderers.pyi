@@ -1,5 +1,5 @@
-from json import JSONEncoder
 from collections.abc import Iterable, Mapping, Sequence
+from json import JSONEncoder
 from typing import Any
 
 from django import forms

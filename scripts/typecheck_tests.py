@@ -7,8 +7,12 @@ from collections import defaultdict
 from distutils import dir_util, spawn
 from typing import Dict, List, Pattern, Union
 
-from scripts.git_helpers import checkout_target_tag
+from scripts.git_helpers import git_checkout_drf
 from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTORY
+
+# django-rest-framework commit hash to check against (ignored with --drf_version)
+# This should be updated periodically or after every DRF release.
+DRF_GIT_REF = "22d206c1e0dbc03840c4d190f7eda537c0f2010a"
 
 IGNORED_MODULES = []
 MOCK_OBJECTS = [
@@ -52,6 +56,7 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "content"',
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
+        '" has no attribute "id"',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -78,7 +83,6 @@ IGNORED_ERRORS = {
         'Incompatible types in assignment (expression has type "AsView[GenericView]", variable has type "AsView[Callable[[HttpRequest], Any]]")',  # noqa: E501
         'Argument "patterns" to "SchemaGenerator" has incompatible type "List[object]"',
         'Argument 1 to "field_to_schema" has incompatible type "object"; expected "Field[Any, Any, Any, Any]"',
-        'Argument "help_text" to "CharField" has incompatible type "_StrPromise"',
         '"Module rest_framework.schemas.coreapi" does not explicitly export attribute "coreapi"',
     ],
     "browsable_api": [
@@ -87,6 +91,7 @@ IGNORED_ERRORS = {
     "models.py": [
         '"ForeignKeyTarget" has no attribute "sources"',
         '"CustomManager" not callable',
+        'Incompatible types in assignment (expression has type "Type[BaseManager[Any]]", variable has type "Type[CustomManager]")',  # noqa: E501
     ],
     "test_authtoken.py": [
         'Item "None" of "Optional[Token]" has no attribute "key"',
@@ -123,7 +128,8 @@ IGNORED_ERRORS = {
     "test_generics.py": [
         'has incompatible type "str"',
         '"Response" has no attribute "serializer"',
-        ' Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
+        'Incompatible types in assignment (expression has type "Type[SlugSerializer]", base class "InstanceView" defined the type as "Type[BasicSerializer]")',  # noqa: E501
+        'Incompatible types in assignment (expression has type "_QuerySet[SlugBasedModel, SlugBasedModel]", base class "InstanceView" defined the type as "_QuerySet[BasicModel, BasicModel]")',  # noqa: E501
     ],
     "test_htmlrenderer.py": [
         'to "get_template_names" of "TemplateHTMLRenderer" has incompatible type',
@@ -134,12 +140,15 @@ IGNORED_ERRORS = {
     "test_model_serializer.py": [
         '"Field[Any, Any, Any, Any]" has no attribute',
         'base class "Meta" defined the type as',
+        '"OneFieldModel" has no attribute "additional_attr"',
     ],
     "test_negotiation.py": ['has incompatible type "None"'],
     "test_pagination.py": [
         "(not iterable)",
         'has incompatible type "range"',
         'expected "Iterable[Any]"',
+        'Value of type variable "_MT" of "paginate_queryset" of "CursorPagination" cannot be "object"',
+        'Value of type "Union[object, Any]" is not indexable',
     ],
     "test_parsers.py": ['"object" has no attribute', 'Argument 1 to "isnan" has incompatible type'],
     "test_permissions.py": [
@@ -148,6 +157,8 @@ IGNORED_ERRORS = {
         "Invalid type alias: expression is not a valid type",
         '"object" not callable',
         'Cannot assign multiple types to name "composed_perm" without an explicit "Type[...]" annotation',
+        '"<typing special form>" not callable',
+        "<nothing> not callable",
     ],
     "test_relations.py": [
         'Invalid index type "int" for "Union[str, _StrPromise, List[Any], Dict[str, Any]]"; expected type "str"',
@@ -156,7 +167,6 @@ IGNORED_ERRORS = {
         'Argument 2 to "re_path" has incompatible type "Callable[[], None]"; expected "Callable[..., HttpResponseBase]"',  # noqa: E501
     ],
     "test_relations_pk.py": [
-        '"OneToOneTarget" has no attribute "id"',
         '"Field[Any, Any, Any, Any]" has no attribute "get_queryset',
     ],
     "test_renderers.py": [
@@ -228,6 +238,8 @@ IGNORED_ERRORS = {
     "test_versioning.py": [
         "rest_framework.decorators",
         'Argument 1 to "include" has incompatible type "Tuple[List[object], str]"',
+        'Incompatible types in assignment (expression has type "Type[FakeResolverMatch]", variable has type "Optional[ResolverMatch]"',  # noqa: E501
+        '"None" not callable',
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
@@ -280,7 +292,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--drf_version", required=False)
     args = parser.parse_args()
-    checkout_target_tag(args.drf_version)
+    git_checkout_drf(args.drf_version or DRF_GIT_REF)
     if sys.version_info[1] > 7:
         shutil.copytree(STUBS_DIRECTORY, DRF_SOURCE_DIRECTORY / "rest_framework", dirs_exist_ok=True)
     else:

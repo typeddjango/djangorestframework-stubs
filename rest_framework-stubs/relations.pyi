@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, Generic, TypeVar
-from _typeshed import Self
 
+from _typeshed import Self
 from django.db.models import Manager, Model, QuerySet
 from rest_framework.fields import Field, Option
 from rest_framework.request import Request

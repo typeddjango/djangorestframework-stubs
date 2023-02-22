@@ -3,7 +3,6 @@ from typing import Any, Protocol, TypeVar
 
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
-
 from rest_framework import mixins, views
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.pagination import BasePagination

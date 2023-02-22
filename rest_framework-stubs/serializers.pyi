@@ -1,16 +1,15 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, Generic, NoReturn, TypeVar
-from _typeshed import Self
 
+from _typeshed import Self
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
 from django.db.models.fields import Field as DjangoModelField
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
-from typing_extensions import Literal
-
+from django.utils.translation import ugettext_lazy as _
+from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -67,7 +66,8 @@ from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from rest_framework.validators import Validator, UniqueTogetherValidator, BaseUniqueForValidator
+from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
+from typing_extensions import Literal
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
 ALL_FIELDS: str
@@ -97,10 +97,10 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
     ): ...
@@ -126,13 +126,11 @@ class SerializerMetaclass(type):
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
 class Serializer(
-    BaseSerializer[
-        _IN,
-    ],
+    BaseSerializer[_IN],
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: dict[str, Field]
-    default_error_messages: dict[str, Any]
+    default_error_messages: dict[str, StrOrPromise]
     def get_initial(self) -> Any: ...
     @cached_property
     def fields(self) -> BindingDict: ...
@@ -155,7 +153,7 @@ class ListSerializer(
 ):
     child: Field | BaseSerializer | None
     many: bool
-    default_error_messages: dict[str, Any]
+    default_error_messages: dict[str, StrOrPromise]
     allow_empty: bool | None
     def __init__(
         self,
@@ -171,12 +169,14 @@ class ListSerializer(
         default: Any = ...,
         initial: Any = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
+        min_length: int | None = ...,
+        max_length: int | None = ...,
     ): ...
     def get_initial(self) -> list[Mapping[Any, Any]]: ...
     def validate(self, attrs: Any) -> Any: ...
@@ -216,10 +216,10 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         default: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
         initial: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
         source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
+        label: StrOrPromise = ...,
+        help_text: StrOrPromise = ...,
         style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
+        error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,

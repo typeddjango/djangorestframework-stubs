@@ -1,7 +1,6 @@
 from collections import OrderedDict
 from collections.abc import Callable
 from typing import Any
-from typing_extensions import TypeAlias
 
 from django.http.request import HttpRequest
 from django.http.response import HttpResponseBase
@@ -10,6 +9,7 @@ from rest_framework.decorators import ViewSetAction
 from rest_framework.generics import _MT_co
 from rest_framework.request import Request
 from rest_framework.views import AsView, GenericView
+from typing_extensions import TypeAlias
 
 def _is_extra_action(attr: Any) -> bool: ...
 
