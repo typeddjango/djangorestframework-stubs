@@ -8,6 +8,28 @@ on:
   workflow_dispatch:
 
 jobs:
+  mypy-self-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -r ./requirements.txt
+      - name: Run mypy on plugin code
+        run: mypy --strict mypy_drf_plugin
+      - name: Run mypy on scripts and utils
+        run: mypy --strict scripts
+      - name: Run mypy on stubs
+        run: mypy --cache-dir=/dev/null --no-incremental rest_framework-stubs
+
   lint:
     runs-on: ubuntu-latest
     strategy:
