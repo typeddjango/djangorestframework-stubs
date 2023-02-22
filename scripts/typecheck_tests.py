@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser
 from collections import defaultdict
 from distutils import dir_util, spawn
-from typing import List, Pattern, Union, DefaultDict
+from typing import DefaultDict, List, Pattern, Union
 
 from scripts.git_helpers import git_checkout_drf
 from scripts.paths import DRF_SOURCE_DIRECTORY, PROJECT_DIRECTORY, STUBS_DIRECTORY
