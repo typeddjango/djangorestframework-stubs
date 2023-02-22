@@ -35,15 +35,6 @@ repos:
         - flake8-pyi==22.11.0
         types: []
         files: ^.*.pyi?$
-  - repo: local
-    hooks:
-      - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        types: [ python ]
-        exclude: "scripts/*"
-        args: [ "--cache-dir=/dev/null", "--no-incremental" ]
 
 ci:
     autofix_commit_msg: '[pre-commit.ci] auto fixes from pre-commit.com hooks'
