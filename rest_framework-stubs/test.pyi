@@ -1,6 +1,5 @@
 from collections.abc import Iterable, Mapping
 from typing import Any
-from typing_extensions import TypeAlias
 
 import coreapi
 import requests
@@ -15,6 +14,7 @@ from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
+from typing_extensions import TypeAlias
 
 _GetDataType: TypeAlias = (
     Mapping[str, str | bytes | int | Iterable[str | bytes | int]]

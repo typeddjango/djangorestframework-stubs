@@ -57,6 +57,7 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
         '" has no attribute "id"',
+        'Argument 2 to "get" of "APIRequestFactory" has incompatible type "Dict[str, object]"',
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -243,6 +244,10 @@ IGNORED_ERRORS = {
     ],
     "test_viewsets.py": [
         '(expression has type "None", variable has type "Request")',
+        "note: Following member(s) of ",
+        "note:     Expected:",
+        "note:     Got:",
+        "note:         def ",
     ],
     "utils.py": ['Invalid signature "Callable[[BadType], Any]"'],
 }
