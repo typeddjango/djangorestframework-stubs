@@ -36,7 +36,7 @@ extras_require = {
 
 setup(
     name="djangorestframework-stubs",
-    version="1.9.0",
+    version="1.9.1",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
