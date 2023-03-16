@@ -7,6 +7,6 @@ djangorestframework==3.14.0
 types-pytz==2022.7.1.2
 types-requests==2.28.11.15
 types-urllib3==1.26.25.8
-git+https://github.com/typeddjango/django-stubs@update-mypy
+django-stub==1.16.0
 django-stubs-ext==0.7.0
 -e .[compatible-mypy,coreapi,markdown]
