@@ -57,6 +57,9 @@ IGNORED_ERRORS = {
         '"_MonkeyPatchedWSGIResponse" has no attribute "data"',
         '" defined here',
         '" has no attribute "id"',
+        'Invalid index type "int" for "Union[List[ErrorDetail], Dict[str, ErrorDetail]]"; expected type "str"',
+        'Invalid index type "str" for "Union[ErrorDetail, List[ErrorDetail], Dict[str, ErrorDetail]]"; expected type "Union[SupportsIndex, slice]"',  # noqa: E501
+        'Invalid index type "int" for "Union[ErrorDetail, List[ErrorDetail], Dict[str, ErrorDetail]]"; expected type "str"',  # noqa: E501
     ],
     "authentication": [
         'Argument 1 to "post" of "APIClient" has incompatible type "None"; expected "str',
@@ -103,6 +106,12 @@ IGNORED_ERRORS = {
         'Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"',
     ],
     "test_encoders.py": ['Argument "serializer" to "ReturnList" has incompatible type "None'],
+    "test_exceptions.py": [
+        'error: No overload variant of "__getitem__" of "list" matches argument type "str"',
+        "note: Possible overload variants:",
+        "note:     def __getitem__(self, SupportsIndex, /) -> ErrorDetail",
+        "note:     def __getitem__(self, slice, /) -> List[ErrorDetail]",
+    ],
     "test_fields.py": [
         '"ChoiceModel"',
         'Argument "validators" to "CharField" has incompatible type',
