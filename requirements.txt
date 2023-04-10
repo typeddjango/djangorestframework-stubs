@@ -1,7 +1,7 @@
 wheel
 gitpython==3.1.31
 pre-commit==2.21.0
-pytest==7.2.2
+pytest==7.3.0
 pytest-mypy-plugins==1.10.1
 djangorestframework==3.14.0
 types-pytz==2023.3.0.0
