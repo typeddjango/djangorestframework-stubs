@@ -15,6 +15,7 @@
         status_code = 200
         default_detail = {"ok": "everything"}
         default_code = "ok"
+
 - case: test_exception_declaration_lazystr
   main: |
     from django.utils.translation import gettext_lazy as _
@@ -24,3 +25,26 @@
         status_code = 200
         default_detail = _("Está tudo bem")
         default_code = "ok"
+
+- case: test_exception_input
+  main: |
+    from django.utils.translation import gettext_lazy as _
+    from rest_framework.exceptions import APIException, ErrorDetail
+
+    test_exception = APIException({
+        'a': [
+            'value',
+            _('translated'),
+            ErrorDetail('with code', code='brown'),
+            {'b': 'test', 'c': _('translated')},
+            ('also', 'tuple', ErrorDetail('value')),
+        ]
+    })
+    APIException(detail=test_exception.detail, code='123')
+    APIException(detail=[test_exception.detail], code='123')
+    APIException('I am just a message', code='msg')
+    APIException()
+    APIException(None, None)
+    APIException(...)  # E: Argument 1 to "APIException" has incompatible type "ellipsis"; expected "_APIExceptionInput"
+    APIException({'a': ...})  # E: Dict entry 0 has incompatible type "str": "ellipsis"; expected "str": "Union[Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
+    APIException({'a': ['test', ...]})  # E: List item 1 has incompatible type "ellipsis"; expected "Union[Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
