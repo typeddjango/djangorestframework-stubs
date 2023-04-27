@@ -50,11 +50,10 @@ setup(
     extras_require=extras_require,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
