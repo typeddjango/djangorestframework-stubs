@@ -7,7 +7,7 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 from rest_framework.views import APIView
 
 class BaseMetadata:
-    def determine_metadata(self, request: Request, view: APIView) -> dict[str, Any]: ...
+    def determine_metadata(self, request: Request, view: APIView) -> Any: ...
 
 class SimpleMetadata(BaseMetadata):
     label_lookup: ClassLookupDict[type[serializers.Field], str]
