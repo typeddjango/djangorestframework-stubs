@@ -4,6 +4,7 @@ from typing import Any, Generic, TypeVar
 
 from _typeshed import Self
 from django.db.models import Manager, Model, QuerySet
+from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field, Option
 from rest_framework.request import Request
 from rest_framework.validators import Validator
@@ -48,11 +49,11 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
         default: Any = ...,
         initial: Any = ...,
         source: Callable | str = ...,
-        label: str | None = ...,
-        help_text: str = ...,
+        label: StrOrPromise | None = ...,
+        help_text: StrOrPromise = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
     ): ...
     # mypy doesn't accept the typing below, although its accurate to what this class is doing, hence the ignore
@@ -87,11 +88,11 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         default: Any = ...,
         initial: Any = ...,
         source: Callable | str = ...,
-        label: str | None = ...,
-        help_text: str = ...,
+        label: StrOrPromise | None = ...,
+        help_text: StrOrPromise = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
         pk_field: str | Field | None = ...,
     ): ...
@@ -115,11 +116,11 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         default: Any = ...,
         initial: Any = ...,
         source: Callable | str = ...,
-        label: str | None = ...,
-        help_text: str = ...,
+        label: StrOrPromise | None = ...,
+        help_text: StrOrPromise = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
         view_name: str | None = ...,
         lookup_field: str | None = ...,
@@ -146,11 +147,11 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         default: _DT = ...,
         initial: _MT | Callable[[Any], _MT] = ...,
         source: Callable | str = ...,
-        label: str | None = ...,
-        help_text: str = ...,
+        label: StrOrPromise | None = ...,
+        help_text: StrOrPromise = ...,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
         slug_field: str | None = ...,
     ): ...
@@ -171,10 +172,10 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
         default: Sequence[Any] = ...,
         initial: Sequence[Any] | Callable[[Any], Sequence[Any]] = ...,
         source: Callable | str = ...,
-        label: str | None = ...,
+        label: StrOrPromise | None = ...,
         help_text: str | None = ...,
         style: dict[str, str] | None = ...,
-        error_messages: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
         validators: Sequence[Validator[Sequence[Any]]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
