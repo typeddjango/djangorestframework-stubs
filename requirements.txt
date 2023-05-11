@@ -6,7 +6,7 @@ pytest-mypy-plugins==1.11.1
 djangorestframework==3.14.0
 types-pytz==2023.3.0.0
 types-requests==2.30.0.0
-types-urllib3==1.26.25.12
+types-urllib3==1.26.25.13
 django-stubs==4.2.0
 django-stubs-ext==4.2.0
 -e .[compatible-mypy,coreapi,markdown]
