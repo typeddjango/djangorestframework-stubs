@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from collections.abc import Iterator, MutableMapping
 from typing import Any
 
@@ -6,7 +5,7 @@ from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
 
-class ReturnDict(OrderedDict):
+class ReturnDict(dict):
     serializer: BaseSerializer
     def __init__(self, serializer: BaseSerializer = ..., *args, **kwargs): ...
     def copy(self) -> ReturnDict: ...
@@ -39,7 +38,7 @@ class NestedBoundField(BoundField):
 
 class BindingDict(MutableMapping[str, Field]):
     serializer: BaseSerializer
-    fields: OrderedDict[str, Field]
+    fields: dict[str, Field]
     def __init__(self, serializer: BaseSerializer): ...
     def __setitem__(self, key: str, field: Field) -> None: ...
     def __getitem__(self, key: str) -> Field: ...

@@ -1,4 +1,4 @@
-from collections import Counter, OrderedDict
+from collections import Counter
 from collections.abc import Iterable, Sequence
 from typing import Any
 
@@ -17,7 +17,7 @@ def distribute_links(obj: Any) -> None: ...
 
 INSERT_INTO_COLLISION_FMT: str
 
-class LinkNode(OrderedDict):
+class LinkNode(dict):
     links: list[Any]
     methods_counter: Counter
     def __init__(self) -> None: ...
