@@ -48,7 +48,7 @@
     from rest_framework.decorators import action
 
     class MyView(viewsets.ViewSet):
-      
+
       @action(methods=("get",), detail=False)
       def view_func_1(request): ...
 
