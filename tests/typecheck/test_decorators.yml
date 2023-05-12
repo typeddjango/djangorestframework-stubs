@@ -41,3 +41,16 @@
         permission_classes([IsAuthenticated & Permission])
         permission_classes([IsAuthenticated | Permission])
         permission_classes([~Permission])
+
+- case: method_decorator
+  main: |
+    from rest_framework import viewsets
+    from rest_framework.decorators import action
+
+    class MyView(viewsets.ViewSet):
+      
+      @action(methods=("get",), detail=False)
+      def view_func_1(request): ...
+
+      @action(methods=["post",], detail=False)
+      def view_func_2(request): ...

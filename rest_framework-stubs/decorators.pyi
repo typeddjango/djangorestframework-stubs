@@ -29,7 +29,7 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS: TypeAlias = list[
+_LOWER_CASE_HTTP_VERBS: TypeAlias = Sequence[
     Literal[
         "get",
         "post",
@@ -42,7 +42,7 @@ _LOWER_CASE_HTTP_VERBS: TypeAlias = list[
     ]
 ]
 
-_MIXED_CASE_HTTP_VERBS: TypeAlias = list[
+_MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
     Literal[
         "GET",
         "POST",
