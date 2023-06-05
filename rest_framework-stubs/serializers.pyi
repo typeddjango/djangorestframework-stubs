@@ -2,13 +2,9 @@ from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMappin
 from typing import Any, Generic, NoReturn, TypeVar
 
 from _typeshed import Self
-from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
-from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
-from django.db.models.fields import Field as DjangoModelField
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
 from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
