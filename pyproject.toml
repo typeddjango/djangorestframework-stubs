@@ -13,6 +13,11 @@ line-length = 120
 target-version = "py38"
 select = [
     "I",    # isort
+    "F401", # Unused imports
+]
+fixable = [
+    "I001",
+    "F401",
 ]
 
 [tool.ruff.isort]
