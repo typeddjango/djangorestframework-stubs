@@ -188,6 +188,8 @@ IGNORED_ERRORS = {
     ],
     "test_response.py": [
         'Argument 2 to "get" of "Client" has incompatible type "**Dict[str, str]"',
+        '"Dict" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance',
+        'Consider using "Mapping" instead, which is covariant in the value type',
     ],
     "test_routers.py": [
         'expression has type "List[RouterTestModel]"',
