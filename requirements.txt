@@ -1,6 +1,6 @@
 wheel
 gitpython==3.1.31
-pre-commit==3.3.2
+pre-commit==3.3.3
 pytest==7.3.2
 pytest-mypy-plugins==1.11.1
 djangorestframework==3.14.0
