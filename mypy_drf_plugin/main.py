@@ -1,10 +1,7 @@
 from typing import Callable, Dict, Optional, Type
 
 from mypy.nodes import TypeInfo
-from mypy.options import Options
 from mypy.plugin import ClassDefContext, Plugin
-from mypy_django_plugin.config import DjangoPluginConfig
-from mypy_django_plugin.django.context import DjangoContext
 
 from mypy_drf_plugin.lib import fullnames, helpers
 from mypy_drf_plugin.transformers import serializers
@@ -19,12 +16,6 @@ def transform_serializer_class(ctx: ClassDefContext) -> None:
 
 
 class NewSemanalDRFPlugin(Plugin):
-    def __init__(self, options: Options) -> None:
-        super().__init__(options)
-
-        django_settings_module = DjangoPluginConfig(options.config_file).django_settings_module
-        self.django_context = DjangoContext(django_settings_module)
-
     def _get_currently_defined_serializers(self) -> Dict[str, int]:
         base_serializer_sym = self.lookup_fully_qualified(fullnames.BASE_SERIALIZER_FULLNAME)
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):
