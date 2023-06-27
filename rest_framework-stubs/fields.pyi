@@ -7,7 +7,7 @@ from json import JSONDecoder, JSONEncoder
 from re import Pattern
 from typing import Any, Final, Generic, NoReturn, Protocol, TypeVar
 
-from _typeshed import Self
+from typing_extensions import Self
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
@@ -122,7 +122,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     def root(self) -> BaseSerializer: ...
     @property
     def context(self) -> dict[str, Any]: ...
-    def __new__(cls: type[Self], *args: Any, **kwargs: Any) -> Self: ...
+    def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
     def __deepcopy__(self, memo: Mapping[Any, Any]) -> Field: ...
 
 class BooleanField(
