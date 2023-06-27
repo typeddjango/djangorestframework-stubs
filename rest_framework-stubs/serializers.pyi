@@ -1,7 +1,6 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, Generic, Literal, NoReturn, TypeVar
 
-from _typeshed import Self
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
 from django.utils.functional import cached_property
@@ -63,6 +62,7 @@ from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
+from typing_extensions import Self
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
 ALL_FIELDS: str
@@ -76,7 +76,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     instance: _IN | None
     initial_data: Any
     _context: dict[str, Any]
-    def __new__(cls: type[Self], *args: Any, **kwargs: Any) -> Self: ...
+    def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
     def __class_getitem__(cls, *args, **kwargs): ...
     def __init__(
         self,
