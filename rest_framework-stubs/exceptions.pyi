@@ -11,7 +11,7 @@ class ErrorDetail(str):
     code: str | None
     def __new__(cls, string: str, code: str | None = ...): ...
 
-_Detail: TypeAlias = ErrorDetail | list[ErrorDetail] | dict[str, ErrorDetail]
+_Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[str, _Detail]
 # NB! _APIExceptionInput doesn't technically handle Sequence/Mapping, but only list/tuple/dict.
 # But since list/tuple are non-covariant types, we run into issues with union type compatibility for input params.
 # So use the more relaxed Sequence/Mapping for now.
@@ -24,7 +24,7 @@ class _FullDetailDict(TypedDict):
     message: ErrorDetail
     code: str | None
 
-_ErrorFullDetails: TypeAlias = _FullDetailDict | list[_FullDetailDict] | dict[str, _FullDetailDict]
+_ErrorFullDetails: TypeAlias = _FullDetailDict | list[_ErrorFullDetails] | dict[str, _ErrorFullDetails]
 
 def _get_error_details(data: _APIExceptionInput, default_code: str | None = ...) -> _Detail: ...
 def _get_codes(detail: _Detail) -> _ErrorCodes: ...
@@ -41,8 +41,8 @@ class APIException(Exception):
     def get_full_details(self) -> _ErrorFullDetails: ...
 
 class ValidationError(APIException):
-    # ValidationError always wraps `detail` in a list.
-    detail: list[ErrorDetail] | dict[str, ErrorDetail]
+    # ValidationError wraps `detail` in a list if it's not already a list/dict.
+    detail: list[_Detail] | dict[str, _Detail]
 
 class ParseError(APIException): ...
 class AuthenticationFailed(APIException): ...
