@@ -7,14 +7,13 @@ from json import JSONDecoder, JSONEncoder
 from re import Pattern
 from typing import Any, Final, Generic, NoReturn, Protocol, TypeVar
 
-from typing_extensions import Self
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
 from django_stubs_ext import StrOrPromise
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
-from typing_extensions import TypeAlias
+from typing_extensions import Self, TypeAlias
 
 class _Empty(Enum):
     sentinel = 0  # noqa: Y015

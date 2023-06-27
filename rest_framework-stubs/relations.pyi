@@ -1,12 +1,12 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, Generic, TypeVar
 
-from typing_extensions import Self
 from django.db.models import Manager, Model, QuerySet
 from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field, Option
 from rest_framework.request import Request
 from rest_framework.validators import Validator
+from typing_extensions import Self
 
 def method_overridden(method_name: str, klass: type, instance: Model) -> bool: ...
 
