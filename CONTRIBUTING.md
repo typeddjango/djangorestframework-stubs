@@ -73,36 +73,6 @@ To execute the unit tests, simply run:
 pytest
 ```
 
-We also test the stubs against the DRF's own test suite. This is done in CI but you can also do this locally.
-To execute the script run:
-
-```bash
-python ./scripts/typecheck_tests.py
-```
-
-You can also optionally specify a specific version tag to test against, e.g.
-
-```bash
-python ./scripts/typecheck_tests.py --drf_version 3.12.1
-```
-
-### Generating Stubs using Stubgen
-
-The stubs are based on auto-generated code created by Mypy's stubgen tool (see: [the stubgen docs](https://mypy.readthedocs.io/en/stable/stubgen.html)).
-To make life easier we have a helper script that auto generates these stubs. To use it you can run:
-
-```bash
-python ./scripts/stubgen-drf.py
-```
-
-You can also pass an optional version tag, e.g.
-
-```bash
-python ./scripts/stubgen-drf.py --drf_version 3.12.1
-```
-
-The output for this is a gitignored folder called "stubgen" in the repo's root.
-
 ## Submission Guidelines
 
 The workflow for contributions is fairly simple:

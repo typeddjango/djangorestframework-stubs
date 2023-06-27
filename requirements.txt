@@ -1,5 +1,4 @@
 wheel
-gitpython==3.1.31
 pre-commit==3.3.3
 pytest==7.4.0
 pytest-mypy-plugins==1.11.1
