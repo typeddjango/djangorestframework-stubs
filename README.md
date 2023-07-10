@@ -26,6 +26,20 @@ plugins =
 
 in your `mypy.ini` file.
 
+## FAQ
+
+### Model instance is inferred as `Any` instead of my `Model` class
+
+This library adds support for [Generics](https://peps.python.org/pep-0484/#generics) in DRF. For example, you can now write:
+
+```python
+class MyModelSerializer(serializers.ModelSerializer[MyModel]):
+    class Meta:
+        model = MyModel
+        fields = ("id", "example")
+```
+
+Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `Union[MyModel, typing.Sequence[MyModel], None]`.
 
 ## To get help
 
