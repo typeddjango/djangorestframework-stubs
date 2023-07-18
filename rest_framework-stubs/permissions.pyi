@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Protocol, Union  # noqa: Y037  # https://github.com/python/mypy/issues/12392
+from typing import Any, Protocol  # noqa: Y037  # https://github.com/python/mypy/issues/12392
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -13,7 +13,7 @@ class _SupportsHasPermission(Protocol):
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
 # https://github.com/python/mypy/issues/12392
-_PermissionClass: TypeAlias = Union[type[BasePermission], OperandHolder, SingleOperandHolder]
+_PermissionClass: TypeAlias = type[BasePermission] | OperandHolder | SingleOperandHolder
 
 class OperationHolderMixin:
     def __and__(self, other: _PermissionClass) -> OperandHolder: ...
