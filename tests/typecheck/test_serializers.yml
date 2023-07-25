@@ -75,3 +75,131 @@
         @cached_property
         def fields(self) -> BindingDict:
             return super().fields
+
+- case: test_return_list
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnList
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnList([], serializer=self)
+            ReturnList((), serializer=self)
+            ReturnList(["1"], serializer=self)
+            ReturnList([{}], serializer=self)
+            ret = ReturnList(serializer=self)
+            reveal_type(ret)  # N: Revealed type is "rest_framework.utils.serializer_helpers.ReturnList"
+
+- case: test_return_list_serializer_argument_is_kw_only
+  parametrized:
+    - arg: ""
+      err: No overload variant of "ReturnList" matches argument type "TestSerializer"
+    - arg: "[],"
+      err: No overload variant of "ReturnList" matches argument types "List[<nothing>]", "TestSerializer"
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnList
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnList({{ arg }} self)
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def ReturnList(self, *, serializer: BaseSerializer[Any]) -> ReturnList
+    main:6: note:     def [_T] ReturnList(self, Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList
+
+- case: test_return_list_serializer_is_required
+  parametrized:
+    - arg: ""
+      err: All overload variants of "ReturnList" require at least one argument
+    - arg: "[]"
+      err: No overload variant of "ReturnList" matches argument type "List[<nothing>]"
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnList
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnList({{ arg }})
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def ReturnList(self, *, serializer: BaseSerializer[Any]) -> ReturnList
+    main:6: note:     def [_T] ReturnList(self, Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList
+
+- case: test_return_dict
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnDict
+    from typing import Mapping
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            input: Mapping[str, str] = {}
+            ReturnDict({}, serializer=self)
+            ReturnDict([("a", "a")], serializer=self)
+            ReturnDict(input, serializer=self)
+            iterable = ""
+            sep = " "
+            ReturnDict((string.split(sep) for string in iterable), serializer=self)
+            ret = ReturnDict(serializer=self)
+            reveal_type(ret)  # N: Revealed type is "rest_framework.utils.serializer_helpers.ReturnDict"
+
+- case: test_return_dict_serializer_argument_is_kw_only
+  parametrized:
+    - arg: ""
+      err: No overload variant of "ReturnDict" matches argument type "TestSerializer"
+    - arg: "{},"
+      err: No overload variant of "ReturnDict" matches argument types "Dict[<nothing>, <nothing>]", "TestSerializer"
+    - arg: "[],"
+      err: No overload variant of "ReturnDict" matches argument types "List[<nothing>]", "TestSerializer"
+    - arg: "[('a', 'a')],"
+      err: No overload variant of "ReturnDict" matches argument types "List[Tuple[str, str]]", "TestSerializer"
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnDict({{ arg }} self)
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def ReturnDict(self, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, SupportsKeysAndGetItem[str, Any], /, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[Tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[Tuple[str, Any]], /, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[List[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[List[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+
+- case: test_return_dict_serializer_is_required
+  parametrized:
+    - arg: ""
+      err: All overload variants of "ReturnDict" require at least one argument
+    - arg: "{}"
+      err: No overload variant of "ReturnDict" matches argument type "Dict[<nothing>, <nothing>]"
+    - arg: "[]"
+      err: No overload variant of "ReturnDict" matches argument type "List[<nothing>]"
+    - arg: "[('a', 'a')]"
+      err: No overload variant of "ReturnDict" matches argument type "List[Tuple[str, str]]"
+  main: |
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnDict({{ arg }})
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def ReturnDict(self, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, SupportsKeysAndGetItem[str, Any], /, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[Tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[Tuple[str, Any]], /, *, serializer: BaseSerializer[Any], **kwargs: Any) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[List[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
+    main:6: note:     def ReturnDict(self, Iterable[List[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict
