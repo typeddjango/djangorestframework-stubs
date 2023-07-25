@@ -1,19 +1,51 @@
-from collections.abc import Iterator, MutableMapping
-from typing import Any
+from collections.abc import Iterable, Iterator, MutableMapping
+from typing import Any, TypeVar, overload
 
+from _typeshed import SupportsKeysAndGetItem
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
 
+_T = TypeVar("_T")
+_VT = TypeVar("_VT")
+_KT = TypeVar("_KT")
+
 class ReturnDict(dict):
     serializer: BaseSerializer
-    def __init__(self, serializer: BaseSerializer = ..., *args, **kwargs): ...
+    # def __init__(self, serializer: BaseSerializer, *args, **kw    @overload
+    @overload
+    def __init__(self, *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(self: dict[str, _VT], *, serializer: BaseSerializer, **kwargs: _VT) -> None: ...
+    @overload
+    def __init__(self, __map: SupportsKeysAndGetItem[_KT, _VT], *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(
+        self: dict[str, _VT], __map: SupportsKeysAndGetItem[str, _VT], *, serializer: BaseSerializer, **kwargs: _VT
+    ) -> None: ...
+    @overload
+    def __init__(self, __iterable: Iterable[tuple[_KT, _VT]], *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(
+        self: dict[str, _VT], __iterable: Iterable[tuple[str, _VT]], *, serializer: BaseSerializer, **kwargs: _VT
+    ) -> None: ...
+    # Next two overloads are for dict(string.split(sep) for string in iterable)
+    # Cannot be Iterable[Sequence[_T]] or otherwise dict(["foo", "bar", "baz"]) is not an error
+    @overload
+    def __init__(self: dict[str, str], __iterable: Iterable[list[str]], *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(
+        self: dict[bytes, bytes], __iterable: Iterable[list[bytes]], *, serializer: BaseSerializer
+    ) -> None: ...
     def copy(self) -> ReturnDict: ...
     def __reduce__(self) -> tuple[dict, tuple[dict]]: ...
 
 class ReturnList(list):
     serializer: BaseSerializer
-    def __init__(self, serializer: BaseSerializer = ..., *args, **kwargs): ...
+    @overload
+    def __init__(self, *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(self, __iterable: Iterable[_T], *, serializer: BaseSerializer) -> None: ...
     def __reduce__(self) -> tuple[dict, tuple[dict]]: ...
 
 class BoundField:
