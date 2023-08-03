@@ -1,20 +1,59 @@
-from collections.abc import Iterator, MutableMapping
-from typing import Any
+from collections.abc import Iterable, Iterator, MutableMapping
+from typing import Any, Generic, TypeVar, overload
 
+from _typeshed import SupportsKeysAndGetItem
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
 
-class ReturnDict(dict):
-    serializer: BaseSerializer
-    def __init__(self, serializer: BaseSerializer = ..., *args, **kwargs): ...
-    def copy(self) -> ReturnDict: ...
-    def __reduce__(self) -> tuple[dict, tuple[dict]]: ...
+_T = TypeVar("_T")
+_VT = TypeVar("_VT")
+_KT = TypeVar("_KT")
 
-class ReturnList(list):
+class ReturnDict(dict[_KT, _VT], Generic[_KT, _VT]):
     serializer: BaseSerializer
-    def __init__(self, serializer: BaseSerializer = ..., *args, **kwargs): ...
-    def __reduce__(self) -> tuple[dict, tuple[dict]]: ...
+    # Copied from https://github.com/python/typeshed/blob/main/stdlib/builtins.pyi `class dict`
+    @overload
+    def __init__(self, *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(self: ReturnDict[str, _VT], *, serializer: BaseSerializer, **kwargs: _VT) -> None: ...
+    @overload
+    def __init__(self, __map: SupportsKeysAndGetItem[_KT, _VT], *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(
+        self: ReturnDict[str, _VT],
+        __map: SupportsKeysAndGetItem[str, _VT],
+        *,
+        serializer: BaseSerializer,
+        **kwargs: _VT
+    ) -> None: ...
+    @overload
+    def __init__(self, __iterable: Iterable[tuple[_KT, _VT]], *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(
+        self: ReturnDict[str, _VT], __iterable: Iterable[tuple[str, _VT]], *, serializer: BaseSerializer, **kwargs: _VT
+    ) -> None: ...
+    # Next two overloads are for dict(string.split(sep) for string in iterable)
+    # Cannot be Iterable[Sequence[_T]] or otherwise dict(["foo", "bar", "baz"]) is not an error
+    @overload
+    def __init__(
+        self: ReturnDict[str, str], __iterable: Iterable[list[str]], *, serializer: BaseSerializer
+    ) -> None: ...
+    @overload
+    def __init__(
+        self: ReturnDict[bytes, bytes], __iterable: Iterable[list[bytes]], *, serializer: BaseSerializer
+    ) -> None: ...
+    def copy(self) -> ReturnDict[_KT, _VT]: ...
+    def __reduce__(self) -> tuple[type[dict[_KT, _VT]], tuple[dict[_KT, _VT]]]: ...
+
+class ReturnList(list[_T], Generic[_T]):
+    serializer: BaseSerializer
+    # Copied from https://github.com/python/typeshed/blob/main/stdlib/builtins.pyi `class list`
+    @overload
+    def __init__(self, *, serializer: BaseSerializer) -> None: ...
+    @overload
+    def __init__(self, __iterable: Iterable[_T], *, serializer: BaseSerializer) -> None: ...
+    def __reduce__(self) -> tuple[type[list[_T]], tuple[list[_T]]]: ...
 
 class BoundField:
     """
