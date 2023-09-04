@@ -7,5 +7,5 @@ types-pytz==2023.3.0.1
 types-requests==2.31.0.2
 types-urllib3==1.26.25.14
 git+https://github.com/typeddjango/django-stubs
-git+https://github.com/typeddjango/django-stubs#subdirectory=django_stubs_ext
+git+https://github.com/typeddjango/django-stubs#subdirectory=ext
 -e .[compatible-mypy,coreapi,markdown]
