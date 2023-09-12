@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, Generic, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -125,7 +125,7 @@ class Serializer(
     metaclass=SerializerMetaclass,
 ):
     _declared_fields: dict[str, Field]
-    default_error_messages: dict[str, StrOrPromise]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
     def get_initial(self) -> Any: ...
     @cached_property
     def fields(self) -> BindingDict: ...
@@ -148,7 +148,7 @@ class ListSerializer(
 ):
     child: Field | BaseSerializer | None
     many: bool
-    default_error_messages: dict[str, StrOrPromise]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
     allow_empty: bool | None
     def __init__(
         self,
