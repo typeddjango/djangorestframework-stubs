@@ -13,10 +13,10 @@
     from django.db.models import Model
 
     class MyModel(Model):
-        pass
+        field = models.IntegerField()
 
     class MyView(generics.DestroyAPIView):
-        queryset = MyModel._default_manager.all()
+        queryset = MyModel.objects.all()
 
         def perform_destroy(self, instance: MyModel) -> None: ...
 
