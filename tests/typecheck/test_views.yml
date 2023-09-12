@@ -10,9 +10,9 @@
 - case: test_destroy_api_view
   main: |
     from rest_framework import generics
-    from django.db.models import Model
+    from django.db import models
 
-    class MyModel(Model):
+    class MyModel(models.Model):
         field = models.IntegerField()
 
     class MyView(generics.DestroyAPIView):
