@@ -16,7 +16,7 @@
         pass
 
     class MyView(generics.DestroyAPIView):
-        queryset = MyModel.objects.all()
+        queryset = MyModel._default_manager.all()
 
         def perform_destroy(self, instance: MyModel) -> None: ...
 
