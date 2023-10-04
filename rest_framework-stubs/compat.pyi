@@ -10,7 +10,7 @@ except ImportError:
 try:
     import coreapi
 except ImportError:
-    coreapi = None  # type: ignore
+    coreapi = None
 try:
     import uritemplate
 except ImportError:
@@ -18,7 +18,7 @@ except ImportError:
 try:
     import coreschema
 except ImportError:
-    coreschema = None  # type: ignore
+    coreschema = None
 try:
     import yaml
 except ImportError:
@@ -30,9 +30,9 @@ except ImportError:
 try:
     import pygments
 except ImportError:
-    pygments = None  # type: ignore
+    pygments = None
 try:
-    import markdown  # type: ignore
+    import markdown
     def apply_markdown(text: str): ...
 
 except ImportError:
@@ -40,7 +40,7 @@ except ImportError:
     markdown = None  # type: ignore
 
 if markdown is not None and pygments is not None:
-    from markdown.preprocessors import Preprocessor  # type: ignore
+    from markdown.preprocessors import Preprocessor
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any

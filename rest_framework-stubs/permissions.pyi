@@ -48,7 +48,7 @@ class NOT(_SupportsHasPermission):
 
 class BasePermissionMetaclass(OperationHolderMixin, type): ...  # type: ignore[misc]
 
-class BasePermission(metaclass=BasePermissionMetaclass):  # type: ignore[misc]
+class BasePermission(metaclass=BasePermissionMetaclass):
     def has_permission(self, request: Request, view: APIView) -> bool: ...
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
