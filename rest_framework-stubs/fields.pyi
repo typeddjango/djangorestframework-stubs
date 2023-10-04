@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, Final, Generic, NoReturn, Protocol, TypeVar
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
 
 from django.core.files.base import File
 from django.db import models
@@ -72,7 +72,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
     default: _VT | None
     default_empty_html: Any
-    default_error_messages: dict[str, StrOrPromise]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
     default_validators: list[Validator[_VT]]
     error_messages: dict[str, StrOrPromise]
     field_name: str | None

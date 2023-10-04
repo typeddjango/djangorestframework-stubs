@@ -26,6 +26,20 @@ plugins =
 
 in your `mypy.ini` file.
 
+## FAQ
+
+### Model instance is inferred as `Any` instead of my `Model` class
+
+When subclassing `ModelSerializer`, add a [type argument](https://peps.python.org/pep-0484/#generics) to type-hint the related model class, for example:
+
+```python
+class MyModelSerializer(serializers.ModelSerializer[MyModel]):
+    class Meta:
+        model = MyModel
+        fields = ("id", "example")
+```
+
+Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `Union[MyModel, typing.Sequence[MyModel], None]`.
 
 ## To get help
 
