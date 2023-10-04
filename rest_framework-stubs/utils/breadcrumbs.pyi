@@ -1,3 +1,5 @@
 from typing import Any
 
-def get_breadcrumbs(url: Any, request: Any | None = ...): ...
+from _typeshed import Incomplete
+
+def get_breadcrumbs(url: Any, request: Any | None = ...) -> Incomplete: ...

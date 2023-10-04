@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from typing import Any, Protocol, TypeVar
 
+from _typeshed import Incomplete
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
 from rest_framework import mixins, views
@@ -27,7 +28,7 @@ class BaseFilterProtocol(Protocol[_MT_inv]):
         self, request: Request, queryset: QuerySet[_MT_inv], view: views.APIView
     ) -> QuerySet[_MT_inv]: ...
     def get_schema_fields(self, view: views.APIView) -> list[Any]: ...
-    def get_schema_operation_parameters(self, view: views.APIView): ...
+    def get_schema_operation_parameters(self, view: views.APIView) -> Incomplete: ...
 
 class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
     queryset: QuerySet[_MT_co] | Manager[_MT_co] | None

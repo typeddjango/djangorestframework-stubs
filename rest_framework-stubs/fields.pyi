@@ -7,6 +7,7 @@ from json import JSONDecoder, JSONEncoder
 from re import Pattern
 from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
 
+from _typeshed import Incomplete
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
@@ -26,11 +27,11 @@ class CreateOnlyDefault:
     requires_context: bool
     default: Any
     def __init__(self, default: Any) -> None: ...
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class CurrentUserDefault:
     requires_context: bool
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class SkipField(Exception): ...
 

@@ -1,6 +1,7 @@
 from typing import Any
 
 import requests  # noqa: F401
+from _typeshed import Incomplete
 from django.db.models import QuerySet
 
 try:
@@ -33,7 +34,7 @@ except ImportError:
     pygments = None
 try:
     import markdown
-    def apply_markdown(text: str): ...
+    def apply_markdown(text: str) -> Incomplete: ...
 
 except ImportError:
     apply_markdown = None  # type: ignore
@@ -45,7 +46,7 @@ if markdown is not None and pygments is not None:
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
         formatter: Any
-        def run(self, lines: Any): ...
+        def run(self, lines: Any) -> Incomplete: ...
 
 def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...

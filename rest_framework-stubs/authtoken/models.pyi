@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.db import models
+from typing_extensions import Self
 
 class Token(models.Model):
     key: models.CharField
@@ -11,4 +12,4 @@ class Token(models.Model):
 
 class TokenProxy(Token):
     @property
-    def pk(self) -> Any: ...
+    def pk(self: Self) -> Any: ...

@@ -1,6 +1,7 @@
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
 
+from _typeshed import Incomplete
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
 from django.utils.functional import cached_property
@@ -77,7 +78,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     initial_data: Any
     _context: dict[str, Any]
     def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
-    def __class_getitem__(cls, *args, **kwargs): ...
+    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
     def __init__(
         self,
         instance: _IN | None = ...,
@@ -114,7 +115,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     def to_representation(self, instance: _IN) -> Any: ...
 
 class SerializerMetaclass(type):
-    def __new__(cls, name: Any, bases: Any, attrs: Any): ...
+    def __new__(cls, name: Any, bases: Any, attrs: Any) -> Incomplete: ...
     @classmethod
     def _get_declared_fields(cls, bases: Sequence[type], attrs: dict[str, Any]) -> dict[str, Field]: ...
 

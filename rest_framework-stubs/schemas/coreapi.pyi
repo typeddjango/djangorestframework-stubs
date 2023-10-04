@@ -2,6 +2,7 @@ from collections import Counter
 from collections.abc import Iterable, Sequence
 from typing import Any
 
+from _typeshed import Incomplete
 from rest_framework.compat import coreapi
 from rest_framework.fields import Field
 from rest_framework.request import Request
@@ -43,7 +44,7 @@ class SchemaGenerator(BaseSchemaGenerator):
     def get_keys(self, subpath: Any, method: Any, view: APIView) -> list[str]: ...
     def determine_path_prefix(self, paths: list[str]) -> str: ...
 
-def field_to_schema(field: Field): ...
+def field_to_schema(field: Field) -> Incomplete: ...
 
 class AutoSchema(ViewInspector):
     def __init__(self, manual_fields: list[coreapi.Field] | None = ...) -> None: ...

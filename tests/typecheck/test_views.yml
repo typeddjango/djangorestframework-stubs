@@ -1,9 +1,11 @@
 - case: test_view_request_type
   main: |
+    from typing import Any
+    from django.db.models import QuerySet
     from rest_framework import generics
 
     class MyListView(generics.ListAPIView):
-        def filter_queryset(self, queryset):
+        def filter_queryset(self, queryset: QuerySet[Any]) -> QuerySet[Any]:
             reveal_type(self.request)  # N: Revealed type is "rest_framework.request.Request"
             return queryset
 
