@@ -46,7 +46,7 @@ class OR(_SupportsHasPermission):
 class NOT(_SupportsHasPermission):
     def __init__(self, op1: _SupportsHasPermission) -> None: ...
 
-class BasePermissionMetaclass(OperationHolderMixin, type): ...  # type: ignore[misc]
+class BasePermissionMetaclass(OperationHolderMixin, type): ...  # type: ignore[misc,unused-ignore]
 
 class BasePermission(metaclass=BasePermissionMetaclass):
     def has_permission(self, request: Request, view: APIView) -> bool: ...
