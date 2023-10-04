@@ -10,15 +10,22 @@
 - case: test_destroy_api_view
   main: |
     from rest_framework import generics
-    from django.db.models import Model
-
-    class MyModel(Model):
-        pass
+    from myapp.models import MyModel
 
     class MyView(generics.DestroyAPIView):
         queryset = MyModel.objects.all()
 
         def perform_destroy(self, instance: MyModel) -> None: ...
+  installed_apps:
+      - myapp
+  files:
+      -   path: myapp/__init__.py
+      -   path: myapp/models.py
+          content: |
+              from django.db import models
+              class MyModel(models.Model):
+                  pass
+
 
 - case: test_build_api_request
   main: |
