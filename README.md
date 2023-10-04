@@ -30,7 +30,7 @@ in your `mypy.ini` file.
 
 ### Model instance is inferred as `Any` instead of my `Model` class
 
-This library adds support for [Generics](https://peps.python.org/pep-0484/#generics) in DRF. For example, you can now write:
+When subclassing `ModelSerializer`, add a [type argument](https://peps.python.org/pep-0484/#generics) to type-hint the related model class, for example:
 
 ```python
 class MyModelSerializer(serializers.ModelSerializer[MyModel]):
