@@ -1,8 +1,8 @@
+from _typeshed import Incomplete
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from typing import Any
 
-from _typeshed import Incomplete
 from rest_framework.compat import coreapi
 from rest_framework.fields import Field
 from rest_framework.request import Request

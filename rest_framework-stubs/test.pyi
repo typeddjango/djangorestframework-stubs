@@ -1,10 +1,10 @@
+from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping
 from typing import Any
 
 import coreapi
 import requests
 import urllib3
-from _typeshed import Incomplete
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest

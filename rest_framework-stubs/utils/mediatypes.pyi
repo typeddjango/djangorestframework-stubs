@@ -1,6 +1,5 @@
-from typing import Any
-
 from _typeshed import Incomplete
+from typing import Any
 
 def media_type_matches(lhs: Any, rhs: Any) -> Incomplete: ...
 def order_by_precedence(media_type_lst: Any) -> Incomplete: ...

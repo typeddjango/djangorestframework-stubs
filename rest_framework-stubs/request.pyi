@@ -1,9 +1,9 @@
+from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
 from typing import Any
 
-from _typeshed import Incomplete
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpRequest

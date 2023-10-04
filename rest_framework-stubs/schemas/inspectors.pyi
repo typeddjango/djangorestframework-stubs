@@ -1,8 +1,7 @@
+from _typeshed import Incomplete
 from collections.abc import Mapping
 from re import Pattern
 from typing import Any
-
-from _typeshed import Incomplete
 
 class ViewInspector:
     header_regex: Pattern

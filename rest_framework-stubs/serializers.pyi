@@ -1,7 +1,7 @@
+from _typeshed import Incomplete
 from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
 
-from _typeshed import Incomplete
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
 from django.utils.functional import cached_property

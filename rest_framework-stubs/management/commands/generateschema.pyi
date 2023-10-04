@@ -1,6 +1,6 @@
+from _typeshed import Incomplete
 from typing import Any
 
-from _typeshed import Incomplete
 from django.core.management.base import BaseCommand
 
 OPENAPI_MODE: str

@@ -1,7 +1,7 @@
+from _typeshed import SupportsKeysAndGetItem
 from collections.abc import Iterable, Iterator, MutableMapping
 from typing import Any, Generic, TypeVar, overload
 
-from _typeshed import SupportsKeysAndGetItem
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer

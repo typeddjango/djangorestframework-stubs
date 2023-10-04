@@ -1,6 +1,5 @@
-from typing import Any
-
 from _typeshed import Incomplete
+from typing import Any
 
 def datetime_formats(formats: Any) -> Incomplete: ...
 def date_formats(formats: Any) -> Incomplete: ...

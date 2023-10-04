@@ -1,6 +1,6 @@
+from _typeshed import Incomplete
 from collections.abc import Iterable
 
-from _typeshed import Incomplete
 from rest_framework.parsers import BaseParser
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request

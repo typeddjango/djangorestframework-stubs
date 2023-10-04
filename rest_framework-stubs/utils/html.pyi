@@ -1,6 +1,5 @@
-from typing import Any
-
 from _typeshed import Incomplete
+from typing import Any
 
 def is_html_input(dictionary: Any) -> Incomplete: ...
 def parse_html_list(dictionary: Any, prefix: str = ..., default: Any | None = ...) -> Incomplete: ...

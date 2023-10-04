@@ -1,6 +1,6 @@
+from _typeshed import Incomplete
 from typing import Any
 
-from _typeshed import Incomplete
 from django import template
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser

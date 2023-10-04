@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from _typeshed import Incomplete
 from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
 from decimal import Decimal
 from enum import Enum
@@ -7,7 +8,6 @@ from json import JSONDecoder, JSONEncoder
 from re import Pattern
 from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
 
-from _typeshed import Incomplete
 from django.core.files.base import File
 from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401

@@ -1,7 +1,7 @@
+from _typeshed import Incomplete
 from collections.abc import MutableMapping, Sequence
 from typing import Any, Generic, TypeVar
 
-from _typeshed import Incomplete
 from django.db import models
 
 NUMERIC_FIELD_TYPES: Sequence[type[models.Field]]

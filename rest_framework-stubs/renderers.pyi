@@ -1,8 +1,8 @@
+from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping, Sequence
 from json import JSONEncoder
 from typing import Any
 
-from _typeshed import Incomplete
 from django import forms
 from rest_framework.request import Request
 from rest_framework.response import Response

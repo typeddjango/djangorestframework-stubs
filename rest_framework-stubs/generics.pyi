@@ -1,7 +1,7 @@
+from _typeshed import Incomplete
 from collections.abc import Sequence
 from typing import Any, Protocol, TypeVar
 
-from _typeshed import Incomplete
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
 from rest_framework import mixins, views

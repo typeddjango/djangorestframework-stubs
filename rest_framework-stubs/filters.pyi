@@ -1,7 +1,7 @@
+from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypeVar
 
-from _typeshed import Incomplete
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.views import APIView
