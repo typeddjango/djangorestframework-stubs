@@ -45,7 +45,7 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
-    parser_context: dict[str, Any] | None
+    parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
     _request: HttpRequest
