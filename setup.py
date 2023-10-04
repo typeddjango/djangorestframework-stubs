@@ -30,7 +30,7 @@ dependencies = [
 
 # Keep compatible-mypy major.minor version pinned to what we use in CI (requirements.txt)
 extras_require = {
-    "compatible-mypy": ["mypy>=1.4,<1.6"],
+    "compatible-mypy": ["mypy==1.5.*"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
