@@ -1,7 +1,6 @@
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any, NoReturn, Protocol, TypeVar
 
-from _typeshed import Incomplete
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
 from django.views.generic import View
@@ -21,7 +20,7 @@ from rest_framework.versioning import BaseVersioning
 def get_view_name(view: APIView) -> str: ...
 def get_view_description(view: APIView, html: bool = ...) -> str: ...
 def set_rollback() -> None: ...
-def exception_handler(exc: Exception, context: Incomplete) -> Response | None: ...
+def exception_handler(exc: Exception, context: dict[str, Any]) -> Response | None: ...
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 

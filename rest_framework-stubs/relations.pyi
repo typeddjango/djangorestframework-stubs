@@ -1,7 +1,6 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, Generic, TypeVar
 
-from _typeshed import Incomplete
 from django.db.models import Manager, Model, QuerySet
 from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field, Option
@@ -16,7 +15,7 @@ class ObjectTypeError(TypeError): ...
 
 class Hyperlink(str):
     def __new__(cls, url: str, obj: Any) -> Self: ...
-    def __getnewargs__(self) -> Incomplete: ...
+    def __getnewargs__(self) -> tuple[str, str]: ...
     @property
     def name(self) -> str: ...
     is_hyperlink: bool
