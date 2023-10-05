@@ -111,7 +111,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     def update(self, instance: _IN, validated_data: Any) -> _IN: ...
     def create(self, validated_data: Any) -> _IN: ...
     def save(self, **kwargs: Any) -> _IN: ...
-    def to_representation(self, instance: _IN) -> Any: ...  # type: ignore[override]
+    def to_representation(self, instance: _IN) -> Any: ...
 
 class SerializerMetaclass(type):
     def __new__(cls, name: Any, bases: Any, attrs: Any): ...
@@ -189,7 +189,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     serializer_url_field: type[RelatedField]
     serializer_choice_field: type[Field]
     url_field_name: str | None
-    instance: _MT | Sequence[_MT] | None  # type: ignore[override]
+    instance: _MT | Sequence[_MT] | None
 
     class Meta:
         model: type[_MT]  # type: ignore
@@ -197,7 +197,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         read_only_fields: Sequence[str] | None
         exclude: Sequence[str] | None
         depth: int | None
-        extra_kwargs: dict[str, dict[str, Any]]  # type: ignore[override]
+        extra_kwargs: dict[str, dict[str, Any]]
     def __init__(
         self,
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
@@ -219,10 +219,10 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ): ...
-    def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
-    def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
-    def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
-    def to_representation(self, instance: _MT) -> Any: ...  # type: ignore[override]
+    def update(self, instance: _MT, validated_data: Any) -> _MT: ...
+    def create(self, validated_data: Any) -> _MT: ...
+    def save(self, **kwargs: Any) -> _MT: ...
+    def to_representation(self, instance: _MT) -> Any: ...
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> list[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> list[str]: ...
     def build_field(
