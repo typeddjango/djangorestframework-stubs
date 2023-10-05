@@ -5,11 +5,11 @@ from django.http import HttpRequest, JsonResponse
 from django_stubs_ext import StrOrPromise
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
-from typing_extensions import TypeAlias, TypedDict
+from typing_extensions import Self, TypeAlias, TypedDict
 
 class ErrorDetail(str):
     code: str | None
-    def __new__(cls, string: str, code: str | None = ...): ...
+    def __new__(cls, string: str, code: str | None = ...) -> Self: ...
 
 _Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[str, _Detail]
 # NB! _APIExceptionInput doesn't technically handle Sequence/Mapping, but only list/tuple/dict.
@@ -68,7 +68,7 @@ class UnsupportedMediaType(APIException):
 class Throttled(APIException):
     extra_detail_singular: str
     extra_detail_plural: str
-    def __init__(self, wait: float | None = ..., detail: _APIExceptionInput = ..., code: str | None = ...): ...
+    def __init__(self, wait: float | None = ..., detail: _APIExceptionInput = ..., code: str | None = ...) -> None: ...
 
 def server_error(request: HttpRequest | Request, *args: Any, **kwargs: Any) -> JsonResponse: ...
 def bad_request(request: HttpRequest | Request, exception: Exception, *args: Any, **kwargs: Any) -> JsonResponse: ...

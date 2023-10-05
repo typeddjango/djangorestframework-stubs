@@ -1,3 +1,4 @@
+from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
@@ -17,7 +18,7 @@ from rest_framework.views import APIView
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(AbstractContextManager[Request]):
-    def __init__(self, view: APIView, request: Request, method: str): ...
+    def __init__(self, view: APIView, request: Request, method: str) -> None: ...
     def __enter__(self) -> Request: ...
     def __exit__(
         self,
@@ -79,5 +80,5 @@ class Request(HttpRequest):
     @property
     def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
-    def FILES(self): ...
+    def FILES(self) -> Incomplete: ...  # type: ignore[override]
     def force_plaintext_errors(self, value: Any) -> None: ...

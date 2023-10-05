@@ -24,6 +24,7 @@ select = [
 
 [tool.ruff.isort]
 split-on-trailing-comma = false
+extra-standard-library = ["_typeshed"]
 
 [build-system]
 requires = ["setuptools<64", "wheel"]

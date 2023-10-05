@@ -1,8 +1,11 @@
 -   case: api_view
     main: |
+        from typing import Any
         from rest_framework.decorators import api_view
+        from rest_framework.request import Request
+        from rest_framework.response import Response
         @api_view()
-        def view_func1(request): ...
+        def view_func1(request: Any) -> Any: ...
         reveal_type(view_func1)  # N: Revealed type is "rest_framework.views.AsView[def (django.http.request.HttpRequest) -> Any]"
 -   case: api_view_fancy
     main: |
@@ -16,14 +19,16 @@
         view_func2(None, 10)  # E: Argument 1 has incompatible type "None"; expected "HttpRequest"  # E: Argument 2 has incompatible type "int"; expected "str"
 -   case: api_view_bare_is_error
     main: |
+        from typing import Any
         from rest_framework.decorators import api_view
         @api_view  # E: Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"
-        def view_func2(request): ...
+        def view_func2(request: Any) -> Any: ...
 -   case: api_view_incorrect_return
     main: |
         from rest_framework.decorators import api_view
+        from rest_framework.request import Request
         @api_view()  # E: Value of type variable "_RESP" of function cannot be "List[Any]"
-        def view_func2(request) -> list: ...
+        def view_func2(request: Request) -> list: ...
 
 -   case: permission_classes
     main: |
@@ -46,11 +51,13 @@
   main: |
     from rest_framework import viewsets
     from rest_framework.decorators import action
+    from rest_framework.request import Request
+    from rest_framework.response import Response
 
     class MyView(viewsets.ViewSet):
 
       @action(methods=("get",), detail=False)
-      def view_func_1(request): ...
+      def view_func_1(self, request: Request) -> Response: ...
 
       @action(methods=["post",], detail=False)
-      def view_func_2(request): ...
+      def view_func_2(self, request: Request) -> Response: ...
