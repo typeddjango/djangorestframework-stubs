@@ -21,7 +21,7 @@ with open("README.md") as f:
 
 dependencies = [
     "mypy>=0.991",
-    "django-stubs>=4.2.2",
+    "django-stubs>=4.2.4",
     "typing-extensions>=3.10.0",
     "requests>=2.0.0",
     "types-requests>=0.1.12",
@@ -30,14 +30,14 @@ dependencies = [
 
 # Keep compatible-mypy major.minor version pinned to what we use in CI (requirements.txt)
 extras_require = {
-    "compatible-mypy": ["mypy==1.4.*"],
+    "compatible-mypy": ["mypy==1.5.*"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
 
 setup(
     name="djangorestframework-stubs",
-    version="3.14.2",
+    version="3.14.3",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",

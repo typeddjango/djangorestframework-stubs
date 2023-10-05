@@ -1,3 +1,4 @@
+from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
@@ -17,7 +18,7 @@ from rest_framework.views import APIView
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(AbstractContextManager[Request]):
-    def __init__(self, view: APIView, request: Request, method: str): ...
+    def __init__(self, view: APIView, request: Request, method: str) -> None: ...
     def __enter__(self) -> Request: ...
     def __exit__(
         self,
@@ -45,7 +46,7 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
-    parser_context: dict[str, Any] | None
+    parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
     _request: HttpRequest
@@ -65,8 +66,8 @@ class Request(HttpRequest):
     def query_params(self) -> _ImmutableQueryDict: ...
     @property
     def data(self) -> dict[str, Any]: ...
-    @property  # type: ignore[override]
-    def user(self) -> AbstractBaseUser | AnonymousUser: ...  # type: ignore[override]
+    @property
+    def user(self) -> AbstractBaseUser | AnonymousUser: ...
     @user.setter
     def user(self, value: AbstractBaseUser | AnonymousUser) -> None: ...
     @property
@@ -79,5 +80,5 @@ class Request(HttpRequest):
     @property
     def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
-    def FILES(self): ...
+    def FILES(self) -> Incomplete: ...  # type: ignore[override]
     def force_plaintext_errors(self, value: Any) -> None: ...

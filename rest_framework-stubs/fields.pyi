@@ -1,11 +1,12 @@
 import datetime
 import uuid
+from _typeshed import Incomplete
 from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, Final, Generic, NoReturn, Protocol, TypeVar
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
 
 from django.core.files.base import File
 from django.db import models
@@ -26,11 +27,11 @@ class CreateOnlyDefault:
     requires_context: bool
     default: Any
     def __init__(self, default: Any) -> None: ...
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class CurrentUserDefault:
     requires_context: bool
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class SkipField(Exception): ...
 
@@ -72,7 +73,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
     default: _VT | None
     default_empty_html: Any
-    default_error_messages: dict[str, StrOrPromise]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
     default_validators: list[Validator[_VT]]
     error_messages: dict[str, StrOrPromise]
     field_name: str | None
