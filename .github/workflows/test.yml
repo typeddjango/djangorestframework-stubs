@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
-          pip install -r ./requirements.txt
+          SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
       - name: Run mypy on plugin code
         run: mypy --strict mypy_drf_plugin
       - name: Run mypy on scripts and utils
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
       - name: Setup system dependencies
@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
-          pip install -r ./requirements.txt
+          SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
 
       - name: Run tests
         run: pytest

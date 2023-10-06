@@ -27,4 +27,4 @@ split-on-trailing-comma = false
 extra-standard-library = ["_typeshed"]
 
 [build-system]
-requires = ["setuptools<64", "wheel"]
+requires = ["setuptools", "wheel"]
