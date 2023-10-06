@@ -1,5 +1,6 @@
 import datetime
 import uuid
+from _typeshed import Incomplete
 from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
 from decimal import Decimal
 from enum import Enum
@@ -26,11 +27,11 @@ class CreateOnlyDefault:
     requires_context: bool
     default: Any
     def __init__(self, default: Any) -> None: ...
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class CurrentUserDefault:
     requires_context: bool
-    def __call__(self, serializer_field: Field): ...
+    def __call__(self, serializer_field: Field) -> Incomplete: ...
 
 class SkipField(Exception): ...
 

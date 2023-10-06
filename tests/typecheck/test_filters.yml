@@ -14,21 +14,23 @@
 
 -   case: django_filters
     main: |
+        from typing import Any, List
         from rest_framework.mixins import CreateModelMixin
-        from rest_framework.generics import GenericAPIView
+        from rest_framework.generics import GenericAPIView, BaseFilterProtocol
+        from rest_framework.request import Request
         from rest_framework.views import APIView
         from rest_framework.serializers import BaseSerializer, ModelSerializer
-        from django.db.models import Model
+        from django.db.models import Model, QuerySet
 
         class MyModel(Model):
             pass
 
         class MyFilterBackend:
-            def filter_queryset(self, request, queryset, view):
+            def filter_queryset(self, request: Request, queryset: QuerySet[MyModel], view: APIView) -> QuerySet[MyModel]:
                 pass
-            def get_schema_fields(self, view):
+            def get_schema_fields(self, view: APIView) -> List[Any]:
                 pass
-            def get_schema_operation_parameters(self, view):
+            def get_schema_operation_parameters(self, view: APIView) -> Any:
                 pass
 
         class MyView(GenericAPIView):
