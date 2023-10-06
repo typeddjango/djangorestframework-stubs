@@ -64,7 +64,7 @@ class PageNumberPagination(BasePagination):
     page_size: int | None
     page: Page | None
     request: Request | None
-    template: str
+    template: str | None
     def paginate_queryset(
         self, queryset: QuerySet[_MT], request: Request, view: APIView | None = ...
     ) -> list[_MT] | None: ...
@@ -88,7 +88,7 @@ class LimitOffsetPagination(BasePagination):
     offset_query_param: str
     offset: int | None
     request: Request | None
-    template: str
+    template: str | None
     def paginate_queryset(
         self, queryset: QuerySet[_MT], request: Request, view: APIView | None = ...
     ) -> list[_MT] | None: ...
@@ -116,7 +116,7 @@ class CursorPagination(BasePagination):
     page_size: int | None
     page: list[Any] | None
     previous_position: str | None
-    template: str
+    template: str | None
     def paginate_queryset(
         self, queryset: QuerySet[_MT], request: Request, view: APIView | None = ...
     ) -> list[_MT] | None: ...
