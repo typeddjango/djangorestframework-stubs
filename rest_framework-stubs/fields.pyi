@@ -17,7 +17,7 @@ from rest_framework.validators import Validator
 from typing_extensions import Self, TypeAlias
 
 class _Empty(Enum):
-    sentinel = 0  # noqa: Y015
+    sentinel = 0
 
 empty: Final = _Empty.sentinel
 
@@ -329,7 +329,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     min_value: Decimal | int | float | None
     localize: bool
     rounding: str | None
-    max_whole_digits = int | None  # noqa: Y026
+    max_whole_digits: int | None
     def __init__(
         self,
         max_digits: int | None,
