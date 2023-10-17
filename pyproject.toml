@@ -43,9 +43,6 @@ ignore = ["PYI021", "PYI024", "PYI041", "PYI043"]
     "PGH003",  # TODO fix these errors
     "PYI002",  # TODO fix these errors
 ]
-#"tests/*.py" = ["INP001"]
-#"ext/tests/*.py" = ["INP001"]
-#"setup.py" = ["INP001"]
 
 [tool.ruff.flake8-tidy-imports.banned-api]
 "_typeshed.Self".msg = "Use typing_extensions.Self (PEP 673) instead."
