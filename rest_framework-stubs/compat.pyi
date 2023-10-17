@@ -1,6 +1,5 @@
 from typing import Any
 
-import requests  # noqa: F401
 from django.db.models import QuerySet
 
 try:
