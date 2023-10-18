@@ -83,6 +83,7 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         self,
         instance: _IN | None = ...,
         data: Any = ...,
+        *,
         partial: bool = ...,
         many: bool = ...,
         allow_empty: bool = ...,

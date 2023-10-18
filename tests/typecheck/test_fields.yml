@@ -9,8 +9,9 @@
 
 -   case: some_positional_args_fields
     main: |
+        from datetime import datetime, time
         from django.db import models
-        from rest_framework.fields import DecimalField, IPAddressField, SlugField, RegexField, ModelField, SerializerMethodField, ChoiceField
+        from rest_framework.fields import DecimalField, IPAddressField, SlugField, RegexField, ModelField, SerializerMethodField, ChoiceField, DateTimeField, DateField, TimeField
 
         DecimalField(1, 1, False, 1, 1, False, None, True)
         DecimalField(1, 1, False, 1, 1, False, None, True, True)  # E: Too many positional arguments for "DecimalField"
@@ -34,37 +35,15 @@
         ChoiceField([])
         ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"
 
--   case: most_positional_args_fields
-    main: |
-        from rest_framework.fields import Field, ListField, DictField, JSONField
-        f: Field = Field()
-
-        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True)
-        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True, f)  # E: Too many positional arguments for "ListField"
-        ListField(True, True, True, [{"key": "value"}], [{"key": "value"}], 'src', 'l', 'ht', {"key": "value"}, {"key": "value"}, [lambda x: None], True, child=f, allow_empty=True, max_length=1, min_length=1)
-
-        DictField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
-        DictField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, f)  # E: Too many positional arguments for "DictField"
-        DictField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, child=f, allow_empty=True)
-
-        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True)
-        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, True)  # E: Too many positional arguments for "JSONField"
-        JSONField(True, True, True, {}, {}, 'src', 'l', 'ht', {}, {}, [], True, binary=True, encoder=None, decoder=None)
-
--   case: all_positional_args_fields
-    main: |
-        from datetime import datetime, time
-        from rest_framework.fields import DateTimeField, DateField, TimeField
-
         d: datetime = datetime.now()
-        DateTimeField('', [], None, True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True)
-        DateTimeField('', [], None, True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "DateTimeField"
+        DateTimeField('', [], None, read_only=True, write_only=True, allow_null=True)
+        DateTimeField('', [], None, True)  # E: Too many positional arguments for "DateTimeField"
 
-        DateField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True)
-        DateField('', [], True, True, True, d, d, 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "DateField"
+        DateField('', [], read_only=True, write_only=True, allow_null=True)
+        DateField('', [], True)  # E: Too many positional arguments for "DateField"
 
-        TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True)
-        TimeField('', [], True, True, True, time(hour=1), time(hour=1), 'src', 'l', 'ht', {}, {}, [], True, 1)  # E: Too many arguments for "TimeField"
+        TimeField('', [], read_only=True, write_only=True, allow_null=True)
+        TimeField('', [], True)  # E: Too many positional arguments for "TimeField"
 
 -   case: default_and_inital_args_fields
     main: |
@@ -107,11 +86,11 @@
         def int_set_callback() -> Set[int]: ...
         def mixed_set_callback() -> Set[Union[int, str]]: ...
 
-        MultipleChoiceField([1], default={1})
-        MultipleChoiceField(['test'], allow_null=True, default=None)
-        MultipleChoiceField([1], default=int_set_callback)
-        MultipleChoiceField([1, 'lulz'], default=mixed_set_callback)
-        MultipleChoiceField([1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")
+        MultipleChoiceField(choices=[1], default={1})
+        MultipleChoiceField(choices=['test'], allow_null=True, default=None)
+        MultipleChoiceField(choices=[1], default=int_set_callback)
+        MultipleChoiceField(choices=[1, 'lulz'], default=mixed_set_callback)
+        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"
