@@ -89,6 +89,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     write_only: bool
     def __init__(
         self,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
