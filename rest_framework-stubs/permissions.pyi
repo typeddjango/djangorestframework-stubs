@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Sequence
-from typing import Any, Protocol  # noqa: Y037  # https://github.com/python/mypy/issues/12392
+from typing import Any, Protocol
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request

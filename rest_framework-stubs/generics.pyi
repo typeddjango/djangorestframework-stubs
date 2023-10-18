@@ -35,7 +35,7 @@ class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
     serializer_class: type[BaseSerializer] | None
     lookup_field: str
     lookup_url_kwarg: str | None
-    filter_backends: Sequence[type[BaseFilterBackend] | type[BaseFilterProtocol[_MT_co]]]
+    filter_backends: Sequence[type[BaseFilterBackend | BaseFilterProtocol[_MT_co]]]
     pagination_class: type[BasePagination] | None
     def get_object(self) -> _MT_co: ...
     def get_serializer(self, *args: Any, **kwargs: Any) -> BaseSerializer[_MT_co]: ...

@@ -19,7 +19,7 @@ from rest_framework.exceptions import Throttled as Throttled
 from rest_framework.exceptions import UnsupportedMediaType as UnsupportedMediaType
 from rest_framework.exceptions import ValidationError as ValidationError
 from rest_framework.fields import BooleanField as BooleanField
-from rest_framework.fields import CharField as CharField  # noqa: F401
+from rest_framework.fields import CharField as CharField
 from rest_framework.fields import ChoiceField as ChoiceField
 from rest_framework.fields import CreateOnlyDefault as CreateOnlyDefault
 from rest_framework.fields import CurrentUserDefault as CurrentUserDefault
