@@ -13,8 +13,8 @@
         from django.db import models
         from rest_framework.fields import DecimalField, IPAddressField, SlugField, RegexField, ModelField, SerializerMethodField, ChoiceField, DateTimeField, DateField, TimeField
 
-        DecimalField(1, 1, False, 1, 1, False, None, True)
-        DecimalField(1, 1, False, 1, 1, False, None, True, True)  # E: Too many positional arguments for "DecimalField"
+        DecimalField(1, 1, False, 1, 1, False, None)
+        DecimalField(1, 1, False, 1, 1, False, None, True)  # E: Too many positional arguments for "DecimalField"
 
         IPAddressField('both')
         IPAddressField('both', True)  # E: Too many positional arguments for "IPAddressField"
