@@ -7,7 +7,7 @@ This project is open source and community driven. As such we encourage code cont
 3. Improve plugin code and extend its capabilities
 4. Write tests
 5. Update dependencies
-6. Fix and remove things from our `stubtest/allowlist_todo.txt`
+6. Fix and remove things from our `scripts/stubtest/allowlist_todo.txt`
 
 Type stubs in `.pyi` files should follow
 [coding conventions from typeshed project](https://github.com/python/typeshed/blob/main/CONTRIBUTING.md#conventions).
