@@ -339,7 +339,6 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         min_value: Decimal | int | float = ...,
         localize: bool = ...,
         rounding: str | None = ...,
-        normalize_output: bool = ...,
         *,
         read_only: bool = ...,
         write_only: bool = ...,

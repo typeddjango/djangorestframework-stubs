@@ -204,6 +204,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         self,
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
         data: Any = ...,
+        *,
         partial: bool = ...,
         many: bool = ...,
         context: dict[str, Any] = ...,
