@@ -37,6 +37,7 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
     html_cutoff_text: str | None
     def __init__(
         self,
+        *,
         many: bool = ...,
         allow_empty: bool = ...,
         queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
@@ -76,6 +77,7 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
     pk_field: str | None
     def __init__(
         self,
+        *,
         many: bool = ...,
         allow_empty: bool = ...,
         queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
@@ -104,6 +106,8 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
     view_name: str | None
     def __init__(
         self,
+        view_name: str,
+        *,
         many: bool = ...,
         allow_empty: bool = ...,
         queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
@@ -121,7 +125,6 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
-        view_name: str | None = ...,
         lookup_field: str | None = ...,
         lookup_url_kwarg: str | None = ...,
         format: str | None = ...,
@@ -135,6 +138,8 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
     slug_field: str | None
     def __init__(
         self,
+        slug_field: str,
+        *,
         many: bool = ...,
         allow_empty: bool = ...,
         queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
@@ -152,7 +157,6 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
-        slug_field: str | None = ...,
     ) -> None: ...
     def to_internal_value(self, data: Any) -> _MT: ...
     def to_representation(self, value: _MT) -> str: ...
@@ -165,6 +169,8 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
     allow_empty: bool
     def __init__(
         self,
+        child_relation: RelatedField = ...,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -178,7 +184,6 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
         validators: Sequence[Validator[Sequence[Any]]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
-        child_relation: RelatedField = ...,
     ) -> None: ...
     def get_value(self, dictionary: Mapping[Any, Any]) -> list[Any]: ...
     def get_choices(self, cutoff: int | None = ...) -> dict: ...

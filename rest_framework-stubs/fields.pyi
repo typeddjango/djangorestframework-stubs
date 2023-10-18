@@ -89,6 +89,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     write_only: bool
     def __init__(
         self,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -339,7 +340,6 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         min_value: Decimal | int | float = ...,
         localize: bool = ...,
         rounding: str | None = ...,
-        normalize_output: bool = ...,
         *,
         read_only: bool = ...,
         write_only: bool = ...,
@@ -367,6 +367,7 @@ class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any])
         format: str | None = ...,
         input_formats: Sequence[str] = ...,
         default_timezone: datetime.tzinfo | None = ...,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -391,6 +392,7 @@ class DateField(Field[datetime.date, datetime.date | str, str, Any]):
         self,
         format: str | None = ...,
         input_formats: Sequence[str] = ...,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -413,6 +415,7 @@ class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
         self,
         format: str | None = ...,
         input_formats: Sequence[str] = ...,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -493,6 +496,7 @@ class MultipleChoiceField(
     allow_empty: bool
     def __init__(
         self,
+        *,
         choices: Iterable[Any],
         read_only: bool = ...,
         write_only: bool = ...,
@@ -521,6 +525,7 @@ class FilePathField(ChoiceField):
         allow_files: bool = ...,
         allow_folders: bool = ...,
         required: bool = ...,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         default: _DefaultInitial[str] = ...,
@@ -593,6 +598,7 @@ class ListField(Field[list[Any], list[Any], list[Any], Any]):
     min_length: int | None
     def __init__(
         self,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -605,7 +611,6 @@ class ListField(Field[list[Any], list[Any], list[Any], Any]):
         error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[list[Any]]] | None = ...,
         allow_null: bool = ...,
-        *,
         child: Field = ...,
         allow_empty: bool = ...,
         max_length: int = ...,
@@ -618,6 +623,7 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
     allow_empty: bool
     def __init__(
         self,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -630,7 +636,6 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
         error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[dict[Any, Any]]] | None = ...,
         allow_null: bool = ...,
-        *,
         child: Field = ...,
         allow_empty: bool = ...,
     ) -> None: ...
@@ -645,6 +650,7 @@ class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | li
     decoder: type[JSONDecoder] | None
     def __init__(
         self,
+        *,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool = ...,
@@ -657,7 +663,6 @@ class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | li
         error_messages: dict[str, StrOrPromise] = ...,
         validators: Sequence[Validator[Any]] | None = ...,
         allow_null: bool = ...,
-        *,
         binary: bool = ...,
         encoder: type[JSONEncoder] | None = ...,
         decoder: type[JSONDecoder] | None = ...,
