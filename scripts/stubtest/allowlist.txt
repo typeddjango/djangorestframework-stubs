@@ -4,4 +4,3 @@
 #
 # Please, move things here when you are sure that they really should be ignored.
 # Comments about why things are ignored are mandatory.
-
