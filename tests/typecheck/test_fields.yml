@@ -76,7 +76,7 @@
         ChoiceField(['test'], allow_null=True, default=None)
         ChoiceField([1], default=int_callback)
         ChoiceField([1, 'lulz'], default=mixed_callback)
-        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[Union[str, _StrPromise], int, Callable[[], Union[Union[str, _StrPromise], int]], None, _Empty]" # E: Incompatible return value type (got "None", expected "Union[Union[str, _StrPromise], int]")  [arg-type]
+        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[Union[str, _StrPromise], int, Callable[[], Union[Union[str, _StrPromise], int]], None, _Empty]"  [arg-type]  # E: Incompatible return value type (got "None", expected "Union[Union[str, _StrPromise], int]")  [return-value]
 
 -   case: MultipleChoiceField_default
     main: |
@@ -90,7 +90,7 @@
         MultipleChoiceField(choices=['test'], allow_null=True, default=None)
         MultipleChoiceField(choices=[1], default=int_set_callback)
         MultipleChoiceField(choices=[1, 'lulz'], default=mixed_set_callback)
-        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")  [arg-type]
+        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"  [arg-type]  # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")  [return-value]
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"  [arg-type]
