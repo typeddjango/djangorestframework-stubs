@@ -1,50 +1,55 @@
 from typing import Any
 
 from django.db.models import QuerySet
+from typing_extensions import TypeAlias
 
 try:
     from django.contrib.postgres import fields as postgres_fields
 except ImportError:
-    postgres_fields = None  # type: ignore
+    postgres_fields: TypeAlias = None  # type: ignore[no-redef]
 try:
     import coreapi
 except ImportError:
-    coreapi = None
+    coreapi: TypeAlias = None  # type: ignore[no-redef]
 try:
     import uritemplate
 except ImportError:
-    uritemplate = None  # type: ignore
+    uritemplate: TypeAlias = None  # type: ignore[no-redef]
 try:
     import coreschema
 except ImportError:
-    coreschema = None
+    coreschema: TypeAlias = None  # type: ignore[no-redef]
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml: TypeAlias = None  # type: ignore[no-redef]
 try:
     import requests
 except ImportError:
-    requests = None  # type: ignore
+    requests: TypeAlias = None  # type: ignore[no-redef]
 try:
     import pygments
 except ImportError:
-    pygments = None
+    pygments: TypeAlias = None  # type: ignore[no-redef]
 try:
     import markdown
     def apply_markdown(text: str) -> str: ...
 
 except ImportError:
-    apply_markdown = None  # type: ignore
-    markdown = None  # type: ignore
+    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
+    markdown: TypeAlias = None  # type: ignore[no-redef]
 
-if markdown is not None and pygments is not None:
+try:
+    import pygments
     from markdown.preprocessors import Preprocessor
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
         formatter: Any
         def run(self, lines: list[str]) -> list[str]: ...
+
+except ImportError:
+    pass
 
 def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...
