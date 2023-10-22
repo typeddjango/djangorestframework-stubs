@@ -103,4 +103,6 @@ class APILiveServerTestCase(testcases.LiveServerTestCase):
     client_class: type[APIClient]
     client: APIClient
 
+def cleanup_url_patterns(cls: type[Incomplete]) -> None: ...
+
 class URLPatternsTestCase(testcases.SimpleTestCase): ...

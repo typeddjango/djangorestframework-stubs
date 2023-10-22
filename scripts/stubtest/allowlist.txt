@@ -14,3 +14,7 @@ rest_framework.serializers.HyperlinkedIdentityField.__init__
 rest_framework.serializers.HyperlinkedRelatedField.__init__
 rest_framework.serializers.ManyRelatedField.__init__
 rest_framework.serializers.SlugRelatedField.__init__
+
+# Deprecated and non-functional
+rest_framework.request.Request.DATA
+rest_framework.request.Request.QUERY_PARAMS

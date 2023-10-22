@@ -1,3 +1,4 @@
+from _typeshed import Incomplete
 from typing import Any
 
 def remove_trailing_string(content: str, trailing: str) -> str: ...
@@ -11,3 +12,4 @@ class lazy_format:
     args: Any
     kwargs: Any
     def __init__(self, format_string: str, *args: Any, **kwargs: Any) -> None: ...
+    def __mod__(self, value: Incomplete) -> str: ...
