@@ -39,7 +39,6 @@ ignore = ["PYI021", "PYI024", "PYI041", "PYI043"]
     "F405",
     "F822",
     "F821",
-    "PGH003",  # TODO fix these errors
 ]
 "rest_framework-stubs/compat.pyi" = ["PYI042"]
 

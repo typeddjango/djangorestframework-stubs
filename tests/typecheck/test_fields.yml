@@ -1,11 +1,11 @@
 -   case: no_positional_args_fields
     main: |
         from rest_framework.fields import IntegerField, FloatField, UUIDField, CharField, DurationField
-        CharField(True)  # E: Too many positional arguments for "CharField"
-        IntegerField(1)  # E: Too many positional arguments for "IntegerField"
-        FloatField(1)  # E: Too many positional arguments for "FloatField"
-        UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"
-        DurationField(1)  # E: Too many positional arguments for "DurationField"
+        CharField(True)  # E: Too many positional arguments for "CharField"  [misc]
+        IntegerField(1)  # E: Too many positional arguments for "IntegerField"  [misc]
+        FloatField(1)  # E: Too many positional arguments for "FloatField"  [misc]
+        UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"  [misc]
+        DurationField(1)  # E: Too many positional arguments for "DurationField"  [misc]
 
 -   case: some_positional_args_fields
     main: |
@@ -14,36 +14,36 @@
         from rest_framework.fields import DecimalField, IPAddressField, SlugField, RegexField, ModelField, SerializerMethodField, ChoiceField, DateTimeField, DateField, TimeField
 
         DecimalField(1, 1, False, 1, 1, False, None)
-        DecimalField(1, 1, False, 1, 1, False, None, True)  # E: Too many positional arguments for "DecimalField"
+        DecimalField(1, 1, False, 1, 1, False, None, True)  # E: Too many positional arguments for "DecimalField"  [misc]
 
         IPAddressField('both')
-        IPAddressField('both', True)  # E: Too many positional arguments for "IPAddressField"
+        IPAddressField('both', True)  # E: Too many positional arguments for "IPAddressField"  [misc]
 
         SlugField(False)
-        SlugField(False, True)  # E: Too many positional arguments for "SlugField"
+        SlugField(False, True)  # E: Too many positional arguments for "SlugField"  [misc]
 
         RegexField('^$')
-        RegexField('^$', True)  # E: Too many positional arguments for "RegexField"
+        RegexField('^$', True)  # E: Too many positional arguments for "RegexField"  [misc]
 
         SerializerMethodField('bla')
-        SerializerMethodField('bla', True)  # E: Too many positional arguments for "SerializerMethodField"
+        SerializerMethodField('bla', True)  # E: Too many positional arguments for "SerializerMethodField"  [misc]
 
         mf: models.CharField = models.CharField()
         ModelField(mf)
-        ModelField(mf, True)  # E: Too many positional arguments for "ModelField"
+        ModelField(mf, True)  # E: Too many positional arguments for "ModelField"  [misc]
 
         ChoiceField([])
-        ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"
+        ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"  [misc]
 
         d: datetime = datetime.now()
         DateTimeField('', [], None, read_only=True, write_only=True, allow_null=True)
-        DateTimeField('', [], None, True)  # E: Too many positional arguments for "DateTimeField"
+        DateTimeField('', [], None, True)  # E: Too many positional arguments for "DateTimeField"  [misc]
 
         DateField('', [], read_only=True, write_only=True, allow_null=True)
-        DateField('', [], True)  # E: Too many positional arguments for "DateField"
+        DateField('', [], True)  # E: Too many positional arguments for "DateField"  [misc]
 
         TimeField('', [], read_only=True, write_only=True, allow_null=True)
-        TimeField('', [], True)  # E: Too many positional arguments for "TimeField"
+        TimeField('', [], True)  # E: Too many positional arguments for "TimeField"  [misc]
 
 -   case: default_and_inital_args_fields
     main: |
@@ -51,11 +51,11 @@
         from typing import Optional, Dict, Any
 
         CharField(initial='', default=lambda: '')
-        CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[Union[str, _StrPromise], Callable[[], Union[str, _StrPromise]], None, _Empty]"
-        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"
+        CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[Union[str, _StrPromise], Callable[[], Union[str, _StrPromise]], None, _Empty]"  [arg-type]
+        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"  [arg-type]
 
         x: Optional[str] = CharField().get_initial()
-        y: Optional[int] = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "Optional[str]", variable has type "Optional[int]")
+        y: Optional[int] = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "Optional[str]", variable has type "Optional[int]")  [assignment]
 
 -   case: float_field_args_fields
     main: |
@@ -76,7 +76,7 @@
         ChoiceField(['test'], allow_null=True, default=None)
         ChoiceField([1], default=int_callback)
         ChoiceField([1, 'lulz'], default=mixed_callback)
-        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[Union[str, _StrPromise], int, Callable[[], Union[Union[str, _StrPromise], int]], None, _Empty]" # E: Incompatible return value type (got "None", expected "Union[Union[str, _StrPromise], int]")
+        ChoiceField([1], default=lambda: None)   # E: Argument "default" to "ChoiceField" has incompatible type "Callable[[], None]"; expected "Union[Union[str, _StrPromise], int, Callable[[], Union[Union[str, _StrPromise], int]], None, _Empty]" # E: Incompatible return value type (got "None", expected "Union[Union[str, _StrPromise], int]")  [arg-type]
 
 -   case: MultipleChoiceField_default
     main: |
@@ -90,13 +90,13 @@
         MultipleChoiceField(choices=['test'], allow_null=True, default=None)
         MultipleChoiceField(choices=[1], default=int_set_callback)
         MultipleChoiceField(choices=[1, 'lulz'], default=mixed_set_callback)
-        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")
+        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")  [arg-type]
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], None, _Empty]"  [arg-type]
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int], Callable[[], Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int]]], None, _Empty]"
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int], Callable[[], Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int]]], None, _Empty]"  [arg-type]
 
 -   case: FileField_default
     main: |
@@ -108,12 +108,12 @@
         FileField(allow_null=True, default=None)
         FileField(allow_null=True, default=file_callback)
         FileField(allow_null=True, default=file_callback())
-        FileField(allow_null=True, default=123) # E: Argument "default" to "FileField" has incompatible type "int"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"
+        FileField(allow_null=True, default=123) # E: Argument "default" to "FileField" has incompatible type "int"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"  [arg-type]
 
         ImageField(allow_null=True, default=None)
         ImageField(default=file_callback)
         ImageField(default=file_callback())
-        ImageField(default='a') # E: Argument "default" to "ImageField" has incompatible type "str"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"
+        ImageField(default='a') # E: Argument "default" to "ImageField" has incompatible type "str"; expected "Union[File[Any], Callable[[], File[Any]], None, _Empty]"  [arg-type]
 
 -   case: DictField_default
     main: |
@@ -123,13 +123,13 @@
         DictField(default={})
         DictField(default={'a': 1, 'b': 2})
         DictField(default=lambda: {'a': [], 'b': 'str'})
-        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "List[<nothing>]"; expected "Union[Dict[Any, Any], Callable[[], Dict[Any, Any]], None, _Empty]"
+        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "List[<nothing>]"; expected "Union[Dict[Any, Any], Callable[[], Dict[Any, Any]], None, _Empty]"  [arg-type]
 
         JSONField(allow_null=True, default=None)
         JSONField(default={})
         JSONField(default={'a': 1, 'b': 2})
         JSONField(default=lambda: {'a': [], 'b': 'str'})
-        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "List[<nothing>]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], None, _Empty]"
+        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "List[<nothing>]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], None, _Empty]"  [arg-type]
 
 -   case: ListField_default
     main: |
@@ -139,4 +139,4 @@
         ListField(default=[])
         ListField(default=[0, 'one'])
         ListField(default=lambda: [])
-        ListField(default='wät')  # E: Argument "default" to "ListField" has incompatible type "str"; expected "Union[List[Any], Callable[[], List[Any]], None, _Empty]"
+        ListField(default='wät')  # E: Argument "default" to "ListField" has incompatible type "str"; expected "Union[List[Any], Callable[[], List[Any]], None, _Empty]"  [arg-type]
