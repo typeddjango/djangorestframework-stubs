@@ -4,10 +4,6 @@
 rest_framework.authtoken.admin.TokenAdmin
 rest_framework.authtoken.default_app_config
 rest_framework.authtoken.management.commands.drf_create_token.UserModel
-rest_framework.authtoken.migrations
-rest_framework.authtoken.migrations.0001_initial
-rest_framework.authtoken.migrations.0002_auto_20160226_1747
-rest_framework.authtoken.migrations.0003_tokenproxy
 rest_framework.authtoken.models.Token.created
 rest_framework.authtoken.models.Token.get_next_by_created
 rest_framework.authtoken.models.Token.get_previous_by_created

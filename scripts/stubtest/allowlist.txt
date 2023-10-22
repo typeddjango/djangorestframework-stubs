@@ -18,3 +18,9 @@ rest_framework.serializers.SlugRelatedField.__init__
 # Deprecated and non-functional
 rest_framework.request.Request.DATA
 rest_framework.request.Request.QUERY_PARAMS
+
+# Migrations are omitted
+rest_framework.authtoken.migrations
+rest_framework.authtoken.migrations.0001_initial
+rest_framework.authtoken.migrations.0002_auto_20160226_1747
+rest_framework.authtoken.migrations.0003_tokenproxy
