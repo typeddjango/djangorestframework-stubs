@@ -6,6 +6,6 @@ djangorestframework==3.14.0
 types-pytz==2023.3.1.1
 types-requests==2.31.0.10
 types-urllib3==1.26.25.14
-git+https://github.com/typeddjango/django-stubs
-git+https://github.com/typeddjango/django-stubs#subdirectory=ext
+django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs
+django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext
 -e .[compatible-mypy,coreapi,markdown]
