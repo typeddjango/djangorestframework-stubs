@@ -1,7 +1,7 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping, Sequence
 from json import JSONEncoder
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from rest_framework.request import Request
@@ -22,10 +22,10 @@ class BaseRenderer:
     ) -> Any: ...
 
 class JSONRenderer(BaseRenderer):
-    encoder_class: type[JSONEncoder]
-    ensure_ascii: bool
-    compact: bool
-    strict: bool
+    encoder_class: ClassVar[type[JSONEncoder]]
+    ensure_ascii: ClassVar[bool]
+    compact: ClassVar[bool]
+    strict: ClassVar[bool]
     def get_indent(self, accepted_media_type: str, renderer_context: Mapping[str, Any]) -> int | None: ...
 
 class TemplateHTMLRenderer(BaseRenderer):
@@ -109,7 +109,12 @@ class _BaseOpenAPIRenderer:
     def get_paths(self, document: Incomplete) -> dict[str, Any]: ...
     def get_structure(self, data: Any) -> dict[str, Any]: ...
 
-class JSONOpenAPIRenderer(_BaseOpenAPIRenderer): ...
+class JSONOpenAPIRenderer(_BaseOpenAPIRenderer):
+    encoder_class: ClassVar[type[JSONEncoder]]
+    ensure_ascii: ClassVar[bool]
+
 class OpenAPIRenderer(_BaseOpenAPIRenderer): ...
 class CoreAPIOpenAPIRenderer(_BaseOpenAPIRenderer): ...
-class CoreAPIJSONOpenAPIRenderer(_BaseOpenAPIRenderer): ...
+
+class CoreAPIJSONOpenAPIRenderer(_BaseOpenAPIRenderer):
+    ensure_ascii: ClassVar[bool]
