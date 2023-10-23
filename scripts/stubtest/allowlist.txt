@@ -24,3 +24,11 @@ rest_framework.authtoken.migrations
 rest_framework.authtoken.migrations.0001_initial
 rest_framework.authtoken.migrations.0002_auto_20160226_1747
 rest_framework.authtoken.migrations.0003_tokenproxy
+
+# Mypy doesn't like default value `empty`
+rest_framework.fields.DateField.__init__
+rest_framework.fields.DateTimeField.__init__
+rest_framework.fields.TimeField.__init__
+rest_framework.serializers.DateField.__init__
+rest_framework.serializers.DateTimeField.__init__
+rest_framework.serializers.TimeField.__init__

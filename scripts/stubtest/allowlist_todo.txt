@@ -29,15 +29,10 @@ rest_framework.documentation.get_schemajs_view
 rest_framework.documentation.include_docs_urls
 rest_framework.fields.BooleanField.initial
 rest_framework.fields.CharField.initial
-rest_framework.fields.DateField.__init__
 rest_framework.fields.DateField.to_internal_value
-rest_framework.fields.DateTimeField.__init__
 rest_framework.fields.DateTimeField.to_internal_value
-rest_framework.fields.DecimalField.__init__
 rest_framework.fields.DictField.initial
 rest_framework.fields.DurationField.to_internal_value
-rest_framework.fields.Field.__init__
-rest_framework.fields.FilePathField.__init__
 rest_framework.fields.ListField.initial
 rest_framework.fields.ListField.to_representation
 rest_framework.fields.ModelField.get_attribute
@@ -46,7 +41,6 @@ rest_framework.fields.NullBooleanField
 rest_framework.fields.Option
 rest_framework.fields.REGEX_TYPE
 rest_framework.fields.SupportsToPython
-rest_framework.fields.TimeField.__init__
 rest_framework.fields.TimeField.to_internal_value
 rest_framework.fields.empty
 rest_framework.generics.BaseFilterProtocol
@@ -92,15 +86,10 @@ rest_framework.serializers.AuthenticationFailed
 rest_framework.serializers.BaseSerializer.is_valid
 rest_framework.serializers.BooleanField.initial
 rest_framework.serializers.CharField.initial
-rest_framework.serializers.DateField.__init__
 rest_framework.serializers.DateField.to_internal_value
-rest_framework.serializers.DateTimeField.__init__
 rest_framework.serializers.DateTimeField.to_internal_value
-rest_framework.serializers.DecimalField.__init__
 rest_framework.serializers.DictField.initial
 rest_framework.serializers.DurationField.to_internal_value
-rest_framework.serializers.Field.__init__
-rest_framework.serializers.FilePathField.__init__
 rest_framework.serializers.HyperlinkedRelatedField.get_object
 rest_framework.serializers.ListField.initial
 rest_framework.serializers.ListField.to_representation
@@ -120,7 +109,6 @@ rest_framework.serializers.ParseError
 rest_framework.serializers.PermissionDenied
 rest_framework.serializers.SlugRelatedField.to_representation
 rest_framework.serializers.Throttled
-rest_framework.serializers.TimeField.__init__
 rest_framework.serializers.TimeField.to_internal_value
 rest_framework.serializers.UnsupportedMediaType
 rest_framework.serializers.empty
