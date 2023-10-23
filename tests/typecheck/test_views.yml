@@ -70,8 +70,19 @@
     from typing import List
 
     from rest_framework.viewsets import GenericViewSet
-    from rest_framework.permissions import BasePermission
+    from rest_framework.permissions import _SupportsHasPermission
 
     class MyView(GenericViewSet):
-        def get_permissions(self) -> List[BasePermission]:
-            ...
+        def get_permissions(self) -> List[_SupportsHasPermission]:
+            return super().get_permissions()
+
+- case: test_override_get_permissions_operandholder
+  main: |
+    from typing import Sequence
+
+    from rest_framework.viewsets import GenericViewSet
+    from rest_framework.permissions import BasePermission, IsAuthenticated, IsAdminUser, _SupportsHasPermission
+
+    class MyView(GenericViewSet):
+        def get_permissions(self) -> list[_SupportsHasPermission]:
+            return [IsAuthenticated & IsAdminUser]
