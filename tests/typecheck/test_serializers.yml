@@ -106,7 +106,7 @@
     - arg: ""
       err: No overload variant of "ReturnList" matches argument type "TestSerializer"
     - arg: "[],"
-      err: No overload variant of "ReturnList" matches argument types "List[<nothing>]", "TestSerializer"
+      err: No overload variant of "ReturnList" matches argument types "List[Never]", "TestSerializer"
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnList
@@ -125,7 +125,7 @@
     - arg: ""
       err: All overload variants of "ReturnList" require at least one argument
     - arg: "[]"
-      err: No overload variant of "ReturnList" matches argument type "List[<nothing>]"
+      err: No overload variant of "ReturnList" matches argument type "List[Never]"
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnList
@@ -176,9 +176,9 @@
     - arg: ""
       err: No overload variant of "ReturnDict" matches argument type "TestSerializer"
     - arg: "{},"
-      err: No overload variant of "ReturnDict" matches argument types "Dict[<nothing>, <nothing>]", "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument types "Dict[Never, Never]", "TestSerializer"
     - arg: "[],"
-      err: No overload variant of "ReturnDict" matches argument types "List[<nothing>]", "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument types "List[Never]", "TestSerializer"
     - arg: "[('a', 'a')],"
       err: No overload variant of "ReturnDict" matches argument types "List[Tuple[str, str]]", "TestSerializer"
   main: |
@@ -205,9 +205,9 @@
     - arg: ""
       err: All overload variants of "ReturnDict" require at least one argument
     - arg: "{}"
-      err: No overload variant of "ReturnDict" matches argument type "Dict[<nothing>, <nothing>]"
+      err: No overload variant of "ReturnDict" matches argument type "Dict[Never, Never]"
     - arg: "[]"
-      err: No overload variant of "ReturnDict" matches argument type "List[<nothing>]"
+      err: No overload variant of "ReturnDict" matches argument type "List[Never]"
     - arg: "[('a', 'a')]"
       err: No overload variant of "ReturnDict" matches argument type "List[Tuple[str, str]]"
   main: |
