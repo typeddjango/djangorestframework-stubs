@@ -52,7 +52,7 @@
 
         CharField(initial='', default=lambda: '')
         CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[Union[str, _StrPromise], Callable[[], Union[str, _StrPromise]], None, _Empty]"
-        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[<nothing>, <nothing>]"; expected "Union[str, Callable[[], str], None, _Empty]"
+        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[Never, Never]"; expected "Union[str, Callable[[], str], None, _Empty]"
 
         x: Optional[str] = CharField().get_initial()
         y: Optional[int] = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "Optional[str]", variable has type "Optional[int]")
@@ -123,13 +123,13 @@
         DictField(default={})
         DictField(default={'a': 1, 'b': 2})
         DictField(default=lambda: {'a': [], 'b': 'str'})
-        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "List[<nothing>]"; expected "Union[Dict[Any, Any], Callable[[], Dict[Any, Any]], None, _Empty]"
+        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "List[Never]"; expected "Union[Dict[Any, Any], Callable[[], Dict[Any, Any]], None, _Empty]"
 
         JSONField(allow_null=True, default=None)
         JSONField(default={})
         JSONField(default={'a': 1, 'b': 2})
         JSONField(default=lambda: {'a': [], 'b': 'str'})
-        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "List[<nothing>]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], None, _Empty]"
+        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "List[Never]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], None, _Empty]"
 
 -   case: ListField_default
     main: |
