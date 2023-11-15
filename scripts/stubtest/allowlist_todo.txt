@@ -94,7 +94,6 @@ rest_framework.serializers.HyperlinkedRelatedField.get_object
 rest_framework.serializers.ListField.initial
 rest_framework.serializers.ListField.to_representation
 rest_framework.serializers.ListSerializer.is_valid
-rest_framework.serializers.ListSerializer.to_representation
 rest_framework.serializers.ManyRelatedField.initial
 rest_framework.serializers.ManyRelatedField.to_representation
 rest_framework.serializers.MethodNotAllowed
