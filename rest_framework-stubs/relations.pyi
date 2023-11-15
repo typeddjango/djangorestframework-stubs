@@ -1,7 +1,8 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, Generic, TypeVar
 
-from django.db.models import Manager, Model, QuerySet
+from django.db.models import Model, QuerySet
+from django.db.models.manager import BaseManager
 from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field, Option
 from rest_framework.request import Request
@@ -32,7 +33,7 @@ _DT = TypeVar("_DT")  # Data Type
 _PT = TypeVar("_PT")  # Primitive Type
 
 class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
-    queryset: QuerySet[_MT] | Manager[_MT] | None
+    queryset: QuerySet[_MT] | BaseManager[_MT] | None
     html_cutoff: int | None
     html_cutoff_text: str | None
     def __init__(
@@ -40,7 +41,7 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
         *,
         many: bool = ...,
         allow_empty: bool = ...,
-        queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
+        queryset: QuerySet[_MT] | BaseManager[_MT] | None = ...,
         html_cutoff: int | None = ...,
         html_cutoff_text: str = ...,
         read_only: bool = ...,
@@ -80,7 +81,7 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         *,
         many: bool = ...,
         allow_empty: bool = ...,
-        queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
+        queryset: QuerySet[_MT] | BaseManager[_MT] | None = ...,
         html_cutoff: int | None = ...,
         html_cutoff_text: str = ...,
         read_only: bool = ...,
@@ -110,7 +111,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         *,
         many: bool = ...,
         allow_empty: bool = ...,
-        queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
+        queryset: QuerySet[_MT] | BaseManager[_MT] | None = ...,
         html_cutoff: int | None = ...,
         html_cutoff_text: str = ...,
         read_only: bool = ...,
@@ -142,7 +143,7 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         *,
         many: bool = ...,
         allow_empty: bool = ...,
-        queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
+        queryset: QuerySet[_MT] | BaseManager[_MT] | None = ...,
         html_cutoff: int | None = ...,
         html_cutoff_text: str = ...,
         read_only: bool = ...,

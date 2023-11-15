@@ -3,7 +3,8 @@ from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMappin
 from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
 
 from django.db import models
-from django.db.models import Manager, Model, QuerySet
+from django.db.models import Model, QuerySet
+from django.db.models.manager import BaseManager
 from django.utils.functional import cached_property
 from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import APIException as APIException
@@ -202,7 +203,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         extra_kwargs: dict[str, dict[str, Any]]
     def __init__(
         self,
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
+        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | BaseManager[_MT] = ...,
         data: Any = ...,
         *,
         partial: bool = ...,

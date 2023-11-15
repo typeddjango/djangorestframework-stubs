@@ -2,7 +2,8 @@ from _typeshed import Incomplete
 from collections.abc import Sequence
 from typing import Any, Protocol, TypeVar
 
-from django.db.models import Manager, Model
+from django.db.models import Model
+from django.db.models.manager import BaseManager
 from django.db.models.query import QuerySet
 from rest_framework import mixins, views
 from rest_framework.filters import BaseFilterBackend
@@ -15,7 +16,7 @@ _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 _MT_inv = TypeVar("_MT_inv", bound=Model)
 
 def get_object_or_404(
-    queryset: type[_MT_co] | Manager[_MT_co] | QuerySet[_MT_co], *filter_args: Any, **filter_kwargs: Any
+    queryset: type[_MT_co] | BaseManager[_MT_co] | QuerySet[_MT_co], *filter_args: Any, **filter_kwargs: Any
 ) -> _MT_co: ...
 
 class UsesQuerySet(Protocol[_MT_co]):
@@ -31,7 +32,7 @@ class BaseFilterProtocol(Protocol[_MT_inv]):
     def get_schema_operation_parameters(self, view: views.APIView) -> Incomplete: ...
 
 class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
-    queryset: QuerySet[_MT_co] | Manager[_MT_co] | None
+    queryset: QuerySet[_MT_co] | BaseManager[_MT_co] | None
     serializer_class: type[BaseSerializer] | None
     lookup_field: str
     lookup_url_kwarg: str | None
