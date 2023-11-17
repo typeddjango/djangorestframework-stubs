@@ -59,10 +59,10 @@ NOT_REQUIRED_DEFAULT: str
 USE_READONLYFIELD: str
 MISSING_ERROR_MESSAGE: str
 
-_IN = TypeVar("_IN")  # Instance Type
 _VT = TypeVar("_VT")  # Value Type
 _DT = TypeVar("_DT")  # Data Type
 _RP = TypeVar("_RP")  # Representation Type
+_IN = TypeVar("_IN")  # Instance Type
 
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
