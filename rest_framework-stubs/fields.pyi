@@ -430,7 +430,7 @@ class TimeField(Field[datetime.time | None, datetime.time | str | None, str | No
         allow_null: bool = ...,
     ) -> None: ...
 
-class DurationField(Field[datetime.timedelta| None, datetime.timedelta | str| None, str| None, Any]):
+class DurationField(Field[datetime.timedelta | None, datetime.timedelta | str | None, str | None, Any]):
     max_value: datetime.timedelta | None
     min_value: datetime.timedelta | None
     def __init__(
@@ -452,7 +452,7 @@ class DurationField(Field[datetime.timedelta| None, datetime.timedelta | str| No
         allow_null: bool = ...,
     ) -> None: ...
 
-class ChoiceField(Field[str| None, str | int | tuple[str | int, str | int | tuple]| None, str| None, Any]):
+class ChoiceField(Field[str | None, str | int | tuple[str | int, str | int | tuple] | None, str | None, Any]):
     html_cutoff: int | None
     html_cutoff_text: StrOrPromise | None
     allow_blank: bool
@@ -487,9 +487,9 @@ class ChoiceField(Field[str| None, str | int | tuple[str | int, str | int | tupl
 class MultipleChoiceField(
     ChoiceField,
     Field[
-        str| None,
-        Sequence[str | int | tuple[str | int, str | int]]| None,
-        Sequence[str | tuple[str | int, str | int]]| None,
+        str | None,
+        Sequence[str | int | tuple[str | int, str | int]] | None,
+        Sequence[str | tuple[str | int, str | int]] | None,
         Any,
     ],
 ):
@@ -591,7 +591,7 @@ class ImageField(FileField):
 
 class _UnvalidatedField(Field): ...
 
-class ListField(Field[list[Any]| None, list[Any]| None, list[Any]| None, Any]):
+class ListField(Field[list[Any] | None, list[Any] | None, list[Any] | None, Any]):
     child: Field
     allow_empty: bool
     max_length: int | None
@@ -618,7 +618,7 @@ class ListField(Field[list[Any]| None, list[Any]| None, list[Any]| None, Any]):
     ) -> None: ...
     def run_child_validation(self, data: list[Mapping[Any, Any]]) -> Any: ...
 
-class DictField(Field[dict[Any, Any]| None, dict[Any, Any]| None, dict[Any, Any]| None, Any]):
+class DictField(Field[dict[Any, Any] | None, dict[Any, Any] | None, dict[Any, Any] | None, Any]):
     child: Field
     allow_empty: bool
     def __init__(
@@ -644,7 +644,9 @@ class DictField(Field[dict[Any, Any]| None, dict[Any, Any]| None, dict[Any, Any]
 class HStoreField(DictField):
     child: CharField
 
-class JSONField(Field[dict[str, Any] | list[dict[str, Any]]| None, dict[str, Any] | list[dict[str, Any]]| None, str| None, Any]):
+class JSONField(
+    Field[dict[str, Any] | list[dict[str, Any]] | None, dict[str, Any] | list[dict[str, Any]] | None, str | None, Any]
+):
     binary: bool
     encoder: type[JSONEncoder] | None
     decoder: type[JSONDecoder] | None
