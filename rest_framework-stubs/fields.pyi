@@ -138,17 +138,7 @@ class BooleanField(
     FALSE_VALUES: set[str | bool | int | float]
     NULL_VALUES: set[str | None]
 
-class NullBooleanField(
-    Field[
-        bool | None,
-        str | bool | int | None,
-        bool | None,
-        Any,
-    ]
-):
-    TRUE_VALUES: set[str | bool | int]
-    FALSE_VALUES: set[str | bool | int | float]
-    NULL_VALUES: set[str | None]
+class NullBooleanField(BooleanField): ...
 
 class CharField(Field[str | None, str | None, str | None, Any]):
     allow_blank: bool
