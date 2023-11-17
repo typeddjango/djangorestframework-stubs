@@ -128,9 +128,9 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
 
 class BooleanField(
     Field[
-        bool,
-        str | bool | int,
-        bool,
+        bool | None,
+        str | bool | int | None,
+        bool | None,
         Any,
     ]
 ):
@@ -142,7 +142,7 @@ class NullBooleanField(
     Field[
         bool | None,
         str | bool | int | None,
-        bool,
+        bool | None,
         Any,
     ]
 ):
@@ -150,7 +150,7 @@ class NullBooleanField(
     FALSE_VALUES: set[str | bool | int | float]
     NULL_VALUES: set[str | None]
 
-class CharField(Field[str, str, str, Any]):
+class CharField(Field[str | None, str | None, str | None, Any]):
     allow_blank: bool
     trim_whitespace: bool
     max_length: int | None
@@ -227,7 +227,7 @@ class SlugField(CharField):
 
 class URLField(CharField): ...
 
-class UUIDField(Field[uuid.UUID, uuid.UUID | str | int, str, Any]):
+class UUIDField(Field[uuid.UUID | None, uuid.UUID | str | int | None, str | None, Any]):
     valid_formats: Sequence[str]
     uuid_format: str
     def __init__(
@@ -273,7 +273,7 @@ class IPAddressField(CharField):
         min_length: int | None = ...,
     ) -> None: ...
 
-class IntegerField(Field[int, float | int | str, int, Any]):
+class IntegerField(Field[int | None, float | int | str | None, int | None, Any]):
     MAX_STRING_LENGTH: int
     re_decimal: Pattern
     max_value: int | None
@@ -297,7 +297,7 @@ class IntegerField(Field[int, float | int | str, int, Any]):
         allow_null: bool = ...,
     ) -> None: ...
 
-class FloatField(Field[float, float | int | str, str, Any]):
+class FloatField(Field[float | None, float | int | str | None, str | None, Any]):
     MAX_STRING_LENGTH: int
     re_decimal: Pattern
     max_value: float | None
@@ -321,7 +321,7 @@ class FloatField(Field[float, float | int | str, str, Any]):
         allow_null: bool = ...,
     ) -> None: ...
 
-class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
+class DecimalField(Field[Decimal | None, int | float | str | Decimal | None, str | None, Any]):
     MAX_STRING_LENGTH: int
     max_digits: int | None
     decimal_places: int | None
@@ -357,7 +357,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     def validate_precision(self, value: Decimal) -> Decimal: ...
     def quantize(self, value: Decimal) -> Decimal: ...
 
-class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any]):
+class DateTimeField(Field[datetime.datetime | None, datetime.datetime | str | None, str | None, Any]):
     datetime_parser: Callable[[str, str], datetime.datetime]
     format: str | None
     input_formats: Sequence[str]
@@ -384,7 +384,7 @@ class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any])
     def enforce_timezone(self, value: datetime.datetime) -> datetime.datetime: ...
     def default_timezone(self) -> str | None: ...
 
-class DateField(Field[datetime.date, datetime.date | str, str, Any]):
+class DateField(Field[datetime.date | None, datetime.date | str | None, str | None, Any]):
     datetime_parser: Callable[[str, str], datetime.datetime]
     format: str | None
     input_formats: Sequence[str]
@@ -407,7 +407,7 @@ class DateField(Field[datetime.date, datetime.date | str, str, Any]):
         allow_null: bool = ...,
     ) -> None: ...
 
-class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
+class TimeField(Field[datetime.time | None, datetime.time | str | None, str | None, Any]):
     datetime_parser: Callable[[str, str], datetime.datetime]
     format: str | None
     input_formats: Sequence[str]
@@ -430,7 +430,7 @@ class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
         allow_null: bool = ...,
     ) -> None: ...
 
-class DurationField(Field[datetime.timedelta, datetime.timedelta | str, str, Any]):
+class DurationField(Field[datetime.timedelta| None, datetime.timedelta | str| None, str| None, Any]):
     max_value: datetime.timedelta | None
     min_value: datetime.timedelta | None
     def __init__(
@@ -452,7 +452,7 @@ class DurationField(Field[datetime.timedelta, datetime.timedelta | str, str, Any
         allow_null: bool = ...,
     ) -> None: ...
 
-class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], str, Any]):
+class ChoiceField(Field[str| None, str | int | tuple[str | int, str | int | tuple]| None, str| None, Any]):
     html_cutoff: int | None
     html_cutoff_text: StrOrPromise | None
     allow_blank: bool
@@ -487,9 +487,9 @@ class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], st
 class MultipleChoiceField(
     ChoiceField,
     Field[
-        str,
-        Sequence[str | int | tuple[str | int, str | int]],
-        Sequence[str | tuple[str | int, str | int]],
+        str| None,
+        Sequence[str | int | tuple[str | int, str | int]]| None,
+        Sequence[str | tuple[str | int, str | int]]| None,
         Any,
     ],
 ):
@@ -542,7 +542,7 @@ class FilePathField(ChoiceField):
         allow_blank: bool = ...,
     ) -> None: ...
 
-class FileField(Field[File, File, str | None, Any]):  # this field can return None without raising!
+class FileField(Field[File | None, File | None, str | None, Any]):  # this field can return None without raising!
     max_length: int
     allow_empty_file: bool
     use_url: bool
@@ -591,7 +591,7 @@ class ImageField(FileField):
 
 class _UnvalidatedField(Field): ...
 
-class ListField(Field[list[Any], list[Any], list[Any], Any]):
+class ListField(Field[list[Any]| None, list[Any]| None, list[Any]| None, Any]):
     child: Field
     allow_empty: bool
     max_length: int | None
@@ -618,7 +618,7 @@ class ListField(Field[list[Any], list[Any], list[Any], Any]):
     ) -> None: ...
     def run_child_validation(self, data: list[Mapping[Any, Any]]) -> Any: ...
 
-class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
+class DictField(Field[dict[Any, Any]| None, dict[Any, Any]| None, dict[Any, Any]| None, Any]):
     child: Field
     allow_empty: bool
     def __init__(
@@ -644,7 +644,7 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
 class HStoreField(DictField):
     child: CharField
 
-class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
+class JSONField(Field[dict[str, Any] | list[dict[str, Any]]| None, dict[str, Any] | list[dict[str, Any]]| None, str| None, Any]):
     binary: bool
     encoder: type[JSONEncoder] | None
     decoder: type[JSONDecoder] | None
