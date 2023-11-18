@@ -14,13 +14,6 @@ from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
 from typing_extensions import Concatenate, ParamSpec, TypeAlias
 
-if sys.version_info >= (3, 11):
-    from http import HTTPMethod
-
-    PizzaBaseType = Literal["deep-pan", "thin"]
-else:
-    PizzaBaseType = str
-
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
