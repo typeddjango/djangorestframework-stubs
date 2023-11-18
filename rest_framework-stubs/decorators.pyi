@@ -1,4 +1,5 @@
 from collections.abc import Callable, Mapping, Sequence
+from http import HTTPMethod
 from typing import Any, Literal, Protocol, TypeVar
 
 from django.http import HttpRequest
@@ -29,43 +30,24 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS: TypeAlias = Sequence[
-    Literal[
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
-    ]
-]
-
 _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
+    # fmt: off
     Literal[
-        "GET",
-        "POST",
-        "DELETE",
-        "PUT",
-        "PATCH",
-        "TRACE",
-        "HEAD",
-        "OPTIONS",
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
+        "get"    , "GET"    , HTTPMethod.GET    ,
+        "post"   , "POST"   , HTTPMethod.POST   ,
+        "delete" , "DELETE" , HTTPMethod.DELETE ,
+        "put"    , "PUT"    , HTTPMethod.PUT    ,
+        "patch"  , "PATCH"  , HTTPMethod.PATCH  ,
+        "trace"  , "TRACE"  , HTTPMethod.TRACE  ,
+        "head"   , "HEAD"   , HTTPMethod.HEAD   ,
+        "options", "OPTIONS", HTTPMethod.OPTIONS,
     ]
+    # fmt: on
 ]
 
 class ViewSetAction(Protocol[_View]):
     detail: bool
-    methods: _LOWER_CASE_HTTP_VERBS
+    methods: _MIXED_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]

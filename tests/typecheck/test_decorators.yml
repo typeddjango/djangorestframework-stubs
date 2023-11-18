@@ -49,6 +49,8 @@
 
 - case: method_decorator
   main: |
+    from http import HTTPMethod
+
     from rest_framework import viewsets
     from rest_framework.decorators import action
     from rest_framework.request import Request
@@ -59,5 +61,11 @@
       @action(methods=("get",), detail=False)
       def view_func_1(self, request: Request) -> Response: ...
 
-      @action(methods=["post",], detail=False)
+      @action(methods=["post"], detail=False)
       def view_func_2(self, request: Request) -> Response: ...
+
+      @action(methods=("GET",), detail=False)
+      def view_func_3(self, request: Request) -> Response: ...
+
+      @action(methods=[HTTPMethod.POST], detail=False)
+      def view_func_4(self, request: Request) -> Response: ...
