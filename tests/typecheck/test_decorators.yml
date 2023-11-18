@@ -49,12 +49,20 @@
 
 - case: method_decorator
   main: |
-    from http import HTTPMethod
+    import sys
+    from typing import Literal
 
     from rest_framework import viewsets
     from rest_framework.decorators import action
     from rest_framework.request import Request
     from rest_framework.response import Response
+
+    if sys.version_info >= (3, 11):
+        from http import HTTPMethod
+
+        enum_value: Literal[HTTPMethod.POST] = HTTPMethod.POST
+    else:
+        enum_value: Literal["POST"] = "POST"
 
     class MyView(viewsets.ViewSet):
 
@@ -67,5 +75,5 @@
       @action(methods=("GET",), detail=False)
       def view_func_3(self, request: Request) -> Response: ...
 
-      @action(methods=[HTTPMethod.POST], detail=False)
+      @action(methods=[enum_value], detail=False)
       def view_func_4(self, request: Request) -> Response: ...
