@@ -33,14 +33,14 @@ class MethodMapper(dict):
 _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
     # fmt: off
     Literal[
-        "get"    , "GET"    , HTTPMethod.GET    ,
-        "post"   , "POST"   , HTTPMethod.POST   ,
         "delete" , "DELETE" , HTTPMethod.DELETE ,
-        "put"    , "PUT"    , HTTPMethod.PUT    ,
-        "patch"  , "PATCH"  , HTTPMethod.PATCH  ,
-        "trace"  , "TRACE"  , HTTPMethod.TRACE  ,
+        "get"    , "GET"    , HTTPMethod.GET    ,
         "head"   , "HEAD"   , HTTPMethod.HEAD   ,
         "options", "OPTIONS", HTTPMethod.OPTIONS,
+        "patch"  , "PATCH"  , HTTPMethod.PATCH  ,
+        "post"   , "POST"   , HTTPMethod.POST   ,
+        "put"    , "PUT"    , HTTPMethod.PUT    ,
+        "trace"  , "TRACE"  , HTTPMethod.TRACE  ,
     ]
     # fmt: on
 ]
