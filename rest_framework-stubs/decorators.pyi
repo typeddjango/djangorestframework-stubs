@@ -1,5 +1,5 @@
+import sys
 from collections.abc import Callable, Mapping, Sequence
-from http import HTTPMethod
 from typing import Any, Literal, Protocol, TypeVar
 
 from django.http import HttpRequest
@@ -13,6 +13,13 @@ from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
 from typing_extensions import Concatenate, ParamSpec, TypeAlias
+
+if sys.version_info >= (3, 11):
+    from http import HTTPMethod
+
+    PizzaBaseType = Literal["deep-pan", "thin"]
+else:
+    PizzaBaseType = str
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
@@ -30,20 +37,58 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
-    # fmt: off
-    Literal[
-        "delete" , "DELETE" , HTTPMethod.DELETE ,
-        "get"    , "GET"    , HTTPMethod.GET    ,
-        "head"   , "HEAD"   , HTTPMethod.HEAD   ,
-        "options", "OPTIONS", HTTPMethod.OPTIONS,
-        "patch"  , "PATCH"  , HTTPMethod.PATCH  ,
-        "post"   , "POST"   , HTTPMethod.POST   ,
-        "put"    , "PUT"    , HTTPMethod.PUT    ,
-        "trace"  , "TRACE"  , HTTPMethod.TRACE  ,
+if sys.version_info >= (3, 11):
+    from http import HTTPMethod
+
+    _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
+        Literal[
+            "GET",
+            "POST",
+            "DELETE",
+            "PUT",
+            "PATCH",
+            "TRACE",
+            "HEAD",
+            "OPTIONS",
+            "get",
+            "post",
+            "delete",
+            "put",
+            "patch",
+            "trace",
+            "head",
+            "options",
+            HTTPMethod.GET,
+            HTTPMethod.POST,
+            HTTPMethod.DELETE,
+            HTTPMethod.PUT,
+            HTTPMethod.PATCH,
+            HTTPMethod.TRACE,
+            HTTPMethod.HEAD,
+            HTTPMethod.OPTIONS,
+        ]
     ]
-    # fmt: on
-]
+else:
+    _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
+        Literal[
+            "GET",
+            "POST",
+            "DELETE",
+            "PUT",
+            "PATCH",
+            "TRACE",
+            "HEAD",
+            "OPTIONS",
+            "get",
+            "post",
+            "delete",
+            "put",
+            "patch",
+            "trace",
+            "head",
+            "options",
+        ]
+    ]
 
 class ViewSetAction(Protocol[_View]):
     detail: bool
