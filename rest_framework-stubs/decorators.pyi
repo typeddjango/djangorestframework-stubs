@@ -17,6 +17,7 @@ from typing_extensions import Concatenate, ParamSpec, TypeAlias
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
+
 _MixedCaseHttpMethod: TypeAlias = Literal[
     "GET",
     "POST",
