@@ -55,9 +55,25 @@
     from rest_framework.response import Response
 
     class MyView(viewsets.ViewSet):
-
       @action(methods=("get",), detail=False)
       def view_func_1(self, request: Request) -> Response: ...
+      @action(methods=["post"], detail=False)
+      def view_func_2(self, request: Request) -> Response: ...
+      @action(methods=("GET",), detail=False)
+      def view_func_3(self, request: Request) -> Response: ...
 
-      @action(methods=["post",], detail=False)
+- case: method_decorator_http_libary
+  skip: sys.version_info < (3, 11)
+  main: |
+    from http import HTTPMethod
+    from rest_framework import viewsets
+    from rest_framework.decorators import action
+    from rest_framework.request import Request
+    from rest_framework.response import Response
+
+    MY_VAR: HTTPMethod = HTTPMethod.POST
+    class MyView(viewsets.ViewSet):
+      @action(methods=[HTTPMethod.GET], detail=False)
+      def view_func_1(self, request: Request) -> Response: ...
+      @action(methods=[MY_VAR], detail=False)
       def view_func_2(self, request: Request) -> Response: ...
