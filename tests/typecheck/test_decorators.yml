@@ -39,41 +39,37 @@
     main: |
         from rest_framework.permissions import BasePermission, IsAuthenticated
         from rest_framework.decorators import permission_classes
-
         class Permission(BasePermission):
             pass
-
         permission_classes([IsAuthenticated & Permission])
         permission_classes([IsAuthenticated | Permission])
         permission_classes([~Permission])
 
 - case: method_decorator
   main: |
-    import sys
-    from typing import Literal
-
     from rest_framework import viewsets
     from rest_framework.decorators import action
     from rest_framework.request import Request
     from rest_framework.response import Response
-
-    if sys.version_info >= (3, 11):
-        from http import HTTPMethod
-
-        enum_value: Literal[HTTPMethod.POST] = HTTPMethod.POST
-    else:
-        enum_value: Literal["POST"] = "POST"
-
     class MyView(viewsets.ViewSet):
-
       @action(methods=("get",), detail=False)
       def view_func_1(self, request: Request) -> Response: ...
-
       @action(methods=["post"], detail=False)
       def view_func_2(self, request: Request) -> Response: ...
-
       @action(methods=("GET",), detail=False)
       def view_func_3(self, request: Request) -> Response: ...
 
-      @action(methods=[enum_value], detail=False)
-      def view_func_4(self, request: Request) -> Response: ...
+- case: method_decorator_http_libary
+  skip: sys.version_info < (3, 11)
+  main: |
+    from http import HTTPMethod
+    from rest_framework import viewsets
+    from rest_framework.decorators import action
+    from rest_framework.request import Request
+    from rest_framework.response import Response
+    MY_VAR: HTTPMethod = HTTPMethod.POST
+    class MyView(viewsets.ViewSet):
+      @action(methods=[HTTPMethod.GET], detail=False)
+      def view_func_1(self, request: Request) -> Response: ...
+      @action(methods=[MY_VAR], detail=False)
+      def view_func_2(self, request: Request) -> Response: ...
