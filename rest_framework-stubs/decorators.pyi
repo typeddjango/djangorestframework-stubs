@@ -85,7 +85,6 @@ else:
 
 class ViewSetAction(Protocol[_View]):
     detail: bool
-    methods: _MIXED_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
