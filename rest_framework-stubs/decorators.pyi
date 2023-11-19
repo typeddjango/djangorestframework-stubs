@@ -17,6 +17,30 @@ from typing_extensions import Concatenate, ParamSpec, TypeAlias
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
+_MixedCaseHttpMethod: TypeAlias = Literal[
+    "GET",
+    "POST",
+    "DELETE",
+    "PUT",
+    "PATCH",
+    "TRACE",
+    "HEAD",
+    "OPTIONS",
+    "get",
+    "post",
+    "delete",
+    "put",
+    "patch",
+    "trace",
+    "head",
+    "options",
+]
+if sys.version_info >= (3, 11):
+    from http import HTTPMethod
+
+    _HttpMethod: TypeAlias = _MixedCaseHttpMethod | HTTPMethod
+else:
+    _HttpMethod: TypeAlias = _MixedCaseHttpMethod
 
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...
@@ -29,59 +53,6 @@ class MethodMapper(dict):
     def head(self, func: _View) -> _View: ...
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
-
-if sys.version_info >= (3, 11):
-    from http import HTTPMethod
-
-    _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
-        Literal[
-            "GET",
-            "POST",
-            "DELETE",
-            "PUT",
-            "PATCH",
-            "TRACE",
-            "HEAD",
-            "OPTIONS",
-            "get",
-            "post",
-            "delete",
-            "put",
-            "patch",
-            "trace",
-            "head",
-            "options",
-            HTTPMethod.GET,
-            HTTPMethod.POST,
-            HTTPMethod.DELETE,
-            HTTPMethod.PUT,
-            HTTPMethod.PATCH,
-            HTTPMethod.TRACE,
-            HTTPMethod.HEAD,
-            HTTPMethod.OPTIONS,
-        ]
-    ]
-else:
-    _MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
-        Literal[
-            "GET",
-            "POST",
-            "DELETE",
-            "PUT",
-            "PATCH",
-            "TRACE",
-            "HEAD",
-            "OPTIONS",
-            "get",
-            "post",
-            "delete",
-            "put",
-            "patch",
-            "trace",
-            "head",
-            "options",
-        ]
-    ]
 
 class ViewSetAction(Protocol[_View]):
     detail: bool
@@ -103,7 +74,7 @@ def throttle_classes(throttle_classes: Sequence[BaseThrottle | type[BaseThrottle
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
 def schema(view_inspector: ViewInspector | type[ViewInspector] | None) -> Callable[[_View], _View]: ...
 def action(
-    methods: _MIXED_CASE_HTTP_VERBS | None = ...,
+    methods: Sequence[_HttpMethod] | None = ...,
     detail: bool = ...,
     url_path: str | None = ...,
     url_name: str | None = ...,
