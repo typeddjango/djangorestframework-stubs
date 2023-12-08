@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Literal, NoReturn, TypeVar
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -73,7 +73,7 @@ ALL_FIELDS: str
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
 
-class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
+class BaseSerializer(Field[Any, Any, Any, _IN]):
     partial: bool
     many: bool
     instance: _IN | None
@@ -124,10 +124,7 @@ class SerializerMetaclass(type):
 
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
-class Serializer(
-    BaseSerializer[_IN],
-    metaclass=SerializerMetaclass,
-):
+class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     _declared_fields: dict[str, Field]
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
     def get_initial(self) -> Any: ...
@@ -190,14 +187,14 @@ class ListSerializer(
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
-class ModelSerializer(Serializer, BaseSerializer[_MT]):
+class ModelSerializer(Serializer[_MT]):
     serializer_field_mapping: dict[type[models.Field], type[Field]]
     serializer_related_field: type[RelatedField]
     serializer_related_to_field: type[RelatedField]
     serializer_url_field: type[RelatedField]
     serializer_choice_field: type[Field]
     url_field_name: str | None
-    instance: _MT | Sequence[_MT] | None
+    instance: _MT | Sequence[_MT] | None  # type: ignore[assignment]
 
     class Meta:
         model: type[_MT]  # type: ignore
