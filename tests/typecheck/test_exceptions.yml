@@ -46,5 +46,5 @@
     APIException()
     APIException(None, None)
     APIException(...)  # E: Argument 1 to "APIException" has incompatible type "ellipsis"; expected "_APIExceptionInput"
-    APIException({'a': ...})  # E: Dict entry 0 has incompatible type "str": "ellipsis"; expected "str": "Union[Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
-    APIException({'a': ['test', ...]})  # E: List item 1 has incompatible type "ellipsis"; expected "Union[Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
+    APIException({'a': ...})  # E: Dict entry 0 has incompatible type "str": "ellipsis"; expected "str": "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
+    APIException({'a': ['test', ...]})  # E: List item 1 has incompatible type "ellipsis"; expected "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
