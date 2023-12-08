@@ -6,6 +6,9 @@ on:
       - master
   pull_request:
   workflow_dispatch:
+  schedule:
+    # 15:41 UTC every day
+    - cron: "41 15 * * TUE"
 
 jobs:
   mypy-self-check:
