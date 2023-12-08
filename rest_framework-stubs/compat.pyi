@@ -31,17 +31,11 @@ try:
     import pygments
 except ImportError:
     pygments: TypeAlias = None  # type: ignore[no-redef]
+
 try:
     import markdown
-    def apply_markdown(text: str) -> str: ...
-
-except ImportError:
-    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
-    markdown: TypeAlias = None  # type: ignore[no-redef]
-
-try:
-    import pygments
     from markdown.preprocessors import Preprocessor
+    def apply_markdown(text: str) -> str: ...
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
@@ -49,7 +43,8 @@ try:
         def run(self, lines: list[str]) -> list[str]: ...
 
 except ImportError:
-    pass
+    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
+    markdown: TypeAlias = None  # type: ignore[no-redef]
 
 def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...
