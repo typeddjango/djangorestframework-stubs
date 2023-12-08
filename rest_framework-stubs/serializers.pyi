@@ -52,6 +52,7 @@ from rest_framework.fields import TimeField as TimeField
 from rest_framework.fields import URLField as URLField
 from rest_framework.fields import UUIDField as UUIDField
 from rest_framework.fields import empty as empty
+from rest_framework.fields import _DefaultInitial
 from rest_framework.relations import Hyperlink as Hyperlink
 from rest_framework.relations import HyperlinkedIdentityField as HyperlinkedIdentityField
 from rest_framework.relations import HyperlinkedRelatedField as HyperlinkedRelatedField
@@ -213,8 +214,8 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
-        default: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
-        initial: _MT | Sequence[_MT] | Callable[[], _MT | Sequence[_MT]] = ...,
+        default: _DefaultInitial[_MT | Sequence[_MT]] = ...,
+        initial: _DefaultInitial[_MT | Sequence[_MT]] = ...,
         source: str | None = None,
         label: StrOrPromise | None = None,
         help_text: StrOrPromise | None = None,
