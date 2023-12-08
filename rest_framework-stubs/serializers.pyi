@@ -146,9 +146,7 @@ class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     @property
     def errors(self) -> ReturnDict: ...
 
-class ListSerializer(
-    BaseSerializer[_IN],
-):
+class ListSerializer(BaseSerializer[_IN]):
     child: Field | BaseSerializer | None
     many: bool
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
