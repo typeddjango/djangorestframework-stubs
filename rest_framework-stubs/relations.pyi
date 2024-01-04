@@ -106,7 +106,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
     view_name: str | None
     def __init__(
         self,
-        view_name: str,
+        view_name: str | None = ...,
         *,
         many: bool = ...,
         allow_empty: bool = ...,
