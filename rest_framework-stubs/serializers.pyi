@@ -233,7 +233,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         self, field_name: str, info: FieldInfo, model_class: _MT, nested_depth: int
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_standard_field(
-        self, field_name: str, model_field: type[models.Field]
+        self, field_name: str, model_field: models.Field
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_relational_field(
         self, field_name: str, relation_info: RelationInfo
