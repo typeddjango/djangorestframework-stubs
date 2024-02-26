@@ -18,8 +18,8 @@ from rest_framework.response import _MonkeyPatchedResponse
 from typing_extensions import TypeAlias
 
 _GetDataType: TypeAlias = (
-    Mapping[str, str | bytes | int | Iterable[str | bytes | int]]
-    | Iterable[tuple[str, str | bytes | int | Iterable[str | bytes | int]]]
+    Mapping[str, str | bytes | float | Iterable[str | bytes | float]]
+    | Iterable[tuple[str, str | bytes | float | Iterable[str | bytes | float]]]
     | None
 )
 
