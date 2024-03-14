@@ -64,5 +64,6 @@ setup(
     ],
     project_urls={
         "Release notes": "https://github.com/typeddjango/djangorestframework-stubs/releases",
+        "Funding": "https://github.com/sponsors/typeddjango",
     },
 )

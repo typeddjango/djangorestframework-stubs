@@ -2,6 +2,7 @@
 # Unsorted: there are real problems and things we can really ignore.
 
 rest_framework.authtoken.admin.TokenAdmin
+rest_framework.authtoken.admin.User
 rest_framework.authtoken.default_app_config
 rest_framework.authtoken.management.commands.drf_create_token.UserModel
 rest_framework.authtoken.models.Token.created
