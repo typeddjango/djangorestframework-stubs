@@ -45,6 +45,6 @@
     APIException('I am just a message', code='msg')
     APIException()
     APIException(None, None)
-    APIException(...)  # E: Argument 1 to "APIException" has incompatible type "EllipsisType"; expected "_APIExceptionInput"
-    APIException({'a': ...})  # E: Dict entry 0 has incompatible type "str": "EllipsisType"; expected "str": "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
-    APIException({'a': ['test', ...]})  # E: List item 1 has incompatible type "EllipsisType"; expected "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
+    APIException(1)  # E: Argument 1 to "APIException" has incompatible type "builtins.int"; expected "_APIExceptionInput"
+    APIException({'a': 1})  # E: Dict entry 0 has incompatible type "str": "builtins.int"; expected "str": "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
+    APIException({'a': ['test', 1]})  # E: List item 1 has incompatible type "builtins.int"; expected "Union[_StrPromise, Sequence[_APIExceptionInput], Mapping[str, _APIExceptionInput], None]"
