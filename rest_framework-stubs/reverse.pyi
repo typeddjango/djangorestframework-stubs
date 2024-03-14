@@ -10,7 +10,7 @@ def reverse(
     kwargs: Mapping[str, Any] | None = ...,
     request: HttpRequest | None = ...,
     format: str | None = ...,
-    **extra: Any
+    **extra: Any,
 ) -> str: ...
 def _reverse(
     viewname: str,
@@ -18,7 +18,7 @@ def _reverse(
     kwargs: Mapping[str, Any] | None = ...,
     request: HttpRequest | None = ...,
     format: str | None = ...,
-    **extra: Any
+    **extra: Any,
 ) -> str: ...
 
 reverse_lazy: Callable[..., str]
