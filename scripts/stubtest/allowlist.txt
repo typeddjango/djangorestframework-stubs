@@ -6,12 +6,8 @@
 # Comments about why things are ignored are mandatory.
 
 # Constructor arguments *appear* optional but actually throw exception
-rest_framework.relations.HyperlinkedIdentityField.__init__
-rest_framework.relations.HyperlinkedRelatedField.__init__
 rest_framework.relations.ManyRelatedField.__init__
 rest_framework.relations.SlugRelatedField.__init__
-rest_framework.serializers.HyperlinkedIdentityField.__init__
-rest_framework.serializers.HyperlinkedRelatedField.__init__
 rest_framework.serializers.ManyRelatedField.__init__
 rest_framework.serializers.SlugRelatedField.__init__
 
