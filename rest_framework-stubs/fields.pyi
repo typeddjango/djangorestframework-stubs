@@ -181,7 +181,7 @@ class EmailField(CharField): ...
 class RegexField(CharField):
     def __init__(
         self,
-        regex: str | Pattern,
+        regex: str | Pattern[str],
         *,
         read_only: bool = ...,
         write_only: bool = ...,
