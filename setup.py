@@ -29,14 +29,14 @@ dependencies = [
 
 # Keep compatible-mypy major.minor version pinned to what we use in CI (requirements.txt)
 extras_require = {
-    "compatible-mypy": ["mypy~=1.7.0", "django-stubs[compatible-mypy]"],
+    "compatible-mypy": ["mypy>=1.7,<1.10", "django-stubs[compatible-mypy]"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
 
 setup(
     name="djangorestframework-stubs",
-    version="3.14.5",
+    version="3.15.0",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -64,5 +64,6 @@ setup(
     ],
     project_urls={
         "Release notes": "https://github.com/typeddjango/djangorestframework-stubs/releases",
+        "Funding": "https://github.com/sponsors/typeddjango",
     },
 )

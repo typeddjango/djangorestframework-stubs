@@ -1,6 +1,7 @@
 [tool.black]
 line-length = 120
 include = '\.pyi?$'
+target-version = ["py38", "py39", "py310", "py311", "py312"]
 
 [tool.ruff]
 # Adds to default excludes: https://docs.astral.sh/ruff/settings/#exclude
