@@ -25,7 +25,7 @@ class ReturnDict(dict[_KT, _VT], Generic[_KT, _VT]):
         __map: SupportsKeysAndGetItem[str, _VT],
         *,
         serializer: BaseSerializer,
-        **kwargs: _VT
+        **kwargs: _VT,
     ) -> None: ...
     @overload
     def __init__(self, __iterable: Iterable[tuple[_KT, _VT]], *, serializer: BaseSerializer) -> None: ...

@@ -197,6 +197,7 @@ class ModelSerializer(Serializer[_MT]):
         exclude: Sequence[str] | None
         depth: int | None
         extra_kwargs: dict[str, dict[str, Any]]
+
     def __init__(
         self,
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
@@ -228,7 +229,7 @@ class ModelSerializer(Serializer[_MT]):
         self, field_name: str, info: FieldInfo, model_class: _MT, nested_depth: int
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_standard_field(
-        self, field_name: str, model_field: type[models.Field]
+        self, field_name: str, model_field: models.Field
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_relational_field(
         self, field_name: str, relation_info: RelationInfo
