@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, ClassVar
+from typing import Any
 
 from django.http import HttpRequest, JsonResponse
 from django_stubs_ext import StrOrPromise
@@ -43,10 +43,6 @@ class APIException(Exception):
 class ValidationError(APIException):
     # ValidationError wraps `detail` in a list if it's not already a list/dict.
     detail: list[_Detail] | dict[str, _Detail]
-    default_params: ClassVar[Mapping[str, Any]]
-    def __init__(
-        self, detail: _Detail | None = ..., code: str | None = ..., params: Mapping[str, Any] | None = ...
-    ) -> None: ...
 
 class ParseError(APIException): ...
 class AuthenticationFailed(APIException): ...
