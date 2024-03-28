@@ -62,6 +62,7 @@ class ViewSetAction(Protocol[_View]):
     kwargs: Mapping[str, Any]
     mapping: MethodMapper
     __call__: _View
+    __name__: str
 
 def api_view(
     http_method_names: Sequence[str] | None = ...,
