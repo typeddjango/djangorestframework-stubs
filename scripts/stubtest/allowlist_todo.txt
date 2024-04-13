@@ -144,7 +144,6 @@ rest_framework.fields.DecimalField.__init__
 rest_framework.fields.Field.__class_getitem__
 rest_framework.fields.logger
 rest_framework.fields.set_value
-rest_framework.filters.SearchFilter.construct_search
 rest_framework.filters.search_smart_split
 rest_framework.generics.GenericAPIView.__class_getitem__
 rest_framework.request.Request.__class_getitem__
