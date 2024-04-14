@@ -145,7 +145,6 @@ rest_framework.fields.logger
 rest_framework.filters.search_smart_split
 rest_framework.routers.BaseRouter.is_already_registered
 rest_framework.serializers.DecimalField.__init__
-rest_framework.serializers.Field.__class_getitem__
 rest_framework.serializers.LIST_SERIALIZER_KWARGS_REMOVE
 rest_framework.serializers.ListSerializer.run_child_validation
 rest_framework.serializers.ModelSerializer.get_unique_together_constraints
