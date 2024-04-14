@@ -1,7 +1,7 @@
 import datetime
 import uuid
 from _typeshed import Incomplete
-from collections.abc import Callable, Generator, Iterable, Mapping, MutableMapping, Sequence
+from collections.abc import Callable, Generator, Iterable, Mapping, Sequence
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
@@ -44,7 +44,6 @@ class Option(Protocol):
 
 def is_simple_callable(obj: Callable) -> bool: ...
 def get_attribute(instance: Any, attrs: list[str] | None) -> Any: ...
-def set_value(dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
 def to_choices_dict(choices: Iterable[Any]) -> dict: ...
 def flatten_choices_dict(choices: dict[Any, Any]) -> dict: ...
 def iter_options(

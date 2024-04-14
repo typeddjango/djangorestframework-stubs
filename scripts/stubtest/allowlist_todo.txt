@@ -143,7 +143,6 @@ rest_framework.compat.distinct
 rest_framework.fields.DecimalField.__init__
 rest_framework.fields.Field.__class_getitem__
 rest_framework.fields.logger
-rest_framework.fields.set_value
 rest_framework.filters.search_smart_split
 rest_framework.generics.GenericAPIView.__class_getitem__
 rest_framework.request.Request.__class_getitem__
@@ -155,7 +154,6 @@ rest_framework.serializers.Field.__class_getitem__
 rest_framework.serializers.LIST_SERIALIZER_KWARGS_REMOVE
 rest_framework.serializers.ListSerializer.run_child_validation
 rest_framework.serializers.ModelSerializer.get_unique_together_constraints
-rest_framework.serializers.Serializer.set_value
 rest_framework.templatetags.rest_framework.optional_logout
 rest_framework.utils.encoders.CustomScalar
 rest_framework.utils.field_mapping.get_unique_validators
