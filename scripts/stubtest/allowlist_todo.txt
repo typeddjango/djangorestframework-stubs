@@ -156,3 +156,6 @@ rest_framework.serializers.ModelSerializer.get_unique_together_constraints
 rest_framework.templatetags.rest_framework.optional_logout
 rest_framework.utils.encoders.CustomScalar
 rest_framework.utils.field_mapping.get_unique_validators
+rest_framework.utils.timezone.datetime_exists
+rest_framework.utils.timezone.datetime_ambiguous
+rest_framework.utils.timezone.valid_datetime
