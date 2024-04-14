@@ -137,7 +137,6 @@ rest_framework.views.AsView
 rest_framework.views.GenericView
 
 # Added in 3.15:
-rest_framework.RemovedInDRF317Warning
 rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
 rest_framework.compat.distinct
 rest_framework.fields.DecimalField.__init__
@@ -156,3 +155,6 @@ rest_framework.serializers.ModelSerializer.get_unique_together_constraints
 rest_framework.templatetags.rest_framework.optional_logout
 rest_framework.utils.encoders.CustomScalar
 rest_framework.utils.field_mapping.get_unique_validators
+rest_framework.utils.timezone.datetime_exists
+rest_framework.utils.timezone.datetime_ambiguous
+rest_framework.utils.timezone.valid_datetime
