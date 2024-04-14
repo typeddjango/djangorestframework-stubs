@@ -58,6 +58,7 @@ class Request(HttpRequest):
         negotiator: BaseContentNegotiation | None = ...,
         parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
+    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
     @property
