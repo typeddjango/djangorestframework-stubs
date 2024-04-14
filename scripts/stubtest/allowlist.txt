@@ -20,6 +20,7 @@ rest_framework.authtoken.migrations
 rest_framework.authtoken.migrations.0001_initial
 rest_framework.authtoken.migrations.0002_auto_20160226_1747
 rest_framework.authtoken.migrations.0003_tokenproxy
+rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
 
 # Mypy doesn't like default value `empty`
 rest_framework.fields.DateField.__init__
