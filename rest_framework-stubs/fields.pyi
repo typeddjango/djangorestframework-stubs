@@ -5,6 +5,7 @@ from collections.abc import Callable, Generator, Iterable, Mapping, Sequence
 from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
+from logging import Logger
 from re import Pattern
 from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
 
@@ -15,6 +16,8 @@ from django_stubs_ext import StrOrPromise
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
 from typing_extensions import Self, TypeAlias
+
+logger: Logger
 
 class _Empty(Enum):
     sentinel = 0
@@ -329,6 +332,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     min_value: Decimal | int | float | None
     localize: bool
     rounding: str | None
+    normalize_output: bool
     max_whole_digits: int | None
     def __init__(
         self,
@@ -339,6 +343,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         min_value: Decimal | int | float | None = None,
         localize: bool = ...,
         rounding: str | None = None,
+        normalize_output: bool = ...,
         *,
         read_only: bool = ...,
         write_only: bool = ...,
