@@ -142,7 +142,6 @@ rest_framework.filters.search_smart_split
 rest_framework.generics.GenericAPIView.__class_getitem__
 rest_framework.request.Request.__class_getitem__
 rest_framework.response.Response.__class_getitem__
-rest_framework.routers.BaseRouter.is_already_registered
 rest_framework.serializers.Field.__class_getitem__
 rest_framework.serializers.ListSerializer.run_child_validation
 rest_framework.serializers.ModelSerializer.get_unique_together_constraints
