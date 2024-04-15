@@ -1,4 +1,5 @@
 import datetime
+import sys
 import uuid
 from _typeshed import Incomplete
 from collections.abc import Callable, Generator, Iterable, Mapping, Sequence
@@ -16,6 +17,9 @@ from django_stubs_ext import StrOrPromise
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
 from typing_extensions import Self, TypeAlias
+
+if sys.version_info >= (3, 9):
+    from types import GenericAlias
 
 logger: Logger
 
@@ -105,6 +109,9 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
         validators: Sequence[Validator[_VT]] | None = ...,
         allow_null: bool = ...,
     ) -> None: ...
+    if sys.version_info >= (3, 9):
+        def __class_getitem__(cls, *args: Any, **kwargs: Any) -> GenericAlias: ...
+
     def bind(self, field_name: str, parent: BaseSerializer) -> None: ...
     @property
     def validators(self) -> list[Validator[_VT]]: ...
