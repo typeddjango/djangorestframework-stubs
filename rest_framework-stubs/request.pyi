@@ -1,4 +1,3 @@
-import sys
 from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
@@ -15,9 +14,7 @@ from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
-
-if sys.version_info >= (3, 9):
-    from types import GenericAlias
+from typing_extensions import Self
 
 def is_form_media_type(media_type: str) -> bool: ...
 
@@ -62,9 +59,7 @@ class Request(HttpRequest):
         negotiator: BaseContentNegotiation | None = ...,
         parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
-    if sys.version_info >= (3, 9):
-        def __class_getitem__(cls, *args: Any, **kwargs: Any) -> GenericAlias: ...
-
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
     @property

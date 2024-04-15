@@ -1,4 +1,3 @@
-import sys
 from collections.abc import Mapping
 from typing import Any
 
@@ -8,9 +7,7 @@ from django.test.utils import ContextList
 from django.urls import ResolverMatch
 from rest_framework.request import Request
 from rest_framework.test import APIClient
-
-if sys.version_info >= (3, 9):
-    from types import GenericAlias
+from typing_extensions import Self
 
 class Response(SimpleTemplateResponse):
     data: Any
@@ -26,9 +23,7 @@ class Response(SimpleTemplateResponse):
         exception: bool = ...,
         content_type: str | None = ...,
     ) -> None: ...
-    if sys.version_info >= (3, 9):
-        def __class_getitem__(cls, *args: Any, **kwargs: Any) -> GenericAlias: ...
-
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
     def rendered_content(self) -> Any: ...
     def render(self) -> Any: ...
