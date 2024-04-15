@@ -1,3 +1,4 @@
+import sys
 from _typeshed import Incomplete
 from collections.abc import Sequence
 from typing import Any, Protocol, TypeVar
@@ -10,6 +11,9 @@ from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
+
+if sys.version_info >= (3, 9):
+    from types import GenericAlias
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 _MT_inv = TypeVar("_MT_inv", bound=Model)
@@ -37,7 +41,9 @@ class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
     lookup_url_kwarg: str | None
     filter_backends: Sequence[type[BaseFilterBackend | BaseFilterProtocol[_MT_co]]]
     pagination_class: type[BasePagination] | None
-    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
+    if sys.version_info >= (3, 9):
+        def __class_getitem__(cls, *args: Any, **kwargs: Any) -> GenericAlias: ...
+
     def get_object(self) -> _MT_co: ...
     def get_serializer(self, *args: Any, **kwargs: Any) -> BaseSerializer[_MT_co]: ...
     def get_serializer_class(self) -> type[BaseSerializer[_MT_co]]: ...

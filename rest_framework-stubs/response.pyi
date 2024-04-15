@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+import sys
 from collections.abc import Mapping
 from typing import Any
 
@@ -8,6 +8,9 @@ from django.test.utils import ContextList
 from django.urls import ResolverMatch
 from rest_framework.request import Request
 from rest_framework.test import APIClient
+
+if sys.version_info >= (3, 9):
+    from types import GenericAlias
 
 class Response(SimpleTemplateResponse):
     data: Any
@@ -23,7 +26,9 @@ class Response(SimpleTemplateResponse):
         exception: bool = ...,
         content_type: str | None = ...,
     ) -> None: ...
-    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
+    if sys.version_info >= (3, 9):
+        def __class_getitem__(cls, *args: Any, **kwargs: Any) -> GenericAlias: ...
+
     @property
     def rendered_content(self) -> Any: ...
     def render(self) -> Any: ...
