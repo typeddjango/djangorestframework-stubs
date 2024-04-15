@@ -14,6 +14,7 @@ from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
+from typing_extensions import Self
 
 def is_form_media_type(media_type: str) -> bool: ...
 
@@ -58,6 +59,7 @@ class Request(HttpRequest):
         negotiator: BaseContentNegotiation | None = ...,
         parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
     @property

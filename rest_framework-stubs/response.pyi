@@ -7,6 +7,7 @@ from django.test.utils import ContextList
 from django.urls import ResolverMatch
 from rest_framework.request import Request
 from rest_framework.test import APIClient
+from typing_extensions import Self
 
 class Response(SimpleTemplateResponse):
     data: Any
@@ -22,6 +23,7 @@ class Response(SimpleTemplateResponse):
         exception: bool = ...,
         content_type: str | None = ...,
     ) -> None: ...
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
     def rendered_content(self) -> Any: ...
     def render(self) -> Any: ...
