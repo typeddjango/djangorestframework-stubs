@@ -67,6 +67,7 @@ from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherVali
 from typing_extensions import Self
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
+LIST_SERIALIZER_KWARGS_REMOVE: Sequence[str]
 ALL_FIELDS: str
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
