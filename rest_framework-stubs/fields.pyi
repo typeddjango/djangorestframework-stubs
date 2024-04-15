@@ -329,6 +329,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
     min_value: Decimal | int | float | None
     localize: bool
     rounding: str | None
+    normalize_output: bool
     max_whole_digits: int | None
     def __init__(
         self,
@@ -339,6 +340,7 @@ class DecimalField(Field[Decimal, int | float | str | Decimal, str, Any]):
         min_value: Decimal | int | float | None = None,
         localize: bool = ...,
         rounding: str | None = None,
+        normalize_output: bool = ...,
         *,
         read_only: bool = ...,
         write_only: bool = ...,
