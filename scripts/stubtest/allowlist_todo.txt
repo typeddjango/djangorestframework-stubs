@@ -138,5 +138,3 @@ rest_framework.views.GenericView
 
 # Added in 3.15:
 rest_framework.filters.search_smart_split
-rest_framework.serializers.ModelSerializer.get_unique_together_constraints
-rest_framework.utils.field_mapping.get_unique_validators
