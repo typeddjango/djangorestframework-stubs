@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Generator, Generic, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Generic, Literal, NoReturn, TypeVar
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -253,9 +253,7 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         self, kwargs: MutableMapping[str, Any], extra_kwargs: MutableMapping[str, Any]
     ) -> MutableMapping[str, Any]: ...
     def get_extra_kwargs(self) -> dict[str, Any]: ...
-    def get_unique_together_constraints(
-        self, model: _MT
-    ) -> Generator[tuple[set[tuple[str, ...]], Manager[_MT]], None, None]: ...
+    def get_unique_together_constraints(self, model: _MT) -> Iterator[tuple[set[tuple[str, ...]], Manager[_MT]]]: ...
     def get_uniqueness_extra_kwargs(
         self, field_names: Iterable[str], declared_fields: Mapping[str, Field], extra_kwargs: dict[str, Any]
     ) -> tuple[dict[str, Any], dict[str, HiddenField]]: ...
