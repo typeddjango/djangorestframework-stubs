@@ -140,5 +140,4 @@ rest_framework.views.GenericView
 rest_framework.filters.search_smart_split
 rest_framework.serializers.ListSerializer.run_child_validation
 rest_framework.serializers.ModelSerializer.get_unique_together_constraints
-rest_framework.templatetags.rest_framework.optional_logout
 rest_framework.utils.field_mapping.get_unique_validators
