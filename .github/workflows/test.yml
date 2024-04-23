@@ -61,7 +61,8 @@ jobs:
           SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
 
       - name: Run tests
-        run: pytest
+        # Suppress errors from other packages due to https://github.com/typeddjango/pytest-mypy-plugins/issues/134
+        run: pytest --mypy-only-local-stub
 
   stubtest:
     timeout-minutes: 10
