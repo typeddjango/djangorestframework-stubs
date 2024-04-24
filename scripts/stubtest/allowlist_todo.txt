@@ -51,7 +51,6 @@ rest_framework.pagination.HtmlContext
 rest_framework.pagination.HtmlContextWithPageLinks
 rest_framework.parsers.BaseParser.media_type
 rest_framework.parsers.FileUploadParser.get_encoded_filename
-rest_framework.relations.HyperlinkedRelatedField.get_object
 rest_framework.relations.ManyRelatedField.initial
 rest_framework.relations.ManyRelatedField.to_representation
 rest_framework.relations.SlugRelatedField.to_representation
@@ -91,7 +90,6 @@ rest_framework.serializers.DateField.to_internal_value
 rest_framework.serializers.DateTimeField.to_internal_value
 rest_framework.serializers.DictField.initial
 rest_framework.serializers.DurationField.to_internal_value
-rest_framework.serializers.HyperlinkedRelatedField.get_object
 rest_framework.serializers.ListField.initial
 rest_framework.serializers.ListField.to_representation
 rest_framework.serializers.ListSerializer.is_valid
