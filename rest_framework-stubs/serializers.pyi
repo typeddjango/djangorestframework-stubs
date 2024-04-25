@@ -62,8 +62,17 @@ from rest_framework.relations import RelatedField as RelatedField
 from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
-from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
+from rest_framework.utils.serializer_helpers import BindingDict as BindingDict
+from rest_framework.utils.serializer_helpers import BoundField as BoundField
+from rest_framework.utils.serializer_helpers import JSONBoundField as JSONBoundField
+from rest_framework.utils.serializer_helpers import NestedBoundField as NestedBoundField
+from rest_framework.utils.serializer_helpers import ReturnDict as ReturnDict
+from rest_framework.utils.serializer_helpers import ReturnList as ReturnList
+from rest_framework.validators import BaseUniqueForValidator, Validator
+from rest_framework.validators import UniqueForDateValidator as UniqueForDateValidator
+from rest_framework.validators import UniqueForMonthValidator as UniqueForMonthValidator
+from rest_framework.validators import UniqueForYearValidator as UniqueForYearValidator
+from rest_framework.validators import UniqueTogetherValidator as UniqueTogetherValidator
 from typing_extensions import Self
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
