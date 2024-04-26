@@ -618,8 +618,8 @@ class ListField(Field[list[Any], list[Any], list[Any], Any]):
         allow_null: bool = ...,
         child: Field = ...,
         allow_empty: bool = ...,
-        max_length: int = ...,
-        min_length: int = ...,
+        max_length: int | None = ...,
+        min_length: int | None = ...,
     ) -> None: ...
     def run_child_validation(self, data: list[Mapping[Any, Any]]) -> Any: ...
 
