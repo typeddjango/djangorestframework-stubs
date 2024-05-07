@@ -24,6 +24,10 @@ try:
 except ImportError:
     yaml: TypeAlias = None  # type: ignore[no-redef]
 try:
+    import inflection
+except ImportError:
+    inflection: TypeAlias = None  # type: ignore[no-redef]
+try:
     import requests
 except ImportError:
     requests: TypeAlias = None  # type: ignore[no-redef]
@@ -63,6 +67,7 @@ __all__ = [
     "QuerySet",
     "uritemplate",
     "yaml",
+    "inflection",
     "pygments",
     "markdown",
     "apply_markdown",
