@@ -38,11 +38,11 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
     def __init__(
         self,
         *,
-        many: bool = ...,
-        allow_empty: bool = ...,
         queryset: QuerySet[_MT] | Manager[_MT] | None = ...,
         html_cutoff: int | None = ...,
         html_cutoff_text: str = ...,
+        many: bool = ...,
+        allow_empty: bool = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
@@ -51,10 +51,10 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
         source: str | None = None,
         label: StrOrPromise | None = ...,
         help_text: StrOrPromise | None = None,
-        allow_null: bool = ...,
-        validators: Sequence[Validator[_MT]] | None = ...,
-        error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
+        error_messages: dict[str, StrOrPromise] | None = ...,
+        validators: Sequence[Validator[_MT]] | None = ...,
+        allow_null: bool = ...,
     ) -> None: ...
     # mypy doesn't accept the typing below, although its accurate to what this class is doing, hence the ignore
     def __new__(cls, *args: Any, **kwargs: Any) -> RelatedField[_MT, _DT, _PT] | ManyRelatedField: ...  # type: ignore
@@ -62,13 +62,13 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
     def many_init(cls, *args: Any, **kwargs: Any) -> ManyRelatedField: ...
     def get_queryset(self) -> QuerySet[_MT]: ...
     def use_pk_only_optimization(self) -> bool: ...
+    def get_attribute(self, instance: _MT) -> _PT | None: ...
     def get_choices(self, cutoff: int | None = ...) -> dict: ...
     @property
     def choices(self) -> dict: ...
     @property
     def grouped_choices(self) -> dict: ...
     def iter_options(self) -> Iterable[Option]: ...
-    def get_attribute(self, instance: _MT) -> _PT | None: ...
     def display_value(self, instance: _MT) -> str: ...
 
 class StringRelatedField(RelatedField[_MT, _MT, str]): ...
