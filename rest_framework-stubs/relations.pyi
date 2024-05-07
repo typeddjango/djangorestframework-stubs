@@ -31,7 +31,7 @@ _MT = TypeVar("_MT", bound=Model)
 _DT = TypeVar("_DT")  # Data Type
 _PT = TypeVar("_PT")  # Primitive Type
 
-class RelatedField(Field[_MT, _DT, _PT, Any]):
+class RelatedField(Field[_MT, Any, _PT, Any]):
     queryset: QuerySet[_MT] | Manager[_MT] | None
     html_cutoff: int | None
     html_cutoff_text: str | None
@@ -57,7 +57,7 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
         allow_null: bool = ...,
     ) -> None: ...
     # mypy doesn't accept the typing below, although its accurate to what this class is doing, hence the ignore
-    def __new__(cls, *args: Any, **kwargs: Any) -> RelatedField[_MT, _DT, _PT] | ManyRelatedField: ...  # type: ignore
+    def __new__(cls, *args: Any, **kwargs: Any) -> RelatedField[_MT, _PT] | ManyRelatedField: ...  # type: ignore
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> ManyRelatedField: ...
     def get_queryset(self) -> QuerySet[_MT]: ...
@@ -71,9 +71,9 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
     def iter_options(self) -> Iterable[Option]: ...
     def display_value(self, instance: _MT) -> str: ...
 
-class StringRelatedField(RelatedField[_MT, _MT, str]): ...
+class StringRelatedField(RelatedField[_MT, str]): ...
 
-class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
+class PrimaryKeyRelatedField(RelatedField[_MT, Any]):
     pk_field: str | None
     def __init__(
         self,
@@ -98,7 +98,7 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         pk_field: str | Field | None = ...,
     ) -> None: ...
 
-class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
+class HyperlinkedRelatedField(RelatedField[_MT, Hyperlink]):
     reverse: Callable
     lookup_field: str
     lookup_url_kwarg: str
@@ -134,7 +134,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
 
 class HyperlinkedIdentityField(HyperlinkedRelatedField): ...
 
-class SlugRelatedField(RelatedField[_MT, str, str]):
+class SlugRelatedField(RelatedField[_MT, str]):
     slug_field: str | None
     def __init__(
         self,
