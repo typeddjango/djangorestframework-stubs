@@ -27,10 +27,7 @@ class DynamicRoute(NamedTuple):
 def escape_curly_brackets(url_path: str) -> str: ...
 def flatten(list_of_lists: Iterable[Iterable[Any]]) -> Iterable[Any]: ...
 
-class RenameRouterMethods(RenameMethodsBase):
-    renamed_methods: Iterable[str | Callable]
-
-class BaseRouter(metaclass=RenameRouterMethods):
+class BaseRouter:
     registry: list[tuple[str, type[ViewSetMixin], str]]
     def register(
         self, prefix: str, viewset: type[ViewSetMixin], basename: str | None = ..., base_name: str | None = ...
