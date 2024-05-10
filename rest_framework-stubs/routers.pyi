@@ -1,7 +1,6 @@
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any, NamedTuple
 
-from django.utils.deprecation import RenameMethodsBase
 from rest_framework import views
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
