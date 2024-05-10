@@ -24,7 +24,7 @@ try:
 except ImportError:
     yaml: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import inflection
+    import inflection  # type: ignore[import-not-found,unused-ignore]
 except ImportError:
     inflection: TypeAlias = None  # type: ignore[no-redef]
 try:
