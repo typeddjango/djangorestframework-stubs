@@ -2,7 +2,7 @@ from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping
 from typing import Any
 
-import coreapi
+import coreapi  # type: ignore[import-untyped]
 import requests
 import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
