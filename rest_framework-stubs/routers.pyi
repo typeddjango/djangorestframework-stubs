@@ -60,10 +60,16 @@ class DefaultRouter(SimpleRouter):
     include_format_suffixes: bool
     root_view_name: str
     default_schema_renderers: Any
-    APIRootView = APIRootView
-    APISchemaView = SchemaView
-    SchemaGenerator = SchemaGenerator
-
+    APIRootView: type[APIRootView]
+    APISchemaView: type[SchemaView]
+    SchemaGenerator: type[SchemaGenerator]
     root_renderers: list[type[BaseRenderer]]
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
+
+    def __init__(
+        self,
+        trailing_slash: bool = True,
+        use_regex_path: bool = True,
+        *,
+        root_renderers: list[type[BaseRenderer]] = ...,
+    ) -> None: ...
     def get_api_root_view(self, api_urls: Any | None = ...) -> Callable: ...

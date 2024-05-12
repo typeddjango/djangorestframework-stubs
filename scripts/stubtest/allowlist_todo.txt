@@ -65,9 +65,6 @@ rest_framework.request.Request.QUERY_PARAMS
 rest_framework.routers.BaseRouter
 rest_framework.routers.BaseRouter.register
 rest_framework.routers.DefaultRouter
-rest_framework.routers.DefaultRouter.APIRootView
-rest_framework.routers.DefaultRouter.APISchemaView
-rest_framework.routers.DefaultRouter.SchemaGenerator
 rest_framework.routers.RenameRouterMethods
 rest_framework.routers.SimpleRouter
 rest_framework.schemas.SchemaGenerator.__init__
