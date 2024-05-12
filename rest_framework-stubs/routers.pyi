@@ -1,7 +1,6 @@
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any, NamedTuple
 
-from django.utils.deprecation import RenameMethodsBase
 from rest_framework import views
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
@@ -27,10 +26,7 @@ class DynamicRoute(NamedTuple):
 def escape_curly_brackets(url_path: str) -> str: ...
 def flatten(list_of_lists: Iterable[Iterable[Any]]) -> Iterable[Any]: ...
 
-class RenameRouterMethods(RenameMethodsBase):
-    renamed_methods: Iterable[str | Callable]
-
-class BaseRouter(metaclass=RenameRouterMethods):
+class BaseRouter:
     registry: list[tuple[str, type[ViewSetMixin], str]]
     def register(
         self, prefix: str, viewset: type[ViewSetMixin], basename: str | None = ..., base_name: str | None = ...

@@ -62,11 +62,7 @@ rest_framework.renderers._BaseOpenAPIRenderer.__init__
 rest_framework.renderers._BaseOpenAPIRenderer.render
 rest_framework.request.Request.DATA
 rest_framework.request.Request.QUERY_PARAMS
-rest_framework.routers.BaseRouter
 rest_framework.routers.BaseRouter.register
-rest_framework.routers.DefaultRouter
-rest_framework.routers.RenameRouterMethods
-rest_framework.routers.SimpleRouter
 rest_framework.schemas.SchemaGenerator.__init__
 rest_framework.schemas.coreapi.SchemaGenerator.__init__
 rest_framework.schemas.generators.common_path
