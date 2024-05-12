@@ -1,7 +1,7 @@
 from collections.abc import Callable, Sequence
 from typing import Any, NamedTuple, TypeVar
 
-from coreapi import Field as CoreAPIField
+from coreapi import Field as CoreAPIField  # type: ignore[import-untyped]
 from django.core.paginator import Page, Paginator
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request

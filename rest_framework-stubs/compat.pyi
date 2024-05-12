@@ -8,7 +8,7 @@ try:
 except ImportError:
     postgres_fields: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import coreapi
+    import coreapi  # type: ignore[import-untyped]
 except ImportError:
     coreapi: TypeAlias = None  # type: ignore[no-redef]
 try:
@@ -16,7 +16,7 @@ try:
 except ImportError:
     uritemplate: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import coreschema
+    import coreschema  # type: ignore[import-untyped]
 except ImportError:
     coreschema: TypeAlias = None  # type: ignore[no-redef]
 try:
@@ -24,7 +24,7 @@ try:
 except ImportError:
     yaml: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import inflection
+    import inflection  # type: ignore[import-not-found,unused-ignore]
 except ImportError:
     inflection: TypeAlias = None  # type: ignore[no-redef]
 try:
