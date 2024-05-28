@@ -76,7 +76,6 @@ rest_framework.schemas.views.SchemaView.__init__
 rest_framework.schemas.views.SchemaView.renderer_classes
 rest_framework.serializers.APIException
 rest_framework.serializers.AuthenticationFailed
-rest_framework.serializers.BaseSerializer.is_valid
 rest_framework.serializers.BooleanField.initial
 rest_framework.serializers.CharField.initial
 rest_framework.serializers.DateField.to_internal_value
@@ -85,7 +84,6 @@ rest_framework.serializers.DictField.initial
 rest_framework.serializers.DurationField.to_internal_value
 rest_framework.serializers.ListField.initial
 rest_framework.serializers.ListField.to_representation
-rest_framework.serializers.ListSerializer.is_valid
 rest_framework.serializers.ManyRelatedField.initial
 rest_framework.serializers.ManyRelatedField.to_representation
 rest_framework.serializers.MethodNotAllowed
