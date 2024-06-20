@@ -17,8 +17,6 @@ from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
 from typing_extensions import Self, TypeAlias
 
-logger: Logger
-
 class _Empty(Enum):
     sentinel = 0
 
