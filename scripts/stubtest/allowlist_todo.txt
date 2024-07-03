@@ -112,10 +112,6 @@ rest_framework.test.APIRequestFactory.put
 rest_framework.test.RequestsClient.__init__
 rest_framework.throttling.SimpleRateThrottle.cache
 rest_framework.utils.encoders.JSONEncoder.default
-rest_framework.utils.json.dump
-rest_framework.utils.json.dumps
-rest_framework.utils.json.load
-rest_framework.utils.json.loads
 rest_framework.validators.BaseUniqueForValidator.message
 rest_framework.validators.ContextValidator
 rest_framework.validators.Validator
