@@ -59,12 +59,12 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: _GetDataType = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def options(self, path: str, data: dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def get(self, path: str, data: _GetDataType = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def options(self, path: str, data: dict[str, str] | str | None = ..., format: str | None = ..., content_type: Any | None = ..., **extra: Any) -> Request: ...  # type: ignore[override]
     def generic(  # type: ignore[override]
         self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Request: ...

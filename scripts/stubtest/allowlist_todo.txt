@@ -103,12 +103,6 @@ rest_framework.settings.DefaultsSettings
 rest_framework.settings.api_settings
 rest_framework.templatetags.rest_framework.urlize_quoted_links
 rest_framework.test.APIClient.options
-rest_framework.test.APIRequestFactory.delete
-rest_framework.test.APIRequestFactory.get
-rest_framework.test.APIRequestFactory.options
-rest_framework.test.APIRequestFactory.patch
-rest_framework.test.APIRequestFactory.post
-rest_framework.test.APIRequestFactory.put
 rest_framework.test.RequestsClient.__init__
 rest_framework.throttling.SimpleRateThrottle.cache
 rest_framework.utils.encoders.JSONEncoder.default
