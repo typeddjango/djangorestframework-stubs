@@ -13,5 +13,6 @@ class Token(models.Model):
     def generate_key(cls) -> str: ...
 
 class TokenProxy(Token):
-    @property
-    def pk(self: Self) -> Any: ...
+    # This is how drf defines this:
+    @property  # type: ignore
+    def pk(self) -> Any: ...  # type: ignore
