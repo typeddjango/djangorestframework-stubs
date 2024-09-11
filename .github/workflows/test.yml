@@ -92,3 +92,21 @@ jobs:
 
       - name: Run stubtest
         run: bash ./scripts/stubtest.sh
+
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python3 -m pip install --upgrade build twine
+      - name: Build
+        run: |
+          python3 -m build --sdist --wheel .
+      - name: Check package metadata
+        run: |
+          twine check --strict dist/*
