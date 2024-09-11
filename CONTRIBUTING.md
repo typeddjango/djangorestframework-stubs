@@ -100,7 +100,7 @@ The workflow for contributions is fairly simple:
 
 ## Releasing `djangorestframework-stubs`
 
-1. Open a pull request that updates `setup.py` (anyone can open this PR, not just maintainers)
+1. Open a pull request that updates `setup.py` (anyone can open this PR, not just maintainers):
 
    - Increase `version=` value within `setup(...)`. Version number `major.minor.patch` is formed as follows:
 
@@ -109,7 +109,7 @@ The workflow for contributions is fairly simple:
      `patch` is sequentially increasing for each stubs release. Reset to `0` if `major.minor` was updated.
 
    - Update `django-stubs>=` dependency to point to latest `django-stubs` release.
-   - Use PR title "Version x.y.z release" by convention
+   - Use pull request title "Version x.y.z release" by convention.
 
 2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need to wait
    for a second maintainer's approval.
@@ -123,4 +123,4 @@ The workflow for contributions is fairly simple:
 
 4. Once you feel brave enough, click "Publish release".
 
-5. Check that the [release pipeline](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/release.yml) succeeds.
+5. Check that the [release workflow](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/release.yml) succeeds.
