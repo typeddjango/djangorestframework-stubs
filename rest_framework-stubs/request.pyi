@@ -12,6 +12,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
+from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
 from typing_extensions import Self
@@ -47,6 +48,8 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
+    accepted_renderer: BaseRenderer | None
+    accepted_media_type: str | None
     parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
