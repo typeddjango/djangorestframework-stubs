@@ -111,15 +111,15 @@ The workflow for contributions is fairly simple:
    - Update `django-stubs>=` dependency to point to latest `django-stubs` release.
    - Use pull request title "Version x.y.z release" by convention.
 
-2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need to wait
-   for a second maintainer's approval.
+2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need
+   to wait for a second maintainer's approval.
 
-3. [Create a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new)
+3. [Create a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new):
 
    - Under "Choose a tag" enter the new version number. Do NOT use `v` prefix.
    - Click "Generate release notes".
-   - Delete all release notes lines containing `by @pre-commit-ci` or `by @dependabot`, as these are
-     irrelevant for our users.
+   - Delete all release notes lines containing `by @pre-commit-ci` or `by @dependabot`, as these
+     are irrelevant for our users.
 
 4. Once you feel brave enough, click "Publish release".
 
