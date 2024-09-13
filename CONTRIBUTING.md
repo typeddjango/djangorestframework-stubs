@@ -114,7 +114,7 @@ The workflow for contributions is fairly simple:
 2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need
    to wait for a second maintainer's approval.
 
-3. [Create a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new):
+3. Maintainers need to [сreate a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new):
 
    - Under "Choose a tag" enter the new version number. Do NOT use `v` prefix.
    - Click "Generate release notes".
