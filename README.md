@@ -1,9 +1,9 @@
-<img src="http://mypy-lang.org/static/mypy_light.svg" alt="mypy logo" width="300px"/>
+<img src="https://mypy-lang.org/static/mypy_light.svg" alt="mypy logo" width="300px"/>
 
 # pep484 stubs for Django REST framework
 
-[![Build Status](https://travis-ci.com/typeddjango/djangorestframework-stubs.svg?branch=master)](https://travis-ci.com/typeddjango/djangorestframework-stubs)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+[![Build status](https://github.com/typeddjango/djangorestframework-stubs/workflows/test/badge.svg?branch=master&event=push)](https://github.com/typeddjango/djangorestframework-stubs/actions?query=workflow%3Atest)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Gitter](https://badges.gitter.im/mypy-django/Lobby.svg)](https://gitter.im/mypy-django/Lobby)
 
 
