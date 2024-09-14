@@ -5,6 +5,7 @@
 [![Build status](https://github.com/typeddjango/djangorestframework-stubs/workflows/test/badge.svg?branch=master&event=push)](https://github.com/typeddjango/djangorestframework-stubs/actions?query=workflow%3Atest)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Gitter](https://badges.gitter.im/mypy-django/Lobby.svg)](https://gitter.im/mypy-django/Lobby)
+[![StackOverflow](https://shields.io/badge/ask-stackoverflow-orange?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/django-stubs?tab=Active)
 
 
 Mypy stubs for [Django REST Framework](https://pypi.org/project/djangorestframework/).
