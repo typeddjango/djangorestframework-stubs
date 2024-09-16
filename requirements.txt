@@ -4,7 +4,7 @@ pre-commit==3.8.0; python_version >= '3.9'
 pytest==8.3.3
 pytest-mypy-plugins==3.1.2
 djangorestframework==3.15.2
-types-pytz==2024.1.0.20240417
+types-pytz==2024.2.0.20240913
 types-requests==2.32.0.20240914
 types-urllib3==1.26.25.14
 types-Pygments==2.18.0.20240506
