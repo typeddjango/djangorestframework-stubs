@@ -14,8 +14,8 @@ class Response(SimpleTemplateResponse):
     data: Any
     exception: bool
     content_type: str | None
-    accepted_renderer: BaseRenderer | None
-    accepted_media_type: str | None
+    accepted_renderer: BaseRenderer
+    accepted_media_type: str
     _request: Request
     def __init__(
         self,

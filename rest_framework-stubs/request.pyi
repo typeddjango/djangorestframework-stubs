@@ -48,8 +48,8 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
-    accepted_renderer: BaseRenderer | None
-    accepted_media_type: str | None
+    accepted_renderer: BaseRenderer
+    accepted_media_type: str
     parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
