@@ -73,7 +73,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     default: _VT | None
     default_empty_html: Any
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
-    default_validators: list[Validator[_VT]]
+    default_validators: Sequence[Validator[_VT]]
     error_messages: dict[str, StrOrPromise]
     field_name: str | None
     help_text: StrOrPromise | None
