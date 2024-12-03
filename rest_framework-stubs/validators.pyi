@@ -51,7 +51,7 @@ class ProhibitSurrogateCharactersValidator:
     def __call__(self, value: Any) -> None: ...
 
 class BaseUniqueForValidator:
-    message: StrOrPromise
+    message: StrOrPromise | None
     missing_message: StrOrPromise
     requires_context: bool
     queryset: QuerySet
