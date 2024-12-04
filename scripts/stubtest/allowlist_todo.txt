@@ -102,6 +102,7 @@ rest_framework.serializers.empty
 rest_framework.settings.DefaultsSettings
 rest_framework.settings.api_settings
 rest_framework.templatetags.rest_framework.urlize_quoted_links
+rest_framework.test.CoreAPIClient
 rest_framework.test.APIClient.options
 rest_framework.test.RequestsClient.__init__
 rest_framework.throttling.SimpleRateThrottle.cache

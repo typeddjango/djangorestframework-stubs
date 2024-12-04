@@ -1,10 +1,9 @@
 import os
-from typing import List
 
 from setuptools import find_packages, setup
 
 
-def find_stub_files(name: str) -> List[str]:
+def find_stub_files(name: str) -> list[str]:
     result = []
     for root, _dirs, files in os.walk(name):
         for file in files:
@@ -50,15 +49,15 @@ setup(
     extras_require=extras_require,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Typing :: Typed",
         "Framework :: Django",
     ],
