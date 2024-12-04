@@ -60,26 +60,26 @@ class APIRequestFactory(DjangoRequestFactory):
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
     def get(self, path: str, data: _GetDataType = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def post(
+    def post(  # type: ignore[override]
         self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any
-    ) -> Request: ...  # type: ignore[override]
-    def put(
+    ) -> Request: ...
+    def put(  # type: ignore[override]
         self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any
-    ) -> Request: ...  # type: ignore[override]
-    def patch(
+    ) -> Request: ...
+    def patch(  # type: ignore[override]
         self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any
-    ) -> Request: ...  # type: ignore[override]
-    def delete(
+    ) -> Request: ...
+    def delete(  # type: ignore[override]
         self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., **extra: Any
-    ) -> Request: ...  # type: ignore[override]
-    def options(
+    ) -> Request: ...
+    def options(  # type: ignore[override]
         self,
         path: str,
         data: dict[str, str] | str | None = ...,
         format: str | None = ...,
         content_type: Any | None = ...,
         **extra: Any,
-    ) -> Request: ...  # type: ignore[override]
+    ) -> Request: ...
     def generic(  # type: ignore[override]
         self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any
     ) -> Request: ...
@@ -95,7 +95,7 @@ class APIClient(APIRequestFactory, DjangoClient):
     ) -> None: ...
     def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
     def get(self, path: str, data: _GetDataType = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def post(
+    def post(  # type: ignore[override]
         self,
         path: str,
         data: Any | None = ...,
@@ -103,8 +103,8 @@ class APIClient(APIRequestFactory, DjangoClient):
         content_type: str | None = ...,
         follow: bool = ...,
         **extra: Any,
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def put(
+    ) -> _MonkeyPatchedResponse: ...
+    def put(  # type: ignore[override]
         self,
         path: str,
         data: Any | None = ...,
@@ -112,8 +112,8 @@ class APIClient(APIRequestFactory, DjangoClient):
         content_type: str | None = ...,
         follow: bool = ...,
         **extra: Any,
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def patch(
+    ) -> _MonkeyPatchedResponse: ...
+    def patch(  # type: ignore[override]
         self,
         path: str,
         data: Any | None = ...,
@@ -121,8 +121,8 @@ class APIClient(APIRequestFactory, DjangoClient):
         content_type: str | None = ...,
         follow: bool = ...,
         **extra: Any,
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def delete(
+    ) -> _MonkeyPatchedResponse: ...
+    def delete(  # type: ignore[override]
         self,
         path: str,
         data: Any | None = ...,
@@ -130,8 +130,8 @@ class APIClient(APIRequestFactory, DjangoClient):
         content_type: str | None = ...,
         follow: bool = ...,
         **extra: Any,
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def options(
+    ) -> _MonkeyPatchedResponse: ...
+    def options(  # type: ignore[override]
         self,
         path: str,
         data: dict[str, str] | str = ...,
@@ -139,7 +139,7 @@ class APIClient(APIRequestFactory, DjangoClient):
         content_type: Any | None = ...,
         follow: bool = ...,
         **extra: Any,
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    ) -> _MonkeyPatchedResponse: ...
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):
