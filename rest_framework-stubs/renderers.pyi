@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 def zero_as_none(value: Any) -> Any | None: ...
 
 class BaseRenderer:
-    media_type: str
-    format: str
+    media_type: str | None
+    format: str | None
     charset: str | None
     render_style: str
     def render(
