@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from setuptools import find_packages, setup
 

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional, Type
+from typing import Callable, Optional
 
 from mypy.nodes import TypeInfo
 from mypy.plugin import ClassDefContext, Plugin
