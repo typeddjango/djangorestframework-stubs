@@ -12,7 +12,7 @@ _V = TypeVar("_V", contravariant=True)
 
 class ContextValidator(Protocol[_V]):
     requires_context: bool
-    def __call__(self, __value: _V, __context: Field) -> None: ...
+    def __call__(self, value: _V, context: Field, /) -> None: ...
 
 Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
 
