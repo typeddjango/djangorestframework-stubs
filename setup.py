@@ -4,7 +4,7 @@ from typing import List
 from setuptools import find_packages, setup
 
 
-def find_stub_files(name: str) -> List[str]:
+def find_stub_files(name: str) -> list[str]:
     result = []
     for root, _dirs, files in os.walk(name):
         for file in files:
