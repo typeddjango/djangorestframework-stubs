@@ -18,10 +18,6 @@ class DRFOpenAPIInfo(TypedDict, total=False):
     version: str
     description: str
 
-class ExternalDocumentationObject(TypedDict, total=False):
-    description: str
-    url: str
-
 class DRFOpenAPISchema(TypedDict, total=False):
     openapi: str
     info: DRFOpenAPIInfo
@@ -29,7 +25,6 @@ class DRFOpenAPISchema(TypedDict, total=False):
     components: dict[str, dict[str, Any]]
     security: list[dict[str, list[Any]]]
     tags: list[dict[str, Any]]
-    externalDocs: ExternalDocumentationObject
     servers: list[dict[str, Any]]
 
 class SchemaGenerator(BaseSchemaGenerator):

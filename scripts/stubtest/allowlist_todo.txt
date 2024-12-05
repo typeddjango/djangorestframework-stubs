@@ -69,7 +69,6 @@ rest_framework.schemas.get_schema_view
 rest_framework.schemas.openapi.AutoSchema.__init__
 rest_framework.schemas.openapi.DRFOpenAPIInfo
 rest_framework.schemas.openapi.DRFOpenAPISchema
-rest_framework.schemas.openapi.ExternalDocumentationObject
 rest_framework.schemas.openapi.SchemaGenerator.get_schema
 rest_framework.schemas.views.SchemaView.__init__
 rest_framework.schemas.views.SchemaView.renderer_classes
