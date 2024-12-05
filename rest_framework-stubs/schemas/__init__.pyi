@@ -20,7 +20,7 @@ def get_schema_view(
     renderer_classes: Sequence[type[BaseRenderer]] | None = ...,
     public: bool = ...,
     patterns: Sequence[_AnyURL] | None = ...,
-    generator_class: type[BaseSchemaGenerator] = ...,
+    generator_class: type[BaseSchemaGenerator] | None = ...,
     authentication_classes: Sequence[str] = ...,
     permission_classes: Sequence[str] = ...,
     version: str | None = ...,
