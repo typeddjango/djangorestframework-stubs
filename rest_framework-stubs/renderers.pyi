@@ -22,6 +22,8 @@ class BaseRenderer:
     ) -> Any: ...
 
 class JSONRenderer(BaseRenderer):
+    media_type: str
+    format: str
     encoder_class: ClassVar[type[JSONEncoder]]
     ensure_ascii: ClassVar[bool]
     compact: ClassVar[bool]
@@ -29,6 +31,8 @@ class JSONRenderer(BaseRenderer):
     def get_indent(self, accepted_media_type: str, renderer_context: Mapping[str, Any]) -> int | None: ...
 
 class TemplateHTMLRenderer(BaseRenderer):
+    media_type: str
+    format: str
     template_name: str | None
     exception_template_names: Sequence[str]
     def resolve_template(self, template_names: Iterable[str]) -> Any: ...
@@ -50,6 +54,8 @@ class BrowsableAPIRenderer(BaseRenderer):
     HTML renderer used to self-document the API.
     """
 
+    media_type: str
+    format: str
     template: str
     filter_template: str
     code_style: str
@@ -83,6 +89,8 @@ class AdminRenderer(BrowsableAPIRenderer):
     def get_result_url(self, result: Mapping[str, Any], view: APIView) -> str | None: ...
 
 class DocumentationRenderer(BaseRenderer):
+    media_type: str
+    format: str
     template: str
     error_template: str
     code_style: str
@@ -90,12 +98,18 @@ class DocumentationRenderer(BaseRenderer):
     def get_context(self, data: Any, request: Request) -> dict[str, Any]: ...
 
 class SchemaJSRenderer(BaseRenderer):
+    media_type: str
+    format: str
     template: str
 
 class MultiPartRenderer(BaseRenderer):
+    media_type: str
+    format: str
     BOUNDARY: str
 
-class CoreJSONRenderer(BaseRenderer): ...
+class CoreJSONRenderer(BaseRenderer):
+    media_type: str
+    format: str
 
 class _BaseOpenAPIRenderer:
     media_type: str
@@ -109,11 +123,14 @@ class _BaseOpenAPIRenderer:
     def get_paths(self, document: Incomplete) -> dict[str, Any]: ...
     def get_structure(self, data: Any) -> dict[str, Any]: ...
 
+class OpenAPIRenderer(_BaseOpenAPIRenderer):
+    media_type: str
+    format: str
+
 class JSONOpenAPIRenderer(_BaseOpenAPIRenderer):
     encoder_class: ClassVar[type[JSONEncoder]]
     ensure_ascii: ClassVar[bool]
 
-class OpenAPIRenderer(_BaseOpenAPIRenderer): ...
 class CoreAPIOpenAPIRenderer(_BaseOpenAPIRenderer): ...
 
 class CoreAPIJSONOpenAPIRenderer(_BaseOpenAPIRenderer):
