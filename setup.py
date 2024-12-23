@@ -28,7 +28,7 @@ dependencies = [
 
 # Keep compatible-mypy major.minor version pinned to what latest django-stubs release uses.
 extras_require = {
-    "compatible-mypy": ["mypy>=1.12,<1.14", "django-stubs[compatible-mypy]"],
+    "compatible-mypy": ["mypy>=1.12,<1.15", "django-stubs[compatible-mypy]"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
