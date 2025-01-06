@@ -64,7 +64,6 @@ rest_framework.request.Request.QUERY_PARAMS
 rest_framework.routers.BaseRouter.register
 rest_framework.schemas.SchemaGenerator.__init__
 rest_framework.schemas.coreapi.SchemaGenerator.__init__
-rest_framework.schemas.generators.common_path
 rest_framework.schemas.get_schema_view
 rest_framework.schemas.openapi.AutoSchema.__init__
 rest_framework.schemas.openapi.DRFOpenAPIInfo
