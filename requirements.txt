@@ -6,7 +6,7 @@ djangorestframework==3.15.2
 types-pytz==2024.2.0.20241221
 types-requests==2.32.0.20241016
 types-urllib3==1.26.25.14
-types-Pygments==2.18.0.20240506
+types-Pygments==2.19.0.20250107
 django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs
 django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext
 -e .[compatible-mypy,coreapi,markdown]
