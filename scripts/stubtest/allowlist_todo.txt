@@ -98,7 +98,6 @@ rest_framework.serializers.PermissionDenied
 rest_framework.serializers.Throttled
 rest_framework.serializers.TimeField.to_internal_value
 rest_framework.serializers.UnsupportedMediaType
-rest_framework.serializers.empty
 rest_framework.settings.DefaultsSettings
 rest_framework.settings.api_settings
 rest_framework.templatetags.rest_framework.urlize_quoted_links
