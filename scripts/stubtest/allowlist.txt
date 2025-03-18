@@ -36,3 +36,6 @@ rest_framework.serializers.Serializer.fields
 # Generated objects:
 rest_framework.authtoken.models.Token@AnnotatedWith
 rest_framework.authtoken.models.TokenProxy@AnnotatedWith
+
+# .save() will be different soon:
+rest_framework.authtoken.models.Token.save
