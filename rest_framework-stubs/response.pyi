@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any
 
-from django.core.handlers import WSGIRequest
+from django.core.handlers.wsgi import WSGIRequest
 from django.template.base import Template
 from django.template.response import SimpleTemplateResponse
 from django.test.utils import ContextList
