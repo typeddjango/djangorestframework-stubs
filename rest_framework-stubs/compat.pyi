@@ -1,7 +1,6 @@
-from typing import Any
+from typing import Any, TypeAlias
 
 from django.db.models import QuerySet
-from typing_extensions import TypeAlias
 
 try:
     from django.contrib.postgres import fields as postgres_fields

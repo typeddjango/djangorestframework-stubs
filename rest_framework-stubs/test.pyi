@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping
-from typing import Any
+from typing import Any, TypeAlias
 
 import coreapi  # type: ignore[import-untyped]
 import requests
@@ -15,7 +15,6 @@ from django.test.client import RequestFactory as DjangoRequestFactory
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
-from typing_extensions import TypeAlias
 
 _GetDataType: TypeAlias = (
     Mapping[str, str | bytes | float | Iterable[str | bytes | float]]
