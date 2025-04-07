@@ -19,11 +19,11 @@ with open("README.md") as f:
     readme = f.read()
 
 dependencies = [
-    "django-stubs>=5.1.3",
-    "typing-extensions>=3.10.0",
-    "requests>=2.0.0",
-    "types-requests>=0.1.12",
-    "types-PyYAML>=5.4.3",
+    "django-stubs>=5.1.3",  # TODO: 5.2
+    "typing-extensions>=4.0",
+    "requests>=2.0",
+    "types-requests",
+    "types-PyYAML",
 ]
 
 # Keep compatible-mypy major.minor version pinned to what latest django-stubs release uses.
@@ -49,11 +49,10 @@ setup(
     extras_require=extras_require,
     packages=["rest_framework-stubs", *find_packages(exclude=["scripts"])],
     package_data={"rest_framework-stubs": find_stub_files("rest_framework-stubs")},
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",

@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from mypy.nodes import TypeInfo
 from mypy.plugin import ClassDefContext, Plugin
@@ -26,7 +26,7 @@ class NewSemanalDRFPlugin(Plugin):
         else:
             return {}
 
-    def get_base_class_hook(self, fullname: str) -> Optional[Callable[[ClassDefContext], None]]:
+    def get_base_class_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
         if fullname in self._get_currently_defined_serializers():
             return transform_serializer_class
         return None

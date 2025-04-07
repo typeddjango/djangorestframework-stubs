@@ -6,7 +6,7 @@ from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeVar
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeAlias, TypeVar
 
 from django.core.files.base import File
 from django.db import models
@@ -14,7 +14,7 @@ from django.forms import ImageField as DjangoImageField  # noqa: F401
 from django_stubs_ext import StrOrPromise
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
-from typing_extensions import Self, TypeAlias
+from typing_extensions import Self
 
 class _Empty(Enum):
     sentinel = 0
