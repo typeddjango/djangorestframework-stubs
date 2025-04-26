@@ -13,7 +13,9 @@ class ContextValidator(Protocol[_V]):
     requires_context: bool
     def __call__(self, value: _V, context: Field, /) -> None: ...
 
-Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
+Validator: TypeAlias = (
+    Callable[[_V], None] | ContextValidator[_V] | UniqueValidator | UniqueTogetherValidator | BaseUniqueForValidator
+)
 
 def qs_exists(queryset: QuerySet) -> bool: ...
 def qs_filter(queryset: QuerySet[_T], **kwargs: Any) -> QuerySet[_T]: ...
@@ -34,10 +36,18 @@ class UniqueTogetherValidator:
     requires_context: bool
     queryset: QuerySet
     fields: Iterable[str]
-    def __init__(self, queryset: QuerySet, fields: Iterable[str], message: StrOrPromise | None = ...) -> None: ...
+    def __init__(
+        self,
+        queryset: QuerySet,
+        fields: Iterable[str],
+        message: StrOrPromise | None = ...,
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str], serializer: BaseSerializer) -> None: ...
     def filter_queryset(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], serializer: BaseSerializer
+        self,
+        attrs: MutableMapping[str, Any],
+        queryset: QuerySet[_T],
+        serializer: BaseSerializer,
     ) -> QuerySet[_T]: ...
     def exclude_current_instance(
         self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], instance: _T
@@ -56,10 +66,20 @@ class BaseUniqueForValidator:
     queryset: QuerySet
     field: str
     date_field: str
-    def __init__(self, queryset: QuerySet, field: str, date_field: str, message: StrOrPromise | None = ...) -> None: ...
+    def __init__(
+        self,
+        queryset: QuerySet,
+        field: str,
+        date_field: str,
+        message: StrOrPromise | None = ...,
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str]) -> None: ...
     def filter_queryset(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], field_name: str, date_field_name: str
+        self,
+        attrs: MutableMapping[str, Any],
+        queryset: QuerySet[_T],
+        field_name: str,
+        date_field_name: str,
     ) -> QuerySet[_T]: ...
     def exclude_current_instance(
         self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], instance: Model
