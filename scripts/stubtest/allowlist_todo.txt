@@ -59,8 +59,6 @@ rest_framework.renderers.BrowsableAPIRenderer.get_extra_actions
 rest_framework.renderers.CoreJSONRenderer.render
 rest_framework.renderers._BaseOpenAPIRenderer.__init__
 rest_framework.renderers._BaseOpenAPIRenderer.render
-rest_framework.request.Request.DATA
-rest_framework.request.Request.QUERY_PARAMS
 rest_framework.routers.BaseRouter.register
 rest_framework.schemas.SchemaGenerator.__init__
 rest_framework.schemas.coreapi.SchemaGenerator.__init__
