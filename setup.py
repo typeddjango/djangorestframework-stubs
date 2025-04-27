@@ -19,7 +19,7 @@ with open("README.md") as f:
     readme = f.read()
 
 dependencies = [
-    "django-stubs>=5.1.3",  # TODO: 5.2
+    "django-stubs>=5.2.0",
     "typing-extensions>=4.0",
     "requests>=2.0",
     "types-requests",
@@ -28,14 +28,14 @@ dependencies = [
 
 # Keep compatible-mypy major.minor version pinned to what latest django-stubs release uses.
 extras_require = {
-    "compatible-mypy": ["mypy>=1.12,<1.16", "django-stubs[compatible-mypy]"],
+    "compatible-mypy": ["mypy>=1.13,<1.16", "django-stubs[compatible-mypy]"],
     "coreapi": ["coreapi>=2.0.0"],
     "markdown": ["types-Markdown>=0.1.5"],
 }
 
 setup(
     name="djangorestframework-stubs",
-    version="3.15.3",
+    version="3.15.4",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
