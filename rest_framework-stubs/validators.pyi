@@ -1,7 +1,7 @@
 from collections.abc import Callable, Container, Iterable, MutableMapping
 from typing import Any, Protocol, TypeAlias, TypeVar
 
-from django.db.models import Model, QuerySet, Q
+from django.db.models import Model, Q, QuerySet
 from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
@@ -34,7 +34,14 @@ class UniqueTogetherValidator:
     requires_context: bool
     queryset: QuerySet
     fields: Iterable[str]
-    def __init__(self, queryset: QuerySet, fields: Iterable[str], message: StrOrPromise | None = ..., condition_fields: Iterable[str] | None = None, condition: Q | None = None) -> None: ...
+    def __init__(
+        self,
+        queryset: QuerySet,
+        fields: Iterable[str],
+        message: StrOrPromise | None = ...,
+        condition_fields: Iterable[str] | None = None,
+        condition: Q | None = None,
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str], serializer: BaseSerializer) -> None: ...
     def filter_queryset(
         self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], serializer: BaseSerializer
