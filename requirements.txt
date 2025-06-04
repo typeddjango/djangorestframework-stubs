@@ -1,6 +1,6 @@
 wheel
 pre-commit==4.2.0
-pytest==8.3.5
+pytest==8.4.0
 pytest-mypy-plugins==3.2.0
 djangorestframework==3.16.0
 types-pytz==2025.2.0.20250516
