@@ -4,7 +4,7 @@ pytest==8.4.0
 pytest-mypy-plugins==3.2.0
 djangorestframework==3.16.0
 types-pytz==2025.2.0.20250516
-types-requests==2.32.0.20250602
+types-requests==2.32.4.20250611
 types-urllib3==1.26.25.14
 types-Pygments==2.19.0.20250516
 types-pyyaml==6.0.12.20250516
