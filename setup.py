@@ -19,7 +19,7 @@ with open("README.md") as f:
     readme = f.read()
 
 dependencies = [
-    "django-stubs>=5.2.0",
+    "django-stubs>=5.2.1",
     "typing-extensions>=4.0",
     "requests>=2.0",
     "types-requests",
@@ -35,7 +35,7 @@ extras_require = {
 
 setup(
     name="djangorestframework-stubs",
-    version="3.16.0",
+    version="3.16.1",
     description="PEP-484 stubs for django-rest-framework",
     long_description=readme,
     long_description_content_type="text/markdown",
