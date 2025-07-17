@@ -40,7 +40,7 @@ class MyModelSerializer(serializers.ModelSerializer[MyModel]):
         fields = ("id", "example")
 ```
 
-Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `Union[MyModel, typing.Sequence[MyModel], None]`.
+Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `MyModel | typing.Sequence[MyModel] | None`.
 
 ## To get help
 

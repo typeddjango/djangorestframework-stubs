@@ -1,15 +1,13 @@
 - case: test_router_urls
   main: |
-    from typing import Union
-
     from django.urls import path, include
     from rest_framework.routers import SimpleRouter, DefaultRouter
     from rest_framework.urlpatterns import _AnyURL
 
     simple = SimpleRouter()
-    reveal_type(simple.urls)  # N: Revealed type is "builtins.list[Union[django.urls.resolvers.URLPattern, django.urls.resolvers.URLResolver]]"
+    reveal_type(simple.urls)  # N: Revealed type is "builtins.list[django.urls.resolvers.URLPattern | django.urls.resolvers.URLResolver]"
     default = DefaultRouter()
-    reveal_type(default.urls)  # N: Revealed type is "builtins.list[Union[django.urls.resolvers.URLPattern, django.urls.resolvers.URLResolver]]"
+    reveal_type(default.urls)  # N: Revealed type is "builtins.list[django.urls.resolvers.URLPattern | django.urls.resolvers.URLResolver]"
 
     urlpatterns: list[_AnyURL] = [
         path('api/', include(simple.urls)),

@@ -16,9 +16,9 @@
 
     reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is "type[_MT?]"
     reveal_type(serializers.ModelSerializer.Meta.fields) # N: Revealed type is "typing.Sequence[builtins.str]"
-    reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
-    reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
-    reveal_type(serializers.ModelSerializer.Meta.depth) # N: Revealed type is "Union[builtins.int, None]"
+    reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is "typing.Sequence[builtins.str] | None"
+    reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is "typing.Sequence[builtins.str] | None"
+    reveal_type(serializers.ModelSerializer.Meta.depth) # N: Revealed type is "builtins.int | None"
     reveal_type(serializers.ModelSerializer.Meta.extra_kwargs) # N: Revealed type is "builtins.dict[builtins.str, builtins.dict[builtins.str, Any]]"
 
 - case: test_model_serializer_passes_check
