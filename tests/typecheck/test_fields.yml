@@ -52,7 +52,7 @@
 
         CharField(initial='', default=lambda: '')
         CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "Union[Union[str, _StrPromise], Callable[[], Union[str, _StrPromise]], _Empty, None]"
-        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "Dict[Never, Never]"; expected "Union[str, Callable[[], str], _Empty, None]"
+        CharField(initial={}, default=empty)  # E: Argument "initial" to "CharField" has incompatible type "dict[Never, Never]"; expected "Union[str, Callable[[], str], _Empty, None]"
 
         x: Optional[str] = CharField().get_initial()
         y: Optional[int] = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "Optional[str]", variable has type "Optional[int]")
@@ -80,23 +80,23 @@
 
 -   case: MultipleChoiceField_default
     main: |
-        from typing import Set, Union
+        from typing import Union
         from rest_framework.fields import MultipleChoiceField
 
-        def int_set_callback() -> Set[int]: ...
-        def mixed_set_callback() -> Set[Union[int, str]]: ...
+        def int_set_callback() -> set[int]: ...
+        def mixed_set_callback() -> set[Union[int, str]]: ...
 
         MultipleChoiceField(choices=[1], default={1})
         MultipleChoiceField(choices=['test'], allow_null=True, default=None)
         MultipleChoiceField(choices=[1], default=int_set_callback)
         MultipleChoiceField(choices=[1, 'lulz'], default=mixed_set_callback)
-        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], List[int]]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], _Empty, None]" # E: Incompatible return value type (got "List[int]", expected "Union[Set[Union[str, int]], Set[str], Set[int]]")
+        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], list[int]]"; expected "Union[set[Union[str, int]], set[str], set[int], Callable[[], Union[set[Union[str, int]], set[str], set[int]]], _Empty, None]" # E: Incompatible return value type (got "list[int]", expected "Union[set[Union[str, int]], set[str], set[int]]")
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[str, int]], Set[str], Set[int], Callable[[], Union[Set[Union[str, int]], Set[str], Set[int]]], _Empty, None]"
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "list[int]"; expected "Union[set[Union[str, int]], set[str], set[int], Callable[[], Union[set[Union[str, int]], set[str], set[int]]], _Empty, None]"
 
         MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "List[int]"; expected "Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int], Callable[[], Union[Set[Union[Union[str, _StrPromise], int]], Set[Union[str, _StrPromise]], Set[int]]], _Empty, None]"
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "list[int]"; expected "Union[set[Union[Union[str, _StrPromise], int]], set[Union[str, _StrPromise]], set[int], Callable[[], Union[set[Union[Union[str, _StrPromise], int]], set[Union[str, _StrPromise]], set[int]]], _Empty, None]"
 
 -   case: FileField_default
     main: |
@@ -123,13 +123,13 @@
         DictField(default={})
         DictField(default={'a': 1, 'b': 2})
         DictField(default=lambda: {'a': [], 'b': 'str'})
-        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "List[Never]"; expected "Union[Dict[Any, Any], Callable[[], Dict[Any, Any]], _Empty, None]"
+        DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "list[Never]"; expected "Union[dict[Any, Any], Callable[[], dict[Any, Any]], _Empty, None]"
 
         JSONField(allow_null=True, default=None)
         JSONField(default={})
         JSONField(default={'a': 1, 'b': 2})
         JSONField(default=lambda: {'a': [], 'b': 'str'})
-        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "List[Never]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], _Empty, None]"
+        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "list[Never]"; expected "Union[Mapping[Any, Any], Callable[[], Mapping[Any, Any]], _Empty, None]"
 
 -   case: ListField_default
     main: |
@@ -139,4 +139,4 @@
         ListField(default=[])
         ListField(default=[0, 'one'])
         ListField(default=lambda: [])
-        ListField(default='wät')  # E: Argument "default" to "ListField" has incompatible type "str"; expected "Union[List[Any], Callable[[], List[Any]], _Empty, None]"
+        ListField(default='wät')  # E: Argument "default" to "ListField" has incompatible type "str"; expected "Union[list[Any], Callable[[], list[Any]], _Empty, None]"
