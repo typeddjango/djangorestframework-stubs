@@ -47,4 +47,4 @@
     APIException(None, None)
     APIException(1)  # E: Argument 1 to "APIException" has incompatible type "int"; expected "_APIExceptionInput"
     APIException({'a': 1})  # E: Argument 1 to "APIException" has incompatible type "dict[str, int]"; expected "_APIExceptionInput"
-    APIException({'a': ['test', 1]})  # E: Argument 1 to "APIException" has incompatible type "dict[str, list[Union[str, int]]]"; expected "_APIExceptionInput"
+    APIException({'a': ['test', 1]})  # E: Argument 1 to "APIException" has incompatible type "dict[str, list[str | int]]"; expected "_APIExceptionInput"
