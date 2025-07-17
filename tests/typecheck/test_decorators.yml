@@ -27,13 +27,13 @@
     main: |
         from rest_framework.decorators import api_view
         from rest_framework.request import Request
-        @api_view()  # E: Value of type variable "_RESP" of function cannot be "List[Any]"
+        @api_view()  # E: Value of type variable "_RESP" of function cannot be "list[Any]"
         def view_func2(request: Request) -> list: ...
 
 -   case: permission_classes
     main: |
         from rest_framework.decorators import permission_classes
-        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[Union[Type[rest_framework.permissions.BasePermission], rest_framework.permissions.OperandHolder, rest_framework.permissions.SingleOperandHolder]]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View`-1) -> _View`-1"
+        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[Union[type[rest_framework.permissions.BasePermission], rest_framework.permissions.OperandHolder, rest_framework.permissions.SingleOperandHolder]]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View`-1) -> _View`-1"
 
 -   case: permission_classes_with_operators
     main: |
