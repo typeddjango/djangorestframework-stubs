@@ -48,7 +48,7 @@
 -   case: default_and_inital_args_fields
     main: |
         from rest_framework.fields import DictField, CharField, empty
-        from typing import Dict, Any
+        from typing import Any
 
         CharField(initial='', default=lambda: '')
         CharField(initial=None, default=4)  # E: Argument "default" to "CharField" has incompatible type "int"; expected "str | _StrPromise | Callable[[], str | _StrPromise] | _Empty | None"
