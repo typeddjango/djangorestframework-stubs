@@ -1,5 +1,5 @@
 wheel
-pre-commit==4.2.0
+pre-commit==4.3.0
 pytest==8.4.1
 pytest-mypy-plugins==3.2.0
 djangorestframework==3.16.1
