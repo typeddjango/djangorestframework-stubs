@@ -1,7 +1,6 @@
-from typing import Any
+from typing import Any, TypeAlias
 
-from django.db.models import QuerySet
-from typing_extensions import TypeAlias
+from django.db.models import Q, QuerySet
 
 try:
     from django.contrib.postgres import fields as postgres_fields
@@ -54,6 +53,7 @@ def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...
 def md_filter_add_syntax_highlight(md: Any) -> bool: ...
 def unicode_http_header(value: str | bytes) -> str: ...
+def get_referenced_base_fields_from_q(q: Q) -> set[str]: ...
 
 SHORT_SEPARATORS: tuple[str, str]
 LONG_SEPARATORS: tuple[str, str]

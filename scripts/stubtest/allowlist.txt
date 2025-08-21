@@ -11,10 +11,6 @@ rest_framework.relations.SlugRelatedField.__init__
 rest_framework.serializers.ManyRelatedField.__init__
 rest_framework.serializers.SlugRelatedField.__init__
 
-# Deprecated and non-functional
-rest_framework.request.Request.DATA
-rest_framework.request.Request.QUERY_PARAMS
-
 # Migrations are omitted
 rest_framework.authtoken.migrations
 rest_framework.authtoken.migrations.0001_initial
@@ -30,9 +26,9 @@ rest_framework.serializers.DateField.__init__
 rest_framework.serializers.DateTimeField.__init__
 rest_framework.serializers.TimeField.__init__
 
-# Ignore @cached_property error "cannot reconcile @property on stub with runtime object"
-rest_framework.serializers.Serializer.fields
-
 # Generated objects:
 rest_framework.authtoken.models.Token@AnnotatedWith
 rest_framework.authtoken.models.TokenProxy@AnnotatedWith
+
+# .save() will be different soon:
+rest_framework.authtoken.models.Token.save

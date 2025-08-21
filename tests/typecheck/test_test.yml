@@ -16,12 +16,11 @@
 
 - case: test_testcases_client_api_urlpatterns
   main: |
-    from typing import Union, List
     from django.urls import URLPattern, URLResolver
     from rest_framework import test, status
 
     class MyTest(test.URLPatternsTestCase):
-        urlpatterns : List[Union[URLPattern, URLResolver]] = []
+        urlpatterns : list[URLPattern | URLResolver] = []
         def test_example(self) -> None:
             reveal_type(self.client) # N: Revealed type is "django.test.client.Client"
             response = self.client.get('/', format="json")

@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
-from collections.abc import MutableMapping, Sequence
-from typing import Any, Generic, Iterator, TypeVar
+from collections.abc import Iterator, MutableMapping, Sequence
+from typing import Any, Generic, TypeVar
 
 from django.db import models
 from rest_framework.validators import UniqueValidator

@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from json import JSONDecoder, JSONEncoder
-from typing import IO, Any, Callable, NoReturn
+from typing import IO, Any, NoReturn
 
 def strict_constant(o: Any) -> NoReturn: ...
 def dump(

@@ -2,14 +2,14 @@
 
 # pep484 stubs for Django REST framework
 
-[![Build status](https://github.com/typeddjango/djangorestframework-stubs/workflows/test/badge.svg?branch=master&event=push)](https://github.com/typeddjango/djangorestframework-stubs/actions?query=workflow%3Atest)
+[![test](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/test.yml)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Gitter](https://badges.gitter.im/mypy-django/Lobby.svg)](https://gitter.im/mypy-django/Lobby)
 [![StackOverflow](https://shields.io/badge/ask-stackoverflow-orange?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/django-stubs?tab=Active)
 
 
 Mypy stubs for [Django REST Framework](https://pypi.org/project/djangorestframework/).
-Supports Python 3.8 and up.
+Supports Python 3.10 and up.
 
 ## Installation
 
@@ -40,7 +40,7 @@ class MyModelSerializer(serializers.ModelSerializer[MyModel]):
         fields = ("id", "example")
 ```
 
-Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `Union[MyModel, typing.Sequence[MyModel], None]`.
+Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `MyModel | typing.Sequence[MyModel] | None`.
 
 ## To get help
 
