@@ -14,7 +14,6 @@ rest_framework.authtoken.models.TokenProxy.get_next_by_created
 rest_framework.authtoken.models.TokenProxy.get_previous_by_created
 rest_framework.authtoken.models.TokenProxy.pk
 rest_framework.authtoken.models.TokenProxy.user_id
-rest_framework.authtoken.views.ObtainAuthToken.serializer_class
 rest_framework.authtoken.views.obtain_auth_token
 rest_framework.compat.CodeBlockPreprocessor
 rest_framework.compat.Preprocessor
@@ -56,7 +55,6 @@ rest_framework.renderers.BaseRenderer.format
 rest_framework.renderers.BaseRenderer.media_type
 rest_framework.renderers.BrowsableAPIRenderer.get_extra_actions
 rest_framework.renderers.CoreJSONRenderer.render
-rest_framework.renderers._BaseOpenAPIRenderer.__init__
 rest_framework.renderers._BaseOpenAPIRenderer.render
 rest_framework.routers.BaseRouter.register
 rest_framework.schemas.SchemaGenerator.__init__
