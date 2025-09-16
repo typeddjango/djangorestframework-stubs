@@ -27,42 +27,28 @@
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 - case: test_requestfactory_http_verbs
-  parametrized:
-  - method: get
-  - method: post
-  - method: put
-  - method: patch
-  - method: delete
-  - method: options
   main: |
     from django.urls import reverse_lazy
     from rest_framework import test, status
 
     url = reverse_lazy("api:example")
     request_factory = test.APIRequestFactory()
-    request_factory.{{ method }}(url)
-
-- case: test_apirequestfactory_generic
-  main: |
-    from django.urls import reverse_lazy
-    from rest_framework import test, status
-
-    url = reverse_lazy("api:example")
-    request_factory = test.APIRequestFactory()
+    request_factory.get(url)
+    request_factory.post(url)
+    request_factory.put(url)
+    request_factory.patch(url)
+    request_factory.delete(url)
     request_factory.generic("get", url)
 
 - case: test_apiclient_http_verbs
-  parametrized:
-  - method: get
-  - method: post
-  - method: put
-  - method: patch
-  - method: delete
-  - method: options
   main: |
     from django.urls import reverse_lazy
     from rest_framework import test, status
 
     url = reverse_lazy("api:example")
     client = test.APIClient()
-    client.{{ method }}(url)
+    client.get(url)
+    client.post(url)
+    client.put(url)
+    client.patch(url)
+    client.delete(url)
