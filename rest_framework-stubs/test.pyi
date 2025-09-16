@@ -120,9 +120,9 @@ class APIClient(APIRequestFactory, DjangoClient):
         self, user: AnonymousUser | AbstractBaseUser | None = ..., token: Token | None = ...
     ) -> None: ...
     def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def get(
+    def get(  # type: ignore[override]
         self, path: StrOrPromise, data: _GetDataType = ..., follow: bool = ..., **extra: Any
-    ) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    ) -> _MonkeyPatchedResponse: ...
     def post(  # type: ignore[override]
         self,
         path: StrOrPromise,
