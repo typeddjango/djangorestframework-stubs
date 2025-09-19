@@ -103,9 +103,9 @@
 - case: test_return_list_serializer_argument_is_kw_only
   parametrized:
     - arg: ""
-      err: No overload variant of "ReturnList" matches argument type "TestSerializer"
+      err: No overload variant of "ReturnList" matches argument type "TestSerializer"  [call-overload]
     - arg: "[],"
-      err: No overload variant of "ReturnList" matches argument types "list[Never]", "TestSerializer"
+      err: No overload variant of "ReturnList" matches argument types "list[Never]", "TestSerializer"  [call-overload]
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnList
@@ -122,9 +122,9 @@
 - case: test_return_list_serializer_is_required
   parametrized:
     - arg: ""
-      err: All overload variants of "ReturnList" require at least one argument
+      err: All overload variants of "ReturnList" require at least one argument  [call-overload]
     - arg: "[]"
-      err: No overload variant of "ReturnList" matches argument type "list[Never]"
+      err: No overload variant of "ReturnList" matches argument type "list[Never]"  [call-overload]
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnList
@@ -173,13 +173,13 @@
 - case: test_return_dict_serializer_argument_is_kw_only
   parametrized:
     - arg: ""
-      err: No overload variant of "ReturnDict" matches argument type "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument type "TestSerializer"  [call-overload]
     - arg: "{},"
-      err: No overload variant of "ReturnDict" matches argument types "dict[Never, Never]", "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument types "dict[Never, Never]", "TestSerializer"  [call-overload]
     - arg: "[],"
-      err: No overload variant of "ReturnDict" matches argument types "list[Never]", "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument types "list[Never]", "TestSerializer"  [call-overload]
     - arg: "[('a', 'a')],"
-      err: No overload variant of "ReturnDict" matches argument types "list[tuple[str, str]]", "TestSerializer"
+      err: No overload variant of "ReturnDict" matches argument types "list[tuple[str, str]]", "TestSerializer"  [call-overload]
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnDict
@@ -202,13 +202,13 @@
 - case: test_return_dict_serializer_is_required
   parametrized:
     - arg: ""
-      err: All overload variants of "ReturnDict" require at least one argument
+      err: All overload variants of "ReturnDict" require at least one argument  [call-overload]
     - arg: "{}"
-      err: No overload variant of "ReturnDict" matches argument type "dict[Never, Never]"
+      err: No overload variant of "ReturnDict" matches argument type "dict[Never, Never]"  [call-overload]
     - arg: "[]"
-      err: No overload variant of "ReturnDict" matches argument type "list[Never]"
+      err: No overload variant of "ReturnDict" matches argument type "list[Never]"  [call-overload]
     - arg: "[('a', 'a')]"
-      err: No overload variant of "ReturnDict" matches argument type "list[tuple[str, str]]"
+      err: No overload variant of "ReturnDict" matches argument type "list[tuple[str, str]]"  [call-overload]
   main: |
     from rest_framework import serializers
     from rest_framework.utils.serializer_helpers import ReturnDict

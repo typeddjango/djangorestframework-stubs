@@ -194,7 +194,7 @@ class ModelSerializer(Serializer[_MT]):
     url_field_name: str | None
 
     class Meta:
-        model: type[_MT]  # type: ignore
+        model: type[_MT]  # type: ignore[valid-type]
         fields: Sequence[str] | Literal["__all__"]
         read_only_fields: Sequence[str] | None
         exclude: Sequence[str] | None

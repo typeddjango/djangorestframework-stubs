@@ -16,18 +16,18 @@
         def view_func2(request: Request, arg: str) -> Response: ...
         reveal_type(view_func2)  # N: Revealed type is "rest_framework.views.AsView[def (django.http.request.HttpRequest, arg: builtins.str) -> rest_framework.response.Response]"
 
-        view_func2(None, 10)  # E: Argument 1 has incompatible type "None"; expected "HttpRequest"  # E: Argument 2 has incompatible type "int"; expected "str"
+        view_func2(None, 10)  # E: Argument 1 has incompatible type "None"; expected "HttpRequest"  [arg-type]  # E: Argument 2 has incompatible type "int"; expected "str"  [arg-type]
 -   case: api_view_bare_is_error
     main: |
         from typing import Any
         from rest_framework.decorators import api_view
-        @api_view  # E: Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Sequence[str] | None"
+        @api_view  # E: Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Sequence[str] | None"  [arg-type]
         def view_func2(request: Any) -> Any: ...
 -   case: api_view_incorrect_return
     main: |
         from rest_framework.decorators import api_view
         from rest_framework.request import Request
-        @api_view()  # E: Value of type variable "_RESP" of function cannot be "list[Any]"
+        @api_view()  # E: Value of type variable "_RESP" of function cannot be "list[Any]"  [type-var]
         def view_func2(request: Request) -> list: ...
 
 -   case: permission_classes
