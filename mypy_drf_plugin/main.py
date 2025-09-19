@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional, Type
+from collections.abc import Callable
 
 from mypy.nodes import TypeInfo
 from mypy.plugin import ClassDefContext, Plugin
@@ -16,21 +16,21 @@ def transform_serializer_class(ctx: ClassDefContext) -> None:
 
 
 class NewSemanalDRFPlugin(Plugin):
-    def _get_currently_defined_serializers(self) -> Dict[str, int]:
+    def _get_currently_defined_serializers(self) -> dict[str, int]:
         base_serializer_sym = self.lookup_fully_qualified(fullnames.BASE_SERIALIZER_FULLNAME)
         if base_serializer_sym is not None and isinstance(base_serializer_sym.node, TypeInfo):
-            serializer_bases: Dict[str, int] = base_serializer_sym.node.metadata.setdefault("drf", {}).setdefault(
+            serializer_bases: dict[str, int] = base_serializer_sym.node.metadata.setdefault("drf", {}).setdefault(
                 "serializer_bases", {fullnames.BASE_SERIALIZER_FULLNAME: 1}
             )
             return serializer_bases
         else:
             return {}
 
-    def get_base_class_hook(self, fullname: str) -> Optional[Callable[[ClassDefContext], None]]:
+    def get_base_class_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
         if fullname in self._get_currently_defined_serializers():
             return transform_serializer_class
         return None
 
 
-def plugin(version: str) -> Type[NewSemanalDRFPlugin]:
+def plugin(version: str) -> type[NewSemanalDRFPlugin]:
     return NewSemanalDRFPlugin
