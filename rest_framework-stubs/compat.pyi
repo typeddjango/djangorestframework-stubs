@@ -34,6 +34,7 @@ try:
     import pygments
 except ImportError:
     pygments: TypeAlias = None  # type: ignore[no-redef]
+
 try:
     import markdown
     from markdown.preprocessors import Preprocessor
