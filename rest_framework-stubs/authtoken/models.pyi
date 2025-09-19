@@ -14,5 +14,5 @@ class Token(models.Model):
 
 class TokenProxy(Token):
     # This is how drf defines this:
-    @property  # type: ignore
+    @property  # type: ignore[no-redef]
     def pk(self) -> Any: ...  # type: ignore[override]
