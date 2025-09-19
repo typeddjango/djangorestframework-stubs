@@ -6,23 +6,34 @@ on:
       - master
   pull_request:
   workflow_dispatch:
+  schedule:
+    # 15:41 UTC every day
+    - cron: "41 15 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   mypy-self-check:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
+          pip install -U pip "setuptools<79.0.0" wheel
           SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
       - name: Run mypy on plugin code
         run: mypy --strict mypy_drf_plugin
@@ -35,47 +46,67 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install binutils libproj-dev gdal-bin
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
+          pip install -U pip "setuptools<79.0.0" wheel
           SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
 
       - name: Run tests
-        run: pytest
+        # Suppress errors from other packages due to https://github.com/typeddjango/pytest-mypy-plugins/issues/134
+        run: pytest --mypy-only-local-stub
 
   stubtest:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.12']
+        python-version: ['3.13']
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install binutils libproj-dev gdal-bin
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
+          pip install -U pip "setuptools<79.0.0" wheel
           SETUPTOOLS_ENABLE_FEATURES=legacy-editable pip install -r ./requirements.txt
 
       - name: Run stubtest
         run: bash ./scripts/stubtest.sh
+
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-tags: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: python3 -m pip install --upgrade build twine
+      - name: Build
+        run: |
+          python3 -m build --sdist --wheel .
+      - name: Check package metadata
+        run: |
+          twine check --strict dist/*

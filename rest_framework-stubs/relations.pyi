@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from typing import Any, Generic, TypeVar
+from typing import Any, TypeVar
 
 from django.db.models import Manager, Model, QuerySet
 from django_stubs_ext import StrOrPromise
@@ -31,7 +31,7 @@ _MT = TypeVar("_MT", bound=Model)
 _DT = TypeVar("_DT")  # Data Type
 _PT = TypeVar("_PT")  # Primitive Type
 
-class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
+class RelatedField(Field[_MT, _DT, _PT, Any]):
     queryset: QuerySet[_MT] | Manager[_MT] | None
     html_cutoff: int | None
     html_cutoff_text: str | None
@@ -45,12 +45,12 @@ class RelatedField(Generic[_MT, _DT, _PT], Field[_MT, _DT, _PT, Any]):
         html_cutoff_text: str = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: Callable | str = ...,
+        source: str | None = None,
         label: StrOrPromise | None = ...,
-        help_text: StrOrPromise = ...,
+        help_text: StrOrPromise | None = None,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
@@ -85,12 +85,12 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         html_cutoff_text: str = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: Callable | str = ...,
+        source: str | None = None,
         label: StrOrPromise | None = ...,
-        help_text: StrOrPromise = ...,
+        help_text: StrOrPromise | None = None,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
@@ -106,7 +106,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
     view_name: str | None
     def __init__(
         self,
-        view_name: str,
+        view_name: str | None = ...,
         *,
         many: bool = ...,
         allow_empty: bool = ...,
@@ -115,12 +115,12 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         html_cutoff_text: str = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: Callable | str = ...,
+        source: str | None = None,
         label: StrOrPromise | None = ...,
-        help_text: StrOrPromise = ...,
+        help_text: StrOrPromise | None = None,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
@@ -129,7 +129,7 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
         lookup_url_kwarg: str | None = ...,
         format: str | None = ...,
     ) -> None: ...
-    def get_object(self, view_name: str, *view_args: Any, **view_kwargs: Any) -> _MT: ...
+    def get_object(self, view_name: str, view_args: list[Any], view_kwargs: dict[str, Any]) -> _MT: ...
     def get_url(self, obj: Model, view_name: str, request: Request, format: str | None) -> str | None: ...
 
 class HyperlinkedIdentityField(HyperlinkedRelatedField): ...
@@ -147,19 +147,19 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
         html_cutoff_text: str = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: _DT = ...,
         initial: _MT | Callable[[Any], _MT] = ...,
-        source: Callable | str = ...,
+        source: str | None = None,
         label: StrOrPromise | None = ...,
-        help_text: StrOrPromise = ...,
+        help_text: StrOrPromise | None = None,
         allow_null: bool = ...,
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
     ) -> None: ...
     def to_internal_value(self, data: Any) -> _MT: ...
-    def to_representation(self, value: _MT) -> str: ...
+    def to_representation(self, obj: _MT) -> str: ...
 
 class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
     default_empty_html: list[object]
@@ -173,10 +173,10 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
         *,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Sequence[Any] = ...,
         initial: Sequence[Any] | Callable[[Any], Sequence[Any]] = ...,
-        source: Callable | str = ...,
+        source: str | None = None,
         label: StrOrPromise | None = ...,
         help_text: str | None = ...,
         style: dict[str, str] | None = ...,

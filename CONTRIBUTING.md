@@ -79,13 +79,12 @@ pytest
 Run `bash ./scripts/stubtest.sh` to test that stubs and sources are in-line.
 
 We have two special files to allow errors:
+
 1. `scripts/stubtest/allowlist.txt` where we store things that we really don't care about: hacks, DRF internal utility modules, things that are handled by our plugin, things that are not representable by type system, etc
 2. `scripts/stubtest/allowlist_todo.txt` where we store all errors there are right now. Basically, this is a TODO list: we need to work through this list and fix things (or move entries to real `allowlist.txt`). In the end, ideally we can remove this file
 
 You might also want to disable `incremental` mode while working on `stubtest` changes.
 This mode leads to several known problems (stubs do not show up or have strange errors).
-
-**Important**: right now we only run `stubtest` on Python 3.12 (because it is the latest released version at the moment), any other versions might generate different outputs. Any work to create per-version allowlists is welcome.
 
 ## Submission Guidelines
 
@@ -96,3 +95,30 @@ The workflow for contributions is fairly simple:
 3. make whatever changes you want to contribute.
 4. ensure your contribution does not introduce linting issues or breaks the tests by linting and testing the code.
 5. make a pull request with an adequate description.
+
+## Releasing `djangorestframework-stubs`
+
+1. Open a pull request that updates `setup.py` (anyone can open this PR, not just maintainers):
+
+   - Increase `version=` value within `setup(...)`. Version number `major.minor.patch` is formed as follows:
+
+     `major.minor` version must match newest supported `djangorestframework` release.
+
+     `patch` is sequentially increasing for each stubs release. Reset to `0` if `major.minor` was updated.
+
+   - Update `django-stubs>=` dependency to point to latest `django-stubs` release.
+   - Use pull request title "Version x.y.z release" by convention.
+
+2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need
+   to wait for a second maintainer's approval.
+
+3. Maintainers need to [сreate a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new):
+
+   - Under "Choose a tag" enter the new version number. Do NOT use `v` prefix.
+   - Click "Generate release notes".
+   - Delete all release notes lines containing `by @pre-commit-ci` or `by @dependabot`, as these
+     are irrelevant for our users.
+
+4. Once you feel brave enough, click "Publish release".
+
+5. Check that the [release workflow](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/release.yml) succeeds.

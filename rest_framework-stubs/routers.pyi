@@ -1,7 +1,6 @@
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any, NamedTuple
 
-from django.utils.deprecation import RenameMethodsBase
 from rest_framework import views
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
@@ -27,14 +26,12 @@ class DynamicRoute(NamedTuple):
 def escape_curly_brackets(url_path: str) -> str: ...
 def flatten(list_of_lists: Iterable[Iterable[Any]]) -> Iterable[Any]: ...
 
-class RenameRouterMethods(RenameMethodsBase):
-    renamed_methods: Iterable[str | Callable]
-
-class BaseRouter(metaclass=RenameRouterMethods):
+class BaseRouter:
     registry: list[tuple[str, type[ViewSetMixin], str]]
     def register(
         self, prefix: str, viewset: type[ViewSetMixin], basename: str | None = ..., base_name: str | None = ...
     ) -> None: ...
+    def is_already_registered(self, new_basename: str) -> bool: ...
     def get_default_basename(self, viewset: type[ViewSetMixin]) -> str: ...
     def get_urls(self) -> list[_AnyURL]: ...
     @property
@@ -43,7 +40,7 @@ class BaseRouter(metaclass=RenameRouterMethods):
 class SimpleRouter(BaseRouter):
     routes: list[Route | DynamicRoute]
     trailing_slash: str
-    def __init__(self, trailing_slash: bool = ...) -> None: ...
+    def __init__(self, trailing_slash: bool = ..., use_regex_path: bool = ...) -> None: ...
     def get_routes(self, viewset: type[ViewSetMixin]) -> list[Route]: ...
     def _get_dynamic_route(self, route: DynamicRoute, action: Any) -> Route: ...
     def get_method_map(self, viewset: type[ViewSetMixin], method_map: Mapping[str, str]) -> dict[str, str]: ...
@@ -59,10 +56,16 @@ class DefaultRouter(SimpleRouter):
     include_format_suffixes: bool
     root_view_name: str
     default_schema_renderers: Any
-    APIRootView = APIRootView
-    APISchemaView = SchemaView
-    SchemaGenerator = SchemaGenerator
-
+    APIRootView: type[APIRootView]
+    APISchemaView: type[SchemaView]
+    SchemaGenerator: type[SchemaGenerator]
     root_renderers: list[type[BaseRenderer]]
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
+
+    def __init__(
+        self,
+        trailing_slash: bool = True,
+        use_regex_path: bool = True,
+        *,
+        root_renderers: list[type[BaseRenderer]] = ...,
+    ) -> None: ...
     def get_api_root_view(self, api_urls: Any | None = ...) -> Callable: ...

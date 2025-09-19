@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Any, TypeAlias
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from typing_extensions import TypeAlias
 
 try:
@@ -8,7 +8,7 @@ try:
 except ImportError:
     postgres_fields: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import coreapi
+    import coreapi  # type: ignore[import-untyped]
 except ImportError:
     coreapi: TypeAlias = None  # type: ignore[no-redef]
 try:
@@ -16,13 +16,17 @@ try:
 except ImportError:
     uritemplate: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import coreschema
+    import coreschema  # type: ignore[import-untyped]
 except ImportError:
     coreschema: TypeAlias = None  # type: ignore[no-redef]
 try:
     import yaml
 except ImportError:
     yaml: TypeAlias = None  # type: ignore[no-redef]
+try:
+    import inflection  # type: ignore[import-not-found,unused-ignore]
+except ImportError:
+    inflection: TypeAlias = None  # type: ignore[no-redef]
 try:
     import requests
 except ImportError:
@@ -33,15 +37,8 @@ except ImportError:
     pygments: TypeAlias = None  # type: ignore[no-redef]
 try:
     import markdown
-    def apply_markdown(text: str) -> str: ...
-
-except ImportError:
-    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
-    markdown: TypeAlias = None  # type: ignore[no-redef]
-
-try:
-    import pygments
     from markdown.preprocessors import Preprocessor
+    def apply_markdown(text: str) -> str: ...
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
@@ -49,13 +46,14 @@ try:
         def run(self, lines: list[str]) -> list[str]: ...
 
 except ImportError:
-    pass
+    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
+    markdown: TypeAlias = None  # type: ignore[no-redef]
 
 def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...
 def md_filter_add_syntax_highlight(md: Any) -> bool: ...
 def unicode_http_header(value: str | bytes) -> str: ...
-def distinct(queryset: QuerySet, base: QuerySet | None) -> QuerySet: ...
+def get_referenced_base_fields_from_q(q: Q) -> set[str]: ...
 
 SHORT_SEPARATORS: tuple[str, str]
 LONG_SEPARATORS: tuple[str, str]
@@ -69,6 +67,7 @@ __all__ = [
     "QuerySet",
     "uritemplate",
     "yaml",
+    "inflection",
     "pygments",
     "markdown",
     "apply_markdown",
@@ -78,7 +77,6 @@ __all__ = [
     "pygments_highlight",
     "md_filter_add_syntax_highlight",
     "unicode_http_header",
-    "distinct",
     "SHORT_SEPARATORS",
     "LONG_SEPARATORS",
     "INDENT_SEPARATORS",

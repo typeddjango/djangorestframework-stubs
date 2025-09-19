@@ -6,11 +6,29 @@
 # Comments about why things are ignored are mandatory.
 
 # Constructor arguments *appear* optional but actually throw exception
-rest_framework.relations.HyperlinkedIdentityField.__init__
-rest_framework.relations.HyperlinkedRelatedField.__init__
 rest_framework.relations.ManyRelatedField.__init__
 rest_framework.relations.SlugRelatedField.__init__
-rest_framework.serializers.HyperlinkedIdentityField.__init__
-rest_framework.serializers.HyperlinkedRelatedField.__init__
 rest_framework.serializers.ManyRelatedField.__init__
 rest_framework.serializers.SlugRelatedField.__init__
+
+# Migrations are omitted
+rest_framework.authtoken.migrations
+rest_framework.authtoken.migrations.0001_initial
+rest_framework.authtoken.migrations.0002_auto_20160226_1747
+rest_framework.authtoken.migrations.0003_tokenproxy
+rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
+
+# Mypy doesn't like default value `empty`
+rest_framework.fields.DateField.__init__
+rest_framework.fields.DateTimeField.__init__
+rest_framework.fields.TimeField.__init__
+rest_framework.serializers.DateField.__init__
+rest_framework.serializers.DateTimeField.__init__
+rest_framework.serializers.TimeField.__init__
+
+# Generated objects:
+rest_framework.authtoken.models.Token@AnnotatedWith
+rest_framework.authtoken.models.TokenProxy@AnnotatedWith
+
+# .save() will be different soon:
+rest_framework.authtoken.models.Token.save

@@ -1,11 +1,11 @@
 from collections.abc import Mapping, Sequence
-from typing import Any
+from typing import Any, TypeAlias
 
 from django.http import HttpRequest, JsonResponse
 from django_stubs_ext import StrOrPromise
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
-from typing_extensions import Self, TypeAlias, TypedDict
+from typing_extensions import Self, TypedDict
 
 class ErrorDetail(str):
     code: str | None

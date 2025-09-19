@@ -5,15 +5,17 @@ from types import TracebackType
 from typing import Any
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, _User
 from django.http import HttpRequest
 from django.http.request import _ImmutableQueryDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
+from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
+from typing_extensions import Self
 
 def is_form_media_type(media_type: str) -> bool: ...
 
@@ -46,6 +48,8 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
+    accepted_renderer: BaseRenderer
+    accepted_media_type: str
     parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
@@ -58,6 +62,7 @@ class Request(HttpRequest):
         negotiator: BaseContentNegotiation | None = ...,
         parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
     def content_type(self) -> str: ...  # type: ignore[override]
     @property
@@ -67,9 +72,9 @@ class Request(HttpRequest):
     @property
     def data(self) -> dict[str, Any]: ...
     @property
-    def user(self) -> AbstractBaseUser | AnonymousUser: ...
+    def user(self) -> _User | AnonymousUser: ...
     @user.setter
-    def user(self, value: AbstractBaseUser | AnonymousUser) -> None: ...
+    def user(self, value: _User | AnonymousUser) -> None: ...
     @property
     def auth(self) -> Token | Any: ...
     @auth.setter

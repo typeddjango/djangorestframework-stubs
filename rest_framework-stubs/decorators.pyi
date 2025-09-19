@@ -1,5 +1,6 @@
+import sys
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any, Literal, Protocol, TypeVar
+from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -11,11 +12,36 @@ from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import Concatenate, ParamSpec, TypeAlias
+from typing_extensions import ParamSpec
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
+
+_MixedCaseHttpMethod: TypeAlias = Literal[
+    "GET",
+    "POST",
+    "DELETE",
+    "PUT",
+    "PATCH",
+    "TRACE",
+    "HEAD",
+    "OPTIONS",
+    "get",
+    "post",
+    "delete",
+    "put",
+    "patch",
+    "trace",
+    "head",
+    "options",
+]
+if sys.version_info >= (3, 11):
+    from http import HTTPMethod
+
+    _HttpMethod: TypeAlias = _MixedCaseHttpMethod | HTTPMethod
+else:
+    _HttpMethod: TypeAlias = _MixedCaseHttpMethod
 
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...
@@ -29,48 +55,14 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS: TypeAlias = Sequence[
-    Literal[
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
-    ]
-]
-
-_MIXED_CASE_HTTP_VERBS: TypeAlias = Sequence[
-    Literal[
-        "GET",
-        "POST",
-        "DELETE",
-        "PUT",
-        "PATCH",
-        "TRACE",
-        "HEAD",
-        "OPTIONS",
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
-    ]
-]
-
 class ViewSetAction(Protocol[_View]):
     detail: bool
-    methods: _LOWER_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
     mapping: MethodMapper
     __call__: _View
+    __name__: str
 
 def api_view(
     http_method_names: Sequence[str] | None = ...,
@@ -84,7 +76,7 @@ def throttle_classes(throttle_classes: Sequence[BaseThrottle | type[BaseThrottle
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
 def schema(view_inspector: ViewInspector | type[ViewInspector] | None) -> Callable[[_View], _View]: ...
 def action(
-    methods: _MIXED_CASE_HTTP_VERBS | None = ...,
+    methods: Sequence[_HttpMethod] | None = ...,
     detail: bool = ...,
     url_path: str | None = ...,
     url_name: str | None = ...,
