@@ -192,7 +192,6 @@ class ModelSerializer(Serializer[_MT]):
     serializer_url_field: type[RelatedField]
     serializer_choice_field: type[Field]
     url_field_name: str | None
-    instance: _MT | Sequence[_MT] | None  # type: ignore[assignment]
 
     class Meta:
         model: type[_MT]  # type: ignore

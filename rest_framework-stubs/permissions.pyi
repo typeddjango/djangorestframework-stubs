@@ -1,11 +1,10 @@
 from _typeshed import Incomplete
 from collections.abc import Sequence
-from typing import Any, Protocol
+from typing import Any, Protocol, TypeAlias
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.views import APIView
-from typing_extensions import TypeAlias
 
 SAFE_METHODS: Sequence[str]
 
