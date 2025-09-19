@@ -4,8 +4,8 @@ from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
 from typing import Any
 
-from django.contrib.auth.base_user import AbstractBaseUser, _UserModel
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AnonymousUser, _User
 from django.http import HttpRequest
 from django.http.request import _ImmutableQueryDict
 from rest_framework.authentication import BaseAuthentication
@@ -72,9 +72,9 @@ class Request(HttpRequest):
     @property
     def data(self) -> dict[str, Any]: ...
     @property
-    def user(self) -> _UserModel | AnonymousUser: ...
+    def user(self) -> _User | AnonymousUser: ...
     @user.setter
-    def user(self, value: _UserModel | AnonymousUser) -> None: ...
+    def user(self, value: _User | AnonymousUser) -> None: ...
     @property
     def auth(self) -> Token | Any: ...
     @auth.setter

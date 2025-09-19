@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 from typing import Any
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.template.base import Template
 from django.template.response import SimpleTemplateResponse
 from django.test.utils import ContextList
@@ -38,6 +39,7 @@ class _MonkeyPatchedResponse(Response):
     context: ContextList | dict[str, Any]
     redirect_chain: list[tuple[str, int]]
     request: dict[str, Any]
+    wsgi_request: WSGIRequest
     resolver_match: ResolverMatch
     templates: list[Template]
     def json(self) -> Any: ...

@@ -1,13 +1,13 @@
 wheel
-pre-commit==3.5.0; python_version < '3.9'
-pre-commit==4.0.1; python_version >= '3.9'
-pytest==8.3.4
-pytest-mypy-plugins==3.1.2
-djangorestframework==3.15.2
-types-pytz==2024.2.0.20241003
-types-requests==2.32.0.20241016
+pre-commit==4.3.0
+pytest==8.4.2
+pytest-mypy-plugins==3.2.0
+djangorestframework==3.16.1
+types-pytz==2025.2.0.20250809
+types-requests==2.32.4.20250913
 types-urllib3==1.26.25.14
-types-Pygments==2.18.0.20240506
+types-Pygments==2.19.0.20250809
+types-pyyaml==6.0.12.20250915
 django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs
 django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext
 -e .[compatible-mypy,coreapi,markdown]
