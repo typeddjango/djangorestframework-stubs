@@ -1,34 +1,116 @@
+[project]
+name = "djangorestframework-stubs"
+version = "3.16.3"
+requires-python = ">=3.10"
+description = "PEP-484 stubs for django-rest-framework"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.txt"]
+authors = [{ name = "Maksim Kurnikov", email = "maxim.kurnikov@gmail.com" }]
+maintainers = [
+  { name = "Marti Raudsepp", email = "marti@juffo.org" },
+  { name = "Nikita Sobolev", email = "mail@sobolevn.me" },
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+  "Framework :: Django",
+]
+dependencies = [
+  "django-stubs>=5.2.5",
+  "typing-extensions>=4.0",
+  "requests>=2.0",
+  "types-requests",
+  "types-PyYAML",
+]
+
+[project.urls]
+Homepage = "https://github.com/typeddjango/djangorestframework-stubs"
+Funding = "https://github.com/sponsors/typeddjango"
+"Release notes" = "https://github.com/typeddjango/djangorestframework-stubs/releases"
+
+[project.optional-dependencies]
+compatible-mypy = ["mypy>=1.13,<1.19", "django-stubs[compatible-mypy]"]
+coreapi = ["coreapi>=2.0.0"]
+markdown = ["types-Markdown>=0.1.5"]
+
+[dependency-groups]
+dev = [
+  "wheel",
+  "pre-commit==4.3.0",
+  "pytest==8.4.2",
+  "pytest-mypy-plugins==3.2.0",
+  "djangorestframework==3.16.1",
+  "types-pytz==2025.2.0.20250809",
+  "types-requests==2.32.4.20250913",
+  "types-urllib3==1.26.25.14",
+  "types-Pygments==2.19.0.20250809",
+  "types-pyyaml==6.0.12.20250915",
+  "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
+  "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
+  "djangorestframework-stubs[compatible-mypy,coreapi,markdown]",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["rest_framework-stubs", "mypy_drf_plugin"]
+module-root = ""
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = [
+  "--tb=native",
+  "-s",
+  "-v",
+  "--cache-clear",
+  "--mypy-extension-hook=scripts.tests_extension_hook.django_plugin_hook",
+  # Suppress errors from other packages due to https://github.com/typeddjango/pytest-mypy-plugins/issues/134
+  "--mypy-only-local-stub",
+  "--mypy-ini-file=mypy.ini"
+]
+
+# Ruff configuration
 [tool.ruff]
 line-length = 120
 target-version = "py310"
+
 # See Rules in Ruff documentation: https://docs.astral.sh/ruff/rules/
 [tool.ruff.lint]
 select = [
-    "B",        # bugbear
-    "E",        # pycodestyle
-    "F",        # pyflakes
-    "INP",      # flake8-tidy-imports
-    "W",        # pycodestyle
-    "I",        # isort
-    "UP",       # pyupgrade
-    "TID251",   # Disallowed imports (flake8-tidy-imports.banned-api)
-    "PYI",      # flake8-pyi
-    "RUF100",   # Equivalent to flake8-noqa NQA103
-    "PGH004",   # Equivalent to flake8-noqa NQA104
-    "PGH003",   # Disallowed blanket `type: ignore` annotations.
+  "B",      # bugbear
+  "E",      # pycodestyle
+  "F",      # pyflakes
+  "INP",    # flake8-tidy-imports
+  "W",      # pycodestyle
+  "I",      # isort
+  "UP",     # pyupgrade
+  "TID251", # Disallowed imports (flake8-tidy-imports.banned-api)
+  "PYI",    # flake8-pyi
+  "RUF100", # Equivalent to flake8-noqa NQA103
+  "PGH004", # Equivalent to flake8-noqa NQA104
+  "PGH003", # Disallowed blanket `type: ignore` annotations.
 ]
 ignore = ["PYI021", "PYI024", "PYI041", "PYI043"]
 
 [tool.ruff.lint.per-file-ignores]
 "*.pyi" = [
-    "B",
-    "E501",
-    "E741",
-    "E743",
-    "F403", # Use wildcard import
-    "F405",
-    "F822",
-    "F821",
+  "B",
+  "E501",
+  "E741",
+  "E743",
+  "F403",   # Use wildcard import
+  "F405",
+  "F822",
+  "F821",
 ]
 "rest_framework-stubs/compat.pyi" = ["PYI042"]
 
@@ -39,5 +121,8 @@ ignore = ["PYI021", "PYI024", "PYI041", "PYI043"]
 split-on-trailing-comma = false
 extra-standard-library = ["_typeshed"]
 
-[build-system]
-requires = ["setuptools<79.0.0", "wheel"]
+# Pyright configuration
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["rest_framework-stubs", "tests"]
+exclude = [".venv", ".mypy_cache", ".pytest_cache", ".idea"]
