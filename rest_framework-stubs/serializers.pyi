@@ -52,7 +52,6 @@ from rest_framework.fields import TimeField as TimeField
 from rest_framework.fields import URLField as URLField
 from rest_framework.fields import UUIDField as UUIDField
 from rest_framework.fields import _DefaultInitial
-from rest_framework.fields import empty as empty
 from rest_framework.relations import Hyperlink as Hyperlink
 from rest_framework.relations import HyperlinkedIdentityField as HyperlinkedIdentityField
 from rest_framework.relations import HyperlinkedRelatedField as HyperlinkedRelatedField
