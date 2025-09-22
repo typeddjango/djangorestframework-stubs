@@ -135,10 +135,10 @@ class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
 class HyperlinkedIdentityField(HyperlinkedRelatedField): ...
 
 class SlugRelatedField(RelatedField[_MT, str, str]):
-    slug_field: str | None
+    slug_field: str
     def __init__(
         self,
-        slug_field: str,
+        slug_field: str | None = None,
         *,
         many: bool = ...,
         allow_empty: bool = ...,
