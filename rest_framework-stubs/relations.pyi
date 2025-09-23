@@ -138,7 +138,7 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
     slug_field: str
     def __init__(
         self,
-        slug_field: str | None = None,
+        slug_field: str,
         *,
         many: bool = ...,
         allow_empty: bool = ...,
