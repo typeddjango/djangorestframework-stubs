@@ -41,7 +41,6 @@ rest_framework.fields.Option
 rest_framework.fields.REGEX_TYPE
 rest_framework.fields.SupportsToPython
 rest_framework.fields.TimeField.to_internal_value
-rest_framework.fields.empty
 rest_framework.generics.BaseFilterProtocol
 rest_framework.generics.UsesQuerySet
 rest_framework.negotiation.DefaultContentNegotiation.settings
@@ -89,7 +88,6 @@ rest_framework.serializers.PermissionDenied
 rest_framework.serializers.Throttled
 rest_framework.serializers.TimeField.to_internal_value
 rest_framework.serializers.UnsupportedMediaType
-rest_framework.serializers.empty
 rest_framework.settings.DefaultsSettings
 rest_framework.settings.api_settings
 rest_framework.test.CoreAPIClient

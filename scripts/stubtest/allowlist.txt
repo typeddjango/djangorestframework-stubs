@@ -23,6 +23,11 @@ rest_framework.authtoken.migrations.0002_auto_20160226_1747
 rest_framework.authtoken.migrations.0003_tokenproxy
 rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
 
+# `empty` hinted as enum, to work correctly in unions:
+# https://github.com/typeddjango/djangorestframework-stubs/issues/42
+rest_framework.fields.empty
+rest_framework.serializers.empty
+
 # Mypy doesn't like default value `empty`
 rest_framework.fields.DateField.__init__
 rest_framework.fields.DateTimeField.__init__

@@ -19,6 +19,8 @@ from typing_extensions import Self
 class _Empty(Enum):
     sentinel = 0
 
+# DISREPANCY: `empty` hinted as enum, to work correctly in unions:
+# https://github.com/typeddjango/djangorestframework-stubs/issues/42
 empty: Final = _Empty.sentinel
 
 class BuiltinSignatureError(Exception): ...
