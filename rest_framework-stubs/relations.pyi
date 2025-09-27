@@ -138,6 +138,7 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
     slug_field: str
     def __init__(
         self,
+        # DISCREPANCY: signature defaults `slug_field=None`, but actually crashes when `None` is provided.
         slug_field: str,
         *,
         many: bool = ...,
@@ -169,7 +170,8 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
     allow_empty: bool
     def __init__(
         self,
-        child_relation: RelatedField = ...,
+        # DISCREPANCY: signature defaults `child_relation=None`, but actually crashes when `None` is provided.
+        child_relation: RelatedField,
         *,
         read_only: bool = ...,
         write_only: bool = ...,

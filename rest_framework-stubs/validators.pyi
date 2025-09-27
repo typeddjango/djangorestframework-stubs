@@ -59,6 +59,7 @@ class ProhibitSurrogateCharactersValidator:
     def __call__(self, value: Any) -> None: ...
 
 class BaseUniqueForValidator:
+    # DISCREPANCY: `message` cannot be None -- None is a placeholder, but subclasses must override this to StrOrPromise
     message: StrOrPromise
     missing_message: StrOrPromise
     requires_context: bool
