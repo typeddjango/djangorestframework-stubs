@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 def zero_as_none(value: Any) -> Any | None: ...
 
 class BaseRenderer:
+    # DISCREPANCY: `media_type`, `format` cannot be None.
+    # None is a placeholder, but all subclasses must override this to `str`.
     media_type: str
     format: str
     charset: str | None

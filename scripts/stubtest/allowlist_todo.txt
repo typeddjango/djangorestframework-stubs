@@ -51,8 +51,6 @@ rest_framework.parsers.BaseParser.media_type
 rest_framework.parsers.FileUploadParser.get_encoded_filename
 rest_framework.relations.ManyRelatedField.initial
 rest_framework.relations.ManyRelatedField.to_representation
-rest_framework.renderers.BaseRenderer.format
-rest_framework.renderers.BaseRenderer.media_type
 rest_framework.renderers.BrowsableAPIRenderer.get_extra_actions
 rest_framework.renderers.CoreJSONRenderer.render
 rest_framework.renderers._BaseOpenAPIRenderer.render
@@ -99,7 +97,6 @@ rest_framework.test.APIClient.options
 rest_framework.test.RequestsClient.__init__
 rest_framework.throttling.SimpleRateThrottle.cache
 rest_framework.utils.encoders.JSONEncoder.default
-rest_framework.validators.BaseUniqueForValidator.message
 rest_framework.validators.ContextValidator
 rest_framework.validators.Validator
 rest_framework.views.APIView.metadata_class

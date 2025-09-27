@@ -11,6 +11,11 @@ rest_framework.relations.SlugRelatedField.__init__
 rest_framework.serializers.ManyRelatedField.__init__
 rest_framework.serializers.SlugRelatedField.__init__
 
+# None is used as a placeholder, but not valid in actual usage
+rest_framework.renderers.BaseRenderer.format
+rest_framework.renderers.BaseRenderer.media_type
+rest_framework.validators.BaseUniqueForValidator.message
+
 # Migrations are omitted
 rest_framework.authtoken.migrations
 rest_framework.authtoken.migrations.0001_initial
