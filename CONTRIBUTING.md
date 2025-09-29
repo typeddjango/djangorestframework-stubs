@@ -96,15 +96,15 @@ The workflow for contributions is fairly simple:
 
 ## Releasing `djangorestframework-stubs`
 
-1. Open a pull request that updates `setup.py` (anyone can open this PR, not just maintainers):
+1. Open a pull request that updates `pyproject.toml` (anyone can open this PR, not just maintainers):
 
-   - Increase `version=` value within `setup(...)`. Version number `major.minor.patch` is formed as follows:
+   - Increase `version =` value within `[project]` section. Version number `major.minor.patch` is formed as follows:
 
      `major.minor` version must match newest supported `djangorestframework` release.
 
      `patch` is sequentially increasing for each stubs release. Reset to `0` if `major.minor` was updated.
 
-   - Update `django-stubs>=` dependency to point to latest `django-stubs` release.
+   - Under `dependencies =`, update the `django-stubs>=` version to point to latest `django-stubs` release.
    - Update lockfile, run: `uv lock`
    - Use pull request title "Version x.y.z release" by convention.
 
