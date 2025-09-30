@@ -53,10 +53,6 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v5
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install binutils libproj-dev gdal-bin
       - name: Install uv & Python ${{ matrix.python-version }}
         uses: astral-sh/setup-uv@v6
         with:
@@ -75,10 +71,6 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v5
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install binutils libproj-dev gdal-bin
       - name: Install uv & Python ${{ matrix.python-version }}
         uses: astral-sh/setup-uv@v6
         with:
