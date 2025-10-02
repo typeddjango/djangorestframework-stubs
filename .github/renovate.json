@@ -2,7 +2,6 @@
   "dependencyDashboard": false,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["* 3-4 * * *"],
     "automerge": true,
     "automergeType": "branch"
   },
