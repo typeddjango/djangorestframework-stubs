@@ -88,17 +88,30 @@ select = [
   "B",      # bugbear
   "E",      # pycodestyle
   "F",      # pyflakes
+  "FURB",   # refurb
   "INP",    # flake8-tidy-imports
   "W",      # pycodestyle
   "I",      # isort
+  "ISC001", # Implicitly concatenated string literals on one line
+  "ISC002", # Implicitly concatenated string literals over multiple lines
   "UP",     # pyupgrade
   "TID251", # Disallowed imports (flake8-tidy-imports.banned-api)
   "PYI",    # flake8-pyi
   "RUF100", # Equivalent to flake8-noqa NQA103
   "PGH004", # Equivalent to flake8-noqa NQA104
   "PGH003", # Disallowed blanket `type: ignore` annotations.
+  "RET504", # Unnecessary assignment to {name} before return statement
+  "RET505", # Unnecessary {branch} after return statement
+  "RET506", # Unnecessary {branch} after raise statement
+  "RET507", # Unnecessary {branch} after continue statement
+  "RET508", # Unnecessary {branch} after break statement
+  "RUF",    # Ruff specific rules
+  "TC",     # flake8-type-checking
 ]
-ignore = ["PYI021", "PYI024", "PYI041", "PYI043"]
+ignore = [
+  "PYI021", # We have a few meaningful docstrings for stubs only constructs/utilities.
+  "PYI041", # This might not be obvious that `float | int` is mostly equivalent to `float` typing wise | int | str
+]
 
 [tool.ruff.lint.per-file-ignores]
 "*.pyi" = [
