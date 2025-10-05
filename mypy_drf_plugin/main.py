@@ -23,8 +23,7 @@ class NewSemanalDRFPlugin(Plugin):
                 "serializer_bases", {fullnames.BASE_SERIALIZER_FULLNAME: 1}
             )
             return serializer_bases
-        else:
-            return {}
+        return {}
 
     def get_base_class_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
         if fullname in self._get_currently_defined_serializers():
