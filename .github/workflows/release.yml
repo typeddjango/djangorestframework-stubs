@@ -16,7 +16,7 @@ jobs:
       - name: Install uv & Python
         uses: astral-sh/setup-uv@v7
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
