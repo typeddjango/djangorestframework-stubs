@@ -68,8 +68,30 @@
 - case: test_override_get_permissions
   main: |
     from rest_framework.viewsets import GenericViewSet
-    from rest_framework.permissions import BasePermission
+    from rest_framework.permissions import BasePermission, IsAdminUser
 
     class MyView(GenericViewSet):
         def get_permissions(self) -> list[BasePermission]:
             ...
+
+- case: test_override_get_permissions_super
+  main: |
+    from typing import Sequence
+
+    from rest_framework.viewsets import GenericViewSet
+    from rest_framework.permissions import _SupportsHasPermission
+
+    class MyView(GenericViewSet):
+        def get_permissions(self) -> Sequence[_SupportsHasPermission]:
+            return super().get_permissions()
+
+- case: test_override_get_permissions_operandholder
+  main: |
+    from typing import Sequence
+
+    from rest_framework.viewsets import GenericViewSet
+    from rest_framework.permissions import AND, IsAuthenticated, IsAdminUser, _SupportsHasPermission
+
+    class MyView(GenericViewSet):
+        def get_permissions(self) -> list[_SupportsHasPermission]:
+            return [AND(IsAuthenticated(), IsAdminUser())]
