@@ -49,6 +49,28 @@
         class Meta:
             model = User
 
+- case: related_field_get_attribute_model_or_pk
+  main: |
+    from typing import cast
+    from django.contrib.auth.models import User
+    from rest_framework import serializers
+    from rest_framework.relations import PKOnlyObject
+
+    field = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user = cast(User, object())
+    value = field.get_attribute(user)
+    reveal_type(value)  # N: Revealed type is "django.contrib.auth.models.User | rest_framework.relations.PKOnlyObject | None"
+
+- case: slug_related_field_accepts_pk_object
+  main: |
+    from django.contrib.auth.models import User
+    from rest_framework import serializers
+    from rest_framework.relations import PKOnlyObject
+
+    field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+    obj = PKOnlyObject(pk=1)
+    reveal_type(field.to_representation(obj))  # N: Revealed type is "builtins.str"
+
 - case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
   main: |
     from rest_framework import serializers
