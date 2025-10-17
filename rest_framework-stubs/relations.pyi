@@ -31,7 +31,7 @@ _MT = TypeVar("_MT", bound=Model)
 _DT = TypeVar("_DT")  # Data Type
 _PT = TypeVar("_PT")  # Primitive Type
 
-class RelatedField(Field[_MT | PKOnlyObject, _DT, _PT, Any]):
+class RelatedField(Field[_MT, _DT, _PT, Any]):
     queryset: QuerySet[_MT] | Manager[_MT] | None
     html_cutoff: int | None
     html_cutoff_text: str | None
