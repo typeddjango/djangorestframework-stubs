@@ -77,7 +77,7 @@
     from rest_framework import serializers
 
     def user_validator(value: User) -> None:
-        _ = value.username
+        ...
 
     field = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
@@ -95,7 +95,7 @@
         default=user
     )
     if field.default is not None:
-        username: str = field.default.username
+        ...
 
 - case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
   main: |
