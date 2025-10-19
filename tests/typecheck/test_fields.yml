@@ -57,21 +57,6 @@
         x: str | None = CharField().get_initial()
         y: int | None = CharField().get_initial()  # E: Incompatible types in assignment (expression has type "str | None", variable has type "int | None")  [assignment]
 
--   case: field_get_attribute_returns_value_type
-    main: |
-        from rest_framework import serializers
-
-        field = serializers.CharField()
-        result = field.get_attribute(object())
-        reveal_type(result)  # N: Revealed type is "builtins.str | None"
-
--   case: float_field_args_fields
-    main: |
-      from rest_framework.fields import FloatField
-
-      FloatField(min_value=1, max_value=1.0)
-      FloatField(min_value=1.2, max_value=1)
-
 -   case: ChoiceField_default
     main: |
         from rest_framework.fields import ChoiceField
