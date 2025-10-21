@@ -235,7 +235,7 @@ wheels = [
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.16.4"
+version = "3.16.5"
 source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
@@ -276,7 +276,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "coreapi", marker = "extra == 'coreapi'", specifier = ">=2.0.0" },
-    { name = "django-stubs", specifier = ">=5.2.5" },
+    { name = "django-stubs", specifier = ">=5.2.7" },
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'compatible-mypy'" },
     { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<1.19" },
     { name = "requests", specifier = ">=2.0" },
