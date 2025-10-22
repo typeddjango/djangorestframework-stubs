@@ -43,6 +43,8 @@ jobs:
         run: uv run mypy --strict scripts
       - name: Run mypy on stubs
         run: uv run mypy --cache-dir=/dev/null --no-incremental rest_framework-stubs
+      - name: Run mypy on the test cases
+        run: uv run mypy tests
 
   test:
     timeout-minutes: 10
