@@ -42,7 +42,7 @@ markdown = ["types-Markdown>=0.1.5"]
 
 [dependency-groups]
 dev = [
-  "pre-commit==4.3.0",
+  "pre-commit==4.4.0",
   "pytest==8.4.2",
   "pytest-mypy-plugins==3.2.0",
   "djangorestframework==3.16.1",
