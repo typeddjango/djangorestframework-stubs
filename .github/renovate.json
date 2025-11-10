@@ -1,5 +1,6 @@
 {
-  "dependencyDashboard": false,
+  "dependencyDashboard": true,
+  "mode": "full",
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true,
@@ -7,9 +8,5 @@
     "schedule": ["* * * * *"]
   },
   "packageRules": [
-    {
-      "matchPackageNames": ["*"],
-      "enabled": false
-    }
   ]
 }
