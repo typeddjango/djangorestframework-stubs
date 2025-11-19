@@ -198,7 +198,7 @@ wheels = [
 [[package]]
 name = "django-stubs"
 version = "5.2.7"
-source = { git = "https://github.com/typeddjango/django-stubs#4da7322f067d17b1faacdf69d4d45a40ca8ca735" }
+source = { git = "https://github.com/typeddjango/django-stubs#bd4a75467db6b4fb6c24c2ff7214904cbe8a75c4" }
 dependencies = [
     { name = "django" },
     { name = "django-stubs-ext" },
@@ -215,7 +215,7 @@ compatible-mypy = [
 [[package]]
 name = "django-stubs-ext"
 version = "5.2.7"
-source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#4da7322f067d17b1faacdf69d4d45a40ca8ca735" }
+source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#bd4a75467db6b4fb6c24c2ff7214904cbe8a75c4" }
 dependencies = [
     { name = "django" },
     { name = "typing-extensions" },
