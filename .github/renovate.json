@@ -5,7 +5,8 @@
     "enabled": true,
     "automerge": true,
     "automergeType": "branch",
-    "schedule": ["* * * * *"]
+    "schedule": ["* * * * 1"],
+    "automergeSchedule": ["* * * * 2"]
   },
   "packageRules": [
   ]
