@@ -1,6 +1,6 @@
 [project]
 name = "djangorestframework-stubs"
-version = "3.16.5"
+version = "3.16.6"
 requires-python = ">=3.10"
 description = "PEP-484 stubs for django-rest-framework"
 readme = "README.md"
@@ -23,7 +23,7 @@ classifiers = [
   "Framework :: Django",
 ]
 dependencies = [
-  "django-stubs>=5.2.7",
+  "django-stubs>=5.2.8",
   "typing-extensions>=4.0",
   "requests>=2.0",
   "types-requests",
