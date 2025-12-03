@@ -115,7 +115,7 @@ The workflow for contributions is fairly simple:
 
    - Under "Choose a tag" enter the new version number. Do NOT use `v` prefix.
    - Click "Generate release notes".
-   - Delete all release notes lines containing `by @pre-commit-ci` or `by @dependabot`, as these
+   - Delete all release notes lines containing `by @pre-commit-ci` or `by @renovate`, as these
      are irrelevant for our users.
 
 4. Once you feel brave enough, click "Publish release".
