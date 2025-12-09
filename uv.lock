@@ -259,6 +259,7 @@ markdown = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "django" },
     { name = "django-stubs", extra = ["compatible-mypy"] },
     { name = "django-stubs-ext" },
     { name = "djangorestframework" },
@@ -289,6 +290,7 @@ provides-extras = ["compatible-mypy", "coreapi", "markdown"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "django", specifier = "==5.2.*" },
     { name = "django-stubs", extras = ["compatible-mypy"], git = "https://github.com/typeddjango/django-stubs" },
     { name = "django-stubs-ext", git = "https://github.com/typeddjango/django-stubs?subdirectory=ext" },
     { name = "djangorestframework", specifier = "==3.16.1" },
