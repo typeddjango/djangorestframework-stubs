@@ -266,7 +266,6 @@ version = "3.16.6"
 source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
-    { name = "requests" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
     { name = "typing-extensions" },
@@ -308,7 +307,6 @@ requires-dist = [
     { name = "django-stubs", specifier = ">=5.2.8" },
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'compatible-mypy'" },
     { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<1.20" },
-    { name = "requests", specifier = ">=2.0" },
     { name = "types-markdown", marker = "extra == 'markdown'", specifier = ">=0.1.5" },
     { name = "types-pyyaml" },
     { name = "types-requests" },
