@@ -186,20 +186,20 @@ class ListSerializer(BaseSerializer[_IN]):
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
 class ModelSerializer(Serializer[_MT]):
-    serializer_field_mapping: dict[type[models.Field], type[Field]]
-    serializer_related_field: type[RelatedField]
-    serializer_related_to_field: type[RelatedField]
-    serializer_url_field: type[RelatedField]
-    serializer_choice_field: type[Field]
-    url_field_name: str | None
+    serializer_field_mapping: ClassVar[dict[type[models.Field], type[Field]]]
+    serializer_related_field: ClassVar[type[RelatedField]]
+    serializer_related_to_field: ClassVar[type[RelatedField]]
+    serializer_url_field: ClassVar[type[RelatedField]]
+    serializer_choice_field: ClassVar[type[Field]]
+    url_field_name: ClassVar[str | None]
 
     class Meta:
-        model: type[_MT]  # type: ignore[valid-type]
-        fields: Sequence[str] | Literal["__all__"]
-        read_only_fields: Sequence[str] | None
-        exclude: Sequence[str] | None
-        depth: int | None
-        extra_kwargs: dict[str, dict[str, Any]]
+        model: ClassVar[type[_MT]]  # type: ignore[valid-type]
+        fields: ClassVar[Sequence[str] | Literal["__all__"]]
+        read_only_fields: ClassVar[Sequence[str] | None]
+        exclude: ClassVar[Sequence[str] | None]
+        depth: ClassVar[int | None]
+        extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
 
     def __init__(
         self,
