@@ -267,7 +267,6 @@ source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
     { name = "types-pyyaml" },
-    { name = "types-requests" },
     { name = "typing-extensions" },
 ]
 
@@ -281,6 +280,9 @@ coreapi = [
 ]
 markdown = [
     { name = "types-markdown" },
+]
+requests = [
+    { name = "types-requests" },
 ]
 
 [package.dev-dependencies]
@@ -309,10 +311,10 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<1.20" },
     { name = "types-markdown", marker = "extra == 'markdown'", specifier = ">=0.1.5" },
     { name = "types-pyyaml" },
-    { name = "types-requests" },
+    { name = "types-requests", marker = "extra == 'requests'" },
     { name = "typing-extensions", specifier = ">=4.0" },
 ]
-provides-extras = ["compatible-mypy", "coreapi", "markdown"]
+provides-extras = ["compatible-mypy", "coreapi", "markdown", "requests"]
 
 [package.metadata.requires-dev]
 dev = [
