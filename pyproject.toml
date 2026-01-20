@@ -25,7 +25,6 @@ classifiers = [
 dependencies = [
   "django-stubs>=5.2.8",
   "typing-extensions>=4.0",
-  "types-requests",
   "types-PyYAML",
 ]
 
@@ -38,6 +37,7 @@ Funding = "https://github.com/sponsors/typeddjango"
 compatible-mypy = ["mypy>=1.13,<1.20", "django-stubs[compatible-mypy]"]
 coreapi = ["coreapi>=2.0.0"]
 markdown = ["types-Markdown>=0.1.5"]
+requests = ["types-requests"]
 
 [dependency-groups]
 dev = [
