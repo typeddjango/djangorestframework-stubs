@@ -54,7 +54,7 @@ dev = [
   "types-pyyaml==6.0.12.20250915",
   "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
   "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
-  "djangorestframework-stubs[compatible-mypy,coreapi,markdown]",
+  "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
 ]
 
 [build-system]
