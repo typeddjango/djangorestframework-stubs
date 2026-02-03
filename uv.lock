@@ -262,7 +262,7 @@ wheels = [
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.16.7"
+version = "3.16.8"
 source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
