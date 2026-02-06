@@ -1,6 +1,8 @@
 from collections.abc import Callable, Sequence
 from typing import Any
 
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
 from rest_framework.urlpatterns import _AnyURL
 
@@ -21,7 +23,7 @@ def get_schema_view(
     public: bool = ...,
     patterns: Sequence[_AnyURL] | None = ...,
     generator_class: type[BaseSchemaGenerator] | None = ...,
-    authentication_classes: Sequence[str] = ...,
-    permission_classes: Sequence[str] = ...,
+    authentication_classes: Sequence[type[BaseAuthentication]] = ...,
+    permission_classes: Sequence[_PermissionClass] = ...,
     version: str | None = ...,
 ) -> Callable[..., Any]: ...
