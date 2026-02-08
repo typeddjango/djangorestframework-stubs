@@ -168,6 +168,15 @@ class APIClient(APIRequestFactory, DjangoClient):
         follow: bool = ...,
         **extra: Any,
     ) -> _MonkeyPatchedResponse: ...
+    def generic(  # type: ignore[override]
+        self,
+        method: str,
+        path: StrOrPromise,
+        data: str = ...,
+        content_type: str = ...,
+        secure: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):
