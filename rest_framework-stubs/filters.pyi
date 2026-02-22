@@ -6,12 +6,15 @@ from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-_MT = TypeVar("_MT", bound=Model)
+_Model = TypeVar("_Model", bound=Model)
+_Row = TypeVar("_Row", default=_Model)
 
 def search_smart_split(search_terms: list[str]) -> list[str]: ...
 
 class BaseFilterBackend:
-    def filter_queryset(self, request: Request, queryset: QuerySet[_MT], view: APIView) -> QuerySet[_MT]: ...
+    def filter_queryset(
+        self, request: Request, queryset: QuerySet[_Model, _Row], view: APIView
+    ) -> QuerySet[_Model, _Row]: ...
     def get_schema_fields(self, view: APIView) -> list[Any]: ...
     def get_schema_operation_parameters(self, view: APIView) -> list[dict[str, Incomplete]]: ...
 
