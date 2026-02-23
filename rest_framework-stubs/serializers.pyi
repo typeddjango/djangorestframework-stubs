@@ -79,8 +79,6 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     instance: _IN | None
     initial_data: Any
     _context: dict[str, Any]
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
-    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
     def __init__(
         self,
         instance: _IN | None = ...,
