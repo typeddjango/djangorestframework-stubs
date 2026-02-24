@@ -64,7 +64,6 @@ from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
-from typing_extensions import Self
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
 LIST_SERIALIZER_KWARGS_REMOVE: Sequence[str]
@@ -79,8 +78,6 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     instance: _IN | None
     initial_data: Any
     _context: dict[str, Any]
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
-    def __class_getitem__(cls, *args: Incomplete, **kwargs: Incomplete) -> Incomplete: ...
     def __init__(
         self,
         instance: _IN | None = ...,
