@@ -23,9 +23,6 @@ rest_framework.compat.apply_markdown
 rest_framework.decorators.ViewSetAction
 rest_framework.decorators.action
 rest_framework.default_app_config
-rest_framework.documentation.get_docs_view
-rest_framework.documentation.get_schemajs_view
-rest_framework.documentation.include_docs_urls
 rest_framework.fields.BooleanField.initial
 rest_framework.fields.CharField.initial
 rest_framework.fields.DateField.to_internal_value
