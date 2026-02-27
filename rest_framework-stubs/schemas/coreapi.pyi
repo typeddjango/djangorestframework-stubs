@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from typing import Any
@@ -31,20 +30,19 @@ class SchemaGenerator(BaseSchemaGenerator):
     coerce_method_names: dict[str, str] | None
     def __init__(
         self,
-        urlconf: str | None = ...,
         title: str | None = ...,
-        description: str | None = ...,
-        version: str | None = ...,
-        patterns: Sequence[_AnyURL] | None = ...,
         url: str | None = ...,
-        endpoints: Sequence[tuple[str, str, Any]] | None = ...,
+        description: str | None = ...,
+        patterns: Sequence[_AnyURL] | None = ...,
+        urlconf: str | None = ...,
+        version: str | None = ...,
     ) -> None: ...
     def get_links(self, request: Request | None = ...) -> LinkNode | None: ...
     def get_schema(self, request: Request | None = ..., public: bool = ...) -> coreapi.Document | None: ...
     def get_keys(self, subpath: Any, method: Any, view: APIView) -> list[str]: ...
     def determine_path_prefix(self, paths: list[str]) -> str: ...
 
-def field_to_schema(field: Field) -> Incomplete: ...
+def field_to_schema(field: Field) -> Any: ...
 
 class AutoSchema(ViewInspector):
     def __init__(self, manual_fields: list[coreapi.Field] | None = ...) -> None: ...
