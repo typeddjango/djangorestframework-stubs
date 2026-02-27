@@ -42,3 +42,8 @@ rest_framework.authtoken.models.TokenProxy@AnnotatedWith
 
 # .save() will be different soon:
 rest_framework.authtoken.models.Token.save
+
+# Stub-only TypedDicts for OpenAPI schema typing
+rest_framework.schemas.openapi.DRFOpenAPIInfo
+rest_framework.schemas.openapi.DRFOpenAPISchema
+rest_framework.schemas.openapi.ExternalDocumentationObject

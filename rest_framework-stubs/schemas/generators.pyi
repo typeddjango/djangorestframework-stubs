@@ -1,5 +1,4 @@
-from _typeshed import Incomplete
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from types import ModuleType
 from typing import Any, TypeAlias
 
@@ -11,7 +10,7 @@ from rest_framework.views import APIView
 
 def get_pk_name(model: type[Model]) -> str: ...
 def is_api_view(callback: Any) -> bool: ...
-def endpoint_ordering(endpoint: tuple[Incomplete, Incomplete, Incomplete]) -> tuple[int]: ...
+def endpoint_ordering(endpoint: tuple[str, str, Callable[..., Any]]) -> tuple[int]: ...
 
 _APIEndpoint: TypeAlias = tuple[str, str, Any]
 
