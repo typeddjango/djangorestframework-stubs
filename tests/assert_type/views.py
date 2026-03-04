@@ -47,3 +47,15 @@ assert_type(MyRetrieveViewSet().get_object(), MyModel)
 # case: test_override_get_permissions
 class MyView(GenericViewSet):
     def get_permissions(self) -> list[BasePermission]: ...
+
+
+# case: test_filter_queryset_preserves_row_type
+my_view: generics.GenericAPIView[MyModel]
+values_qs: QuerySet[MyModel, dict[str, Any]]
+filtered = my_view.filter_queryset(values_qs)
+assert_type(filtered, QuerySet[MyModel, dict[str, Any]])
+
+
+# case: test_paginate_queryset_extracts_row_type
+page = my_view.paginate_queryset(values_qs)
+assert_type(page, list[dict[str, Any]] | None)
