@@ -13,5 +13,6 @@ class SchemaView(APIView):
     schema_generator: SchemaGenerator | None
     renderer_classes: Sequence[type[BaseRenderer]] | None  # type: ignore[assignment]
 
+    # *args accepted but View.__init__ only takes **kwargs, so positional args raise TypeError at runtime.
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     def get(self, request: Request, *args: Any, **kwargs: Any) -> Response: ...
