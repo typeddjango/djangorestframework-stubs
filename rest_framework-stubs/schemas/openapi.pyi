@@ -13,29 +13,29 @@ from .inspectors import ViewInspector as ViewInspector
 # OpenAPI requires its own typings. Below are minimal typing.
 # TODO: evaluate using a 3rd party typing package for this, e.g.: https://github.com/meeshkan/openapi-typed
 
-class DRFOpenAPIInfo(TypedDict, total=False):
+class _DRFOpenAPIInfo(TypedDict, total=False):
     title: str
     version: str
     description: str
 
-class ExternalDocumentationObject(TypedDict, total=False):
+class _ExternalDocumentationObject(TypedDict, total=False):
     description: str
     url: str
 
-class DRFOpenAPISchema(TypedDict, total=False):
+class _DRFOpenAPISchema(TypedDict, total=False):
     openapi: str
-    info: DRFOpenAPIInfo
+    info: _DRFOpenAPIInfo
     paths: dict[str, dict[str, Any]]
     components: dict[str, dict[str, Any]]
     security: list[dict[str, list[Any]]]
     tags: list[dict[str, Any]]
-    externalDocs: ExternalDocumentationObject
+    externalDocs: _ExternalDocumentationObject
     servers: list[dict[str, Any]]
 
 class SchemaGenerator(BaseSchemaGenerator):
-    def get_info(self) -> DRFOpenAPIInfo: ...
+    def get_info(self) -> _DRFOpenAPIInfo: ...
     def check_duplicate_operation_id(self, paths: dict[str, dict[str, Any]]) -> None: ...
-    def get_schema(self, request: Request = ..., public: bool = ...) -> DRFOpenAPISchema: ...  # type: ignore[override]
+    def get_schema(self, request: Request | None = None, public: bool = False) -> _DRFOpenAPISchema: ...
 
 class AutoSchema(ViewInspector):
     operation_id_base: str | None
@@ -44,7 +44,7 @@ class AutoSchema(ViewInspector):
     response_media_types: list[str]
     method_mapping: dict[str, str]
     def __init__(
-        self, tags: Sequence[str] = ..., operation_id_base: str | None = ..., component_name: str | None = ...
+        self, tags: Sequence[str] | None = None, operation_id_base: str | None = None, component_name: str | None = None
     ) -> None: ...
     def get_operation(self, path: str, method: str) -> dict[str, Any]: ...
     def get_component_name(self, serializer: BaseSerializer) -> str: ...

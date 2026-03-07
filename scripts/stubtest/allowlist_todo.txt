@@ -51,15 +51,6 @@ rest_framework.renderers.BrowsableAPIRenderer.get_extra_actions
 rest_framework.renderers.CoreJSONRenderer.render
 rest_framework.renderers._BaseOpenAPIRenderer.render
 rest_framework.routers.BaseRouter.register
-rest_framework.schemas.SchemaGenerator.__init__
-rest_framework.schemas.coreapi.SchemaGenerator.__init__
-rest_framework.schemas.openapi.AutoSchema.__init__
-rest_framework.schemas.openapi.DRFOpenAPIInfo
-rest_framework.schemas.openapi.DRFOpenAPISchema
-rest_framework.schemas.openapi.ExternalDocumentationObject
-rest_framework.schemas.openapi.SchemaGenerator.get_schema
-rest_framework.schemas.views.SchemaView.__init__
-rest_framework.schemas.views.SchemaView.renderer_classes
 rest_framework.serializers.APIException
 rest_framework.serializers.AuthenticationFailed
 rest_framework.serializers.BooleanField.initial
