@@ -2,6 +2,7 @@ from collections.abc import Callable
 
 from mypy.nodes import TypeInfo
 from mypy.plugin import ClassDefContext, Plugin
+from typing_extensions import override
 
 from mypy_drf_plugin.lib import fullnames, helpers
 from mypy_drf_plugin.transformers import serializers
@@ -25,6 +26,7 @@ class NewSemanalDRFPlugin(Plugin):
             return serializer_bases
         return {}
 
+    @override
     def get_base_class_hook(self, fullname: str) -> Callable[[ClassDefContext], None] | None:
         if fullname in self._get_currently_defined_serializers():
             return transform_serializer_class

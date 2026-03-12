@@ -6,7 +6,7 @@ from django.utils.functional import cached_property
 from rest_framework import serializers
 from rest_framework.relations import PKOnlyObject
 from rest_framework.utils.serializer_helpers import BindingDict, ReturnDict, ReturnList
-from typing_extensions import assert_type
+from typing_extensions import assert_type, override
 
 
 # case: multiple_inheritance_from_two_serializers_with_meta_nested_class_defined
@@ -91,6 +91,7 @@ class TestSerializer5(serializers.ModelSerializer):
         model = User
 
     @cached_property
+    @override
     def fields(self) -> BindingDict:
         return super().fields
 

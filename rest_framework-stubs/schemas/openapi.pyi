@@ -5,7 +5,7 @@ from rest_framework.fields import Field
 from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.serializers import BaseSerializer
-from typing_extensions import TypedDict
+from typing_extensions import TypedDict, override
 
 from .generators import BaseSchemaGenerator as BaseSchemaGenerator
 from .inspectors import ViewInspector as ViewInspector
@@ -35,6 +35,7 @@ class _DRFOpenAPISchema(TypedDict, total=False):
 class SchemaGenerator(BaseSchemaGenerator):
     def get_info(self) -> _DRFOpenAPIInfo: ...
     def check_duplicate_operation_id(self, paths: dict[str, dict[str, Any]]) -> None: ...
+    @override
     def get_schema(self, request: Request | None = None, public: bool = False) -> _DRFOpenAPISchema: ...
 
 class AutoSchema(ViewInspector):

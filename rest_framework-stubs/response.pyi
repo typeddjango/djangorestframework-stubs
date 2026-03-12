@@ -9,7 +9,7 @@ from django.urls import ResolverMatch
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.test import APIClient
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 class Response(SimpleTemplateResponse):
     data: Any
@@ -29,7 +29,9 @@ class Response(SimpleTemplateResponse):
     ) -> None: ...
     def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
+    @override
     def rendered_content(self) -> Any: ...
+    @override
     def render(self) -> Any: ...
     @property
     def status_text(self) -> str: ...

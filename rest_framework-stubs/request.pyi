@@ -15,13 +15,15 @@ from rest_framework.parsers import BaseParser
 from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(AbstractContextManager[Request]):
     def __init__(self, view: APIView, request: Request, method: str) -> None: ...
+    @override
     def __enter__(self) -> Request: ...
+    @override
     def __exit__(
         self,
         exc_type: type[BaseException] | None,
@@ -64,6 +66,7 @@ class Request(HttpRequest):
     ) -> None: ...
     def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
+    @override
     def content_type(self) -> str: ...  # type: ignore[override]
     @property
     def stream(self) -> Any: ...
@@ -71,6 +74,7 @@ class Request(HttpRequest):
     def query_params(self) -> _ImmutableQueryDict: ...
     @property
     def data(self) -> dict[str, Any]: ...
+    @override  # type: ignore[explicit-override]
     @property
     def user(self) -> _User | AnonymousUser: ...
     @user.setter
@@ -82,7 +86,9 @@ class Request(HttpRequest):
     @property
     def successful_authenticator(self) -> BaseAuthentication | ForcedAuthentication | None: ...
     @property
+    @override
     def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
+    @override
     def FILES(self) -> Incomplete: ...  # type: ignore[override]
     def force_plaintext_errors(self, value: Any) -> None: ...

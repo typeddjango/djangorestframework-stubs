@@ -12,7 +12,7 @@ from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import ParamSpec
+from typing_extensions import ParamSpec, override
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
@@ -46,6 +46,7 @@ else:
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...
     def _map(self, method: str, func: _View) -> _View: ...
+    @override
     def get(self, func: _View) -> _View: ...  # type: ignore[override]
     def post(self, func: _View) -> _View: ...
     def put(self, func: _View) -> _View: ...

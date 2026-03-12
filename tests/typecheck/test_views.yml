@@ -1,11 +1,13 @@
 - case: test_destroy_api_view
   main: |
+    from typing_extensions import override
     from rest_framework import generics
     from myapp.models import MyModel
 
     class MyView(generics.DestroyAPIView):
         queryset = MyModel.objects.all()
 
+        @override
         def perform_destroy(self, instance: MyModel) -> None: ...
   installed_apps:
       - myapp
