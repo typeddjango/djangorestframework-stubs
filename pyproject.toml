@@ -75,7 +75,6 @@ addopts = [
   "--cache-clear",
   "--mypy-extension-hook=scripts.tests_extension_hook.django_plugin_hook",
   # Suppress errors from other packages due to https://github.com/typeddjango/pytest-mypy-plugins/issues/134
-  "--mypy-only-local-stub",
   "--mypy-ini-file=mypy.ini"
 ]
 
