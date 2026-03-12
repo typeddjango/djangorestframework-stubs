@@ -7,7 +7,7 @@ from django.db.models import Model, QuerySet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from typing_extensions import TypedDict
+from typing_extensions import TypedDict, override
 
 def _positive_int(integer_string: str, strict: bool = ..., cutoff: int | None = ...) -> int: ...
 def _divide_with_ceil(a: int, b: int) -> int: ...
@@ -66,6 +66,7 @@ class PageNumberPagination(BasePagination):
     page: Page | None
     request: Request | None
     template: str | None
+    @override
     def get_schema_operation_parameters(self, view: APIView) -> list[dict[str, Any]]: ...
     def get_page_number(self, request: Request, paginator: Paginator) -> int | str: ...
     def get_page_size(self, request: Request) -> int | None: ...

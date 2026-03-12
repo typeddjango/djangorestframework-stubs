@@ -5,6 +5,7 @@ from django import template
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.request import Request
+from typing_extensions import override
 
 register: Any
 class_re: Any
@@ -16,6 +17,7 @@ class CodeNode(template.Node):
     lang: Any
     nodelist: Any
     def __init__(self, lang: Any, code: Any) -> None: ...
+    @override
     def render(self, context: Any) -> Incomplete: ...
 
 def with_location(fields: Any, location: Any) -> Incomplete: ...

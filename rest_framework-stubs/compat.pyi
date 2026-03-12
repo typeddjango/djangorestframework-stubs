@@ -1,6 +1,7 @@
 from typing import Any, TypeAlias
 
 from django.db.models import Q, QuerySet
+from typing_extensions import override
 
 try:
     from django.contrib.postgres import fields as postgres_fields
@@ -43,6 +44,7 @@ try:
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
         formatter: Any
+        @override
         def run(self, lines: list[str]) -> list[str]: ...
 
 except ImportError:

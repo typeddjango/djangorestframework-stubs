@@ -5,6 +5,7 @@ from typing import Any, Generic, TypeVar, overload
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
+from typing_extensions import override
 
 _T = TypeVar("_T")
 _VT = TypeVar("_VT")
@@ -44,7 +45,9 @@ class ReturnDict(dict[_KT, _VT], Generic[_KT, _VT]):
     def __init__(
         self: ReturnDict[bytes, bytes], iterable: Iterable[list[bytes]], /, *, serializer: BaseSerializer
     ) -> None: ...
+    @override
     def copy(self) -> ReturnDict[_KT, _VT]: ...
+    @override
     def __reduce__(self) -> tuple[type[dict[_KT, _VT]], tuple[dict[_KT, _VT]]]: ...
 
 class ReturnList(list[_T], Generic[_T]):
@@ -54,6 +57,7 @@ class ReturnList(list[_T], Generic[_T]):
     def __init__(self, *, serializer: BaseSerializer) -> None: ...
     @overload
     def __init__(self, iterable: Iterable[_T], /, *, serializer: BaseSerializer) -> None: ...
+    @override
     def __reduce__(self) -> tuple[type[list[_T]], tuple[list[_T]]]: ...
 
 class BoundField:
@@ -80,8 +84,13 @@ class BindingDict(MutableMapping[str, Field]):
     serializer: BaseSerializer
     fields: dict[str, Field]
     def __init__(self, serializer: BaseSerializer) -> None: ...
+    @override
     def __setitem__(self, key: str, field: Field) -> None: ...
+    @override
     def __getitem__(self, key: str) -> Field: ...
+    @override
     def __delitem__(self, key: str) -> None: ...
+    @override
     def __iter__(self) -> Iterator[Field]: ...  # type: ignore[override]
+    @override
     def __len__(self) -> int: ...
