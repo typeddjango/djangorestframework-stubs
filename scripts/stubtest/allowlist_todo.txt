@@ -82,7 +82,6 @@ rest_framework.test.CoreAPIClient
 rest_framework.test.APIClient.options
 rest_framework.test.RequestsClient.__init__
 rest_framework.throttling.SimpleRateThrottle.cache
-rest_framework.utils.encoders.JSONEncoder.default
 rest_framework.validators.ContextValidator
 rest_framework.validators.Validator
 rest_framework.views.APIView.metadata_class
