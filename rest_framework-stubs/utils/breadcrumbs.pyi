@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
-from typing import Any
+from django.http import HttpRequest
 
-def get_breadcrumbs(url: Any, request: Any | None = ...) -> Incomplete: ...
+def get_breadcrumbs(url: str, request: HttpRequest | None = None) -> list[tuple[str, str]]: ...
