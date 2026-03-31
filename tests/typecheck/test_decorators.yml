@@ -23,4 +23,4 @@
     main: |
         from typing_extensions import reveal_type
         from rest_framework.decorators import permission_classes
-        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[type[rest_framework.permissions.BasePermission] | rest_framework.permissions.OperandHolder | rest_framework.permissions.SingleOperandHolder]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View`-1) -> _View`-1"
+        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[type[rest_framework.permissions.BasePermission] | rest_framework.permissions.OperandHolder | rest_framework.permissions.SingleOperandHolder]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View) -> _View"
