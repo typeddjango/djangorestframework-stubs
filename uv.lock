@@ -278,7 +278,7 @@ wheels = [
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.16.8"
+version = "3.16.9"
 source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
@@ -322,7 +322,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "coreapi", marker = "extra == 'coreapi'", specifier = ">=2.0.0" },
-    { name = "django-stubs", specifier = ">=5.2.8" },
+    { name = "django-stubs", specifier = ">=5.2.9" },
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'compatible-mypy'" },
     { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<1.21" },
     { name = "types-markdown", marker = "extra == 'markdown'", specifier = ">=0.1.5" },
