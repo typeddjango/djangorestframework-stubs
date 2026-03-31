@@ -14,8 +14,8 @@
   out: |
     main:6: error: {{ err }}
     main:6: note: Possible overload variants:
-    main:6: note:     def [_T] ReturnList(self, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
-    main:6: note:     def [_T] ReturnList(self, Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(*, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
 
 - case: test_return_list_serializer_is_required
   parametrized:
@@ -33,8 +33,8 @@
   out: |
     main:6: error: {{ err }}
     main:6: note: Possible overload variants:
-    main:6: note:     def [_T] ReturnList(self, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
-    main:6: note:     def [_T] ReturnList(self, Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(*, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
 
 - case: test_return_dict_serializer_argument_is_kw_only
   parametrized:
@@ -56,14 +56,14 @@
   out: |
     main:6: error: {{ err }}
     main:6: note: Possible overload variants:
-    main:6: note:     def [_KT, _VT] ReturnDict(self, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
 
 - case: test_return_dict_serializer_is_required
   parametrized:
@@ -85,11 +85,11 @@
   out: |
     main:6: error: {{ err }}
     main:6: note: Possible overload variants:
-    main:6: note:     def [_KT, _VT] ReturnDict(self, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
-    main:6: note:     def [_KT, _VT] ReturnDict(self, Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
