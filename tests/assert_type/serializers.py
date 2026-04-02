@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
@@ -130,3 +130,20 @@ class TestSerializer8(serializers.Serializer):
         assert_type(ret, ReturnDict[str, str])
         copy = ret.copy()
         assert_type(copy, ReturnDict[str, str])
+
+
+# case: test_context_accepts_typeddict
+class SomeContext(TypedDict):
+    some_string: str
+    some_number: int
+
+
+context: SomeContext = {"some_string": "hey", "some_number": 1}
+context_ser: serializers.Serializer = serializers.Serializer(None, context=context)
+assert_type(context_ser.context, Mapping[str, Any])
+
+context_list_ser: serializers.ListSerializer = serializers.ListSerializer(None, context=context)
+assert_type(context_list_ser.context, Mapping[str, Any])
+
+context_model_ser: serializers.ModelSerializer = serializers.ModelSerializer(None, context=context)
+assert_type(context_model_ser.context, Mapping[str, Any])

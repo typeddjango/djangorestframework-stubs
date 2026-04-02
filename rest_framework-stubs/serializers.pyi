@@ -78,7 +78,7 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     many: bool
     instance: _IN | None
     initial_data: Any
-    _context: dict[str, Any]
+    _context: Mapping[str, Any]
     def __init__(
         self,
         instance: _IN | None = ...,
@@ -87,7 +87,7 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
         partial: bool = ...,
         many: bool = ...,
         allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
@@ -159,7 +159,7 @@ class ListSerializer(BaseSerializer[_IN]):
         instance: _IN | None = ...,
         data: Any = ...,
         partial: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         allow_empty: bool = ...,
         child: Field | BaseSerializer | None = ...,
         read_only: bool = ...,
@@ -215,7 +215,7 @@ class ModelSerializer(Serializer[_MT]):
         *,
         partial: bool = ...,
         many: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
