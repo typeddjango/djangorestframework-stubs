@@ -59,7 +59,3 @@ rest_framework.templatetags.rest_framework.data
 rest_framework.templatetags.rest_framework.form_for_link
 rest_framework.templatetags.rest_framework.schema_links
 rest_framework.templatetags.rest_framework.with_location
-
-# UniqueTogetherValidator gained a `code` parameter in 3.17
-rest_framework.validators.UniqueTogetherValidator.__init__
-rest_framework.validators.UniqueTogetherValidator.code

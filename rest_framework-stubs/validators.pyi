@@ -17,6 +17,7 @@ class ContextValidator(Protocol[_V]):
 Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
 
 def qs_exists(queryset: QuerySet) -> bool: ...
+def qs_exists_with_condition(queryset: QuerySet[Any], condition: Q | None, against: dict[str, Any]) -> bool: ...
 def qs_filter(queryset: QuerySet[_Model, _Row], **kwargs: Any) -> QuerySet[_Model, _Row]: ...
 
 class UniqueValidator:
@@ -24,7 +25,7 @@ class UniqueValidator:
     requires_context: bool
     queryset: QuerySet
     lookup: str
-    def __init__(self, queryset: QuerySet, message: StrOrPromise | None = ..., lookup: str = ...) -> None: ...
+    def __init__(self, queryset: QuerySet, message: StrOrPromise | None = None, lookup: str = "exact") -> None: ...
     def filter_queryset(
         self, value: Any, queryset: QuerySet[_Model, _Row], field_name: str
     ) -> QuerySet[_Model, _Row]: ...
@@ -37,15 +38,17 @@ class UniqueTogetherValidator:
     message: StrOrPromise
     missing_message: StrOrPromise
     requires_context: bool
+    code: str
     queryset: QuerySet
     fields: Iterable[str]
     def __init__(
         self,
         queryset: QuerySet,
         fields: Iterable[str],
-        message: StrOrPromise | None = ...,
+        message: StrOrPromise | None = None,
         condition_fields: Iterable[str] | None = None,
         condition: Q | None = None,
+        code: str | None = None,
     ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str], serializer: BaseSerializer) -> None: ...
     def filter_queryset(
@@ -55,8 +58,6 @@ class UniqueTogetherValidator:
         self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], instance: _Model
     ) -> QuerySet[_Model, _Row]: ...
     def __call__(self, attrs: MutableMapping[str, Any], serializer: BaseSerializer) -> None: ...
-
-def qs_exists_with_condition(queryset: QuerySet[Any], condition: Q | None, against: dict[str, Any]) -> bool: ...
 
 class ProhibitSurrogateCharactersValidator:
     message: StrOrPromise
@@ -71,7 +72,9 @@ class BaseUniqueForValidator:
     queryset: QuerySet
     field: str
     date_field: str
-    def __init__(self, queryset: QuerySet, field: str, date_field: str, message: StrOrPromise | None = ...) -> None: ...
+    def __init__(
+        self, queryset: QuerySet, field: str, date_field: str, message: StrOrPromise | None = None
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str]) -> None: ...
     def filter_queryset(
         self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], field_name: str, date_field_name: str
