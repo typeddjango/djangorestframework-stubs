@@ -50,7 +50,7 @@ dev = [
   "types-pytz==2026.1.1.20260402",
   "types-requests==2.33.0.20260327",
   "types-urllib3==1.26.25.14",
-  "types-Pygments==2.19.0.20251121",
+  "types-Pygments==2.19.0.20260402",
   "types-pyyaml==6.0.12.20250915",
   "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
   "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
