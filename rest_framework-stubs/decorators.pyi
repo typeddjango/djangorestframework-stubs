@@ -5,12 +5,15 @@ from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.metadata import BaseMetadata
+from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
+from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView, AsView  # noqa: F401
 from typing_extensions import ParamSpec, override
 
@@ -75,6 +78,9 @@ def authentication_classes(
 ) -> Callable[[_View], _View]: ...
 def throttle_classes(throttle_classes: Sequence[BaseThrottle | type[BaseThrottle]]) -> Callable[[_View], _View]: ...
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
+def content_negotiation_class(content_negotiation_class: type[BaseContentNegotiation]) -> Callable[[_View], _View]: ...
+def metadata_class(metadata_class: type[BaseMetadata] | None) -> Callable[[_View], _View]: ...
+def versioning_class(versioning_class: type[BaseVersioning] | None) -> Callable[[_View], _View]: ...
 def schema(view_inspector: ViewInspector | type[ViewInspector] | None) -> Callable[[_View], _View]: ...
 def action(
     methods: Sequence[_HttpMethod] | None = ...,
