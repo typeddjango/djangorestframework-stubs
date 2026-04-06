@@ -11,11 +11,6 @@ rest_framework.RemovedInDRF317Warning
 rest_framework.compat.coreapi
 rest_framework.compat.coreschema
 
-# New decorator helpers added in 3.17, missing from stub
-rest_framework.decorators.content_negotiation_class
-rest_framework.decorators.metadata_class
-rest_framework.decorators.versioning_class
-
 # rest_framework.documentation module removed in 3.17
 rest_framework.documentation
 
