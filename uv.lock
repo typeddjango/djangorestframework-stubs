@@ -343,7 +343,7 @@ dev = [
     { name = "pre-commit", specifier = "==4.5.1" },
     { name = "pytest", specifier = "==9.0.2" },
     { name = "pytest-mypy-plugins", specifier = "==4.0.0" },
-    { name = "types-pygments", specifier = "==2.20.0.20260405" },
+    { name = "types-pygments", specifier = "==2.20.0.20260406" },
     { name = "types-pytz", specifier = "==2026.1.1.20260402" },
     { name = "types-pyyaml", specifier = "==6.0.12.20250915" },
     { name = "types-requests", specifier = "==2.33.0.20260402" },
@@ -1232,14 +1232,14 @@ wheels = [
 
 [[package]]
 name = "types-pygments"
-version = "2.20.0.20260405"
+version = "2.20.0.20260406"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "types-docutils" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ad/28/7a11c06b290e370eca368dd59d9738a79657a7518f5a4021b1e187c1a16d/types_pygments-2.20.0.20260405.tar.gz", hash = "sha256:f06fe34d6457044ce7587a5a6cf73e6bc5c769c933cd9edf033379bcd7ed2897", size = 19342, upload-time = "2026-04-05T04:27:06.184Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/bd/d17c28a4c65c556bc4c4bc8f363aa2fbfc91b397e3c0019839d74d9ead31/types_pygments-2.20.0.20260406.tar.gz", hash = "sha256:d3ed7ecd7c34a382459d28ce624b87e1dee03d6844e43aa7590ef4b8c7c9dfce", size = 19486, upload-time = "2026-04-06T04:33:59.632Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/51/dabb479c2cda4fbed99a0f2045aee2bb91487c50c654a7ad6dfa327c5b82/types_pygments-2.20.0.20260405-py3-none-any.whl", hash = "sha256:79dc975f7a9c6cbfdcc32f3d31b7eb507d39a41031c3b2124f16fc2e42326954", size = 26688, upload-time = "2026-04-05T04:27:05.215Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/00/dca7518e6f99ce0f235ec1c6512593ee4bd25109ae1c912bf9ee836a26e1/types_pygments-2.20.0.20260406-py3-none-any.whl", hash = "sha256:6bb0c79874c304977e1c097f7007140e16fe78c443329154db803d7910d945b3", size = 27278, upload-time = "2026-04-06T04:33:58.744Z" },
 ]
 
 [[package]]
