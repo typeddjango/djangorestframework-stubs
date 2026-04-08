@@ -51,7 +51,7 @@ dev = [
   "types-requests==2.33.0.20260402",
   "types-urllib3==1.26.25.14",
   "types-Pygments==2.20.0.20260407",
-  "types-pyyaml==6.0.12.20250915",
+  "types-pyyaml==6.0.12.20260408",
   "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
   "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
   "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
