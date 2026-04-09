@@ -36,13 +36,6 @@ rest_framework.management.commands.generateschema.Command.get_mode
 # get_schema_fields removed from BasePagination in 3.17 (coreapi cleanup)
 rest_framework.pagination.BasePagination.get_schema_fields
 
-# CoreAPI/coreapi-related renderers removed in 3.17
-rest_framework.renderers.CoreAPIJSONOpenAPIRenderer
-rest_framework.renderers.CoreAPIOpenAPIRenderer
-rest_framework.renderers.CoreJSONRenderer
-rest_framework.renderers.DocumentationRenderer
-rest_framework.renderers.SchemaJSRenderer
-
 # DefaultRouter.SchemaGenerator now points to openapi.SchemaGenerator (was coreapi)
 rest_framework.routers.DefaultRouter.SchemaGenerator
 
