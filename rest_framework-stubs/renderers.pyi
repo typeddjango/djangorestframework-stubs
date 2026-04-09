@@ -1,6 +1,6 @@
 from collections.abc import Iterable, Mapping, Sequence
 from json import JSONEncoder
-from typing import Any, ClassVar, Literal
+from typing import Any, ClassVar, Literal, TypeVar
 
 from django import forms
 from rest_framework.fields import Field
@@ -12,7 +12,9 @@ from rest_framework.utils.serializer_helpers import BoundField
 from rest_framework.views import APIView
 from typing_extensions import override
 
-def zero_as_none(value: Any) -> Any: ...
+_T = TypeVar("_T")
+
+def zero_as_none(value: _T) -> _T | None: ...
 
 class BaseRenderer:
     # DISCREPANCY: `media_type`, `format` cannot be None.
