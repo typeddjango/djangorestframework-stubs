@@ -43,7 +43,7 @@ requests = ["types-requests"]
 dev = [
   "pre-commit==4.5.1",
   "pytest==9.0.3",
-  "pytest-mypy-plugins==4.0.1",
+  "pytest-mypy-plugins==4.0.2",
   "djangorestframework==3.17.1",
   "django==5.2.*; python_version < '3.12'",
   "django==6.0.*; python_version >= '3.12'",
