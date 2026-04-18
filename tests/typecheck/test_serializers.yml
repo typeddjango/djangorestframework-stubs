@@ -1,3 +1,32 @@
+- case: test_serializer_with_many_returns_list_serializer
+  main: |
+    from typing import Any
+    from typing_extensions import assert_type
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnList
+
+    class ChildSerializer(serializers.Serializer):
+        pass
+
+    s = ChildSerializer(many=True)
+    assert_type(s, serializers.ListSerializer[Any])
+    assert_type(s.data, ReturnList[Any])
+    assert_type(s.to_representation([]), list[Any])
+
+- case: test_serializer_without_many_is_not_list_serializer
+  main: |
+    from typing import Any
+    from typing_extensions import assert_type
+    from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    class ChildSerializer(serializers.Serializer):
+        pass
+
+    s = ChildSerializer()
+    assert_type(s, ChildSerializer)
+    assert_type(s.data, ReturnDict[Any, Any])
+
 - case: test_serializer_many_accepts_list_serializer_kwargs
   main: |
     from rest_framework import serializers

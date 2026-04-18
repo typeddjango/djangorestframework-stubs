@@ -36,7 +36,7 @@ class NewSemanalDRFPlugin(Plugin):
     @override
     def get_function_signature_hook(self, fullname: str) -> Callable[[FunctionSigContext], CallableType] | None:
         if fullname in self._get_currently_defined_serializers():
-            return serializers.add_list_serializer_kwargs_when_many
+            return serializers.transform_serializer_constructor_when_many
         return None
 
 

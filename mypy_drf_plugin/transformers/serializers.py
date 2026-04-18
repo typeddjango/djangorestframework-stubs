@@ -1,7 +1,9 @@
 from mypy.nodes import ARG_NAMED_OPT, NameExpr
 from mypy.plugin import ClassDefContext, FunctionSigContext
-from mypy.types import CallableType, NoneType, UnionType
+from mypy.types import AnyType, CallableType, Instance, NoneType, TypeOfAny, UnionType
 from mypy_django_plugin.lib import helpers as mypy_django_helpers
+
+from mypy_drf_plugin.lib import fullnames
 
 
 def make_meta_nested_class_inherit_from_any(ctx: ClassDefContext) -> None:
@@ -20,11 +22,18 @@ def _many_is_truthy(ctx: FunctionSigContext) -> bool:
     return any(isinstance(expr, NameExpr) and expr.fullname == "builtins.True" for expr in ctx.args[many_idx])
 
 
-def add_list_serializer_kwargs_when_many(ctx: FunctionSigContext) -> CallableType:
-    # When a Serializer is instantiated with ``many=True`` it becomes a
-    # ListSerializer at runtime, which accepts ``min_length`` / ``max_length``.
+def transform_serializer_constructor_when_many(ctx: FunctionSigContext) -> CallableType:
+    # A Serializer called with ``many=True`` is turned into a ListSerializer by
+    # ``many_init`` at runtime. Reflect that by accepting ListSerializer-only
+    # kwargs (``min_length`` / ``max_length``) and returning ``ListSerializer[Any]``.
     sig = ctx.default_signature
     if not _many_is_truthy(ctx):
+        return sig
+
+    list_serializer_info = mypy_django_helpers.lookup_fully_qualified_typeinfo(
+        ctx.api, fullnames.LIST_SERIALIZER_FULLNAME
+    )
+    if list_serializer_info is None:
         return sig
 
     int_or_none = UnionType([ctx.api.named_generic_type("builtins.int", []), NoneType()])
@@ -43,4 +52,5 @@ def add_list_serializer_kwargs_when_many(ctx: FunctionSigContext) -> CallableTyp
         arg_kinds=new_arg_kinds,
         arg_names=new_arg_names,
         arg_types=new_arg_types,
+        ret_type=Instance(list_serializer_info, [AnyType(TypeOfAny.special_form)]),
     )
