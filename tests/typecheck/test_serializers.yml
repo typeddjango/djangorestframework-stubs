@@ -1,3 +1,26 @@
+- case: test_serializer_many_accepts_list_serializer_kwargs
+  main: |
+    from rest_framework import serializers
+
+    class ChildSerializer(serializers.Serializer):
+        pass
+
+    ChildSerializer(many=True, min_length=1)
+    ChildSerializer(many=True, max_length=5)
+    ChildSerializer(many=True, allow_empty=False, min_length=1, max_length=5)
+
+- case: test_serializer_without_many_rejects_list_serializer_kwargs
+  main: |
+    from rest_framework import serializers
+
+    class ChildSerializer(serializers.Serializer):
+        pass
+
+    ChildSerializer(min_length=1)
+  out: |
+    main:6: error: Unexpected keyword argument "min_length" for "ChildSerializer"  [call-arg]
+    main:6: note: "ChildSerializer" defined in "rest_framework.serializers"
+
 - case: test_return_list_serializer_argument_is_kw_only
   parametrized:
     - arg: ""
