@@ -1,5 +1,6 @@
 - case: test_serializer_with_many_returns_list_serializer
   main: |
+    from collections.abc import Iterable
     from typing import Any
     from typing_extensions import assert_type
     from rest_framework import serializers
@@ -9,9 +10,25 @@
         pass
 
     s = ChildSerializer(many=True)
-    assert_type(s, serializers.ListSerializer[Any])
+    assert_type(s, serializers.ListSerializer[Iterable[Any]])
     assert_type(s.data, ReturnList[Any])
     assert_type(s.to_representation([]), list[Any])
+
+- case: test_generic_serializer_with_many_preserves_instance_element_type
+  main: |
+    from collections.abc import Iterable
+    from typing_extensions import assert_type
+    from rest_framework import serializers
+
+    class Item:
+        pass
+
+    class ItemSerializer(serializers.Serializer[Item]):
+        pass
+
+    s = ItemSerializer(many=True)
+    assert_type(s, serializers.ListSerializer[Iterable[Item]])
+    assert_type(s.instance, Iterable[Item] | None)
 
 - case: test_serializer_without_many_is_not_list_serializer
   main: |
