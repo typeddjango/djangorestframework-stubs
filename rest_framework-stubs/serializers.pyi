@@ -42,7 +42,6 @@ from rest_framework.fields import JSONField as JSONField
 from rest_framework.fields import ListField as ListField
 from rest_framework.fields import ModelField as ModelField
 from rest_framework.fields import MultipleChoiceField as MultipleChoiceField
-from rest_framework.fields import NullBooleanField as NullBooleanField
 from rest_framework.fields import ReadOnlyField as ReadOnlyField
 from rest_framework.fields import RegexField as RegexField
 from rest_framework.fields import SerializerMethodField as SerializerMethodField

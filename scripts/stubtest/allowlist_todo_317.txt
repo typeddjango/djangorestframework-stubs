@@ -14,11 +14,6 @@ rest_framework.compat.coreschema
 # rest_framework.documentation module removed in 3.17
 rest_framework.documentation
 
-# BigIntegerField added to runtime, missing from stub
-rest_framework.fields.BigIntegerField
-
-# DurationField.__init__ signature changed in 3.17 (now accepts format + **kwargs)
-rest_framework.fields.DurationField.__init__
 
 # get_schema_fields removed from BaseFilterBackend in 3.17 (coreapi cleanup)
 rest_framework.filters.BaseFilterBackend.get_schema_fields
