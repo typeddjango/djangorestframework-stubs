@@ -240,7 +240,7 @@ wheels = [
 [[package]]
 name = "django-stubs"
 version = "6.0.3"
-source = { git = "https://github.com/typeddjango/django-stubs#92f5240465ea35ae206a7cf6e0cbeb819d491ca2" }
+source = { git = "https://github.com/typeddjango/django-stubs#36484fe11f8262046d85e7f14c70dc7b864fc6b5" }
 dependencies = [
     { name = "django", version = "5.2.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -258,7 +258,7 @@ compatible-mypy = [
 [[package]]
 name = "django-stubs-ext"
 version = "6.0.3"
-source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#92f5240465ea35ae206a7cf6e0cbeb819d491ca2" }
+source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#36484fe11f8262046d85e7f14c70dc7b864fc6b5" }
 dependencies = [
     { name = "django", version = "5.2.13", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
