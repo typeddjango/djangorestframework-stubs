@@ -49,7 +49,6 @@ dev = [
   "django==6.0.*; python_version >= '3.12'",
   "types-pytz",
   "types-requests",
-  "types-urllib3==1.26.25.14",
   "types-Pygments",
   "types-pyyaml",
   "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
