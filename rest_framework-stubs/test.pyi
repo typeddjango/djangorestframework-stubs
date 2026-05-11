@@ -29,6 +29,7 @@ def force_authenticate(
 ) -> None: ...
 
 class HeaderDict(urllib3._collections.HTTPHeaderDict):
+    @override
     def get_all(self, key: str, default: Any = ...) -> Incomplete: ...
 
 class MockOriginalResponse:
