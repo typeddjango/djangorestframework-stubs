@@ -383,10 +383,10 @@ dev = [
     { name = "pre-commit", specifier = "==4.6.0" },
     { name = "pytest", specifier = "==9.0.3" },
     { name = "pytest-mypy-plugins", specifier = "==4.0.2" },
-    { name = "types-pygments", specifier = "==2.20.0.20260508" },
-    { name = "types-pytz", specifier = "==2026.2.0.20260506" },
-    { name = "types-pyyaml", specifier = "==6.0.12.20260510" },
-    { name = "types-requests", specifier = "==2.33.0.20260508" },
+    { name = "types-pygments" },
+    { name = "types-pytz" },
+    { name = "types-pyyaml" },
+    { name = "types-requests" },
     { name = "types-urllib3", specifier = "==1.26.25.14" },
 ]
 
