@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeAlias, TypeVar
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeAlias, TypeVar, type_check_only
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.base import File
@@ -49,6 +49,7 @@ class CurrentUserDefault:
 
 class SkipField(Exception): ...
 
+@type_check_only
 class Option(Protocol):
     start_option_group: bool
     end_option_group: bool
@@ -68,6 +69,7 @@ _VT = TypeVar("_VT")  # Value Type
 _DT = TypeVar("_DT")  # Data Type
 _RP = TypeVar("_RP")  # Representation Type
 
+@type_check_only
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 

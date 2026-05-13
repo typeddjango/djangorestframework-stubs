@@ -25,12 +25,6 @@ rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
 # https://github.com/typeddjango/djangorestframework-stubs/issues/42
 rest_framework.fields.empty
 
-# Stub-only Protocol for iter_options() return type (no runtime class)
-rest_framework.fields.Option
-
-# Stub-only Protocol for ImageField typing (no runtime class)
-rest_framework.fields.SupportsToPython
-
 # Mypy doesn't like default value `empty`
 rest_framework.fields.DateField.__init__
 rest_framework.fields.DateTimeField.__init__
