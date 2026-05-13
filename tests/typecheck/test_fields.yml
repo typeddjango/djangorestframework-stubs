@@ -5,7 +5,7 @@
         IntegerField(1)  # E: Too many positional arguments for "IntegerField"  [misc]
         FloatField(1)  # E: Too many positional arguments for "FloatField"  [misc]
         UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"  [misc]
-        DurationField(1)  # E: Too many positional arguments for "DurationField"  [misc]
+        DurationField('iso-8601')  # E: Too many positional arguments for "DurationField"  [misc]
 
 -   case: some_positional_args_fields
     main: |
