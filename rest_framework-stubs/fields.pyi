@@ -622,6 +622,7 @@ class ImageField(FileField):
 
 class _UnvalidatedField(Field):
     allow_blank: bool
+    allow_null: bool
 
 class ListField(Field[list[Any], list[Any], list[Any], Any]):
     child: Field
