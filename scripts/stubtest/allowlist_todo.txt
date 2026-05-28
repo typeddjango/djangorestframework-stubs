@@ -20,7 +20,6 @@ rest_framework.compat.__all__
 rest_framework.compat.apply_markdown
 rest_framework.decorators.ViewSetAction
 rest_framework.decorators.action
-rest_framework.default_app_config
 rest_framework.generics.BaseFilterProtocol
 rest_framework.generics.UsesQuerySet
 rest_framework.negotiation.DefaultContentNegotiation.settings
