@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Generic, Literal, NoReturn, TypedDict
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -61,24 +61,36 @@ from rest_framework.relations import PrimaryKeyRelatedField as PrimaryKeyRelated
 from rest_framework.relations import RelatedField as RelatedField
 from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
+from rest_framework.request import Request
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
 from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
-from typing_extensions import override
+from rest_framework.views import APIView
+from typing_extensions import TypeVar, override
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
 LIST_SERIALIZER_KWARGS_REMOVE: Sequence[str]
 ALL_FIELDS: str
 
+_VT = TypeVar("_VT", bound=APIView)  # View Type
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
 
-class BaseSerializer(Field[Any, Any, Any, _IN]):
+class _AnyContextType(TypedDict): ...
+
+class _ContextType(TypedDict, Generic[_VT]):
+    request: Request
+    format: str | None
+    view: _VT
+
+_CT = TypeVar("_CT", bound=_AnyContextType, default=_ContextType)  # Context Type
+
+class BaseSerializer(Field[Any, Any, Any, _IN, _CT]):
     partial: bool
     many: bool
     instance: _IN | None
     initial_data: Any
-    _context: Mapping[str, Any]
+    _context: _CT
     def __init__(
         self,
         instance: _IN | None = ...,
@@ -87,7 +99,7 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
         partial: bool = ...,
         many: bool = ...,
         allow_empty: bool = ...,
-        context: Mapping[str, Any] = ...,
+        context: _CT = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
@@ -123,7 +135,7 @@ class SerializerMetaclass(type):
 
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
-class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
+class Serializer(BaseSerializer[_IN, _CT], metaclass=SerializerMetaclass):
     _declared_fields: dict[str, Field]
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
     @override
@@ -149,7 +161,7 @@ class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     @override
     def errors(self) -> ReturnDict: ...
 
-class ListSerializer(BaseSerializer[_IN]):
+class ListSerializer(BaseSerializer[_IN, _CT]):
     child: Field | BaseSerializer | None
     many: bool
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
@@ -159,7 +171,7 @@ class ListSerializer(BaseSerializer[_IN]):
         instance: _IN | None = ...,
         data: Any = ...,
         partial: bool = ...,
-        context: Mapping[str, Any] = ...,
+        context: _CT = ...,
         allow_empty: bool = ...,
         child: Field | BaseSerializer | None = ...,
         read_only: bool = ...,
@@ -192,7 +204,7 @@ class ListSerializer(BaseSerializer[_IN]):
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
-class ModelSerializer(Serializer[_MT]):
+class ModelSerializer(Serializer[_MT, _CT]):
     serializer_field_mapping: ClassVar[dict[type[models.Field], type[Field]]]
     serializer_related_field: ClassVar[type[RelatedField]]
     serializer_related_to_field: ClassVar[type[RelatedField]]
@@ -215,7 +227,7 @@ class ModelSerializer(Serializer[_MT]):
         *,
         partial: bool = ...,
         many: bool = ...,
-        context: Mapping[str, Any] = ...,
+        context: _CT = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
