@@ -138,12 +138,15 @@ class SomeContext(TypedDict):
     some_number: int
 
 
-context: SomeContext = {"some_string": "hey", "some_number": 1}
-context_ser: serializers.Serializer = serializers.Serializer(None, context=context)
-assert_type(context_ser.context, Mapping[str, Any])
+context = SomeContext(some_string="hey", some_number=1)
+context_ser = serializers.Serializer(None, context=context)  # type: ignore[var-annotated]
+assert_type(context_ser, serializers.Serializer[Any, SomeContext])
+assert_type(context_ser.context, SomeContext)
 
-context_list_ser: serializers.ListSerializer = serializers.ListSerializer(None, context=context)
-assert_type(context_list_ser.context, Mapping[str, Any])
+context_list_ser = serializers.ListSerializer(None, context=context)  # type: ignore[var-annotated]
+assert_type(context_list_ser, serializers.ListSerializer[Any, SomeContext])
+assert_type(context_list_ser.context, SomeContext)
 
-context_model_ser: serializers.ModelSerializer = serializers.ModelSerializer(None, context=context)
-assert_type(context_model_ser.context, Mapping[str, Any])
+context_model_ser = serializers.ModelSerializer(None, context=context)  # type: ignore[var-annotated]
+assert_type(context_model_ser, serializers.ModelSerializer[Any, SomeContext])
+assert_type(context_model_ser.context, SomeContext)

@@ -1,4 +1,4 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import Any, Protocol, TypeVar
 
 from django.db.models import Manager, Model
@@ -8,7 +8,7 @@ from rest_framework.filters import BaseFilterBackend
 from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.serializers import BaseSerializer
+from rest_framework.serializers import BaseSerializer, _ContextType
 from typing_extensions import Self
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
@@ -40,7 +40,7 @@ class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
     def get_object(self) -> _MT_co: ...
     def get_serializer(self, *args: Any, **kwargs: Any) -> BaseSerializer[_MT_co]: ...
     def get_serializer_class(self) -> type[BaseSerializer[_MT_co]]: ...
-    def get_serializer_context(self) -> Mapping[str, Any]: ...
+    def get_serializer_context(self) -> _ContextType[Self]: ...
     def filter_queryset(self, queryset: QuerySet[_MT_co, _Row]) -> QuerySet[_MT_co, _Row]: ...
     @property
     def paginator(self) -> BasePagination | None: ...
