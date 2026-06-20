@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from rest_framework.pagination import PageNumberPagination
@@ -16,3 +18,9 @@ assert_type(page, list[User] | None)
 flat_values_queryset: QuerySet[User, str]
 flat_values_page = paginator.paginate_queryset(flat_values_queryset, request)
 assert_type(flat_values_page, list[str] | None)
+
+
+# case: test_page_number_pagination_paginate_sequence
+sequence_data: list[dict[str, Any]] = [{"key": "value"}]
+sequence_page = paginator.paginate_queryset(sequence_data, request)
+assert_type(sequence_page, list[dict[str, Any]] | None)

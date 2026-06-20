@@ -60,3 +60,8 @@ assert_type(filtered, QuerySet[MyModel, dict[str, Any]])
 # case: test_paginate_queryset_extracts_row_type
 page = my_view.paginate_queryset(values_qs)
 assert_type(page, list[dict[str, Any]] | None)
+
+# case: test_paginate_queryset_accepts_sequence
+sequence_data: list[dict[str, Any]] = [{"key": "value"}]
+sequence_page = my_view.paginate_queryset(sequence_data)
+assert_type(sequence_page, list[dict[str, Any]] | None)
