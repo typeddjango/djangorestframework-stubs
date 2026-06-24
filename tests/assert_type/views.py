@@ -84,3 +84,9 @@ class MyContextView2(generics.RetrieveAPIView):
         context = cast("MyContext", super().get_serializer_context())  # Widen to allow setting the api_key
         context["api_key"] = "test"
         return context
+
+
+# case: test_paginate_queryset_accepts_sequence
+sequence_data: list[dict[str, Any]] = [{"key": "value"}]
+sequence_page = my_view.paginate_queryset(sequence_data)
+assert_type(sequence_page, list[dict[str, Any]] | None)
