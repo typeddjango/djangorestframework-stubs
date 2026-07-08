@@ -350,7 +350,7 @@ requires-dist = [
     { name = "coreapi", marker = "extra == 'coreapi'", specifier = ">=2.0.0" },
     { name = "django-stubs", specifier = ">=6.0.4" },
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'compatible-mypy'" },
-    { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<2.2" },
+    { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<2.3" },
     { name = "types-markdown", marker = "extra == 'markdown'", specifier = ">=0.1.5" },
     { name = "types-pyyaml" },
     { name = "types-requests", marker = "extra == 'requests'" },
