@@ -1,11 +1,11 @@
 -   case: no_positional_args_fields
     main: |
         from rest_framework.fields import IntegerField, FloatField, UUIDField, CharField, DurationField
-        CharField(True)  # E: Too many positional arguments for "CharField"  [misc]
-        IntegerField(1)  # E: Too many positional arguments for "IntegerField"  [misc]
-        FloatField(1)  # E: Too many positional arguments for "FloatField"  [misc]
-        UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"  [misc]
-        DurationField('iso-8601')  # E: Too many positional arguments for "DurationField"  [misc]
+        CharField(True)  # E: Too many positional arguments for "CharField"  [call-arg]  # N: "CharField" defined in "rest_framework.fields"
+        IntegerField(1)  # E: Too many positional arguments for "IntegerField"  [call-arg]  # N: "IntegerField" defined in "rest_framework.fields"
+        FloatField(1)  # E: Too many positional arguments for "FloatField"  [call-arg]  # N: "FloatField" defined in "rest_framework.fields"
+        UUIDField('hex_verbose')  # E: Too many positional arguments for "UUIDField"  [call-arg]  # N: "UUIDField" defined in "rest_framework.fields"
+        DurationField('iso-8601')  # E: Too many positional arguments for "DurationField"  [call-arg]  # N: "DurationField" defined in "rest_framework.fields"
 
 -   case: some_positional_args_fields
     main: |
@@ -14,36 +14,36 @@
         from rest_framework.fields import DecimalField, IPAddressField, SlugField, RegexField, ModelField, SerializerMethodField, ChoiceField, DateTimeField, DateField, TimeField
 
         DecimalField(1, 1, False, 1, 1, False, None, False)
-        DecimalField(1, 1, False, 1, 1, False, None, False, True)  # E: Too many positional arguments for "DecimalField"  [misc]
+        DecimalField(1, 1, False, 1, 1, False, None, False, True)  # E: Too many positional arguments for "DecimalField"  [call-arg]  # N: "DecimalField" defined in "rest_framework.fields"
 
         IPAddressField('both')
-        IPAddressField('both', True)  # E: Too many positional arguments for "IPAddressField"  [misc]
+        IPAddressField('both', True)  # E: Too many positional arguments for "IPAddressField"  [call-arg]  # N: "IPAddressField" defined in "rest_framework.fields"
 
         SlugField(False)
-        SlugField(False, True)  # E: Too many positional arguments for "SlugField"  [misc]
+        SlugField(False, True)  # E: Too many positional arguments for "SlugField"  [call-arg]  # N: "SlugField" defined in "rest_framework.fields"
 
         RegexField('^$')
-        RegexField('^$', True)  # E: Too many positional arguments for "RegexField"  [misc]
+        RegexField('^$', True)  # E: Too many positional arguments for "RegexField"  [call-arg]  # N: "RegexField" defined in "rest_framework.fields"
 
         SerializerMethodField('bla')
-        SerializerMethodField('bla', True)  # E: Too many positional arguments for "SerializerMethodField"  [misc]
+        SerializerMethodField('bla', True)  # E: Too many positional arguments for "SerializerMethodField"  [call-arg]  # N: "SerializerMethodField" defined in "rest_framework.fields"
 
         mf: models.CharField = models.CharField()
         ModelField(mf)
-        ModelField(mf, True)  # E: Too many positional arguments for "ModelField"  [misc]
+        ModelField(mf, True)  # E: Too many positional arguments for "ModelField"  [call-arg]  # N: "ModelField" defined in "rest_framework.fields"
 
         ChoiceField([])
-        ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"  [misc]
+        ChoiceField([], False)  # E: Too many positional arguments for "ChoiceField"  [call-arg]  # N: "ChoiceField" defined in "rest_framework.fields"
 
         d: datetime = datetime.now()
         DateTimeField('', [], None, read_only=True, write_only=True, allow_null=True)
-        DateTimeField('', [], None, True)  # E: Too many positional arguments for "DateTimeField"  [misc]
+        DateTimeField('', [], None, True)  # E: Too many positional arguments for "DateTimeField"  [call-arg]  # N: "DateTimeField" defined in "rest_framework.fields"
 
         DateField('', [], read_only=True, write_only=True, allow_null=True)
-        DateField('', [], True)  # E: Too many positional arguments for "DateField"  [misc]
+        DateField('', [], True)  # E: Too many positional arguments for "DateField"  [call-arg]  # N: "DateField" defined in "rest_framework.fields"
 
         TimeField('', [], read_only=True, write_only=True, allow_null=True)
-        TimeField('', [], True)  # E: Too many positional arguments for "TimeField"  [misc]
+        TimeField('', [], True)  # E: Too many positional arguments for "TimeField"  [call-arg]  # N: "TimeField" defined in "rest_framework.fields"
 
 -   case: default_and_inital_args_fields
     main: |
