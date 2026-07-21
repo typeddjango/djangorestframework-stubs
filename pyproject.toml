@@ -41,7 +41,7 @@ requests = ["types-requests"]
 
 [dependency-groups]
 dev = [
-  "pre-commit==4.6.0",
+  "pre-commit==4.6.1",
   "pytest==9.1.1",
   "pytest-mypy-plugins==4.0.3",
   "djangorestframework==3.17.1",
