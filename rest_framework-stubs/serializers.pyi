@@ -210,7 +210,7 @@ class ModelSerializer(Serializer[_MT]):
 
     def __init__(
         self,
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
+        instance: _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] | None = ...,
         data: Any = ...,
         *,
         partial: bool = ...,
