@@ -73,7 +73,7 @@ _RP = TypeVar("_RP")  # Representation Type
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
-_DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | None | _Empty
+_DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | _Empty | None
 
 class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool
@@ -385,7 +385,7 @@ class DateTimeField(Field[datetime.datetime, datetime.datetime | str, str, Any])
     timezone: datetime.tzinfo
     def __init__(
         self,
-        format: str | None | _Empty = ...,
+        format: str | _Empty | None = ...,
         input_formats: Sequence[str] | None = None,
         default_timezone: datetime.tzinfo | None = None,
         *,
@@ -413,7 +413,7 @@ class DateField(Field[datetime.date, datetime.date | str, str, Any]):
     input_formats: Sequence[str]
     def __init__(
         self,
-        format: str | None | _Empty = ...,
+        format: str | _Empty | None = ...,
         input_formats: Sequence[str] | None = None,
         *,
         read_only: bool = False,
@@ -438,7 +438,7 @@ class TimeField(Field[datetime.time, datetime.time | str, str, Any]):
     input_formats: Sequence[str]
     def __init__(
         self,
-        format: str | None | _Empty = ...,
+        format: str | _Empty | None = ...,
         input_formats: Sequence[str] | None = None,
         *,
         read_only: bool = False,
@@ -464,7 +464,7 @@ class DurationField(Field[datetime.timedelta, datetime.timedelta | str, str, Any
     def __init__(
         self,
         *,
-        format: str | None | _Empty = ...,
+        format: str | _Empty | None = ...,
         max_value: datetime.timedelta | int | float | None = None,
         min_value: datetime.timedelta | int | float | None = None,
         read_only: bool = False,
