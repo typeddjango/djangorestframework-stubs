@@ -73,7 +73,7 @@ _RP = TypeVar("_RP")  # Representation Type
 class SupportsToPython(Protocol):
     def to_python(self, value: Any) -> Any: ...
 
-_DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | None | _Empty
+_DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | _Empty | None
 
 class Field(Generic[_VT, _DT, _RP, _IN]):
     allow_null: bool

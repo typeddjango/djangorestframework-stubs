@@ -18,7 +18,7 @@ _Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[str, _Detail]
 _APIExceptionInput: TypeAlias = (
     _Detail | StrOrPromise | Sequence[_APIExceptionInput] | Mapping[str, _APIExceptionInput] | None
 )
-_ErrorCodes: TypeAlias = str | None | list[_ErrorCodes] | dict[str, _ErrorCodes]
+_ErrorCodes: TypeAlias = str | list[_ErrorCodes] | dict[str, _ErrorCodes] | None
 
 class _FullDetailDict(TypedDict):
     message: ErrorDetail
