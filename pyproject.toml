@@ -1,6 +1,6 @@
 [project]
 name = "djangorestframework-stubs"
-version = "3.17.0"
+version = "3.17.1"
 requires-python = ">=3.10"
 description = "PEP-484 stubs for django-rest-framework"
 readme = "README.md"
@@ -23,7 +23,7 @@ classifiers = [
   "Framework :: Django",
 ]
 dependencies = [
-  "django-stubs>=6.0.4",
+  "django-stubs>=6.0.7",
   "typing-extensions>=4.0",
   "types-PyYAML",
 ]
@@ -51,8 +51,8 @@ dev = [
   "types-requests",
   "types-Pygments",
   "types-pyyaml",
-  "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
-  "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
+  "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs@b6771e5519e8988f0946fae0c7e7b1171dfd2dea",
+  "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs@b6771e5519e8988f0946fae0c7e7b1171dfd2dea#subdirectory=ext",
   "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
 ]
 
