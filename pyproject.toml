@@ -44,7 +44,7 @@ dev = [
   "pre-commit==4.6.1",
   "pytest==9.1.1",
   "pytest-mypy-plugins==4.0.3",
-  "djangorestframework==3.17.1",
+  "djangorestframework==3.17.2",
   "django==5.2.*; python_version < '3.12'",
   "django==6.0.*; python_version >= '3.12'",
   "types-pytz",
