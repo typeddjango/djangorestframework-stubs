@@ -8,17 +8,9 @@ try:
 except ImportError:
     postgres_fields: TypeAlias = None  # type: ignore[no-redef]
 try:
-    import coreapi  # type: ignore[import-untyped]
-except ImportError:
-    coreapi: TypeAlias = None  # type: ignore[no-redef]
-try:
     import uritemplate
 except ImportError:
     uritemplate: TypeAlias = None  # type: ignore[no-redef]
-try:
-    import coreschema  # type: ignore[import-untyped]
-except ImportError:
-    coreschema: TypeAlias = None  # type: ignore[no-redef]
 try:
     import yaml
 except ImportError:
@@ -69,8 +61,6 @@ __all__ = [
     "Preprocessor",
     "QuerySet",
     "apply_markdown",
-    "coreapi",
-    "coreschema",
     "inflection",
     "markdown",
     "md_filter_add_syntax_highlight",
