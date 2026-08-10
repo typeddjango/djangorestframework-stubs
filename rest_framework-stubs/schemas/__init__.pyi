@@ -6,13 +6,11 @@ from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
 from rest_framework.urlpatterns import _AnyURL
 
-from . import coreapi as coreapi
 from . import openapi as openapi
-from .coreapi import AutoSchema as AutoSchema
-from .coreapi import ManualSchema as ManualSchema
-from .coreapi import SchemaGenerator as SchemaGenerator
 from .generators import BaseSchemaGenerator
 from .inspectors import DefaultSchema as DefaultSchema
+from .openapi import AutoSchema as AutoSchema
+from .openapi import SchemaGenerator as SchemaGenerator
 
 def get_schema_view(
     title: str | None = ...,

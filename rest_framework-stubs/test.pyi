@@ -2,7 +2,6 @@ from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping
 from typing import Any, TypeAlias
 
-import coreapi  # type: ignore[import-untyped]
 import requests
 import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -50,11 +49,6 @@ class DjangoTestAdapter(requests.adapters.HTTPAdapter):
     def close(self) -> None: ...
 
 class RequestsClient(requests.Session): ...
-
-class CoreAPIClient(coreapi.Client):
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
-    @property
-    def session(self) -> Incomplete: ...
 
 class APIRequestFactory(DjangoRequestFactory):
     renderer_classes_list: Any
