@@ -41,10 +41,10 @@ requests = ["types-requests"]
 
 [dependency-groups]
 dev = [
-  "pre-commit==4.6.1",
+  "pre-commit==4.6.2",
   "pytest==9.1.1",
   "pytest-mypy-plugins==4.0.3",
-  "djangorestframework==3.17.2",
+  "djangorestframework==3.18.0",
   "django==5.2.*; python_version < '3.12'",
   "django==6.1.*; python_version >= '3.12'",
   "types-pytz",

@@ -15,4 +15,4 @@ stubtest rest_framework \
     --ignore-positional-only \
     --allowlist scripts/stubtest/allowlist.txt \
     --allowlist scripts/stubtest/allowlist_todo.txt \
-    --allowlist scripts/stubtest/allowlist_todo_317.txt
+    --allowlist scripts/stubtest/allowlist_todo_318.txt
