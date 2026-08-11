@@ -1,8 +1,8 @@
-from typing import Any
+from typing import Any, TypeVar, cast
 
 from django.db.models import Model, QuerySet
 from django.http.request import HttpRequest
-from rest_framework import generics, viewsets
+from rest_framework import generics, serializers, viewsets
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -60,6 +60,31 @@ assert_type(filtered, QuerySet[MyModel, dict[str, Any]])
 # case: test_paginate_queryset_extracts_row_type
 page = my_view.paginate_queryset(values_qs)
 assert_type(page, list[dict[str, Any]] | None)
+
+
+# case: test_override_get_serializer_context
+_VT = TypeVar("_VT", bound=APIView)  # View Type
+
+
+class MyContext(serializers._ContextType[_VT]):
+    api_key: str
+
+
+class MyContextView(generics.RetrieveAPIView):
+    @override
+    def get_serializer_context(self) -> MyContext:
+        context = super().get_serializer_context() | {"api_key": "test"}
+        assert_type(context, dict[str, object])  # Mypy doesn't specialize this union
+        return context  # type: ignore[return-value]
+
+
+class MyContextView2(generics.RetrieveAPIView):
+    @override
+    def get_serializer_context(self) -> MyContext:
+        context = cast("MyContext", super().get_serializer_context())  # Widen to allow setting the api_key
+        context["api_key"] = "test"
+        return context
+
 
 # case: test_paginate_queryset_accepts_sequence
 sequence_data: list[dict[str, Any]] = [{"key": "value"}]
