@@ -49,6 +49,7 @@ class UniqueTogetherValidator:
         condition_fields: Iterable[str] | None = None,
         condition: Q | None = None,
         code: str | None = None,
+        nulls_distinct: bool | None = None,
     ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str], serializer: BaseSerializer) -> None: ...
     def filter_queryset(
