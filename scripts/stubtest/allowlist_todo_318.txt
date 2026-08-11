@@ -1,1 +1,0 @@
-# Allowlist for DRF v3.18 - items not yet covered in stubs
