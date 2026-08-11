@@ -29,9 +29,7 @@ class SearchFilter(BaseFilterBackend):
     def must_call_distinct(self, queryset: QuerySet, search_fields: Iterable[str]) -> bool: ...
     def to_html(self, request: Request, queryset: QuerySet, view: APIView) -> str: ...
 
-class UnaccentedSearchFilter(SearchFilter):
-    lookup_prefixes: dict[str, str]
-    default_lookup: str
+class UnaccentedSearchFilter(SearchFilter): ...
 
 class OrderingFilter(BaseFilterBackend):
     ordering_param: str

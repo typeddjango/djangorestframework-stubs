@@ -1,8 +1,8 @@
-from typing import Any
+from typing import Any, Final
 
 from django.utils.datastructures import MultiValueDict
 
-NOT_PROVIDED: object
+NOT_PROVIDED: Final[object]
 
 def is_html_input(dictionary: Any) -> bool: ...
 def parse_html_list(dictionary: Any, prefix: str = "", default: Any | None = None) -> list[Any] | None: ...
