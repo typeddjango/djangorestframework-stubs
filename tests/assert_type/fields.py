@@ -1,9 +1,8 @@
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, assert_type
 
 from rest_framework import serializers
 from rest_framework.fields import FloatField
-from typing_extensions import assert_type
 
 # case: field_get_attribute_returns_value_type
 field = serializers.CharField()

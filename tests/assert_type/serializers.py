@@ -1,12 +1,12 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, TypedDict, cast
+from typing import Any, TypedDict, assert_type, cast
 
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
 from rest_framework import serializers
 from rest_framework.relations import PKOnlyObject
 from rest_framework.utils.serializer_helpers import BindingDict, ReturnDict, ReturnList
-from typing_extensions import assert_type, override
+from typing_extensions import override
 
 
 # case: multiple_inheritance_from_two_serializers_with_meta_nested_class_defined

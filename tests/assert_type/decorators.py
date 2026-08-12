@@ -1,7 +1,6 @@
-# case: api_view
-import sys
 from collections.abc import Callable
-from typing import Any
+from http import HTTPMethod
+from typing import Any, assert_type
 
 from django.http import HttpRequest
 from mypy_extensions import Arg
@@ -11,7 +10,6 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import AsView
-from typing_extensions import assert_type
 
 
 # case: api_view
@@ -56,18 +54,10 @@ class MyView(viewsets.ViewSet):
 
 
 # case: method_decorator_http_libary
-if sys.version_info >= (3, 11):
-    from http import HTTPMethod
+MY_VAR: HTTPMethod = HTTPMethod.POST
 
-    from rest_framework import viewsets
-    from rest_framework.decorators import action
-    from rest_framework.request import Request
-    from rest_framework.response import Response
-
-    MY_VAR: HTTPMethod = HTTPMethod.POST
-
-    class MyView2(viewsets.ViewSet):
-        @action(methods=[HTTPMethod.GET], detail=False)
-        def view_func_1(self, request: Request) -> Response: ...
-        @action(methods=[MY_VAR], detail=False)
-        def view_func_2(self, request: Request) -> Response: ...
+class MyView2(viewsets.ViewSet):
+    @action(methods=[HTTPMethod.GET], detail=False)
+    def view_func_1(self, request: Request) -> Response: ...
+    @action(methods=[MY_VAR], detail=False)
+    def view_func_2(self, request: Request) -> Response: ...

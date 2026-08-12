@@ -1,5 +1,5 @@
-import sys
 from collections.abc import Callable, Mapping, Sequence
+from http import HTTPMethod
 from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar
 
 from django.http import HttpRequest
@@ -39,12 +39,8 @@ _MixedCaseHttpMethod: TypeAlias = Literal[
     "head",
     "options",
 ]
-if sys.version_info >= (3, 11):
-    from http import HTTPMethod
 
-    _HttpMethod: TypeAlias = _MixedCaseHttpMethod | HTTPMethod
-else:
-    _HttpMethod: TypeAlias = _MixedCaseHttpMethod
+_HttpMethod: TypeAlias = _MixedCaseHttpMethod | HTTPMethod
 
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...

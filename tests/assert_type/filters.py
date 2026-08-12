@@ -1,11 +1,10 @@
-from typing import Any
+from typing import Any, assert_type
 
 from django.db.models import Model, QuerySet
 from rest_framework.filters import BaseFilterBackend, OrderingFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
 from rest_framework.views import APIView
-from typing_extensions import assert_type
 
 
 # case: basic_filters

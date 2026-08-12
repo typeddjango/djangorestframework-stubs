@@ -1,9 +1,10 @@
+from typing import assert_type
+
 from django.test.client import Client
 from django.urls import URLPattern, URLResolver, reverse_lazy
 from rest_framework import status, test
 from rest_framework.response import _MonkeyPatchedResponse
 from rest_framework.test import APIClient, APILiveServerTestCase, APISimpleTestCase, APITestCase, APITransactionTestCase
-from typing_extensions import assert_type
 
 
 # case: api_client_returns_proper_responses

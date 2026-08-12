@@ -2,7 +2,7 @@ from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
-from typing import Any
+from typing import Any, Self
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser, _User
@@ -15,7 +15,7 @@ from rest_framework.parsers import BaseParser
 from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
-from typing_extensions import Self, override
+from typing_extensions import override
 
 def is_form_media_type(media_type: str) -> bool: ...
 

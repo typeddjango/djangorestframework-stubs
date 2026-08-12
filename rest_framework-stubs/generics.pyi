@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, Protocol, TypeVar
+from typing import Any, Protocol, Self, TypeVar
 
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
@@ -9,7 +9,6 @@ from rest_framework.pagination import BasePagination
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
-from typing_extensions import Self
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 _MT_inv = TypeVar("_MT_inv", bound=Model)
