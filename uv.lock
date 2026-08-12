@@ -288,7 +288,7 @@ wheels = [
 [[package]]
 name = "django-stubs"
 version = "6.0.7"
-source = { git = "https://github.com/typeddjango/django-stubs?rev=b6771e5519e8988f0946fae0c7e7b1171dfd2dea#b6771e5519e8988f0946fae0c7e7b1171dfd2dea" }
+source = { git = "https://github.com/typeddjango/django-stubs#5868773c9fa5ba236c2cc263799a02acc67f7c0b" }
 dependencies = [
     { name = "django", version = "5.2.17", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -306,7 +306,7 @@ compatible-mypy = [
 [[package]]
 name = "django-stubs-ext"
 version = "6.0.7"
-source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext&rev=b6771e5519e8988f0946fae0c7e7b1171dfd2dea#b6771e5519e8988f0946fae0c7e7b1171dfd2dea" }
+source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#5868773c9fa5ba236c2cc263799a02acc67f7c0b" }
 dependencies = [
     { name = "django", version = "5.2.17", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -385,8 +385,8 @@ provides-extras = ["compatible-mypy", "coreapi", "markdown", "requests"]
 dev = [
     { name = "django", marker = "python_full_version < '3.12'", specifier = "==5.2.*" },
     { name = "django", marker = "python_full_version >= '3.12'", specifier = "==6.1.*" },
-    { name = "django-stubs", extras = ["compatible-mypy"], git = "https://github.com/typeddjango/django-stubs?rev=b6771e5519e8988f0946fae0c7e7b1171dfd2dea" },
-    { name = "django-stubs-ext", git = "https://github.com/typeddjango/django-stubs?subdirectory=ext&rev=b6771e5519e8988f0946fae0c7e7b1171dfd2dea" },
+    { name = "django-stubs", extras = ["compatible-mypy"], git = "https://github.com/typeddjango/django-stubs" },
+    { name = "django-stubs-ext", git = "https://github.com/typeddjango/django-stubs?subdirectory=ext" },
     { name = "djangorestframework", specifier = "==3.18.0" },
     { name = "djangorestframework-stubs", extras = ["compatible-mypy", "coreapi", "markdown", "requests"] },
     { name = "pre-commit", specifier = "==4.6.2" },
