@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, assert_type
 
 from django.db.models import Model, QuerySet
 from django.http.request import HttpRequest
@@ -7,7 +7,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from typing_extensions import assert_type, override
+from typing_extensions import override
 
 
 class MyModel(Model):

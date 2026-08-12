@@ -1,7 +1,8 @@
+from typing import assert_type
+
 from django.urls import URLPattern, URLResolver, include, path
 from rest_framework.routers import DefaultRouter, SimpleRouter
 from rest_framework.urlpatterns import _AnyURL
-from typing_extensions import assert_type
 
 # case: test_router_urls
 simple = SimpleRouter()

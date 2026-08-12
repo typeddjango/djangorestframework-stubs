@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, Self
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.template.base import Template
@@ -9,7 +9,7 @@ from django.urls import ResolverMatch
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.test import APIClient
-from typing_extensions import Self, override
+from typing_extensions import override
 
 class Response(SimpleTemplateResponse):
     data: Any

@@ -1,8 +1,7 @@
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Self
 
 from django.db import models
 from django.db.models.manager import Manager
-from typing_extensions import Self
 
 class Token(models.Model):
     key: models.CharField

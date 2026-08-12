@@ -78,7 +78,7 @@ addopts = [
 # Ruff configuration
 [tool.ruff]
 line-length = 120
-target-version = "py310"
+target-version = "py311"
 
 # See Rules in Ruff documentation: https://docs.astral.sh/ruff/rules/
 [tool.ruff.lint]
@@ -127,7 +127,6 @@ ignore = [
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "_typeshed.Self".msg = "Use typing_extensions.Self (PEP 673) instead."
-"typing.assert_type".msg = "Use typing_extensions.assert_type instead."
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false

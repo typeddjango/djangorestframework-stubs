@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, TypeAlias, TypeVar, type_check_only
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, Self, TypeAlias, TypeVar, type_check_only
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.base import File
@@ -15,7 +15,7 @@ from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.serializers import BaseSerializer
 from rest_framework.validators import Validator
-from typing_extensions import Self, override
+from typing_extensions import override
 
 class _Empty(Enum):
     sentinel = 0

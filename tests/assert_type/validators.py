@@ -1,9 +1,8 @@
-from typing import Any
+from typing import Any, assert_type
 
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from rest_framework.validators import UniqueValidator, qs_filter
-from typing_extensions import assert_type
 
 # case: qs_filter_preserves_queryset_type
 values_qs: QuerySet[User, dict[str, Any]]

@@ -1,5 +1,6 @@
+from typing import assert_type
+
 from rest_framework.request import Request
-from typing_extensions import assert_type
 
 
 # case: request_querydict
