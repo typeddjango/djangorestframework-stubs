@@ -287,7 +287,7 @@ wheels = [
 
 [[package]]
 name = "django-stubs"
-version = "6.0.7"
+version = "6.0.9"
 source = { git = "https://github.com/typeddjango/django-stubs#5868773c9fa5ba236c2cc263799a02acc67f7c0b" }
 dependencies = [
     { name = "django", version = "5.2.17", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -305,7 +305,7 @@ compatible-mypy = [
 
 [[package]]
 name = "django-stubs-ext"
-version = "6.0.7"
+version = "6.0.9"
 source = { git = "https://github.com/typeddjango/django-stubs?subdirectory=ext#5868773c9fa5ba236c2cc263799a02acc67f7c0b" }
 dependencies = [
     { name = "django", version = "5.2.17", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -328,7 +328,7 @@ wheels = [
 
 [[package]]
 name = "djangorestframework-stubs"
-version = "3.17.1"
+version = "3.18.0"
 source = { editable = "." }
 dependencies = [
     { name = "django-stubs" },
@@ -371,7 +371,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "coreapi", marker = "extra == 'coreapi'", specifier = ">=2.0.0" },
-    { name = "django-stubs", specifier = ">=6.0.7" },
+    { name = "django-stubs", specifier = ">=6.0.9" },
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'compatible-mypy'" },
     { name = "mypy", marker = "extra == 'compatible-mypy'", specifier = ">=1.13,<2.4" },
     { name = "types-markdown", marker = "extra == 'markdown'", specifier = ">=0.1.5" },
