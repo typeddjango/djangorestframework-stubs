@@ -18,6 +18,11 @@ rest_framework.validators.BaseUniqueForValidator.message
 # named keyword parameters for better editor support.
 rest_framework.decorators.action
 
+# `RequestsClient.__init__(*args, **kwargs)` at runtime just delegates to the
+# `requests.Session.__init__(self)` superclass and doesn't actually accept
+# arbitrary arguments.
+rest_framework.test.RequestsClient.__init__
+
 # Migrations are omitted
 rest_framework.authtoken.migrations
 rest_framework.authtoken.migrations.0001_initial

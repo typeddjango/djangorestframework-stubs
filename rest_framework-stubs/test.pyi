@@ -48,8 +48,7 @@ class DjangoTestAdapter(requests.adapters.HTTPAdapter):
     @override
     def close(self) -> None: ...
 
-class RequestsClient(requests.Session):
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
+class RequestsClient(requests.Session): ...
 
 class APIRequestFactory(DjangoRequestFactory):
     renderer_classes_list: Any
