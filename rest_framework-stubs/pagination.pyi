@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import Any, NamedTuple, TypeVar
+from typing import Any, NamedTuple, TypeVar, type_check_only
 
 from django.core.paginator import Page, Paginator
 from django.db.models import Model, QuerySet
@@ -27,10 +27,12 @@ class PageLink(NamedTuple):
     is_active: bool
     is_break: bool
 
+@type_check_only
 class HtmlContext(TypedDict):
     previous_url: str
     next_url: str
 
+@type_check_only
 class HtmlContextWithPageLinks(HtmlContext):
     page_links: list[PageLink]
 

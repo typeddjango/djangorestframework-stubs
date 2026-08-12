@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, Protocol, Self, TypeVar
+from typing import Any, Protocol, Self, TypeVar, type_check_only
 
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
@@ -18,11 +18,13 @@ def get_object_or_404(
     queryset: type[_MT_co] | Manager[_MT_co] | QuerySet[_MT_co], *filter_args: Any, **filter_kwargs: Any
 ) -> _MT_co: ...
 
+@type_check_only
 class UsesQuerySet(Protocol[_MT_co]):
     def get_queryset(self) -> QuerySet[_MT_co]: ...
 
 # Can't just use BaseFilterBackend because there's also things like django_filters.rest_framework.DjangoFilterBackend that are
 # valid options but don't extend it
+@type_check_only
 class BaseFilterProtocol(Protocol[_MT_inv]):
     def filter_queryset(
         self, request: Request, queryset: QuerySet[_MT_inv], view: views.APIView

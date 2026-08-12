@@ -42,17 +42,12 @@ rest_framework.authtoken.models.Token.save
 # Stub-only synthetic types (Protocols, TypeAliases, TypedDicts, base Meta),
 # intentionally not present at runtime. They exist to give better types to
 # users of the library.
-rest_framework.decorators.ViewSetAction
-rest_framework.generics.BaseFilterProtocol
-rest_framework.generics.UsesQuerySet
-rest_framework.pagination.HtmlContext
-rest_framework.pagination.HtmlContextWithPageLinks
+# Most such symbols are marked with `@typing.type_check_only`, but that
+# decorator can't be applied to `TypeAlias` assignments, so `Validator`
+# stays here. `ModelSerializer.Meta` is present at runtime as a subclass
+# hook but stubtest can't reconcile its stub-only class attributes.
 rest_framework.serializers.ModelSerializer.Meta
-rest_framework.settings.DefaultsSettings
-rest_framework.validators.ContextValidator
 rest_framework.validators.Validator
-rest_framework.views.AsView
-rest_framework.views.GenericView
 
 # Model field descriptor mismatches: django-stubs types model fields as their
 # `Field` subclass, but at runtime Django replaces them with

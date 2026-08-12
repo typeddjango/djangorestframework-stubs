@@ -1,5 +1,5 @@
 from collections.abc import Callable, Container, Iterable, MutableMapping
-from typing import Any, Protocol, TypeAlias, TypeVar
+from typing import Any, Protocol, TypeAlias, TypeVar, type_check_only
 
 from django.db.models import Model, Q, QuerySet
 from django_stubs_ext import StrOrPromise
@@ -10,6 +10,7 @@ _Model = TypeVar("_Model", bound=Model)
 _Row = TypeVar("_Row", default=_Model)
 _V = TypeVar("_V", contravariant=True)
 
+@type_check_only
 class ContextValidator(Protocol[_V]):
     requires_context: bool
     def __call__(self, value: _V, context: Field, /) -> None: ...

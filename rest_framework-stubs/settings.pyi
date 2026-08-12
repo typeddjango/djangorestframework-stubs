@@ -1,8 +1,9 @@
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
+from typing import Any, type_check_only
 
 from typing_extensions import TypedDict
 
+@type_check_only
 class DefaultsSettings(TypedDict, total=False):
     DEFAULT_RENDERER_CLASSES: Sequence[str]
     DEFAULT_PARSER_CLASSES: Sequence[str]

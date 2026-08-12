@@ -1,5 +1,5 @@
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any, NoReturn, Protocol, TypeVar
+from typing import Any, NoReturn, Protocol, TypeVar, type_check_only
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -25,6 +25,7 @@ def exception_handler(exc: Exception, context: dict[str, Any]) -> Response | Non
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 
+@type_check_only
 class AsView(Protocol[_View]):
     cls: type[APIView]
     view_class: type[APIView]
@@ -33,6 +34,7 @@ class AsView(Protocol[_View]):
     __call__: _View
 
 # Call signature for view function that's returned by as_view()
+@type_check_only
 class GenericView(Protocol):
     def __call__(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response: ...
 
