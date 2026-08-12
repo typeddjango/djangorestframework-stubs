@@ -1,7 +1,7 @@
 [project]
 name = "djangorestframework-stubs"
 version = "3.18.0"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 description = "PEP-484 stubs for django-rest-framework"
 readme = "README.md"
 license = "MIT"
@@ -12,9 +12,7 @@ maintainers = [
   { name = "Nikita Sobolev", email = "mail@sobolevn.me" },
 ]
 classifiers = [
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -137,6 +135,6 @@ extra-standard-library = ["_typeshed"]
 
 # Pyright configuration
 [tool.pyright]
-pythonVersion = "3.10"
+pythonVersion = "3.11"
 include = ["rest_framework-stubs", "tests"]
 exclude = [".venv", ".mypy_cache", ".pytest_cache", ".idea"]
