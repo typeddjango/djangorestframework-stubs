@@ -1,0 +1,54 @@
+# Real problems in the stubs that should be fixed.
+#
+# Each group has a short TODO explaining what needs to change. Once the
+# corresponding stub is fixed, remove the entry (or the whole group) from
+# this file. Entries that are deliberately ignored belong in `allowlist.txt`.
+
+# TODO: `default_app_config` was removed in Django 3.2 in favour of the
+# `default_auto_field` on `AppConfig`. The stub should drop this attribute.
+rest_framework.authtoken.default_app_config
+
+# TODO: `obtain_auth_token` is a plain `csrf_exempt`-wrapped view function at
+# runtime, but the stub types it as `AsView[GenericView]` (a stub-only
+# synthetic). Retype it as a `Callable[..., HttpResponseBase]` (or similar)
+# once the AsView/GenericView story is settled.
+rest_framework.authtoken.views.obtain_auth_token
+
+# TODO: `@action` signature drift vs. runtime:
+#   - runtime `detail=None`, stub `detail: bool` (should be `bool | None`)
+#   - stub has extra positional-or-keyword params `suffix` and `name` that
+#     runtime only accepts through `**kwargs`; either drop them or make them
+#     keyword-only.
+rest_framework.decorators.action
+
+# TODO: `FileUploadParser.get_encoded_filename` does not exist at runtime.
+# The stub was added speculatively – either remove it or verify against the
+# DRF version being targeted.
+rest_framework.parsers.FileUploadParser.get_encoded_filename
+
+# TODO: `ManyRelatedField` overrides:
+#   - `initial = []` at runtime, but the stub inherits the base `Field.initial`
+#     type. Add an explicit `initial: list[Any]` override.
+#   - `to_representation(self, iterable)` at runtime; the stub inherits the
+#     base signature with parameter `value`. Add an override with the correct
+#     parameter name.
+rest_framework.relations.ManyRelatedField.initial
+rest_framework.relations.ManyRelatedField.to_representation
+
+# TODO: `BaseRouter.register` no longer accepts the long-deprecated `base_name`
+# keyword (removed from runtime). Drop `base_name` from the stub signature.
+rest_framework.routers.BaseRouter.register
+
+# TODO: `APIClient.options(data=None, ...)` at runtime, but the stub types
+# `data: dict[str, str] | str` without a `None` default. Change to
+# `data: dict[str, str] | str | None = ...`.
+rest_framework.test.APIClient.options
+
+# TODO: `RequestsClient.__init__(self, *args, **kwargs)` at runtime; the stub
+# only exposes `requests.Session.__init__(self)`. Add `*args: Any, **kwargs: Any`.
+rest_framework.test.RequestsClient.__init__
+
+# TODO: `APIView.metadata_class` default is the `SimpleMetadata` *class* at
+# runtime, but the stub types it as `str | BaseMetadata | None`. Retype as
+# `type[BaseMetadata] | None` (matching how it's actually used).
+rest_framework.views.APIView.metadata_class
