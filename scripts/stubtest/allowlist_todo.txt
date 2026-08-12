@@ -8,13 +8,6 @@
 # `default_auto_field` on `AppConfig`. The stub should drop this attribute.
 rest_framework.authtoken.default_app_config
 
-# TODO: `@action` signature drift vs. runtime:
-#   - runtime `detail=None`, stub `detail: bool` (should be `bool | None`)
-#   - stub has extra positional-or-keyword params `suffix` and `name` that
-#     runtime only accepts through `**kwargs`; either drop them or make them
-#     keyword-only.
-rest_framework.decorators.action
-
 # TODO: `FileUploadParser.get_encoded_filename` does not exist at runtime.
 # The stub was added speculatively – either remove it or verify against the
 # DRF version being targeted.
@@ -41,8 +34,3 @@ rest_framework.test.APIClient.options
 # TODO: `RequestsClient.__init__(self, *args, **kwargs)` at runtime; the stub
 # only exposes `requests.Session.__init__(self)`. Add `*args: Any, **kwargs: Any`.
 rest_framework.test.RequestsClient.__init__
-
-# TODO: `APIView.metadata_class` default is the `SimpleMetadata` *class* at
-# runtime, but the stub types it as `str | BaseMetadata | None`. Retype as
-# `type[BaseMetadata] | None` (matching how it's actually used).
-rest_framework.views.APIView.metadata_class
