@@ -9,7 +9,7 @@
 
 
 Mypy stubs for [Django REST Framework](https://pypi.org/project/djangorestframework/).
-Supports Python 3.10 and up.
+Supports Python 3.11 and up.
 
 ## Installation
 
