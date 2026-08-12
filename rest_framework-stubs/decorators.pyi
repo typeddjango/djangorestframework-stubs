@@ -1,6 +1,6 @@
 from collections.abc import Callable, Mapping, Sequence
 from http import HTTPMethod
-from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar
+from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar, type_check_only
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -55,6 +55,7 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
+@type_check_only
 class ViewSetAction(Protocol[_View]):
     detail: bool
     url_path: str

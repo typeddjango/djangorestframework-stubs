@@ -8,12 +8,6 @@
 # `default_auto_field` on `AppConfig`. The stub should drop this attribute.
 rest_framework.authtoken.default_app_config
 
-# TODO: `obtain_auth_token` is a plain `csrf_exempt`-wrapped view function at
-# runtime, but the stub types it as `AsView[GenericView]` (a stub-only
-# synthetic). Retype it as a `Callable[..., HttpResponseBase]` (or similar)
-# once the AsView/GenericView story is settled.
-rest_framework.authtoken.views.obtain_auth_token
-
 # TODO: `@action` signature drift vs. runtime:
 #   - runtime `detail=None`, stub `detail: bool` (should be `bool | None`)
 #   - stub has extra positional-or-keyword params `suffix` and `name` that
