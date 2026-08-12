@@ -48,7 +48,8 @@ class DjangoTestAdapter(requests.adapters.HTTPAdapter):
     @override
     def close(self) -> None: ...
 
-class RequestsClient(requests.Session): ...
+class RequestsClient(requests.Session):
+    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
 
 class APIRequestFactory(DjangoRequestFactory):
     renderer_classes_list: Any
@@ -176,7 +177,7 @@ class APIClient(APIRequestFactory, DjangoClient):
     def options(  # type: ignore[override]
         self,
         path: StrOrPromise,
-        data: dict[str, str] | str = ...,
+        data: dict[str, str] | str | None = ...,
         format: str | None = ...,
         content_type: Any | None = ...,
         follow: bool = ...,
