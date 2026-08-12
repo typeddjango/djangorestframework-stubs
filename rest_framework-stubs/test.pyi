@@ -176,7 +176,7 @@ class APIClient(APIRequestFactory, DjangoClient):
     def options(  # type: ignore[override]
         self,
         path: StrOrPromise,
-        data: dict[str, str] | str = ...,
+        data: dict[str, str] | str | None = ...,
         format: str | None = ...,
         content_type: Any | None = ...,
         follow: bool = ...,

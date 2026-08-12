@@ -45,7 +45,7 @@ class APIView(View):
     format_kwarg: Any
     headers: dict[str, str]
     kwargs: Any
-    metadata_class: str | BaseMetadata | None
+    metadata_class: str | type[BaseMetadata] | None
     parser_classes: Sequence[type[BaseParser]]
     permission_classes: Sequence[_PermissionClass]
     renderer_classes: Sequence[type[BaseRenderer]]

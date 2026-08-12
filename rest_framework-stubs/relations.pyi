@@ -174,6 +174,7 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
     html_cutoff_text: str | None
     child_relation: RelatedField
     allow_empty: bool
+    initial: list[Any]
     def __init__(
         self,
         # DISCREPANCY: signature defaults `child_relation=None`, but actually crashes when `None` is provided.
@@ -196,6 +197,8 @@ class ManyRelatedField(Field[Sequence[Any], Sequence[Any], list[Any], Any]):
     @override
     def get_value(self, dictionary: Mapping[Any, Any]) -> list[Any]: ...
     def get_choices(self, cutoff: int | None = ...) -> dict: ...
+    @override
+    def to_representation(self, iterable: Iterable[Any]) -> list[Any]: ...
     @property
     def choices(self) -> dict: ...
     @property

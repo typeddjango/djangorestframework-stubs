@@ -13,5 +13,4 @@ rm -rf .mypy_cache
 stubtest rest_framework \
     --mypy-config-file mypy.ini \
     --ignore-positional-only \
-    --allowlist scripts/stubtest/allowlist.txt \
-    --allowlist scripts/stubtest/allowlist_todo.txt
+    --allowlist scripts/stubtest/allowlist.txt
