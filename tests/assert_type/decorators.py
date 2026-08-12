@@ -56,6 +56,7 @@ class MyView(viewsets.ViewSet):
 # case: method_decorator_http_libary
 MY_VAR: HTTPMethod = HTTPMethod.POST
 
+
 class MyView2(viewsets.ViewSet):
     @action(methods=[HTTPMethod.GET], detail=False)
     def view_func_1(self, request: Request) -> Response: ...
