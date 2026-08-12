@@ -9,17 +9,16 @@
 rest_framework.relations.ManyRelatedField.__init__
 rest_framework.relations.SlugRelatedField.__init__
 
-# `@action(detail=...)` is required at runtime (asserts non-None), so the stub
-# marks `detail: bool` without a default even though the runtime signature is
-# `detail=None`. The stub also promotes `suffix` / `name` from `**kwargs` to
-# named keyword parameters for better editor support.
-rest_framework.decorators.action
-
 # None is used as a placeholder, but not valid in actual usage
 rest_framework.parsers.BaseParser.media_type
 rest_framework.renderers.BaseRenderer.format
 rest_framework.renderers.BaseRenderer.media_type
 rest_framework.validators.BaseUniqueForValidator.message
+# `@action(detail=...)` is required at runtime (asserts non-None), so the stub
+# marks `detail: bool` without a default even though the runtime signature is
+# `detail=None`. The stub also promotes `suffix` / `name` from `**kwargs` to
+# named keyword parameters for better editor support.
+rest_framework.decorators.action
 
 # Migrations are omitted
 rest_framework.authtoken.migrations
