@@ -1,4 +1,4 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypedDict, assert_type, cast
 
 from django.contrib.auth.models import User
@@ -75,6 +75,20 @@ assert_type(value, User | PKOnlyObject | None)
 field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 obj = PKOnlyObject(pk=1)
 assert_type(field.to_representation(obj), str)
+
+# case: many_related_field_get_attribute_returns_iterable
+# `ManyRelatedField.get_attribute()` returns `relationship.all()` at runtime
+# (a `QuerySet`) for related managers. The class-level value type must be
+# `Iterable[Any]` (which `QuerySet` satisfies) rather than only `Sequence[Any]`,
+# so that the value returned by `get_attribute` is compatible with what
+# `to_representation` accepts.
+child_relation = serializers.PrimaryKeyRelatedField[Any](read_only=True)
+many_field = serializers.ManyRelatedField(child_relation=child_relation, read_only=True)
+user_instance = cast("User", object())
+attr = many_field.get_attribute(user_instance)
+assert_type(attr, Iterable[Any] | None)
+groups_qs = user_instance.groups.all()
+assert_type(many_field.to_representation(groups_qs), list[Any])
 
 
 # case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
