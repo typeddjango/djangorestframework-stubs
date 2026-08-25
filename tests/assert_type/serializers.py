@@ -71,6 +71,12 @@ user = cast("User", object())
 value = field.get_attribute(user)
 assert_type(value, User | PKOnlyObject | None)
 
+pk_field_typed = serializers.PrimaryKeyRelatedField(
+    queryset=User.objects.all(),
+    pk_field=serializers.UUIDField(format="hex"),
+)
+assert_type(pk_field_typed.pk_field, serializers.Field | None)
+
 # case: slug_related_field_accepts_pk_object
 field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 obj = PKOnlyObject(pk=1)
