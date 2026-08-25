@@ -1,7 +1,7 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypedDict, assert_type, cast
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.utils.functional import cached_property
 from rest_framework import serializers
 from rest_framework.relations import PKOnlyObject
@@ -81,6 +81,16 @@ assert_type(pk_field_typed.pk_field, serializers.Field | None)
 field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 obj = PKOnlyObject(pk=1)
 assert_type(field.to_representation(obj), str)
+
+# case: many_related_field_value_type_iterable
+child_relation = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+groups_qs = Group.objects.all()
+many_field = serializers.ManyRelatedField(
+    child_relation=child_relation, read_only=True, default=groups_qs, initial=groups_qs
+)
+user = cast("User", object())
+value = many_field.get_attribute(user)
+assert_type(value, Iterable[Any] | None)
 
 
 # case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
