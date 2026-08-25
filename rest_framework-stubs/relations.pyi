@@ -78,7 +78,7 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
 class StringRelatedField(RelatedField[_MT, _MT, str]): ...
 
 class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
-    pk_field: str | None
+    pk_field: Field | None
     def __init__(
         self,
         *,
@@ -99,7 +99,7 @@ class PrimaryKeyRelatedField(RelatedField[_MT, _MT, Any]):
         validators: Sequence[Validator[_MT]] | None = ...,
         error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
-        pk_field: str | Field | None = ...,
+        pk_field: Field | None = ...,
     ) -> None: ...
 
 class HyperlinkedRelatedField(RelatedField[_MT, str, Hyperlink]):
