@@ -168,7 +168,7 @@ class SlugRelatedField(RelatedField[_MT, str, str]):
     @override
     def to_representation(self, obj: _MT | PKOnlyObject) -> str: ...
 
-class ManyRelatedField(Field[Iterable[Any], Iterable[Any], list[Any], Any]):
+class ManyRelatedField(Field[Iterable[Any], Sequence[Any], list[Any], Any]):
     html_cutoff: int | None
     html_cutoff_text: str | None
     child_relation: RelatedField
