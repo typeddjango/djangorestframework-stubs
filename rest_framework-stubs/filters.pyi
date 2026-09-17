@@ -2,6 +2,7 @@ from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypeVar
 
 from django.db.models import Model, QuerySet
+from django_stubs_ext import StrOrPromise
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
@@ -20,8 +21,8 @@ class SearchFilter(BaseFilterBackend):
     search_param: str
     template: str
     lookup_prefixes: dict[str, str]
-    search_title: str
-    search_description: str
+    search_title: StrOrPromise
+    search_description: StrOrPromise
     default_lookup: str
     def get_search_fields(self, view: APIView, request: Request) -> Sequence[str] | None: ...
     def get_search_terms(self, request: Request) -> list[str]: ...
@@ -34,8 +35,8 @@ class UnaccentedSearchFilter(SearchFilter): ...
 class OrderingFilter(BaseFilterBackend):
     ordering_param: str
     ordering_fields: Sequence[str] | None
-    ordering_title: str
-    ordering_description: str
+    ordering_title: StrOrPromise
+    ordering_description: StrOrPromise
     template: str
     def get_ordering(self, request: Request, queryset: QuerySet, view: APIView) -> Sequence[str] | None: ...
     def get_default_ordering(self, view: APIView) -> Sequence[str] | None: ...
