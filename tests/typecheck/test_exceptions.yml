@@ -18,5 +18,22 @@
     APIException()
     APIException(None, None)
     APIException(1)  # E: Argument 1 to "APIException" has incompatible type "int"; expected "_APIExceptionInput"  [arg-type]
-    APIException({'a': 1})  # E: Dict entry 0 has incompatible type "str": "int"; expected "str": "_StrPromise | Sequence[_APIExceptionInput] | Mapping[str, _APIExceptionInput] | None"  [dict-item]
-    APIException({'a': ['test', 1]})  # E: List item 1 has incompatible type "int"; expected "_StrPromise | Sequence[_APIExceptionInput] | Mapping[str, _APIExceptionInput] | None"  [list-item]
+    APIException({'a': 1})  # E: Argument 1 to "APIException" has incompatible type "dict[str, int]"; expected "_APIExceptionInput"  [arg-type]
+    APIException({'a': ['test', 1]})  # E: Argument 1 to "APIException" has incompatible type "dict[str, list[str | int]]"; expected "_APIExceptionInput"  [arg-type]
+
+- case: test_exception_input_index_keyed
+  main: |
+    from rest_framework.exceptions import ErrorDetail, ValidationError
+
+    # DRF itself raises `ValidationError` with list-index keys, e.g. `ListField.run_child_validation`
+    # and, since DRF 3.18, `ListSerializer.to_internal_value`.
+    ValidationError({0: ['A valid integer is required.']})
+    ValidationError({0: {'field': ErrorDetail('required', code='required')}})
+
+    index_errors: dict[int, list[str]] = {0: ['A valid integer is required.']}
+    ValidationError(index_errors)
+
+    field_errors: dict[str, list[str]] = {'field': ['A valid integer is required.']}
+    ValidationError(field_errors)
+
+    ValidationError({0: 1})  # E: Argument 1 to "ValidationError" has incompatible type "dict[int, int]"; expected "_APIExceptionInput"  [arg-type]
