@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Sequence
-from typing import Any, Protocol, TypeAlias
+from typing import Any, ClassVar, Protocol, TypeAlias
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -58,8 +58,8 @@ class IsAdminUser(BasePermission): ...
 class IsAuthenticatedOrReadOnly(BasePermission): ...
 
 class DjangoModelPermissions(BasePermission):
-    perms_map: dict[str, list[str]]
-    authenticated_users_only: bool
+    perms_map: ClassVar[dict[str, list[str]]]
+    authenticated_users_only: ClassVar[bool]
     def get_required_permissions(self, method: str, model_cls: type[Model]) -> list[str]: ...
     def _queryset(self, view: APIView) -> QuerySet: ...
 
