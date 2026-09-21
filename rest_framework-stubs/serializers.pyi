@@ -186,8 +186,11 @@ class ListSerializer(BaseSerializer[_IN]):
     @property
     @override
     def data(self) -> ReturnList: ...
-    # Since DRF 3.18 `to_internal_value` collects child errors in a list-index-keyed dict, so `.errors`
-    # is a `ReturnDict` for that shape (and for non-field errors) and a `ReturnList` otherwise.
+    # `ReturnList` only for the empty, no-errors case, since `_errors` defaults to `[]` here.
+    # Every error path in DRF 3.18 produces a `ReturnDict`: child errors are keyed by list index and
+    # list-level errors by `NON_FIELD_ERRORS_KEY`. A non-empty `ReturnList` is still reachable on DRF
+    # >= 3.19 with `LIST_SERIALIZER_ERRORS_AS_DICT = False` (deprecated, removed in DRF 3.20), which
+    # restores the positional list format, and from subclasses raising list-shaped details.
     @property
     @override
     def errors(self) -> ReturnDict | ReturnList: ...

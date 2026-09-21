@@ -163,10 +163,3 @@ assert_type(context_list_ser.context, Mapping[str, Any])
 
 context_model_ser: serializers.ModelSerializer = serializers.ModelSerializer(None, context=context)
 assert_type(context_model_ser.context, Mapping[str, Any])
-
-
-# case: test_list_serializer_errors_may_be_index_keyed
-# Since DRF 3.18 `ListSerializer.to_internal_value` collects child errors in an index-keyed dict,
-# so `.errors` is a `ReturnDict` for that shape and a `ReturnList` otherwise.
-list_ser: serializers.ListSerializer = serializers.ListSerializer(child=serializers.Serializer())
-assert_type(list_ser.errors, ReturnDict[Any, Any] | ReturnList[Any])

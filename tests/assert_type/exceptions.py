@@ -1,3 +1,4 @@
+from collections.abc import Mapping, Sequence
 from typing import assert_type
 
 from django.utils.translation import gettext_lazy as _
@@ -25,18 +26,40 @@ class MyException3(exceptions.APIException):
     default_code = "ok"
 
 
-# case: test_validation_error_detail_is_index_or_field_keyed
+# case: test_exception_input_accepts_every_member_of_the_union
+# `_Detail`
+exceptions.APIException(exceptions.ErrorDetail("with code", code="brown"))
+exceptions.APIException([exceptions.ErrorDetail("in a list")])
+exceptions.APIException({"field": exceptions.ErrorDetail("field keyed")})
+exceptions.APIException({0: exceptions.ErrorDetail("index keyed")})
+# `StrOrPromise`
+exceptions.APIException("I am just a message", code="msg")
+exceptions.APIException(_("translated"))
+# `Sequence[_APIExceptionInput]`
+exceptions.APIException(["value", _("translated"), {"nested": "test"}])
+exceptions.APIException(("also", "tuple", exceptions.ErrorDetail("value")))
+# `Mapping[str, _APIExceptionInput]` / `Mapping[int, _APIExceptionInput]`
+field_errors: Mapping[str, Sequence[str]] = {"field": ["A valid integer is required."]}
+exceptions.APIException(field_errors)
+index_errors: Mapping[int, Sequence[str]] = {0: ["A valid integer is required."]}
+exceptions.APIException(index_errors)
+# `None`
+exceptions.APIException(None, None)
+exceptions.APIException()
+
+
+# case: test_exception_detail_round_trips_as_input
+def round_trip(exc: exceptions.APIException) -> None:
+    exceptions.APIException(detail=exc.detail, code="123")
+    exceptions.APIException(detail=[exc.detail], code="123")
+    exceptions.APIException(detail={"nested": exc.detail}, code="123")
+    exceptions.APIException(detail={0: exc.detail}, code="123")
+
+
+# case: test_validation_error_detail_keys_may_be_field_names_or_list_indexes
 def handle_validation_error(exc: exceptions.ValidationError) -> None:
-    # DRF keys error mappings by list index in `ListField.run_child_validation` and, since
-    # DRF 3.18, in `ListSerializer.to_internal_value`, so keys are not necessarily field names.
+    # `ListField.run_child_validation` and, since DRF 3.18, `ListSerializer.to_internal_value`
+    # key their error mappings by list index rather than by field name.
     if isinstance(exc.detail, dict):
         for key in exc.detail:
             assert_type(key, str | int)
-
-
-# case: test_validation_error_accepts_index_keyed_mapping
-index_errors: dict[int, list[str]] = {0: ["A valid integer is required."]}
-exceptions.ValidationError(index_errors)
-
-field_errors: dict[str, list[str]] = {"field": ["A valid integer is required."]}
-exceptions.ValidationError(field_errors)

@@ -11,16 +11,14 @@ class ErrorDetail(str):
     code: str | None
     def __new__(cls, string: str, code: str | None = ...) -> Self: ...
 
-# DRF keys error mappings by list index, not just by field name: `ListField.run_child_validation`
-# and (since DRF 3.18) `ListSerializer.to_internal_value` both raise `ValidationError({index: detail})`.
-# `_get_error_details` passes mapping keys through untouched, so those `int` keys reach `.detail`.
-_DetailKey: TypeAlias = str | int
-_Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[_DetailKey, _Detail]
+# DRF keys error mappings either by field name or by list index, never intermixed within one mapping:
+# `Serializer.to_internal_value` and `DictField.run_child_validation` build `str`-keyed dicts, while
+# `ListField.run_child_validation` and (since DRF 3.18) `ListSerializer.to_internal_value` build
+# `int`-keyed ones. `_get_error_details` passes mapping keys through untouched, so both reach `.detail`.
+_Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[str, _Detail] | dict[int, _Detail]
 # NB! _APIExceptionInput doesn't technically handle Sequence/Mapping, but only list/tuple/dict.
 # But since list/tuple are non-covariant types, we run into issues with union type compatibility for input params.
 # So use the more relaxed Sequence/Mapping for now.
-# NB! Mapping is invariant in its key type, so a single `Mapping[_DetailKey, ...]` would reject both
-# `dict[str, ...]` and `dict[int, ...]`. Spell the two key types out as separate union members instead.
 _APIExceptionInput: TypeAlias = (
     _Detail
     | StrOrPromise
@@ -29,13 +27,15 @@ _APIExceptionInput: TypeAlias = (
     | Mapping[int, _APIExceptionInput]
     | None
 )
-_ErrorCodes: TypeAlias = str | list[_ErrorCodes] | dict[_DetailKey, _ErrorCodes] | None
+_ErrorCodes: TypeAlias = str | list[_ErrorCodes] | dict[str, _ErrorCodes] | dict[int, _ErrorCodes] | None
 
 class _FullDetailDict(TypedDict):
     message: ErrorDetail
     code: str | None
 
-_ErrorFullDetails: TypeAlias = _FullDetailDict | list[_ErrorFullDetails] | dict[_DetailKey, _ErrorFullDetails]
+_ErrorFullDetails: TypeAlias = (
+    _FullDetailDict | list[_ErrorFullDetails] | dict[str, _ErrorFullDetails] | dict[int, _ErrorFullDetails]
+)
 
 def _get_error_details(data: _APIExceptionInput, default_code: str | None = ...) -> _Detail: ...
 def _get_codes(detail: _Detail) -> _ErrorCodes: ...
@@ -53,7 +53,7 @@ class APIException(Exception):
 
 class ValidationError(APIException):
     # ValidationError wraps `detail` in a list if it's not already a list/dict.
-    detail: list[_Detail] | dict[_DetailKey, _Detail]
+    detail: list[_Detail] | dict[str, _Detail] | dict[int, _Detail]
 
 class ParseError(APIException): ...
 class AuthenticationFailed(APIException): ...
