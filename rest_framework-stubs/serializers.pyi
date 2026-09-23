@@ -186,9 +186,14 @@ class ListSerializer(BaseSerializer[_IN]):
     @property
     @override
     def data(self) -> ReturnList: ...
+    # `ReturnList` only for the empty, no-errors case, since `_errors` defaults to `[]` here.
+    # Every error path in DRF 3.18 produces a `ReturnDict`: child errors are keyed by list index and
+    # list-level errors by `NON_FIELD_ERRORS_KEY`. A non-empty `ReturnList` is still reachable on DRF
+    # >= 3.19 with `LIST_SERIALIZER_ERRORS_AS_DICT = False` (deprecated, removed in DRF 3.20), which
+    # restores the positional list format, and from subclasses raising list-shaped details.
     @property
     @override
-    def errors(self) -> ReturnList: ...
+    def errors(self) -> ReturnDict | ReturnList: ...
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
