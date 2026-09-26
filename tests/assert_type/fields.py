@@ -1,4 +1,3 @@
-from collections.abc import Mapping
 from typing import Any, assert_type
 
 from rest_framework import serializers
@@ -9,8 +8,8 @@ field = serializers.CharField()
 result = field.get_attribute(object())
 assert_type(result, str | None)
 
-# case: field_context_is_mapping
-assert_type(field.context, Mapping[str, Any])
+# case: field_context_is_default_context_type
+assert_type(field.context, serializers._ContextType[Any])
 
 # case: float_field_args_fields
 FloatField(min_value=1, max_value=1.0)
