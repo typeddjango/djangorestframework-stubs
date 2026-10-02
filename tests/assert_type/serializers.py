@@ -54,6 +54,12 @@ class TestSerializer2(serializers.Serializer):
         assert_type(callable(*args), dict[str, str])
 
 
+# case: test_serializer_data_and_errors_are_parameterized
+def check_serializer_return_dicts(serializer: serializers.Serializer) -> None:
+    assert_type(serializer.data, ReturnDict[str, Any])
+    assert_type(serializer.errors, ReturnDict[str, Any])
+
+
 # case: test_model_serializer_with_customized_serializer_field_mapping
 class TestSerializer3(serializers.ModelSerializer):
     serializer_related_field = serializers.PrimaryKeyRelatedField
