@@ -47,14 +47,12 @@ rest_framework.authtoken.models.TokenProxy@AnnotatedWith
 # .save() will be different soon:
 rest_framework.authtoken.models.Token.save
 
-# Stub-only synthetic types (Protocols, TypeAliases, TypedDicts, base Meta),
+# Stub-only synthetic types (Protocols, TypeAliases, TypedDicts),
 # intentionally not present at runtime. They exist to give better types to
 # users of the library.
 # Most such symbols are marked with `@typing.type_check_only`, but that
 # decorator can't be applied to `TypeAlias` assignments, so `Validator`
-# stays here. `ModelSerializer.Meta` is present at runtime as a subclass
-# hook but stubtest can't reconcile its stub-only class attributes.
-rest_framework.serializers.ModelSerializer.Meta
+# stays here.
 rest_framework.validators.Validator
 
 # Model field descriptor mismatches: django-stubs types model fields as their

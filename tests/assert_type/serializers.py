@@ -1,4 +1,4 @@
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Iterable, Mapping
 from typing import Any, TypedDict, assert_type, cast
 
 from django.contrib.auth.models import Group, User
@@ -24,26 +24,17 @@ class SerializerC(SerializerA, SerializerB):
     pass
 
 
-# case: model_serializer_meta_attributes
-assert_type(serializers.ModelSerializer.Meta.model, type[serializers._MT])  # type: ignore[valid-type]
-assert_type(serializers.ModelSerializer.Meta.fields, Sequence[str])
-assert_type(serializers.ModelSerializer.Meta.read_only_fields, Sequence[str] | None)
-assert_type(serializers.ModelSerializer.Meta.exclude, Sequence[str] | None)
-assert_type(serializers.ModelSerializer.Meta.depth, int | None)
-assert_type(serializers.ModelSerializer.Meta.extra_kwargs, dict[str, dict[str, Any]])
-
-
-# case: test_model_serializer_passes_check
-class TestSerializer(serializers.ModelSerializer):
+# case: test_model_serializer_meta_is_declared_by_subclass
+# `ModelSerializer` has no `Meta` at runtime; each subclass declares its own,
+# so the subclass's attribute types are the ones that apply.
+class TestSerializer(serializers.ModelSerializer[User]):
     class Meta:
         model = User
+        fields = ("id", "username")
 
 
-def is_meta_model(serializer: type[serializers.ModelSerializer]) -> bool:
-    return bool(serializer.Meta.model)
-
-
-assert_type(is_meta_model(TestSerializer), bool)
+assert_type(TestSerializer.Meta.model, type[User])
+assert_type(TestSerializer.Meta.fields, tuple[str, str])
 
 
 # case: test_return_dict_reduce

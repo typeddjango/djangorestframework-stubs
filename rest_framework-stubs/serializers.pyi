@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, NoReturn, TypeVar
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -204,14 +204,6 @@ class ModelSerializer(Serializer[_MT]):
     serializer_url_field: ClassVar[type[RelatedField]]
     serializer_choice_field: ClassVar[type[Field]]
     url_field_name: ClassVar[str | None]
-
-    class Meta:
-        model: ClassVar[type[_MT]]  # type: ignore[valid-type]
-        fields: ClassVar[Sequence[str] | Literal["__all__"]]
-        read_only_fields: ClassVar[Sequence[str] | None]
-        exclude: ClassVar[Sequence[str] | None]
-        depth: ClassVar[int | None]
-        extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
 
     def __init__(
         self,
