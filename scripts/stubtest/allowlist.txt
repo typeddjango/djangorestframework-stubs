@@ -44,6 +44,12 @@ rest_framework.fields.TimeField.__init__
 rest_framework.authtoken.models.Token@AnnotatedWith
 rest_framework.authtoken.models.TokenProxy@AnnotatedWith
 
+# The django-stubs mypy plugin synthesizes a `ManagerFrom<QuerySet>` class and a
+# matching `as_manager()` classmethod for every `QuerySet` subclass. Neither
+# exists at runtime; `TokenProxy.objects` is a plain `Manager` there.
+rest_framework.authtoken.models.ManagerFromTokenProxyQuerySet
+rest_framework.authtoken.models.TokenProxyQuerySet.as_manager
+
 # .save() will be different soon:
 rest_framework.authtoken.models.Token.save
 
