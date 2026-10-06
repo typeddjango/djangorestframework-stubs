@@ -108,7 +108,7 @@
 
 -   case: DictField_default
     main: |
-        from rest_framework.fields import DictField, JSONField
+        from rest_framework.fields import DictField
 
         DictField(allow_null=True, default=None)
         DictField(default={})
@@ -116,11 +116,43 @@
         DictField(default=lambda: {'a': [], 'b': 'str'})
         DictField(default=[])  # E: Argument "default" to "DictField" has incompatible type "list[Never]"; expected "dict[Any, Any] | Callable[[], dict[Any, Any]] | _Empty | None"  [arg-type]
 
+-   case: JSONField_default
+    main: |
+        from rest_framework.fields import JSONField
+
         JSONField(allow_null=True, default=None)
+        JSONField(default=1)
+        JSONField(default=1.5)
+        JSONField(default=True)
+        JSONField(default='str')
         JSONField(default={})
         JSONField(default={'a': 1, 'b': 2})
+        JSONField(default=[])
+        JSONField(default=[1, 2, 'three'])
+        JSONField(default=(1, 2, 3))
+        JSONField(default=list)
+        JSONField(default=dict)
+        JSONField(default=lambda: [])
         JSONField(default=lambda: {'a': [], 'b': 'str'})
-        JSONField(default=[])  # E: Argument "default" to "JSONField" has incompatible type "list[Never]"; expected "Mapping[Any, Any] | Callable[[], Mapping[Any, Any]] | _Empty | None"  [arg-type]
+        JSONField(default=lambda: 123)
+
+        JSONField(initial=1)
+        JSONField(initial=1.5)
+        JSONField(initial=True)
+        JSONField(initial='str')
+        JSONField(initial={})
+        JSONField(initial={'a': 1, 'b': 2})
+        JSONField(initial=[])
+        JSONField(initial=[1, 2, 'three'])
+        JSONField(initial=(1, 2, 3))
+        JSONField(initial=list)
+        JSONField(initial=dict)
+        JSONField(initial=lambda: [])
+        JSONField(initial=lambda: {'a': [], 'b': 'str'})
+        JSONField(initial=lambda: 123)
+
+        JSONField(default=object())  # E: Argument "default" to "JSONField" has incompatible type "object"; expected "Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None | Callable[[], Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None] | _Empty | None"  [arg-type]
+        JSONField(initial=object())  # E: Argument "initial" to "JSONField" has incompatible type "object"; expected "Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None | Callable[[], Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None] | _Empty | None"  [arg-type]
 
 -   case: ListField_default
     main: |
