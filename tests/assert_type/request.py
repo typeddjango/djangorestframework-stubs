@@ -9,6 +9,6 @@ def some_view(request: Request) -> None:
     assert_type(request.POST["field"], str)
 
 
-# case: is_form_media_type_accepts_none
-assert_type(is_form_media_type(None), bool)
+# case: is_form_media_type
+assert_type(is_form_media_type("application/json"), bool)
 assert_type(MAX_MEDIA_TYPE_LENGTH, int)
