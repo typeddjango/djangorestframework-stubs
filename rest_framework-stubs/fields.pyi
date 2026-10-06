@@ -681,6 +681,8 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
 class HStoreField(DictField):
     child: CharField
 
+_JSONValue: TypeAlias = Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None
+
 class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
     binary: bool
     encoder: type[JSONEncoder] | None
@@ -691,8 +693,8 @@ class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | li
         read_only: bool = False,
         write_only: bool = False,
         required: bool | None = None,
-        default: _DefaultInitial[Mapping[Any, Any]] = ...,
-        initial: _DefaultInitial[Mapping[Any, Any]] = ...,
+        default: _DefaultInitial[_JSONValue] = ...,
+        initial: _DefaultInitial[_JSONValue] = ...,
         source: str | None = None,
         label: StrOrPromise | None = None,
         help_text: StrOrPromise | None = None,
