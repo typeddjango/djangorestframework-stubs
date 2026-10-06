@@ -5,6 +5,7 @@ from rest_framework.parsers import BaseParser
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.settings import api_settings
+from rest_framework.utils.mediatypes import _MediaType
 
 class BaseContentNegotiation:
     def select_parser(self, request: Request, parsers: Iterable[BaseParser]) -> BaseParser | None: ...
@@ -14,5 +15,9 @@ class BaseContentNegotiation:
 
 class DefaultContentNegotiation(BaseContentNegotiation):
     settings = api_settings
+    max_accept_header_length: int
+    max_accept_tokens: int
+    max_media_type_length: int
     def filter_renderers(self, renderers: Iterable[BaseRenderer], format: str) -> list[BaseRenderer]: ...
     def get_accept_list(self, request: Request) -> list[str]: ...
+    def _get_parsed_accept_list(self, request: Request) -> list[_MediaType]: ...
