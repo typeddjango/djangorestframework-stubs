@@ -1,58 +1,51 @@
 # General
 
-Provides Python type stubs for Django REST Framework (DRF)
-for type-checkers such as mypy, pyright, ty.
-Stubs should model *runtime* behavior of DRF as closely as possible.
+Python type stubs for Django REST Framework (DRF) for mypy, pyright, ty, etc.
+Match DRF runtime behavior.
 
-- `rest_framework-stubs/**.pyi` - type stub files corresponding to DRF modules
-- `mypy_drf_plugin/` - minimal plugin for mypy; adds fallback to `Serializer.Meta` inner class fields.
+- `rest_framework-stubs/**.pyi` stubs
+- `mypy_drf_plugin/`: plugin for mypy that affects `Serializer.Meta`
 
 ## Pull requests
 
 Keep descriptions concise.
-Link upstream implementation or API documentation supporting the change when possible.
+Link supporting upstream code or API docs when possible.
 
 ## Finding upstream source
 
-When editing stubs, ALWAYS verify against actual implementation source.
-Run `uv sync` and then see sources at `.venv/lib/python*/site-packages/`:
-
-- `rest_framework/` - DRF runtime
-- `django/` - Django runtime
-- `django-stubs/` - `.pyi` files for Django
+ALWAYS VERIFY changes against upstream implementation source.
+Run `uv sync`, then sources are in `.venv/lib/python*/site-packages/{rest_framework,django,django-stubs}`
 
 ## Docs
 
-Consult upstream docs for examples or when intent is not perfectly clear from source.
-To access, clone repos into `_local/` if not already present:
+Consult upstream docs for examples or when intent is not perfectly clear.
+Clone missing repositories into `_local/`:
 
 - DRF `git clone -q --depth=1 https://github.com/encode/django-rest-framework _local/drf`
 - Django `git clone -q --depth=1 https://github.com/django/django _local/django`
-- Python type system details - verify for complex typing constructs:
+- Typing specification - for complex type constructs:
   `git clone -q --depth=1 https://github.com/python/typing _local/typing`
 
 ## Tests
 
-For *basic* stubs changes: DO create a test but don't commit it.
+Prefer extending existing tests.
+Create temporary tests for basic stub changes.
+Commit tests only for complex typing:
+- Generics, decorators, protocols, overloads
+- Fixing nontrivial bugs
+- django-stubs integration
 
-ONLY commit tests for complex cases:
-- Generics, decorators, protocols, `@overload`
-- When fixing nontrivial bugs
-- Testing integration with django-stubs
+Run `uv run mypy tests && uv run pytest`
 
-Before adding a test, check if an existing related test can be improved.
-
-Run with: `uv run mypy tests && uv run pytest`
-
-Respectively:
-- `tests/assert_type/*.py`: Preferred. Plain Python files scanned with type checker, must produce no type errors.
-- `tests/typecheck/*.yml`: Slower mypy-specific pytest tests - ONLY if above is insufficient.
-  e.g. ensure specific errors are raised or test plugin logic.
+- `tests/assert_type/*.py`: Preferred; must type-check without errors.
+- `tests/typecheck/*.yml`: Use only when plain Python tests are insufficient,
+  e.g. expected diagnostics or plugin behavior.
 
 ## Validation
 
-Stubtest `uv run scripts/stubtest.sh` compares stubs to symbols available at Python runtime.
-ONLY add exclusions when stubtest inference is wrong, with explaining comment: `scripts/stubtest/allowlist.txt`
+`uv run scripts/stubtest.sh` compares stubs with runtime symbols.
+When stubtest is wrong, allowlist with a comment explaining why:
+`scripts/stubtest/allowlist.txt`
 
-Pre-commit hooks run Ruff formatter and linter.
-Install before committing: `PRE_COMMIT_USE_UV=1 uv run pre-commit install`
+Before committing, install Ruff format/lint hooks:
+`PRE_COMMIT_USE_UV=1 uv run pre-commit install`
