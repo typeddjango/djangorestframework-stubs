@@ -15,3 +15,8 @@ assert_type(field.context, Mapping[str, Any])
 # case: float_field_args_fields
 FloatField(min_value=1, max_value=1.0)
 FloatField(min_value=1.2, max_value=1)
+
+# case: field_error_messages_accepts_mapping
+error_messages: Mapping[str, str] = {"required": "Required."}
+serializers.CharField(error_messages=error_messages)
+serializers.IntegerField(error_messages=error_messages)
