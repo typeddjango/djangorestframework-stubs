@@ -2,7 +2,6 @@ from typing import Any, ClassVar, Self
 
 from django.db import models
 from django.db.models.manager import Manager
-from typing_extensions import override
 
 class Token(models.Model):
     key: models.CharField
@@ -12,9 +11,7 @@ class Token(models.Model):
     @classmethod
     def generate_key(cls) -> str: ...
 
-class TokenProxyQuerySet(models.QuerySet["TokenProxy"]):
-    @override
-    def delete(self) -> tuple[int, dict[str, int]]: ...
+class TokenProxyQuerySet(models.QuerySet["TokenProxy"]): ...
 
 class TokenProxy(Token):
     # This is how drf defines this:
