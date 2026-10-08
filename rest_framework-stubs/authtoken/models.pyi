@@ -20,5 +20,3 @@ class TokenProxy(Token):
     # This is how drf defines this:
     @property  # type: ignore[no-redef]
     def pk(self) -> Any: ...  # type: ignore[override]
-    @override
-    def delete(self, using: Any = ..., keep_parents: bool = ...) -> tuple[int, dict[str, int]]: ...
