@@ -1,6 +1,7 @@
 from collections.abc import Mapping, Sequence
 from typing import Any, Self, TypeAlias
 
+from django.forms.utils import ErrorList
 from django.http import HttpRequest, JsonResponse
 from django_stubs_ext import StrOrPromise
 from rest_framework.renderers import BaseRenderer
@@ -19,9 +20,11 @@ _Detail: TypeAlias = ErrorDetail | list[_Detail] | dict[str, _Detail] | dict[int
 # NB! _APIExceptionInput doesn't technically handle Sequence/Mapping, but only list/tuple/dict.
 # But since list/tuple are non-covariant types, we run into issues with union type compatibility for input params.
 # So use the more relaxed Sequence/Mapping for now.
+# ErrorList stores Django ValidationErrors, but iteration exposes their messages.
 _APIExceptionInput: TypeAlias = (
     _Detail
     | StrOrPromise
+    | ErrorList
     | Sequence[_APIExceptionInput]
     | Mapping[str, _APIExceptionInput]
     | Mapping[int, _APIExceptionInput]
