@@ -1,0 +1,2 @@
+# Internal main/model/setup_mypy interfaces reviewed at this revision.
+mypy-primer @ git+https://github.com/hauntsaninja/mypy_primer@0bb419028b53bceb57c136094e7a9df1444e7241

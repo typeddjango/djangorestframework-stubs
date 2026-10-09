@@ -1,0 +1,110 @@
+name: mypy_primer
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mypy-primer-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: "3.12"
+            selector: lidotiku
+          - python: "3.13"
+            selector: sentry|django-polymorphic|djangorestframework-dataclasses|django-seriously
+          - python: "3.14"
+            selector: cookiecutter-django
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_HEAD: ${{ github.event.pull_request.head.sha }}
+      PR_BASE: ${{ github.event.pull_request.base.sha }}
+      PYTHON_VERSION: ${{ matrix.python }}
+      PROJECT_SELECTOR: ${{ matrix.selector }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          path: rest_framework-stubs_to_test
+          persist-credentials: false
+      - name: Record comparison revisions
+        run: |
+          mkdir -p primer-artifacts
+          cd rest_framework-stubs_to_test
+          merge_base=$(git merge-base HEAD "$PR_BASE")
+          git worktree add ../rest_framework-stubs_base "$merge_base"
+          export TESTED_MERGE=$(git rev-parse HEAD)
+          export TESTED_BASE="$merge_base"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          keys = ["PR_NUMBER", "PR_HEAD", "PR_BASE", "TESTED_MERGE", "TESTED_BASE", "GITHUB_RUN_ID", "PYTHON_VERSION"]
+          data = {key: os.environ[key] for key in keys}
+          Path("../primer-artifacts/metadata.json").write_text(json.dumps(data))
+          print(json.dumps(data, indent=2))
+          PY
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install native consumer dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
+      - name: Install pinned primer and resolve mypy
+        run: |
+          uv venv --python "$PYTHON_VERSION" primer-venv
+          uv pip install --python primer-venv/bin/python -r rest_framework-stubs_to_test/scripts/mypy_primer_requirements.txt
+          python - <<'PY'
+          import os, re, subprocess
+          from pathlib import Path
+          result = subprocess.check_output(
+              ["uv", "tree", "--locked", "--package=mypy", "--depth=0", "-q"],
+              cwd="rest_framework-stubs_to_test", text=True,
+          ).strip()
+          match = re.fullmatch(r"mypy v(\d+\.\d+\.\d+)", result)
+          if not match:
+              raise SystemExit(f"Unexpected locked mypy version: {result!r}")
+          with open(os.environ["GITHUB_ENV"], "a") as env:
+              env.write(f"MYPY_VERSION={match[1]}\n")
+          Path("primer-artifacts/versions.txt").write_text(
+              subprocess.check_output(["primer-venv/bin/python", "--version"], text=True)
+              + result + "\n" + Path("rest_framework-stubs_to_test/scripts/mypy_primer_requirements.txt").read_text()
+          )
+          PY
+      - name: Compare stubs and plugins
+        run: |
+          set +e
+          primer-venv/bin/python rest_framework-stubs_to_test/scripts/run_mypy_primer.py \
+            --new "$MYPY_VERSION" --old "$MYPY_VERSION" \
+            --known-dependency-selector djangorestframework-stubs \
+            --project-selector "$PROJECT_SELECTOR" \
+            --old-prepend-path rest_framework-stubs_base \
+            --new-prepend-path rest_framework-stubs_to_test \
+            --base-dir primer-work --num-shards 1 --shard-index 0 \
+            --output concise --debug -j 2 \
+            > primer-artifacts/comparison.txt 2> primer-artifacts/diagnostics.log
+          status=$?
+          set -e
+          printf '%s\n' "$status" > primer-artifacts/exit-code.txt
+          cat primer-artifacts/comparison.txt
+          cat primer-artifacts/diagnostics.log
+          case "$status" in
+            0|1) exit 0 ;;
+            *) exit "$status" ;;
+          esac
+      - name: Upload comparison and failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: mypy-primer-${{ matrix.python }}
+          path: primer-artifacts/
+          if-no-files-found: warn
+          overwrite: true
+          retention-days: 14
