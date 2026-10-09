@@ -77,33 +77,63 @@ groups because their supported versions do not overlap:
 | 3.13 | Sentry, django-polymorphic, djangorestframework-dataclasses, django-seriously |
 | 3.14 | Cookiecutter Django (a generated project with DRF enabled) |
 
-To compare two local checkout roots, install the native dependencies (`libpq-dev`, `libgdal-dev`,
-and `libgeos-dev` on Debian/Ubuntu), then run the appropriate group. For example:
+Run from this repository's root on Linux with [uv](https://docs.astral.sh/uv/).
+On Debian/Ubuntu, first install the native consumer dependencies:
 
 ```bash
-uv venv --python 3.13 _local/primer-venv
-uv pip install --python _local/primer-venv/bin/python -r scripts/mypy_primer_requirements.txt
-uv tree --locked --package=mypy --depth=0 -q
-# Use the exact version printed above for both --new and --old (currently 2.4.0).
-_local/primer-venv/bin/python scripts/run_mypy_primer.py \
-  --new 2.4.0 --old 2.4.0 \
+sudo apt-get update
+sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
+```
+
+Create a baseline worktree at the merge base with the target branch (replace `origin/master`
+if targeting another branch). Skip this step when comparing an existing checkout:
+
+```bash
+git fetch origin master
+git worktree add --detach ../djangorestframework-stubs-base "$(git merge-base HEAD origin/master)"
+```
+
+The non-default `primer` dependency group in `pyproject.toml` pins the runner; `uv.lock` also
+locks its transitive dependencies. `uv run --only-group primer` installs only this group, not
+the package or default development dependencies. Use a separate runner environment per Python
+group so concurrent runs cannot overwrite each other's interpreter or the development environment.
+Resolve the checker version from this checkout's lockfile, then run the Python 3.13 group:
+
+```bash
+MYPY_VERSION=$(uv tree --locked --package=mypy --depth=0 -q)
+MYPY_VERSION=${MYPY_VERSION#mypy v}
+UV_PROJECT_ENVIRONMENT=_local/primer-runner-313 \
+  uv run --locked --only-group primer --python 3.13 python scripts/run_mypy_primer.py \
+  --new "$MYPY_VERSION" --old "$MYPY_VERSION" \
   --known-dependency-selector djangorestframework-stubs \
   --project-selector 'sentry|django-polymorphic|djangorestframework-dataclasses|django-seriously' \
   --old-prepend-path ../djangorestframework-stubs-base \
   --new-prepend-path . \
-  --base-dir _local/primer-work --output concise --debug
+  --base-dir _local/primer-work-313 --output concise --debug -j 2
 ```
 
+For Lidotiku, use `--python 3.12`, `--project-selector lidotiku`,
+`UV_PROJECT_ENVIRONMENT=_local/primer-runner-312`, and `--base-dir _local/primer-work-312`;
+for Cookiecutter, use `--python 3.14`, `--project-selector cookiecutter-django`,
+`UV_PROJECT_ENVIRONMENT=_local/primer-runner-314`, and `--base-dir _local/primer-work-314`.
+For a quick check, select only `djangorestframework-dataclasses` on Python 3.13.
+For an identical-checkout smoke run, use `--old-prepend-path . --new-prepend-path .`.
+The new path includes uncommitted source changes; package dependency metadata is not compared.
+
 Exit codes: `0` means identical diagnostics, `1` means differences, and `70` means an operational
-failure. Use separate work directories for concurrent Python groups. Prepend paths must point
-to checkout roots, not directly to `rest_framework-stubs/`.
+failure. Use separate work directories for concurrent Python groups. Repeated runs reuse uv's
+download cache and refresh consumer clones, but recreate checker/consumer environments and caches.
+Primer cleans and resets clones inside its work directory; never store your own edits there.
+Prepend paths must point to checkout roots, not directly to `rest_framework-stubs/`.
 
 The wrapper extends pinned upstream internal APIs to select our registry, prepend the matching
 checkout in both checker environments, and retain operational failures. When updating
-`scripts/mypy_primer_requirements.txt` or consumer revisions, review the
+the `primer` dependency group in `pyproject.toml` or consumer revisions, review the
 [pinned upstream implementation](https://github.com/hauntsaninja/mypy_primer/tree/0bb419028b53bceb57c136094e7a9df1444e7241/mypy_primer)
 and rerun the configured consumers, an identical-checkout comparison, and deliberate stub/plugin
 change comparisons. Sentry uses its upstream development configuration; Cookiecutter runs its
 normal generation hooks and then normalizes fixture credentials for reproducible generated source.
 **Never deploy the generated primer project:** its credentials are deliberately predictable.
 Existing consumer diagnostics are expected unless an entry explicitly sets `expected_success`.
+After changing the primer dependency, regenerate `uv.lock` with `uv lock` and commit both
+`pyproject.toml` and `uv.lock`.

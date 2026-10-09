@@ -30,6 +30,7 @@ jobs:
       PR_BASE: ${{ github.event.pull_request.base.sha }}
       PYTHON_VERSION: ${{ matrix.python }}
       PROJECT_SELECTOR: ${{ matrix.selector }}
+      UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/primer-venv
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -57,12 +58,10 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install native consumer dependencies
         run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
-      - name: Install pinned primer and resolve mypy
+      - name: Resolve locked mypy and record runner dependencies
         run: |
-          uv venv --python "$PYTHON_VERSION" primer-venv
-          uv pip install --python primer-venv/bin/python -r rest_framework-stubs_to_test/scripts/mypy_primer_requirements.txt
           python - <<'PY'
-          import os, re, subprocess
+          import os, re, subprocess, tomllib
           from pathlib import Path
           result = subprocess.check_output(
               ["uv", "tree", "--locked", "--package=mypy", "--depth=0", "-q"],
@@ -73,15 +72,20 @@ jobs:
               raise SystemExit(f"Unexpected locked mypy version: {result!r}")
           with open(os.environ["GITHUB_ENV"], "a") as env:
               env.write(f"MYPY_VERSION={match[1]}\n")
+          dependencies = tomllib.loads(Path("rest_framework-stubs_to_test/pyproject.toml").read_text())["dependency-groups"]["primer"]
           Path("primer-artifacts/versions.txt").write_text(
-              subprocess.check_output(["primer-venv/bin/python", "--version"], text=True)
-              + result + "\n" + Path("rest_framework-stubs_to_test/scripts/mypy_primer_requirements.txt").read_text()
+              subprocess.check_output(["python", "--version"], text=True)
+              + result + "\n" + "\n".join(dependencies) + "\n" + subprocess.check_output(
+                  ["uv", "tree", "--locked", "--only-group", "primer"],
+                  cwd="rest_framework-stubs_to_test", text=True,
+              )
           )
           PY
       - name: Compare stubs and plugins
         run: |
           set +e
-          primer-venv/bin/python rest_framework-stubs_to_test/scripts/run_mypy_primer.py \
+          uv run --locked --only-group primer --python "$PYTHON_VERSION" \
+            --project rest_framework-stubs_to_test python rest_framework-stubs_to_test/scripts/run_mypy_primer.py \
             --new "$MYPY_VERSION" --old "$MYPY_VERSION" \
             --known-dependency-selector djangorestframework-stubs \
             --project-selector "$PROJECT_SELECTOR" \

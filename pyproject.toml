@@ -53,6 +53,10 @@ dev = [
   "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
   "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
 ]
+# Internal main/model/setup_mypy interfaces reviewed at this revision.
+primer = [
+  "mypy-primer @ git+https://github.com/hauntsaninja/mypy_primer@0bb419028b53bceb57c136094e7a9df1444e7241",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]

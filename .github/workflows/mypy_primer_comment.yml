@@ -107,7 +107,7 @@ jobs:
               const exitCode = files['exit-code.txt'].trim();
               if (!['0', '1'].includes(exitCode)) throw new Error('Artifact is not a successful comparison');
               // ANSI and Markdown are untrusted diagnostic data, not comment markup.
-              const diff = files['comparison.txt'].replace(/\x1b\[[0-9;]*m/g, '').trim();
+              const diff = files['comparison.txt'].replace(/\x1b(?:\[[0-9;]*m|\([A-Za-z0-9])/g, '').trim();
               if ((exitCode === '0') !== (diff === '')) throw new Error('Inconsistent comparison status');
               sections.push(`### Python ${version}\n\n` + (diff ?
                 '<pre>' + diff.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>' :
