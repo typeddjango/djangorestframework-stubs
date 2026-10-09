@@ -68,11 +68,22 @@ as artifacts. A separate privileged workflow validates the current PR and tested
 before updating a comment; it never checks out PR code or extracts artifact archives.
 The comment workflow must exist on the default branch before GitHub can trigger it.
 
-Consumer definitions and the Python-to-project mapping live in `scripts/primer_projects.py`.
+Consumer definitions and the Python-to-project mapping live in `scripts/run_primer.py`.
 Each run checks the latest consumer default-branch heads, recording their resolved SHAs.
 Both mypy checks share each consumer's checkout and installed dependencies; only the DRF
 stubs/plugin source changes. Consumers use Linux and separate Python groups because their
 supported versions do not overlap.
+
+The public CLI starts `scripts/primer_internal.py --run-primer` in each selected Python's
+primer environment. That subprocess imports the public project definitions, installs our
+hooks, and runs upstream primer. For custom setup, primer invokes
+`primer_internal.py --prepare-project=NAME --install=COMMAND` from the project checkout,
+before either mypy check. The supplied installer targets the project's virtualenv;
+the helper itself need not run in that environment. Exactly one internal mode is required;
+preparation does not require primer to be installed.
+
+Cookiecutter uses an in-memory SQLite database URL for Django settings initialization.
+Lidotiku keeps its PostGIS URL because its settings explicitly force that backend.
 
 Run from this repository's root on Linux with [uv](https://docs.astral.sh/uv/).
 On Debian/Ubuntu, first install the native consumer dependencies:
@@ -123,7 +134,7 @@ Exit codes: `0` means identical diagnostics, `1` means differences, and `70` mea
 operational failure. Existing consumer errors are fine: the comparison reports changes,
 not whether either checker run was error-free.
 
-CI derives its matrix from `scripts/primer_projects.py` and selects one Python group per job:
+CI derives its matrix from `scripts/run_primer.py` and selects projects assigned to one Python version per job:
 
 ```bash
 uv run --no-project python scripts/run_primer.py \
@@ -131,8 +142,8 @@ uv run --no-project python scripts/run_primer.py \
 ```
 
 The checked-out PR sources serve as the new side; only the baseline needs a worktree.
-`--python` is a CI group restriction, not needed for normal local use. Explicitly selected
-projects incompatible with that group are rejected rather than silently skipped.
+`--python` only checks projects assigned to that Python version, and is not needed locally.
+Explicitly selected projects assigned to another version are rejected rather than silently skipped.
 
 The runner extends pinned upstream internal APIs to select our registry, prepend the matching
 checkout in both checker environments, log consumer SHAs, and retain operational failures.

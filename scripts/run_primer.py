@@ -9,91 +9,143 @@ installed dependencies. Both checks use the same mypy version, latest project
 checkout, and project dependencies. We diff their diagnostics (reported errors and
 notes) to show which were added or removed by changing our stubs/plugin.
 
+--projects=NAME,... selects consumers and infers Python; omitted means all consumers.
+--python=VERSION selects projects assigned to that Python version (CI).
+
 ## Comparison
 
 Default: merge-base(HEAD, origin/HEAD) -> WORKTREE, including uncommitted changes.
 COMMIT: first parent -> COMMIT. A..B: A -> B. A...B: merge-base(A, B) -> B.
 WORKTREE may replace the new endpoint; committed endpoints use detached worktrees.
 
-## Execution
-
---projects=NAME,... selects consumers and infers Python; omitted means all consumers.
---python=VERSION restricts the group for CI matrix jobs.
-uv uses pinned primer, locked mypy, and isolated temporary environments under _local/.
-
 ## Output
 
-Colored diffs stream to stdout; diagnostics and resolved revisions go to stderr.
-Exit 0: identical diagnostics; 1: differences; 70: operational failure.
+Diff of mypy results to stdout; diagnostics and resolved revisions go to stderr.
+Exit 0: identical mypy results; 1: mypy differences; 70: errors.
+
+## Execution
+run_primer.py
+    |       Resolve old/new sources; group projects by Python.
+    v
+uv run --locked --python=VERSION --only-group=primer
+    |       Install locked primer deps in a temporary runner venv, once per Python group.
+    v
+primer_internal.py --run-primer
+    |       Import project definitions; install checker hooks.
+    v
+upstream mypy_primer
+    |       Clone latest project head; create its dependency venv.
+    +--> primer_internal.py --prepare-project=NAME --install=COMMAND
+    |       Custom setup only, before checks; installer targets the project's venv.
+    |       Python subprocesses use the project's interpreter, not necessarily the helper's.
+    |
+    v
+mypy(old sources) + mypy(new sources)
+    |       Separate checker venvs; same locked mypy/project/deps.
+    |       Only the selected DRF stubs/plugin sources differ.
+    v
+diagnostic diff -> stdout
+    |       Progress, full diagnostics, and project SHAs -> stderr.
+    v
+cleanup
+
 """
 
+from __future__ import annotations
+
 import argparse
-import importlib
 import os
 import re
 import shlex
 import subprocess
 import sys
 import tempfile
-import traceback
-from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+    from mypy_primer.model import Project  # type: ignore[import-not-found]
 
 ROOT = Path(__file__).resolve().parent.parent
-registry: Any = importlib.import_module(f"{__package__}.primer_projects" if __package__ else "primer_projects")
-# Prepend the old/new checkout root to sys.path so mypy imports its DRF plugin,
-# not the copy installed in the downstream project's virtualenv.
-# language=python
-PREPEND_PTH = """\
-import os
-import sys
-
-prepend_path = os.environ.get("MYPY_PRIMER_PREPEND_PATH")
-if prepend_path:
-    sys.path[:0] = prepend_path.split(os.pathsep)
-"""
+# Runner choices, not compatibility floors: some consumers also have upper bounds.
+PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
+    "3.12": ("lidotiku",),
+    "3.13": ("sentry", "django-polymorphic", "djangorestframework-dataclasses", "django-seriously"),
+    "3.14": ("cookiecutter-django",),
+}
 
 
-def configure() -> Any:
-    # The launcher is stdlib-only; optional primer dependencies are installed in the worker.
-    import mypy_primer.main as primer  # type: ignore[import-not-found]
-    import mypy_primer.model as model  # type: ignore[import-not-found]
-    import mypy_primer.utils as utils  # type: ignore[import-not-found]
+def get_projects() -> list[Project]:
+    from mypy_primer.model import Project
 
-    upstream_setup = primer.setup_mypy
-    upstream_run = model.run
-    upstream_checkout = model.ensure_repo_at_revision
+    helper = shlex.quote(str(Path(__file__).with_name("primer_internal.py").resolve()))
 
-    async def setup_mypy(mypy_dir: Path, **kwargs: Any) -> Path:
-        executable: Path = await upstream_setup(mypy_dir, **kwargs)
-        site_packages = utils.Venv(mypy_dir / "venv").site_packages
-        # .pth files execute only import-prefixed lines; encode the multiline script as one.
-        (site_packages / "primer_prepend.pth").write_text(f"import sys; exec({PREPEND_PTH!r})\n", encoding="utf-8")
-        return executable
+    def preparation(name: str) -> str:
+        return f'python {helper} --prepare-project={name} --install="{{install}}"'
 
-    async def checkout(*args: Any, **kwargs: Any) -> Path:
-        path: Path = await upstream_checkout(*args, **kwargs)
-        revision, _ = await upstream_run(["git", "rev-parse", "HEAD"], cwd=path, output=True)
-        print(f"Consumer revision: {path.name} {revision.stdout.strip()}", file=sys.stderr)
-        return path
-
-    async def run(cmd: str | list[str], **kwargs: Any) -> Any:
-        proc, runtime = await upstream_run(cmd, **kwargs)
-        if isinstance(cmd, str) and "--python-executable=" in cmd:
-            print(f"Consumer check ({runtime:.2f}s): {cmd}", file=sys.stderr)
-            print(proc.stderr + proc.stdout, file=sys.stderr)
-            # Equal configuration/internal failures must not become an empty diff.
-            if proc.returncode not in (0, 1) or "INTERNAL ERROR" in proc.stderr + proc.stdout:
-                raise RuntimeError(f"Consumer checker failed operationally (exit {proc.returncode}): {cmd}")
-        return proc, runtime
-
-    primer.get_projects = registry.get_projects
-    primer.setup_mypy = setup_mypy
-    model.ensure_repo_at_revision = checkout
-    model.run = run
-    return primer
+    common = {"pyright_cmd": None, "needs_mypy_plugins": True, "supported_platforms": ["linux"]}
+    return [
+        Project(
+            location="https://github.com/getsentry/sentry",
+            mypy_cmd="SENTRY_CONF=primer-config PYTHONPATH=src:. {mypy} src/sentry/api --num-workers=0",
+            install_cmd=preparation("sentry"),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 13),
+            cost={"mypy": 74},
+            **common,
+        ),
+        Project(
+            location="https://github.com/cookiecutter/cookiecutter-django",
+            mypy_cmd=("cd generated/primer_project && DATABASE_URL=sqlite:///:memory: {mypy} primer_project"),
+            install_cmd=preparation("cookiecutter-django"),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 14),
+            expected_success=("mypy",),
+            cost={"mypy": 13},
+            **common,
+        ),
+        Project(
+            location="https://github.com/django-commons/django-polymorphic",
+            mypy_cmd="PYTHONPATH=src:. {mypy} src/polymorphic",
+            install_cmd=(
+                "{install} -e . djangorestframework django-stubs django-stubs-ext django-filter django-extra-views"
+            ),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 11),
+            cost={"mypy": 8},
+            **common,
+        ),
+        Project(
+            location="https://github.com/oxan/djangorestframework-dataclasses",
+            mypy_cmd="{mypy} -p rest_framework_dataclasses",
+            install_cmd="{install} -e . django-stubs",
+            deps=["djangorestframework-stubs"],
+            cost={"mypy": 5},
+            **common,
+        ),
+        Project(
+            location="https://github.com/tfranzel/django-seriously",
+            mypy_cmd="{mypy} django_seriously",
+            install_cmd="{install} -e '.[schema]' django-stubs",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 6},
+            **common,
+        ),
+        # Settings force the PostGIS backend; a SQLite URL would not switch engines.
+        Project(
+            location="https://github.com/City-of-Helsinki/lidotiku",
+            mypy_cmd="DATABASE_URL=postgis://primer:primer@localhost/primer SECRET_KEY=primer {mypy} api lidotiku",
+            install_cmd=preparation("lidotiku"),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 19},
+            **common,
+        ),
+    ]
 
 
 def command_output(command: list[str]) -> str:
@@ -134,7 +186,7 @@ def resolve_comparison(revision: str | None) -> tuple[str, str]:
 
 
 def select_groups(python: str | None, projects: str | None) -> dict[str, tuple[str, ...]]:
-    available: dict[str, tuple[str, ...]] = registry.PYTHON_PROJECTS
+    available = PYTHON_PROJECTS
     requested = None if projects is None else {name.strip() for name in projects.split(",")}
     if requested is not None:
         if "" in requested:
@@ -156,12 +208,16 @@ def select_groups(python: str | None, projects: str | None) -> dict[str, tuple[s
     return groups
 
 
-def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: bool) -> int:
+def locked_mypy_version() -> str:
     version_output = command_output(["uv", "tree", "--locked", "--package=mypy", "--depth=0", "-q"])
     match = re.fullmatch(r"mypy v(\d+\.\d+\.\d+)", version_output)
     if match is None:
         raise ValueError(f"Unexpected locked mypy version: {version_output!r}")
-    version = match[1]
+    return match[1]
+
+
+def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: bool) -> int:
+    version = locked_mypy_version()
     local = ROOT / "_local"
     local.mkdir(exist_ok=True)
     print(f"Comparing {old}..{new} with mypy {version}", file=sys.stderr, flush=True)
@@ -184,8 +240,8 @@ def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: 
                 f"--python={group_python}",
                 "python",
                 "-u",
-                str(Path(__file__).resolve()),
-                "--worker",
+                str(Path(__file__).with_name("primer_internal.py").resolve()),
+                "--run-primer",
                 f"--new={version}",
                 f"--old={version}",
                 "--known-dependency-selector=djangorestframework-stubs",
@@ -213,18 +269,26 @@ def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: 
     return status
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    known_projects = ", ".join(sorted(name for names in PYTHON_PROJECTS.values() for name in names))
     parser.add_argument("revision", nargs="?", help="COMMIT, A..B, or A...B; B may be WORKTREE")
     parser.add_argument(
-        "--projects", metavar="NAME,...", help="Comma-separated consumer names; Python versions are automatic"
+        "--projects",
+        metavar="NAME,...",
+        help=f"Comma-separated names; Python versions are automatic. Known projects: {known_projects}",
     )
     parser.add_argument(
         "--dry-run", action="store_true", help="Resolve/check out sources and print commands without running primer"
     )
     parser.add_argument_group("CI").add_argument(
-        "--python", choices=registry.PYTHON_PROJECTS, help="Restrict the consumer group for a CI matrix job"
+        "--python", choices=PYTHON_PROJECTS, help="Only check projects assigned to this Python version (for CI)"
     )
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
     args = parser.parse_args()
     try:
         groups = select_groups(args.python, args.projects)
@@ -243,20 +307,5 @@ def main() -> int:
         return 70
 
 
-def primer_main() -> None:
-    """Run upstream primer in the worker's selected Python environment."""
-    try:
-        configure().main()
-    except Exception:
-        traceback.print_exc()
-        sys.exit(70)
-
-
 if __name__ == "__main__":
-    # Internal subprocess entry point: the launcher re-runs this script in the selected
-    # Python environment with primer installed. Skip orchestration and run primer directly.
-    if sys.argv[1:2] == ["--worker"]:
-        del sys.argv[1]
-        primer_main()
-    else:
-        sys.exit(main())
+    sys.exit(main())

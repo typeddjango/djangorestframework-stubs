@@ -21,7 +21,14 @@ jobs:
         with:
           persist-credentials: false
       - id: projects
-        run: echo "matrix=$(python scripts/primer_projects.py)" >> "$GITHUB_OUTPUT"
+        run: |
+          python - <<'PY'
+          import json, os
+          from scripts.run_primer import PYTHON_PROJECTS
+          matrix = {"include": [{"python": version} for version in PYTHON_PROJECTS]}
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print(f"matrix={json.dumps(matrix)}", file=output)
+          PY
   compare:
     needs: projects
     runs-on: ubuntu-latest
