@@ -62,7 +62,7 @@ You can always also reach out in gitter to discuss your contributions!
 PR CI uses [mypy_primer](https://github.com/hauntsaninja/mypy_primer) to check how DRF
 stub and plugin changes affect downstream projects. Diagnostic differences are advisory:
 a separate workflow updates a PR comment with the diff, and full logs are available
-in workflow artifacts. Commenting requires that workflow to be on the default branch.
+in workflow artifacts.
 
 Run manually from the repository root on Linux with [uv](https://docs.astral.sh/uv/)
 installed. Native dependencies are also required: `libpq-dev`, `libgdal-dev`, and

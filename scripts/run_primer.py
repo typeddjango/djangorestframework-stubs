@@ -10,6 +10,7 @@ see README for required system packages. No activated virtualenv is needed.
     python scripts/run_primer.py
     python scripts/run_primer.py --projects=sentry,lidotiku
     python scripts/run_primer.py <branch-name>
+    python scripts/run_primer.py <commit>..<commit>
 
 By default, checks your changes against origin, including uncommitted changes.
 --projects selects which projects to check; omit it to check all configured projects.
