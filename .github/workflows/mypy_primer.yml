@@ -11,26 +11,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  projects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.projects.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - id: projects
+        run: echo "matrix=$(python scripts/primer_projects.py)" >> "$GITHUB_OUTPUT"
   compare:
+    needs: projects
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - python: "3.12"
-            selector: lidotiku
-          - python: "3.13"
-            selector: sentry|django-polymorphic|djangorestframework-dataclasses|django-seriously
-          - python: "3.14"
-            selector: cookiecutter-django
+      matrix: ${{ fromJSON(needs.projects.outputs.matrix) }}
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_HEAD: ${{ github.event.pull_request.head.sha }}
       PR_BASE: ${{ github.event.pull_request.base.sha }}
       PYTHON_VERSION: ${{ matrix.python }}
-      PROJECT_SELECTOR: ${{ matrix.selector }}
-      UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/primer-venv
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -42,9 +45,9 @@ jobs:
           mkdir -p primer-artifacts
           cd rest_framework-stubs_to_test
           merge_base=$(git merge-base HEAD "$PR_BASE")
-          git worktree add ../rest_framework-stubs_base "$merge_base"
           export TESTED_MERGE=$(git rev-parse HEAD)
           export TESTED_BASE="$merge_base"
+          echo "TESTED_BASE=$TESTED_BASE" >> "$GITHUB_ENV"
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -60,7 +63,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
       - name: Resolve locked mypy and record runner dependencies
         run: |
-          python - <<'PY'
+          uv run --no-project --python="$PYTHON_VERSION" python - <<'PY'
           import os, re, subprocess, tomllib
           from pathlib import Path
           result = subprocess.check_output(
@@ -70,13 +73,11 @@ jobs:
           match = re.fullmatch(r"mypy v(\d+\.\d+\.\d+)", result)
           if not match:
               raise SystemExit(f"Unexpected locked mypy version: {result!r}")
-          with open(os.environ["GITHUB_ENV"], "a") as env:
-              env.write(f"MYPY_VERSION={match[1]}\n")
           dependencies = tomllib.loads(Path("rest_framework-stubs_to_test/pyproject.toml").read_text())["dependency-groups"]["primer"]
           Path("primer-artifacts/versions.txt").write_text(
               subprocess.check_output(["python", "--version"], text=True)
               + result + "\n" + "\n".join(dependencies) + "\n" + subprocess.check_output(
-                  ["uv", "tree", "--locked", "--only-group", "primer"],
+                  ["uv", "tree", "--locked", "--only-group=primer"],
                   cwd="rest_framework-stubs_to_test", text=True,
               )
           )
@@ -84,15 +85,9 @@ jobs:
       - name: Compare stubs and plugins
         run: |
           set +e
-          uv run --locked --only-group primer --python "$PYTHON_VERSION" \
-            --project rest_framework-stubs_to_test python rest_framework-stubs_to_test/scripts/run_mypy_primer.py \
-            --new "$MYPY_VERSION" --old "$MYPY_VERSION" \
-            --known-dependency-selector djangorestframework-stubs \
-            --project-selector "$PROJECT_SELECTOR" \
-            --old-prepend-path rest_framework-stubs_base \
-            --new-prepend-path rest_framework-stubs_to_test \
-            --base-dir primer-work --num-shards 1 --shard-index 0 \
-            --output concise --debug -j 2 \
+          uv run --no-project --python="$PYTHON_VERSION" python \
+            rest_framework-stubs_to_test/scripts/run_primer.py \
+            "$TESTED_BASE..WORKTREE" --python="$PYTHON_VERSION" \
             > primer-artifacts/comparison.txt 2> primer-artifacts/diagnostics.log
           status=$?
           set -e
