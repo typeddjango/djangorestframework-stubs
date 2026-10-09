@@ -66,7 +66,7 @@ jobs:
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           python-version: ${{ matrix.python }}
-      - name: Install native consumer dependencies
+      - name: Install native project dependencies
         run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
       - name: Resolve locked mypy and record runner dependencies
         run: |
@@ -94,7 +94,7 @@ jobs:
           set +e
           uv run --no-project --python="$PYTHON_VERSION" python \
             rest_framework-stubs_to_test/scripts/run_primer.py \
-            "$TESTED_BASE..WORKTREE" --python="$PYTHON_VERSION" \
+            "$TESTED_BASE..WORKTREE" --python="$PYTHON_VERSION" --verbose \
             > primer-artifacts/comparison.txt 2> primer-artifacts/diagnostics.log
           status=$?
           set -e

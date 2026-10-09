@@ -1,4 +1,5 @@
-"""Internal entry point; normally invoked by run_primer.py or upstream mypy_primer.
+"""
+Internal entry point; invoked by `run_primer.py` or upstream mypy_primer.
 
 --run-primer: the launcher starts this mode in its selected Python/primer environment.
 It imports the public script's project definitions, installs our hooks, and runs primer.
@@ -16,6 +17,7 @@ import shlex
 import subprocess
 import sys
 import traceback
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -33,9 +35,11 @@ if prepend_path:
 
 
 def install_checker_path_hook(primer: Any, utils: Any) -> None:
+    """Hook mypy setup so each checker can import the selected checkout's DRF plugin."""
     upstream_setup = primer.setup_mypy
 
     async def setup_mypy(mypy_dir: Path, **kwargs: Any) -> Path:
+        """Set up mypy and add the startup hook for the selected stubs/plugin checkout."""
         executable: Path = await upstream_setup(mypy_dir, **kwargs)
         site_packages = utils.Venv(mypy_dir / "venv").site_packages
         # .pth files execute only import-prefixed lines; encode the multiline script as one.
@@ -45,37 +49,73 @@ def install_checker_path_hook(primer: Any, utils: Any) -> None:
     primer.setup_mypy = setup_mypy
 
 
-def install_checkout_logging(model: Any) -> None:
+def install_checkout_logging(model: Any, status: Callable[..., None]) -> None:
+    """Hook project checkout to show preparation progress and optionally its revision."""
     upstream_checkout = model.ensure_repo_at_revision
     upstream_run = model.run
 
     async def checkout(*args: Any, **kwargs: Any) -> Path:
+        """Return the checked-out project path after logging preparation progress."""
         path: Path = await upstream_checkout(*args, **kwargs)
-        revision, _ = await upstream_run(["git", "rev-parse", "HEAD"], cwd=path, output=True)
-        print(f"Consumer revision: {path.name} {revision.stdout.strip()}", file=sys.stderr)
+        status(f"Preparing {path.name}")
+        if model.ctx.get().debug:
+            revision, _ = await upstream_run(["git", "rev-parse", "HEAD"], cwd=path, output=True)
+            status(f"Project revision: {path.name} {revision.stdout.strip()}")
         return path
 
     model.ensure_repo_at_revision = checkout
 
 
-def install_checker_diagnostics(model: Any) -> None:
+def install_checker_diagnostics(model: Any, status: Callable[..., None]) -> None:
+    """Hook commands to report check timings, optional output, and operational failures."""
     upstream_run = model.run
 
     async def run(cmd: str | list[str], **kwargs: Any) -> Any:
+        """Run a command, showing concise checker progress or full failure diagnostics."""
+        if not isinstance(cmd, str) or "--python-executable=" not in cmd:
+            return await upstream_run(cmd, **kwargs)
+        project = Path(kwargs["cwd"]).name
+        sources = kwargs["env"]["MYPY_PRIMER_PREPEND_PATH"]
+        label = "old" if sources == str(model.ctx.get().old_prepend_path) else "new"
+        status(f"Checking {project} ({label})")
         proc, runtime = await upstream_run(cmd, **kwargs)
-        if isinstance(cmd, str) and "--python-executable=" in cmd:
-            print(f"Consumer check ({runtime:.2f}s): {cmd}", file=sys.stderr)
-            print(proc.stderr + proc.stdout, file=sys.stderr)
-            # Equal configuration/internal failures must not become an empty diff.
-            if proc.returncode not in (0, 1) or "INTERNAL ERROR" in proc.stderr + proc.stdout:
-                raise RuntimeError(f"Consumer checker failed operationally (exit {proc.returncode}): {cmd}")
+        output = proc.stderr + proc.stdout
+        # Equal configuration/internal failures must not become an empty diff.
+        failed = proc.returncode not in (0, 1) or "INTERNAL ERROR" in output
+        status(f"Finished {project} ({label}) in {runtime:.2f}s", kind="error" if failed else "info")
+        if model.ctx.get().debug or failed:
+            print(
+                f"\n--- mypy: {project} ({label}) ---\n{output.rstrip()}\n--- end mypy ---\n",
+                file=sys.stderr,
+                flush=True,
+            )
+        if failed:
+            raise RuntimeError(f"Project checker failed operationally (exit {proc.returncode}): {cmd}")
         return proc, runtime
 
     model.run = run
 
 
+def install_project_status(model: Any, status: Callable[..., None]) -> None:
+    """Hook completed project comparisons to report their diff status."""
+    upstream_result = model.Project.primer_result
+
+    async def primer_result(self: Any, *args: Any, **kwargs: Any) -> Any:
+        """Report each project's outcome after both checks, preserving failures."""
+        try:
+            result = await upstream_result(self, *args, **kwargs)
+        except Exception:
+            status(f"Failed {self.name}: comparison incomplete", kind="error")
+            raise
+        summary = "diagnostic differences" if result.diff else "no diagnostic differences"
+        status(f"Finished {self.name}: {summary}", kind="warning" if result.diff else "success")
+        return result
+
+    model.Project.primer_result = primer_result
+
+
 def configure_primer() -> Any:
-    """Select our consumers and install hooks on the upstream functions primer calls."""
+    """Select our projects and install hooks on the upstream functions primer calls."""
     # Optional primer imports belong only to --run-primer, never project preparation.
     import mypy_primer.main as primer  # type: ignore[import-not-found]
     import mypy_primer.model as model  # type: ignore[import-not-found]
@@ -84,15 +124,17 @@ def configure_primer() -> Any:
     if __package__:
         from . import run_primer as package_runner
 
-        primer.get_projects = package_runner.get_projects
+        runner = package_runner
     else:
         import run_primer  # type: ignore[import-not-found]
 
-        primer.get_projects = run_primer.get_projects
+        runner = run_primer
 
+    primer.get_projects = runner.get_projects
     install_checker_path_hook(primer, utils)
-    install_checkout_logging(model)
-    install_checker_diagnostics(model)
+    install_checkout_logging(model, runner.log_status)
+    install_checker_diagnostics(model, runner.log_status)
+    install_project_status(model, runner.log_status)
     return primer
 
 
@@ -138,6 +180,7 @@ def normalize_generated_secrets(project: Path) -> None:
 
 
 def prepare_primer_project(project: str, install: str) -> None:
+    """Install project dependencies and generate configuration using primer's supplied installer."""
     installer = shlex.split(install)
     # The helper may run in the runner environment; project subprocesses need its target Python.
     python = installer[installer.index("--python") + 1] if "--python" in installer else installer[0]
@@ -194,10 +237,11 @@ def prepare_primer_project(project: str, install: str) -> None:
                 check=True,
             )
     else:
-        raise ValueError(f"Unknown consumer: {project}")
+        raise ValueError(f"Unknown project: {project}")
 
 
 def main() -> int:
+    """Dispatch exactly one internal mode, forwarding remaining arguments to primer."""
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False
     )
