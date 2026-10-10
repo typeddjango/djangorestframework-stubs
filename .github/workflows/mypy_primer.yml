@@ -1,0 +1,116 @@
+name: mypy_primer
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mypy-primer-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  projects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.projects.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - id: projects
+        run: |
+          python - <<'PY'
+          import json, os
+          from scripts.run_primer import PYTHON_PROJECTS
+          matrix = {"include": [{"python": version} for version in PYTHON_PROJECTS]}
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print(f"matrix={json.dumps(matrix)}", file=output)
+          PY
+  compare:
+    needs: projects
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.projects.outputs.matrix) }}
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_HEAD: ${{ github.event.pull_request.head.sha }}
+      PR_BASE: ${{ github.event.pull_request.base.sha }}
+      PYTHON_VERSION: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          path: rest_framework-stubs_to_test
+          persist-credentials: false
+      - name: Record comparison revisions
+        run: |
+          mkdir -p primer-artifacts
+          cd rest_framework-stubs_to_test
+          merge_base=$(git merge-base HEAD "$PR_BASE")
+          export TESTED_MERGE=$(git rev-parse HEAD)
+          export TESTED_BASE="$merge_base"
+          echo "TESTED_BASE=$TESTED_BASE" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          keys = ["PR_NUMBER", "PR_HEAD", "PR_BASE", "TESTED_MERGE", "TESTED_BASE", "GITHUB_RUN_ID", "PYTHON_VERSION"]
+          data = {key: os.environ[key] for key in keys}
+          Path("../primer-artifacts/metadata.json").write_text(json.dumps(data))
+          print(json.dumps(data, indent=2))
+          PY
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install native project dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
+      - name: Resolve locked mypy and record runner dependencies
+        run: |
+          uv run --no-project --python="$PYTHON_VERSION" python - <<'PY'
+          import os, re, subprocess, tomllib
+          from pathlib import Path
+          result = subprocess.check_output(
+              ["uv", "tree", "--locked", "--package=mypy", "--depth=0", "-q"],
+              cwd="rest_framework-stubs_to_test", text=True,
+          ).strip()
+          match = re.fullmatch(r"mypy v(\d+\.\d+\.\d+)", result)
+          if not match:
+              raise SystemExit(f"Unexpected locked mypy version: {result!r}")
+          dependencies = tomllib.loads(Path("rest_framework-stubs_to_test/pyproject.toml").read_text())["dependency-groups"]["primer"]
+          Path("primer-artifacts/versions.txt").write_text(
+              subprocess.check_output(["python", "--version"], text=True)
+              + result + "\n" + "\n".join(dependencies) + "\n" + subprocess.check_output(
+                  ["uv", "tree", "--locked", "--only-group=primer"],
+                  cwd="rest_framework-stubs_to_test", text=True,
+              )
+          )
+          PY
+      - name: Compare stubs and plugins
+        run: |
+          set +e
+          uv run --no-project --python="$PYTHON_VERSION" python \
+            rest_framework-stubs_to_test/scripts/run_primer.py \
+            "$TESTED_BASE..WORKTREE" --python="$PYTHON_VERSION" --verbose \
+            > primer-artifacts/comparison.txt 2> primer-artifacts/diagnostics.log
+          status=$?
+          set -e
+          printf '%s\n' "$status" > primer-artifacts/exit-code.txt
+          cat primer-artifacts/comparison.txt
+          cat primer-artifacts/diagnostics.log
+          case "$status" in
+            0|1) exit 0 ;;
+            *) exit "$status" ;;
+          esac
+      - name: Upload comparison and failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: mypy-primer-${{ matrix.python }}
+          path: primer-artifacts/
+          if-no-files-found: warn
+          overwrite: true
+          retention-days: 14

@@ -56,3 +56,23 @@ This project is open source and community driven. As such we encourage contribut
 3. Identify bugs and issues and report these
 
 You can always also reach out in gitter to discuss your contributions!
+
+### Downstream checks with mypy_primer
+
+PR CI uses [mypy_primer](https://github.com/hauntsaninja/mypy_primer) to check how DRF
+stub and plugin changes affect downstream projects. Diagnostic differences are advisory:
+a separate workflow updates a PR comment with the diff, and full logs are available
+in workflow artifacts.
+
+Run manually from the repository root on Linux with [uv](https://docs.astral.sh/uv/)
+installed. Native dependencies are also required: `libpq-dev`, `libgdal-dev`, and
+`libgeos-dev` on Debian/Ubuntu.
+
+```bash
+python scripts/run_primer.py
+python scripts/run_primer.py --projects=sentry,lidotiku
+python scripts/run_primer.py --help
+```
+
+The default run compares your changes against origin, including uncommitted files.
+See `--help` for revision ranges, project selection, and output options.
