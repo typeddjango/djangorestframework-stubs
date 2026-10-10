@@ -14,5 +14,8 @@ class BaseContentNegotiation:
 
 class DefaultContentNegotiation(BaseContentNegotiation):
     settings = api_settings
+    max_accept_header_length: int
+    max_accept_tokens: int
+    max_media_type_length: int
     def filter_renderers(self, renderers: Iterable[BaseRenderer], format: str) -> list[BaseRenderer]: ...
     def get_accept_list(self, request: Request) -> list[str]: ...

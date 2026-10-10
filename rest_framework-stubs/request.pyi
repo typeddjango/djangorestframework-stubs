@@ -17,6 +17,8 @@ from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
 from typing_extensions import override
 
+MAX_MEDIA_TYPE_LENGTH: int
+
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(AbstractContextManager[Request]):
