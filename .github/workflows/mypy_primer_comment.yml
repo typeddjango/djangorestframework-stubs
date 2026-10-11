@@ -19,12 +19,13 @@ concurrency:
 jobs:
   comment:
     name: Comment PR from mypy_primer
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     timeout-minutes: 5
     steps:
       # No checkout: this privileged workflow never imports or executes PR code.
-      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      - name: Post comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
         with:
           script: |
             const {execFileSync} = require('node:child_process');
@@ -130,18 +131,20 @@ jobs:
             const link = `https://github.com/${repo.owner}/${repo.repo}/actions/runs/${run.id}`;
             const header = `${marker}\n## mypy_primer\n\nCompared DRF stubs and plugin at ${pr.merge_commit_sha} with the target-branch merge base. Differences are advisory.\n\n`;
             const footer = `\n\n[Full comparison and diagnostic artifacts](${link})`;
-            const MAX_CHARACTERS = 50000;
-            const MAX_CHARACTERS_PER_PROJECT = MAX_CHARACTERS / 3;
+            const MAX_CHARACTERS = 50000
+            const MAX_CHARACTERS_PER_PROJECT = MAX_CHARACTERS / 3
+
             function truncateIfNeeded(original, maxLength) {
               if (original.length <= maxLength) {
-                return original;
+                return original
               }
-              let truncated = original.substring(0, maxLength);
-              // Remove the last line, which may have been cut in the middle.
-              truncated = truncated.substring(0, truncated.lastIndexOf('\n'));
-              const lines = original.split('\n').length - truncated.split('\n').length;
-              return `${truncated}\n\n... (truncated ${lines} lines) ...`;
+              let truncated = original.substring(0, maxLength)
+              // further, remove last line that might be truncated
+              truncated = truncated.substring(0, truncated.lastIndexOf('\n'))
+              let lines_truncated = original.split('\n').length - truncated.split('\n').length
+              return `${truncated}\n\n... (truncated ${lines_truncated} lines) ...`
             }
+
             let data = sections.map(({version, diff}) => {
               if (!diff) return `Python ${version}\n\nNo diagnostic differences.`;
               const projects = diff.split('\n\n');
