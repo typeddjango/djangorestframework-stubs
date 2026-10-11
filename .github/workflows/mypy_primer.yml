@@ -112,6 +112,6 @@ jobs:
         with:
           name: mypy-primer-${{ matrix.python }}
           path: primer-artifacts/
-          if-no-files-found: warn
+          if-no-files-found: error
           overwrite: true
           retention-days: 14

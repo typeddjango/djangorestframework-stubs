@@ -64,6 +64,8 @@ stub and plugin changes affect downstream projects. Diagnostic differences are a
 a separate workflow updates a PR comment with the diff, and full logs are available
 in workflow artifacts. Large comments truncate each project's output so one project
 does not crowd out the other comparison results.
+Comments include every tested Python version; results for outdated PR or target-branch
+revisions are ignored.
 
 Run manually from the repository root on Linux with [uv](https://docs.astral.sh/uv/)
 installed. Native dependencies are also required: `libpq-dev`, `libgdal-dev`, and

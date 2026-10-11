@@ -65,6 +65,13 @@ jobs:
             const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
               ...repo, run_id: run.id, per_page: 100,
             });
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+              ...repo, run_id: run.id, filter: 'latest', per_page: 100,
+            });
+            const versions = jobs.map(job => /^Run \((\d+\.\d+)\)$/.exec(job.name)?.[1]).filter(Boolean);
+            if (!versions.length || new Set(versions).size !== versions.length)
+              throw new Error('Missing or duplicate Python comparison jobs');
+            versions.sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
             const sections = [];
             const reader = `
             import io, json, sys, zipfile
@@ -84,7 +91,7 @@ jobs:
                     result[name] = raw.decode("utf-8", errors="replace")
             print(json.dumps(result))
             `;
-            for (const version of ['3.12', '3.13', '3.14']) {
+            for (const version of versions) {
               const matches = artifacts.filter(a => a.name === `mypy-primer-${version}` && !a.expired);
               if (matches.length !== 1 || matches[0].size_in_bytes > 64 * 1024 * 1024)
                 throw new Error('Missing, duplicate, or oversized comparison artifact');
@@ -96,10 +103,14 @@ jobs:
               }).toString());
               const metadata = JSON.parse(files['metadata.json']);
               if (metadata.PR_NUMBER !== String(pr.number) || metadata.PR_HEAD !== pr.head.sha ||
-                  metadata.PR_BASE !== pr.base.sha || metadata.TESTED_MERGE !== pr.merge_commit_sha ||
                   metadata.GITHUB_RUN_ID !== String(run.id) || metadata.PYTHON_VERSION !== version ||
-                  !/^[0-9a-f]{40}$/.test(metadata.TESTED_BASE))
+                  ![metadata.PR_BASE, metadata.TESTED_MERGE, metadata.TESTED_BASE]
+                    .every(sha => /^[0-9a-f]{40}$/.test(sha)))
                 throw new Error('Artifact metadata does not match trusted current PR/run metadata');
+              if (metadata.PR_BASE !== pr.base.sha || metadata.TESTED_MERGE !== pr.merge_commit_sha) {
+                core.notice('The target branch or PR merge changed; ignoring stale results.');
+                return;
+              }
               const merge = await github.rest.repos.getCommit({...repo, ref: metadata.TESTED_MERGE});
               if (merge.data.parents.length !== 2 || merge.data.parents[1].sha !== pr.head.sha ||
                   merge.data.parents[0].sha !== pr.base.sha) throw new Error('Unexpected tested merge parents');
