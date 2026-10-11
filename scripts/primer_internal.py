@@ -137,53 +137,69 @@ def primer_main() -> None:
     configure_primer().main()
 
 
-def prepare_primer_project(project: str, install: str) -> None:
-    """Prepare only the dependencies and configuration needed to run mypy."""
-    installer = shlex.split(install)
-    # The helper may run in the runner environment; project subprocesses need its target Python.
-    python = installer[installer.index("--python") + 1] if "--python" in installer else installer[0]
-    directory = Path(".")
-    if project == "cookiecutter-django":
-        subprocess.run([*installer, "cookiecutter==2.6.0"], check=True)
-        subprocess.run(
-            [
-                python,
-                "-m",
-                "cookiecutter",
-                ".",
-                "--no-input",
-                "--output-dir=generated",
-                "project_name=Primer Project",
-                "project_slug=primer_project",
-                "rest_api=DRF",
-                "cloud_provider=None",
-                "mail_service=Other SMTP",
-                "use_docker=n",
-                "use_celery=n",
-                "use_sentry=n",
-                "frontend_pipeline=None",
-                "keep_local_envs_in_vcs=y",
-                "use_whitenoise=y",
-            ],
-            check=True,
-        )
-        directory = Path("generated/primer_project")
-    elif project not in {"sentry", "lidotiku"}:
-        raise ValueError(f"Unknown project: {project}")
-
+def install_locked_dependencies(install_args: list[str], directory: Path) -> None:
+    """Export a project's lockfile and install its dependencies with primer's installer."""
     requirements = directory / "primer-requirements.txt"
     subprocess.run(
         ["uv", "export", "--frozen", "--no-hashes", "--no-emit-project", f"--output-file={requirements.resolve()}"],
         cwd=directory,
         check=True,
     )
-    subprocess.run([*installer, "-r", str(requirements)], check=True)
-    if project == "sentry":
-        subprocess.run(
-            [python, "-m", "sentry", "init", "--dev", "--no-clobber", "primer-config"],
-            env={**os.environ, "PYTHONPATH": "src:."},
-            check=True,
-        )
+    subprocess.run([*install_args, "-r", str(requirements)], check=True)
+
+
+def prepare_cookiecutter_django(install_args: list[str], python: str) -> None:
+    """Generate a Django project from the cookiecutter template, then install its locked dependencies."""
+    subprocess.run([*install_args, "cookiecutter==2.6.0"], check=True)
+    subprocess.run(
+        [
+            python,
+            "-m",
+            "cookiecutter",
+            ".",
+            "--no-input",
+            "--output-dir=generated",
+            "project_name=Primer Project",
+            "project_slug=primer_project",
+            "rest_api=DRF",
+            "cloud_provider=None",
+            "mail_service=Other SMTP",
+            "use_docker=n",
+            "use_celery=n",
+            "use_sentry=n",
+            "frontend_pipeline=None",
+            "keep_local_envs_in_vcs=y",
+            "use_whitenoise=y",
+        ],
+        check=True,
+    )
+    install_locked_dependencies(install_args, Path("generated/primer_project"))
+
+
+def prepare_sentry(install_args: list[str], python: str) -> None:
+    """Install Sentry's locked dependencies, then generate primer-config for SENTRY_CONF."""
+    install_locked_dependencies(install_args, Path("."))
+    subprocess.run(
+        [python, "-m", "sentry", "init", "--dev", "--no-clobber", "primer-config"],
+        env={**os.environ, "PYTHONPATH": "src:."},
+        check=True,
+    )
+
+
+def prepare_primer_project(project: str, install_cmd: str) -> None:
+    """Dispatch the preparation needed to run each project's mypy checks."""
+    install_args = shlex.split(install_cmd)
+    # The helper may run in the runner environment; project subprocesses need its target Python.
+    python = install_args[install_args.index("--python") + 1] if "--python" in install_args else install_args[0]
+    match project:
+        case "cookiecutter-django":
+            prepare_cookiecutter_django(install_args, python)
+        case "sentry":
+            prepare_sentry(install_args, python)
+        case "lidotiku":
+            install_locked_dependencies(install_args, Path("."))
+        case _:
+            raise ValueError(f"Unknown project: {project}")
 
 
 def main() -> int:
