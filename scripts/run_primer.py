@@ -264,14 +264,12 @@ def locked_mypy_version() -> str:
 def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: bool, verbose: bool) -> int:
     """Compare selected projects in temporary environments, or print commands for a dry run."""
     version = locked_mypy_version()
-    local = ROOT / "_local"
-    local.mkdir(exist_ok=True)
     log_status(f"Comparing {old}..{new} with mypy {version}")
     if new == "WORKTREE":
         log_status(f"Working tree HEAD: {command_output(['git', 'rev-parse', 'HEAD'])}")
     status = 0
     with (
-        tempfile.TemporaryDirectory(prefix="primer-work-", dir=local) as temporary,
+        tempfile.TemporaryDirectory(prefix="primer-work-") as temporary,
         source_path(old, Path(temporary) / "old") as old_path,
         source_path(new, Path(temporary) / "new") as new_path,
     ):
@@ -364,6 +362,7 @@ def main() -> int:
         groups = select_groups(args.python, args.projects)
     except ValueError as error:
         parser.error(str(error))
+
     try:
         old, new = resolve_comparison(args.revision)
         return compare(old, new, groups=groups, dry_run=args.dry_run, verbose=args.verbose)
