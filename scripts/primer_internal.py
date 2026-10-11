@@ -8,10 +8,12 @@ It imports the public script's project definitions, installs our hooks, and runs
 checkout during dependency installation, before either mypy check. Preparation uses
 the supplied installer and its target Python, not necessarily this script's interpreter.
 Exactly one mode is required; project preparation needs only the standard library.
+
+Prepare only what mypy and its plugins need to run; the downstream application
+itself does not need to run.
 """
 
 import argparse
-import ast
 import os
 import shlex
 import subprocess
@@ -143,44 +145,8 @@ def primer_main() -> None:
     configure_primer().main()
 
 
-def normalize_generated_secrets(project: Path) -> None:
-    """Make disposable primer fixtures reproducible; never deploy this project."""
-    secret = "primer-only-secret-never-deploy-this-generated-project"
-    for filename in ("local.py", "test.py"):
-        path = project / "config" / "settings" / filename
-        source = path.read_text(encoding="utf-8")
-        assignments = [
-            node
-            for node in ast.parse(source).body
-            if isinstance(node, ast.Assign)
-            and any(isinstance(target, ast.Name) and target.id == "SECRET_KEY" for target in node.targets)
-        ]
-        if len(assignments) != 1 or not isinstance(assignments[0].value, ast.Call):
-            raise ValueError(f"Unexpected generated SECRET_KEY assignment in {path}")
-        default = next(keyword.value for keyword in assignments[0].value.keywords if keyword.arg == "default")
-        literal = ast.get_source_segment(source, default)
-        if not isinstance(default, ast.Constant) or not isinstance(default.value, str) or literal is None:
-            raise ValueError(f"Unexpected generated SECRET_KEY default in {path}")
-        path.write_text(source.replace(literal, repr(secret), 1), encoding="utf-8")
-    values = {
-        "DJANGO_SECRET_KEY": secret,
-        "DJANGO_ADMIN_URL": "primer-admin/",
-        "POSTGRES_USER": "primer",
-        "POSTGRES_PASSWORD": "primer-only-do-not-deploy",
-        "CELERY_FLOWER_USER": "primer",
-        "CELERY_FLOWER_PASSWORD": "primer-only-do-not-deploy",
-    }
-    for path in (project / ".envs").rglob("*"):
-        if path.is_file():
-            rewritten = []
-            for line in path.read_text(encoding="utf-8").splitlines(keepends=True):
-                key = line.partition("=")[0]
-                rewritten.append(f"{key}={values[key]}\n" if key in values else line)
-            path.write_text("".join(rewritten), encoding="utf-8")
-
-
 def prepare_primer_project(project: str, install: str) -> None:
-    """Install project dependencies and generate configuration using primer's supplied installer."""
+    """Prepare only the dependencies and configuration needed to run mypy."""
     installer = shlex.split(install)
     # The helper may run in the runner environment; project subprocesses need its target Python.
     python = installer[installer.index("--python") + 1] if "--python" in installer else installer[0]
@@ -208,7 +174,6 @@ def prepare_primer_project(project: str, install: str) -> None:
             ],
             check=True,
         )
-        normalize_generated_secrets(Path("generated/primer_project"))
         requirements = Path("generated/primer_project/primer-requirements.txt")
         subprocess.run(
             [
