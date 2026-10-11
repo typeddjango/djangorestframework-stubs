@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from json import JSONDecoder, JSONEncoder
 from re import Pattern
-from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, Self, TypeAlias, TypeVar, final, type_check_only
+from typing import Any, ClassVar, Final, Generic, NoReturn, Protocol, Self, TypeAlias, TypeVar, type_check_only
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.files.base import File
@@ -328,7 +328,7 @@ class FloatField(Field[float, float | int | str, str, Any]):
         min_value: float | None = None,
         read_only: bool = False,
         write_only: bool = False,
-        required: str | None = None,  # Deliberate primer regression probe.
+        required: bool | None = None,
         default: _DefaultInitial[float] = ...,
         initial: _DefaultInitial[float] = ...,
         source: str | None = None,
@@ -681,10 +681,7 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
 class HStoreField(DictField):
     child: CharField
 
-_JSONValue: TypeAlias = Mapping[Any, Any] | list[Any] | tuple[Any, ...] | bool | int | float | str | None
-
-@final  # Deliberate primer regression probe: valid consumers subclass this field.
-class JSONField(Field[_JSONValue, dict[str, Any] | list[dict[str, Any]], str, Any]):
+class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
     binary: bool
     encoder: type[JSONEncoder] | None
     decoder: type[JSONDecoder] | None
