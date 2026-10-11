@@ -1,4 +1,4 @@
-name: mypy_primer
+name: Run mypy_primer
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: mypy-primer-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -30,6 +30,7 @@ jobs:
               print(f"matrix={json.dumps(matrix)}", file=output)
           PY
   compare:
+    name: Run (${{ matrix.python }})
     needs: projects
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -107,7 +108,7 @@ jobs:
           esac
       - name: Upload comparison and failure diagnostics
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: mypy-primer-${{ matrix.python }}
           path: primer-artifacts/
