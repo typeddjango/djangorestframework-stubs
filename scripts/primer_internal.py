@@ -122,15 +122,7 @@ def configure_primer() -> Any:
     import mypy_primer.main as primer  # type: ignore[import-not-found]
     import mypy_primer.model as model  # type: ignore[import-not-found]
     import mypy_primer.utils as utils  # type: ignore[import-not-found]
-
-    if __package__:
-        from . import run_primer as package_runner
-
-        runner = package_runner
-    else:
-        import run_primer  # type: ignore[import-not-found]
-
-        runner = run_primer
+    import run_primer as runner  # type: ignore[import-not-found]
 
     primer.get_projects = runner.get_projects
     install_checker_path_hook(primer, utils)
@@ -150,6 +142,7 @@ def prepare_primer_project(project: str, install: str) -> None:
     installer = shlex.split(install)
     # The helper may run in the runner environment; project subprocesses need its target Python.
     python = installer[installer.index("--python") + 1] if "--python" in installer else installer[0]
+    directory = Path(".")
     if project == "cookiecutter-django":
         subprocess.run([*installer, "cookiecutter==2.6.0"], check=True)
         subprocess.run(
@@ -174,35 +167,23 @@ def prepare_primer_project(project: str, install: str) -> None:
             ],
             check=True,
         )
-        requirements = Path("generated/primer_project/primer-requirements.txt")
-        subprocess.run(
-            [
-                "uv",
-                "export",
-                "--frozen",
-                "--no-hashes",
-                "--no-emit-project",
-                "--project=generated/primer_project",
-                f"--output-file={requirements.resolve()}",
-            ],
-            check=True,
-        )
-        subprocess.run([*installer, "-r", str(requirements)], check=True)
-    elif project in {"sentry", "lidotiku"}:
-        requirements = Path("primer-requirements.txt")
-        subprocess.run(
-            ["uv", "export", "--frozen", "--no-hashes", "--no-emit-project", f"--output-file={requirements}"],
-            check=True,
-        )
-        subprocess.run([*installer, "-r", str(requirements)], check=True)
-        if project == "sentry":
-            subprocess.run(
-                [python, "-m", "sentry", "init", "--dev", "--no-clobber", "primer-config"],
-                env={**os.environ, "PYTHONPATH": "src:."},
-                check=True,
-            )
-    else:
+        directory = Path("generated/primer_project")
+    elif project not in {"sentry", "lidotiku"}:
         raise ValueError(f"Unknown project: {project}")
+
+    requirements = directory / "primer-requirements.txt"
+    subprocess.run(
+        ["uv", "export", "--frozen", "--no-hashes", "--no-emit-project", f"--output-file={requirements.resolve()}"],
+        cwd=directory,
+        check=True,
+    )
+    subprocess.run([*installer, "-r", str(requirements)], check=True)
+    if project == "sentry":
+        subprocess.run(
+            [python, "-m", "sentry", "init", "--dev", "--no-clobber", "primer-config"],
+            env={**os.environ, "PYTHONPATH": "src:."},
+            check=True,
+        )
 
 
 def main() -> int:
