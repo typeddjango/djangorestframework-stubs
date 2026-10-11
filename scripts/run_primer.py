@@ -73,15 +73,15 @@ cleanup
 
 from __future__ import annotations
 
-import argparse
 import os
 import re
 import shlex
 import subprocess
 import sys
-import tempfile
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from contextlib import contextmanager
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -269,7 +269,7 @@ def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: 
         log_status(f"Working tree HEAD: {command_output(['git', 'rev-parse', 'HEAD'])}")
     status = 0
     with (
-        tempfile.TemporaryDirectory(prefix="primer-work-") as temporary,
+        TemporaryDirectory(prefix="primer-work-") as temporary,
         source_path(old, Path(temporary) / "old") as old_path,
         source_path(new, Path(temporary) / "new") as new_path,
     ):
@@ -331,12 +331,12 @@ def compare(old: str, new: str, *, groups: dict[str, tuple[str, ...]], dry_run: 
     return status
 
 
-def build_parser() -> argparse.ArgumentParser:
+def build_parser() -> ArgumentParser:
     """Build the public CLI using the user-facing section of the module docstring."""
     description = __doc__.split("\n## How it works\n", 1)[0] if __doc__ else None
     if description is not None:
         description = description.strip().removeprefix("## Usage").lstrip()
-    parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = ArgumentParser(description=description, formatter_class=RawDescriptionHelpFormatter)
     known_projects = ", ".join(sorted(name for names in PYTHON_PROJECTS.values() for name in names))
     parser.add_argument("revision", nargs="?", help="REF, A..B, or A...B; B may be WORKTREE")
     parser.add_argument(

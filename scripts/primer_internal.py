@@ -13,12 +13,12 @@ Prepare only what mypy and its plugins need to run; the downstream application
 itself does not need to run.
 """
 
-import argparse
 import os
 import shlex
 import subprocess
 import sys
 import traceback
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -204,13 +204,12 @@ def prepare_primer_project(project: str, install_cmd: str) -> None:
 
 def main() -> int:
     """Dispatch exactly one internal mode, forwarding remaining arguments to primer."""
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter, allow_abbrev=False
-    )
+    parser = ArgumentParser(description=__doc__, formatter_class=RawDescriptionHelpFormatter, allow_abbrev=False)
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--run-primer", action="store_true", help="Run primer with its remaining CLI arguments")
     modes.add_argument("--prepare-project", choices=["cookiecutter-django", "sentry", "lidotiku"])
     parser.add_argument("--install", help="Primer's installer command; required with --prepare-project")
+
     args, primer_args = parser.parse_known_args()
     if args.run_primer:
         if args.install is not None:
