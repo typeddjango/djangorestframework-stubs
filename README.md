@@ -62,9 +62,8 @@ You can always also reach out in gitter to discuss your contributions!
 PR CI uses [mypy_primer](https://github.com/hauntsaninja/mypy_primer) to check how DRF
 stub and plugin changes affect downstream projects. Diagnostic differences are advisory:
 a separate workflow updates a PR comment with the diff, and full logs are available
-in workflow artifacts. Large comments truncate each project's output so one project
-does not crowd out the other comparison results.
-Comments include every tested Python version; results for outdated PR or target-branch
+in workflow artifacts. Large comments use per-project and overall output limits.
+Comment output labels Python versions; results for outdated PR or target-branch
 revisions are ignored.
 
 Run manually from the repository root on Linux with [uv](https://docs.astral.sh/uv/)

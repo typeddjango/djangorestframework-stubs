@@ -132,32 +132,24 @@ jobs:
             const footer = `\n\n[Full comparison and diagnostic artifacts](${link})`;
             const MAX_CHARACTERS = 50000;
             const MAX_CHARACTERS_PER_PROJECT = MAX_CHARACTERS / 3;
-            function escape(text) {
-              return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
             function truncateIfNeeded(original, maxLength) {
-              if (maxLength <= 100) return '';
-              if (Buffer.byteLength(escape(original), 'utf8') <= maxLength) return original;
-              let truncated = original;
-              while (Buffer.byteLength(escape(truncated), 'utf8') > maxLength - 100)
-                truncated = truncated.substring(0, Math.floor(truncated.length * 0.9));
+              if (original.length <= maxLength) {
+                return original;
+              }
+              let truncated = original.substring(0, maxLength);
               // Remove the last line, which may have been cut in the middle.
-              truncated = truncated.substring(0, Math.max(0, truncated.lastIndexOf('\n')));
+              truncated = truncated.substring(0, truncated.lastIndexOf('\n'));
               const lines = original.split('\n').length - truncated.split('\n').length;
-              return `${truncated}\n\n... (truncated ${lines} lines; see artifacts) ...`;
+              return `${truncated}\n\n... (truncated ${lines} lines) ...`;
             }
-            const details = sections.map(({version, diff}) => {
-              if (!diff) return `### Python ${version}\n\nNo diagnostic differences.`;
+            let data = sections.map(({version, diff}) => {
+              if (!diff) return `Python ${version}\n\nNo diagnostic differences.`;
               const projects = diff.split('\n\n');
-              // Reserve space for every Python version and project.
-              const budget = Math.min(MAX_CHARACTERS_PER_PROJECT,
-                MAX_CHARACTERS / sections.length / projects.length);
-              const data = truncateIfNeeded(
-                projects.map(project => truncateIfNeeded(project, budget)).join('\n\n'),
-                MAX_CHARACTERS / sections.length);
-              return `### Python ${version}\n\n<pre>${escape(data)}</pre>`;
+              return `Python ${version}\n\n` +
+                projects.map(project => truncateIfNeeded(project, MAX_CHARACTERS_PER_PROJECT)).join('\n\n');
             }).join('\n\n');
-            const body = header + details + footer;
+            data = truncateIfNeeded(data, MAX_CHARACTERS);
+            const body = header + '```diff\n' + data + '\n```' + footer;
             const comments = await github.paginate(github.rest.issues.listComments, {
               ...repo, issue_number: pr.number, per_page: 100,
             });
