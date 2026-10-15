@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from typing import Any, assert_type
 
 from rest_framework import serializers
