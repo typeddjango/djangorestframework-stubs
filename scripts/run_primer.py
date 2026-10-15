@@ -92,9 +92,31 @@ if TYPE_CHECKING:
 ROOT = Path(__file__).resolve().parent.parent
 # Runner choices, not compatibility floors: some projects also have upper bounds.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
-    "3.12": ("lidotiku",),
-    "3.13": ("sentry", "django-polymorphic", "djangorestframework-dataclasses", "django-seriously"),
+    "3.11": ("rainbond-console",),
+    "3.12": ("lidotiku", "django-styleguide-example", "opencontracts"),
+    "3.13": (
+        "sentry",
+        "django-polymorphic",
+        "djangorestframework-dataclasses",
+        "django-seriously",
+        "django-rest-registration",
+        "swh-web",
+    ),
     "3.14": ("cookiecutter-django",),
+}
+
+# Exclude large non-Python assets; settings and plugin imports still need the source tree.
+# Savings versus regular depth-1 clones; allocated disk including .git (2026-10-15).
+SPARSE_EXCLUDES: dict[str, tuple[str, ...]] = {
+    "sentry": (  # Saves 214 MB; 131 MB remaining.
+        "static",
+        ".github/screenshots",
+        "src/sentry/locale/*/LC_MESSAGES",  # Keep locale/catalogs.json: imported by Sentry settings.
+        "tests/sentry/grouping/snapshots",
+    ),
+    "lidotiku": (".devcontainer",),  # Saves 9 MB; <1 MB remaining.
+    "opencontracts": ("docs", "frontend"),  # Saves 183 MB; 51 MB remaining.
+    "rainbond-console": ("www/static", "bin"),  # Saves 87 MB; 17 MB remaining.
 }
 
 
@@ -164,6 +186,53 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 12),
             cost={"mypy": 19},
+            **common,
+        ),
+        Project(
+            location="https://github.com/apragacz/django-rest-registration",
+            mypy_cmd="PYTHONPATH=. {mypy} rest_registration",
+            install_cmd="{install} -e . django-stubs",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 9),
+            cost={"mypy": 4},
+            **common,
+        ),
+        Project(
+            location="https://github.com/HackSoftware/Django-Styleguide-Example",
+            name_override="django-styleguide-example",
+            mypy_cmd="PYTHONPATH=. {mypy} --config=mypy.ini styleguide_example",
+            install_cmd="{install} -r requirements/local.txt",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 6},
+            **common,
+        ),
+        Project(
+            location="https://github.com/Open-Source-Legal/OpenContracts",
+            name_override="opencontracts",
+            mypy_cmd="TELEMETRY_ENABLED=False PYTHONPATH=. {mypy} opencontractserver config",
+            install_cmd="{install} -r requirements/local.txt",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 55},
+            **common,
+        ),
+        Project(
+            location="https://github.com/goodrain/rainbond-console",
+            mypy_cmd="PYTHONPATH=. {mypy} console www openapi",
+            install_cmd=preparation("rainbond-console"),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 11),
+            cost={"mypy": 16},
+            **common,
+        ),
+        Project(
+            location="https://gitlab.softwareheritage.org/swh/devel/swh-web",
+            mypy_cmd="DJANGO_SETTINGS_MODULE=swh.web.settings.development {mypy} swh",
+            install_cmd="TOX_ENV_DIR=primer {install} -e '.[testing]'",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 11),
+            cost={"mypy": 15},
             **common,
         ),
     ]
