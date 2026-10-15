@@ -92,7 +92,7 @@ if TYPE_CHECKING:
 ROOT = Path(__file__).resolve().parent.parent
 # Runner choices, not compatibility floors: some projects also have upper bounds.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
-    "3.12": ("lidotiku",),
+    "3.12": ("lidotiku", "django-styleguide-example"),
     "3.13": (
         "sentry",
         "django-polymorphic",
@@ -179,6 +179,16 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 9),
             cost={"mypy": 4},
+            **common,
+        ),
+        Project(
+            location="https://github.com/HackSoftware/Django-Styleguide-Example",
+            name_override="django-styleguide-example",
+            mypy_cmd="PYTHONPATH=. {mypy} --config=mypy.ini styleguide_example",
+            install_cmd="{install} -r requirements/local.txt",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 6},
             **common,
         ),
     ]
