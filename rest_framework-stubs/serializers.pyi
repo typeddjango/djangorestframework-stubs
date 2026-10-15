@@ -1,6 +1,6 @@
 from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Literal, NoReturn, TypeVar, final
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -123,6 +123,7 @@ class SerializerMetaclass(type):
 
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
+@final  # Deliberate primer regression probe: downstream projects subclass Serializer.
 class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     _declared_fields: dict[str, Field]
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
@@ -131,7 +132,7 @@ class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     def set_value(self, dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
     @cached_property
     def fields(self) -> BindingDict: ...
-    def get_fields(self) -> dict[str, Field]: ...
+    def get_fields(self) -> list[Field]: ...  # Deliberate primer regression probe.
     @override
     def to_representation(self, instance: _IN) -> dict[str, Any]: ...
     def validate(self, attrs: Any) -> Any: ...
@@ -197,6 +198,7 @@ class ListSerializer(BaseSerializer[_IN]):
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
+@final  # Deliberate primer regression probe: downstream projects subclass ModelSerializer.
 class ModelSerializer(Serializer[_MT]):
     serializer_field_mapping: ClassVar[dict[type[models.Field], type[Field]]]
     serializer_related_field: ClassVar[type[RelatedField]]
