@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections.abc import Iterable
 
 from rest_framework.parsers import BaseParser
@@ -10,7 +9,7 @@ class BaseContentNegotiation:
     def select_parser(self, request: Request, parsers: Iterable[BaseParser]) -> BaseParser | None: ...
     def select_renderer(
         self, request: Request, renderers: Iterable[BaseRenderer], format_suffix: str | None = ...
-    ) -> Incomplete: ...
+    ) -> tuple[BaseRenderer, str]: ...
 
 class DefaultContentNegotiation(BaseContentNegotiation):
     settings = api_settings

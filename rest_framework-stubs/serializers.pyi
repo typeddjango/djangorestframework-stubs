@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
 from typing import Any, ClassVar, Literal, NoReturn, TypeVar
 
@@ -117,7 +116,7 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     def to_representation(self, instance: _IN) -> Any: ...
 
 class SerializerMetaclass(type):
-    def __new__(cls, name: Any, bases: Any, attrs: Any) -> Incomplete: ...
+    def __new__(cls, name: Any, bases: Any, attrs: Any) -> SerializerMetaclass: ...
     @classmethod
     def _get_declared_fields(cls, bases: Sequence[type], attrs: dict[str, Any]) -> dict[str, Field]: ...
 
