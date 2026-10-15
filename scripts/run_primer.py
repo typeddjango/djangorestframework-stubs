@@ -92,7 +92,7 @@ if TYPE_CHECKING:
 ROOT = Path(__file__).resolve().parent.parent
 # Runner choices, not compatibility floors: some projects also have upper bounds.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
-    "3.12": ("lidotiku", "django-styleguide-example"),
+    "3.12": ("lidotiku", "django-styleguide-example", "opencontracts"),
     "3.13": (
         "sentry",
         "django-polymorphic",
@@ -114,6 +114,7 @@ SPARSE_EXCLUDES: dict[str, tuple[str, ...]] = {
         "tests/sentry/grouping/snapshots",
     ),
     "lidotiku": (".devcontainer",),  # Saves 9 MB; <1 MB remaining.
+    "opencontracts": ("docs", "frontend"),  # Saves 183 MB; 51 MB remaining.
 }
 
 
@@ -202,6 +203,16 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 12),
             cost={"mypy": 6},
+            **common,
+        ),
+        Project(
+            location="https://github.com/Open-Source-Legal/OpenContracts",
+            name_override="opencontracts",
+            mypy_cmd="TELEMETRY_ENABLED=False PYTHONPATH=. {mypy} opencontractserver config",
+            install_cmd="{install} -r requirements/local.txt",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 12),
+            cost={"mypy": 55},
             **common,
         ),
         Project(
