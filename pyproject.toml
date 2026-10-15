@@ -32,17 +32,17 @@ Funding = "https://github.com/sponsors/typeddjango"
 "Release notes" = "https://github.com/typeddjango/djangorestframework-stubs/releases"
 
 [project.optional-dependencies]
-compatible-mypy = ["mypy>=1.13,<2.4", "django-stubs[compatible-mypy]"]
+compatible-mypy = ["mypy>=1.13,<2.5", "django-stubs[compatible-mypy]"]
 coreapi = ["coreapi>=2.0.0"]
 markdown = ["types-Markdown>=0.1.5"]
 requests = ["types-requests"]
 
 [dependency-groups]
 dev = [
-  "pre-commit==4.6.2",
+  "pre-commit==4.7.0",
   "pytest==9.1.1",
   "pytest-mypy-plugins==4.0.3",
-  "djangorestframework==3.18.0",
+  "djangorestframework==3.18.3",
   "django==5.2.*; python_version < '3.12'",
   "django==6.1.*; python_version >= '3.12'",
   "types-pytz",
@@ -53,9 +53,12 @@ dev = [
   "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
   "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
 ]
+primer = [
+  "mypy-primer @ git+https://github.com/hauntsaninja/mypy_primer",
+]
 
 [build-system]
-requires = ["uv_build>=0.12.0,<0.13.0"]
+requires = ["uv_build>=0.13.0,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
