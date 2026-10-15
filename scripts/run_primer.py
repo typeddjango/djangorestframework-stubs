@@ -93,7 +93,13 @@ ROOT = Path(__file__).resolve().parent.parent
 # Runner choices, not compatibility floors: some projects also have upper bounds.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
     "3.12": ("lidotiku",),
-    "3.13": ("sentry", "django-polymorphic", "djangorestframework-dataclasses", "django-seriously"),
+    "3.13": (
+        "sentry",
+        "django-polymorphic",
+        "djangorestframework-dataclasses",
+        "django-seriously",
+        "django-rest-registration",
+    ),
     "3.14": ("cookiecutter-django",),
 }
 
@@ -164,6 +170,15 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 12),
             cost={"mypy": 19},
+            **common,
+        ),
+        Project(
+            location="https://github.com/apragacz/django-rest-registration",
+            mypy_cmd="PYTHONPATH=. {mypy} rest_registration",
+            install_cmd="{install} -e . django-stubs",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 9),
+            cost={"mypy": 4},
             **common,
         ),
     ]
