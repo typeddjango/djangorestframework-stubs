@@ -99,6 +99,7 @@ PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
         "djangorestframework-dataclasses",
         "django-seriously",
         "django-rest-registration",
+        "swh-web",
     ),
     "3.14": ("cookiecutter-django",),
 }
@@ -189,6 +190,15 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 12),
             cost={"mypy": 6},
+            **common,
+        ),
+        Project(
+            location="https://gitlab.softwareheritage.org/swh/devel/swh-web",
+            mypy_cmd="DJANGO_SETTINGS_MODULE=swh.web.settings.development {mypy} swh",
+            install_cmd="TOX_ENV_DIR=primer {install} -e '.[testing]'",
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 11),
+            cost={"mypy": 15},
             **common,
         ),
     ]
