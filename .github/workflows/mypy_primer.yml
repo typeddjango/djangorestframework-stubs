@@ -72,9 +72,11 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install native project dependencies
         # swh-web requires: libsystemd-dev, libleveldb-dev
+        # rainbond-console requires: default-libmysqlclient-dev
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev libsystemd-dev libleveldb-dev
+          sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev libsystemd-dev libleveldb-dev \
+              default-libmysqlclient-dev
       - name: Resolve locked mypy and record runner dependencies
         run: |
           uv run --no-project --python="$PYTHON_VERSION" python - <<'PY'

@@ -211,6 +211,18 @@ def prepare_sentry(install_args: list[str], python: str) -> None:
     )
 
 
+def prepare_rainbond(install_args: list[str]) -> None:
+    """Use a Python 3.11 Pillow wheel instead of building Rainbond's obsolete pin."""
+    overrides = Path("primer-overrides.txt")
+    overrides.write_text("pillow==9.5.0\n")
+    subprocess.run(
+        [*install_args, "--overrides", str(overrides), "-r", "requirements.txt", "-r", "requirements-typing.txt"],
+        check=True,
+    )
+    # Django settings use a racy check-then-mkdir; both checker runs share this path.
+    Path(os.environ.get("LOG_PATH", "logs")).mkdir(parents=True, exist_ok=True)
+
+
 def prepare_primer_project(project: str, install_cmd: str) -> None:
     """Dispatch the preparation needed to run each project's mypy checks."""
     install_args = shlex.split(install_cmd)
@@ -223,6 +235,8 @@ def prepare_primer_project(project: str, install_cmd: str) -> None:
             prepare_sentry(install_args, python)
         case "lidotiku":
             install_locked_dependencies(install_args, Path("."))
+        case "rainbond-console":
+            prepare_rainbond(install_args)
         case _:
             raise ValueError(f"Unknown project: {project}")
 
@@ -232,7 +246,7 @@ def main() -> int:
     parser = ArgumentParser(description=__doc__, formatter_class=RawDescriptionHelpFormatter, allow_abbrev=False)
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--run-primer", action="store_true", help="Run primer with its remaining CLI arguments")
-    modes.add_argument("--prepare-project", choices=["cookiecutter-django", "sentry", "lidotiku"])
+    modes.add_argument("--prepare-project", choices=["cookiecutter-django", "sentry", "lidotiku", "rainbond-console"])
     parser.add_argument("--install", help="Primer's installer command; required with --prepare-project")
 
     args, primer_args = parser.parse_known_args()

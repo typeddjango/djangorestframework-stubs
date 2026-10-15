@@ -92,6 +92,7 @@ if TYPE_CHECKING:
 ROOT = Path(__file__).resolve().parent.parent
 # Runner choices, not compatibility floors: some projects also have upper bounds.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
+    "3.11": ("rainbond-console",),
     "3.12": ("lidotiku", "django-styleguide-example", "opencontracts"),
     "3.13": (
         "sentry",
@@ -115,6 +116,7 @@ SPARSE_EXCLUDES: dict[str, tuple[str, ...]] = {
     ),
     "lidotiku": (".devcontainer",),  # Saves 9 MB; <1 MB remaining.
     "opencontracts": ("docs", "frontend"),  # Saves 183 MB; 51 MB remaining.
+    "rainbond-console": ("www/static", "bin"),  # Saves 87 MB; 17 MB remaining.
 }
 
 
@@ -213,6 +215,15 @@ def get_projects() -> list[Project]:
             deps=["djangorestframework-stubs"],
             min_python_version=(3, 12),
             cost={"mypy": 55},
+            **common,
+        ),
+        Project(
+            location="https://github.com/goodrain/rainbond-console",
+            mypy_cmd="PYTHONPATH=. {mypy} console www openapi",
+            install_cmd=preparation("rainbond-console"),
+            deps=["djangorestframework-stubs"],
+            min_python_version=(3, 11),
+            cost={"mypy": 16},
             **common,
         ),
         Project(
