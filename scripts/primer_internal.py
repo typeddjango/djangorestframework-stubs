@@ -51,6 +51,29 @@ def install_checker_path_hook(primer: Any, utils: Any) -> None:
     primer.setup_mypy = setup_mypy
 
 
+def install_sparse_checkout(git_utils: Any, exclusions: dict[str, tuple[str, ...]]) -> None:
+    """Avoid downloading excluded assets while retaining upstream revision handling."""
+    upstream_clone = git_utils.clone
+
+    async def clone(repo_source: str, *, repo_dir: Path, cwd: Path, shallow: bool = False) -> None:
+        paths = exclusions.get(repo_dir.name)
+        if not paths:
+            await upstream_clone(repo_source, repo_dir=repo_dir, cwd=cwd, shallow=shallow)
+            return
+        if Path(repo_source).exists():
+            repo_source = str(Path(repo_source).resolve())
+        command = ["git", "clone", "--recurse-submodules", "--filter=blob:none", "--sparse"]
+        if shallow:
+            command += ["--depth=1"]
+        await git_utils.run([*command, repo_source, str(repo_dir)], cwd=cwd)
+        await git_utils.run(
+            ["git", "sparse-checkout", "set", "--no-cone", "/*", *(f"!/{path}/" for path in paths)],
+            cwd=repo_dir,
+        )
+
+    git_utils.clone = clone
+
+
 def install_checkout_logging(model: Any, status: Callable[..., None]) -> None:
     """Hook project checkout to show preparation progress and optionally its revision."""
     upstream_checkout = model.ensure_repo_at_revision
@@ -119,12 +142,14 @@ def install_project_status(model: Any, status: Callable[..., None]) -> None:
 def configure_primer() -> Any:
     """Select our projects and install hooks on the upstream functions primer calls."""
     # Optional primer imports belong only to --run-primer, never project preparation.
+    import mypy_primer.git_utils as git_utils  # type: ignore[import-not-found]
     import mypy_primer.main as primer  # type: ignore[import-not-found]
     import mypy_primer.model as model  # type: ignore[import-not-found]
     import mypy_primer.utils as utils  # type: ignore[import-not-found]
     import run_primer as runner  # type: ignore[import-not-found]
 
     primer.get_projects = runner.get_projects
+    install_sparse_checkout(git_utils, runner.SPARSE_EXCLUDES)
     install_checker_path_hook(primer, utils)
     install_checkout_logging(model, runner.log_status)
     install_checker_diagnostics(model, runner.log_status)

@@ -104,6 +104,18 @@ PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
     "3.14": ("cookiecutter-django",),
 }
 
+# Exclude large non-Python assets; settings and plugin imports still need the source tree.
+# Savings versus regular depth-1 clones; allocated disk including .git (2026-10-15).
+SPARSE_EXCLUDES: dict[str, tuple[str, ...]] = {
+    "sentry": (  # Saves 214 MB; 131 MB remaining.
+        "static",
+        ".github/screenshots",
+        "src/sentry/locale/*/LC_MESSAGES",  # Keep locale/catalogs.json: imported by Sentry settings.
+        "tests/sentry/grouping/snapshots",
+    ),
+    "lidotiku": (".devcontainer",),  # Saves 9 MB; <1 MB remaining.
+}
+
 
 def get_projects() -> list[Project]:
     """Define the downstream projects primer checks against our DRF stubs."""
