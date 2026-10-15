@@ -1,6 +1,7 @@
 from collections.abc import Mapping, Sequence
 from typing import assert_type
 
+from django.forms import Form
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions
 
@@ -63,3 +64,11 @@ def handle_validation_error(exc: exceptions.ValidationError) -> None:
     if isinstance(exc.detail, dict):
         for key in exc.detail:
             assert_type(key, str | int)
+
+
+# case: test_exception_input_django_form_errors
+def validate(form: Form) -> None:
+    exceptions.APIException(form.errors)
+    exceptions.ValidationError(form.errors)
+    exceptions.APIException(form.non_field_errors())
+    exceptions.ValidationError(form.errors["email"])
