@@ -11,6 +11,8 @@ class Token(models.Model):
     @classmethod
     def generate_key(cls) -> str: ...
 
+class TokenProxyQuerySet(models.QuerySet["TokenProxy"]): ...
+
 class TokenProxy(Token):
     # This is how drf defines this:
     @property  # type: ignore[no-redef]

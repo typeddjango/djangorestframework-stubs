@@ -29,3 +29,8 @@ assert_type(serializers.JSONField(initial=[1, 2, 3]), serializers.JSONField)
 assert_type(serializers.JSONField(initial={"a": 1}), serializers.JSONField)
 assert_type(serializers.JSONField(initial=list), serializers.JSONField)
 assert_type(serializers.JSONField(initial=lambda: []), serializers.JSONField)
+
+# case: field_error_messages_accepts_mapping
+error_messages: Mapping[str, str] = {"required": "Required."}
+serializers.CharField(error_messages=error_messages)
+serializers.IntegerField(error_messages=error_messages)
