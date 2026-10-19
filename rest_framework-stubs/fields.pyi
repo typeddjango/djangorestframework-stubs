@@ -681,7 +681,7 @@ class DictField(Field[dict[Any, Any], dict[Any, Any], dict[Any, Any], Any]):
 class HStoreField(DictField):
     child: CharField
 
-_JSONValue: TypeAlias = Mapping[Any, Any] | Sequence[Any] | bool | int | float | str | None
+_JSONValue: TypeAlias = Mapping[str, Any] | Sequence[Any] | bool | int | float | str | None
 
 class JSONField(Field[dict[str, Any] | list[dict[str, Any]], dict[str, Any] | list[dict[str, Any]], str, Any]):
     binary: bool
