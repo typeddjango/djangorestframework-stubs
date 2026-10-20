@@ -9,13 +9,21 @@ from rest_framework.serializers import BaseSerializer
 _Model = TypeVar("_Model", bound=Model)
 _Row = TypeVar("_Row", default=_Model)
 _V = TypeVar("_V", contravariant=True)
+_C = TypeVar("_C", contravariant=True, default=Field)
 
 @type_check_only
-class ContextValidator(Protocol[_V]):
+class ContextValidator(Protocol[_V, _C]):
     requires_context: bool
-    def __call__(self, value: _V, context: Field, /) -> None: ...
+    def __call__(self, value: _V, context: _C, /) -> None: ...
 
+# DRF calls a validator with `requires_context = True` as `validator(value, self)`, where `self` is
+# whatever holds the validator (`Field.run_validators`).
+# On a field that is the field, so `UniqueTogetherValidator` and `Unique*ForValidator`, which need the
+# serializer, are not accepted there.
 Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
+# On a serializer (`Meta.validators`, `validators=`) it is the serializer, and the value is the dict of
+# validated attributes.
+SerializerValidator: TypeAlias = Callable[[_V], None] | ContextValidator[_V, BaseSerializer]
 
 def qs_exists(queryset: QuerySet) -> bool: ...
 def qs_exists_with_condition(queryset: QuerySet[Any], condition: Q | None, against: dict[str, Any]) -> bool: ...

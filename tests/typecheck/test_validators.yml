@@ -1,0 +1,15 @@
+-   case: serializer_level_validators_are_rejected_by_fields
+    main: |
+        from django.contrib.auth.models import User
+        from rest_framework.fields import CharField
+        from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
+
+        CharField(validators=[UniqueValidator(queryset=User.objects.all())])
+        CharField(validators=[UniqueTogetherValidator(queryset=User.objects.all(), fields=["username"])])
+    out: |
+        main:6: error: List item 0 has incompatible type "UniqueTogetherValidator"; expected "Callable[[str], None] | ContextValidator[str, Field[Any, Any, Any, Any]]"  [list-item]
+        main:6: note: Following member(s) of "UniqueTogetherValidator" have conflicts:
+        main:6: note:     Expected:
+        main:6: note:         def __call__(self, str, Field[Any, Any, Any, Any], /) -> None
+        main:6: note:     Got:
+        main:6: note:         def __call__(self, attrs: MutableMapping[str, Any], serializer: BaseSerializer[Any]) -> None
