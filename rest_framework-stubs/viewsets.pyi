@@ -5,7 +5,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponseBase
 from rest_framework import generics, mixins, views
 from rest_framework.decorators import ViewSetAction
-from rest_framework.generics import _MT_co
+from rest_framework.generics import _S, _MT_co
 from rest_framework.request import Request
 from rest_framework.views import AsView, GenericView
 
@@ -37,13 +37,13 @@ class ViewSetMixin:
     def get_extra_action_url_map(self) -> dict[str, str]: ...
 
 class ViewSet(ViewSetMixin, views.APIView): ...
-class GenericViewSet(ViewSetMixin, generics.GenericAPIView[_MT_co]): ...
-class ReadOnlyModelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet[_MT_co]): ...
+class GenericViewSet(ViewSetMixin, generics.GenericAPIView[_MT_co, _S]): ...
+class ReadOnlyModelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet[_MT_co, _S]): ...
 class ModelViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
-    GenericViewSet[_MT_co],
+    GenericViewSet[_MT_co, _S],
 ): ...
