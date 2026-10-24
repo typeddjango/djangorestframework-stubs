@@ -18,6 +18,11 @@ rest_framework.validators.BaseUniqueForValidator.message
 # named keyword parameters for better editor support.
 rest_framework.decorators.action
 
+# DRF defaults allow_nan to False, unlike stdlib json. Stubtest follows the
+# functools.wraps metadata and incorrectly sees the stdlib's True default.
+rest_framework.utils.json.dump
+rest_framework.utils.json.dumps
+
 # `RequestsClient.__init__(*args, **kwargs)` at runtime just delegates to the
 # `requests.Session.__init__(self)` superclass and doesn't actually accept
 # arbitrary arguments.
