@@ -37,21 +37,7 @@ jobs:
             }
             const workflow = await github.rest.actions.getWorkflow({...repo, workflow_id: 'mypy_primer.yml'});
             if (workflow.data.id !== run.workflow_id) throw new Error('Unexpected producer workflow');
-            // Fork workflow_run payloads can omit pull_requests; use trusted commit association.
-            const associated = run.pull_requests.length ? run.pull_requests :
-              (await github.rest.repos.listPullRequestsAssociatedWithCommit({...repo, commit_sha: run.head_sha})).data;
-            const candidates = [];
-            for (const candidate of associated) {
-              const {data: pr} = await github.rest.pulls.get({...repo, pull_number: candidate.number});
-              if (pr.state === 'open' && pr.head.sha === run.head_sha &&
-                  pr.head.repo?.full_name === run.head_repository.full_name &&
-                  pr.base.repo.full_name === `${repo.owner}/${repo.repo}`) candidates.push(pr);
-            }
-            if (candidates.length !== 1) {
-              core.notice('No unique current PR for the tested head; ignoring stale results.');
-              return;
-            }
-            const pr = candidates[0];
+            let pr;
             async function current() {
               const {data: latestPR} = await github.rest.pulls.get({...repo, pull_number: pr.number});
               if (latestPR.state !== 'open' || latestPR.head.sha !== run.head_sha ||
@@ -62,7 +48,6 @@ jobs:
               return !runs.some(other => other.run_number > run.run_number ||
                 (other.id === run.id && other.run_attempt > run.run_attempt));
             }
-            if (!await current()) return;
             const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
               ...repo, run_id: run.id, per_page: 100,
             });
@@ -76,7 +61,7 @@ jobs:
             const sections = [];
             const reader = `
             import io, json, sys, zipfile
-            limits = {"metadata.json": 8192, "comparison.txt": 64 * 1024 * 1024, "exit-code.txt": 8}
+            limits = {"pr_number.txt": 32, "metadata.json": 8192, "comparison.txt": 64 * 1024 * 1024, "exit-code.txt": 8}
             result = {}
             with zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())) as archive:
                 for name, limit in limits.items():
@@ -102,6 +87,23 @@ jobs:
               const files = JSON.parse(execFileSync('python3', ['-c', reader], {
                 input: Buffer.from(download.data), maxBuffer: 2 * 1024 * 1024, timeout: 10000,
               }).toString());
+              const prNumberRaw = files['pr_number.txt'].trim();
+              const prNumber = Number(prNumberRaw);
+              if (!/^[1-9]\d*$/.test(prNumberRaw) || !Number.isSafeInteger(prNumber))
+                throw new Error('Invalid PR number in PR artifact');
+              if (!pr) {
+                // Fork workflow_run payloads can omit pull_requests; read the number from the artifact.
+                const {data} = await github.rest.pulls.get({...repo, pull_number: prNumber});
+                if (data.state !== 'open' || data.head.sha !== run.head_sha ||
+                    data.head.repo?.full_name !== run.head_repository.full_name ||
+                    data.base.repo.full_name !== `${repo.owner}/${repo.repo}`) {
+                  core.notice('No current PR for the tested head; ignoring stale results.');
+                  return;
+                }
+                pr = data;
+                if (!await current()) return;
+              }
+              if (prNumber !== pr.number) throw new Error('Comparison artifacts refer to different PRs');
               const metadata = JSON.parse(files['metadata.json']);
               if (metadata.PR_NUMBER !== String(pr.number) || metadata.PR_HEAD !== pr.head.sha ||
                   metadata.GITHUB_RUN_ID !== String(run.id) || metadata.PYTHON_VERSION !== version ||

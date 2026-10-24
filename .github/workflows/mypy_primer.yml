@@ -67,11 +67,16 @@ jobs:
           print(json.dumps(data, indent=2))
           PY
       - name: Install uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e  # v10.3.2
         with:
           python-version: ${{ matrix.python }}
       - name: Install native project dependencies
-        run: sudo apt-get update && sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev
+        # swh-web requires: libsystemd-dev, libleveldb-dev
+        # rainbond-console requires: default-libmysqlclient-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libgdal-dev libgeos-dev libsystemd-dev libleveldb-dev \
+              default-libmysqlclient-dev
       - name: Resolve locked mypy and record runner dependencies
         run: |
           uv run --no-project --python="$PYTHON_VERSION" python - <<'PY'
@@ -110,6 +115,10 @@ jobs:
             0|1) exit 0 ;;
             *) exit "$status" ;;
           esac
+      - name: Save PR number
+        working-directory: primer-artifacts
+        run: |
+          echo ${{ github.event.pull_request.number }} | tee pr_number.txt
       - name: Upload mypy_primer diff and diagnostics
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7
         if: always()
