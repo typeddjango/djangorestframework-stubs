@@ -112,6 +112,22 @@ class TestSerializer5(serializers.ModelSerializer):
         return super().fields
 
 
+# case: serializer_to_internal_value_returns_validated_values
+class NameSerializer(serializers.Serializer):
+    name = serializers.CharField()
+
+    @override
+    def to_internal_value(self, data: Any) -> dict[str, Any]:
+        validated = super().to_internal_value(data)
+        assert_type(validated, dict[str, Any])
+        return validated
+
+
+assert_type(serializers.ModelSerializer[User]().to_internal_value({}), dict[str, Any])
+assert_type(serializers.ListSerializer(child=NameSerializer()).to_internal_value([]), list[Any])
+assert_type(NameSerializer().validate({"name": "x"}), Any)
+
+
 # case: test_return_list
 class TestSerializer6(serializers.Serializer):
     def test(self) -> None:
