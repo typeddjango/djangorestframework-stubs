@@ -18,6 +18,11 @@ rest_framework.validators.BaseUniqueForValidator.message
 # named keyword parameters for better editor support.
 rest_framework.decorators.action
 
+# DRF defaults allow_nan to False, unlike stdlib json. Stubtest follows the
+# functools.wraps metadata and incorrectly sees the stdlib's True default.
+rest_framework.utils.json.dump
+rest_framework.utils.json.dumps
+
 # `RequestsClient.__init__(*args, **kwargs)` at runtime just delegates to the
 # `requests.Session.__init__(self)` superclass and doesn't actually accept
 # arbitrary arguments.
@@ -43,6 +48,12 @@ rest_framework.fields.TimeField.__init__
 # Generated objects:
 rest_framework.authtoken.models.Token@AnnotatedWith
 rest_framework.authtoken.models.TokenProxy@AnnotatedWith
+
+# The django-stubs mypy plugin synthesizes a `ManagerFrom<QuerySet>` class and a
+# matching `as_manager()` classmethod for every `QuerySet` subclass. Neither
+# exists at runtime; `TokenProxy.objects` is a plain `Manager` there.
+rest_framework.authtoken.models.ManagerFromTokenProxyQuerySet
+rest_framework.authtoken.models.TokenProxyQuerySet.as_manager
 
 # .save() will be different soon:
 rest_framework.authtoken.models.Token.save

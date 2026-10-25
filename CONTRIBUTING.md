@@ -82,6 +82,21 @@ We have a special file to allow errors:
 You might also want to disable `incremental` mode while working on `stubtest` changes.
 This mode leads to several known problems (stubs do not show up or have strange errors).
 
+### Downstream checks with mypy_primer
+
+CI uses [mypy_primer](https://github.com/hauntsaninja/mypy_primer) to check how DRF
+stub and plugin changes affect downstream projects.
+
+To run locally, you must have `uv` and some packages required by checked projects: `libpq-dev`, `libgdal-dev`, and `libgeos-dev` on Debian/Ubuntu.
+
+```bash
+python scripts/run_primer.py
+python scripts/run_primer.py --help
+python scripts/run_primer.py --projects=sentry,lidotiku
+```
+
+The default run compares your changes against origin, including uncommitted files.
+
 ## Submission Guidelines
 
 The workflow for contributions is fairly simple:

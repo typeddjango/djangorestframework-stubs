@@ -10,6 +10,8 @@ from typing_extensions import override
 _Data = TypeVar("_Data")
 _Files = TypeVar("_Files")
 
+def get_encoding(parser_context: Mapping[str, Any]) -> str: ...
+
 class DataAndFiles(Generic[_Data, _Files]):
     data: _Data
     files: _Files

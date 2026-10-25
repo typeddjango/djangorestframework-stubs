@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections.abc import Iterator, Sequence
 from contextlib import AbstractContextManager, contextmanager
 from types import TracebackType
@@ -6,8 +5,10 @@ from typing import Any, Self
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser, _User
+from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest
 from django.http.request import _ImmutableQueryDict
+from django.utils.datastructures import MultiValueDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
@@ -16,6 +17,8 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
 from typing_extensions import override
+
+MAX_MEDIA_TYPE_LENGTH: int
 
 def is_form_media_type(media_type: str) -> bool: ...
 
@@ -90,5 +93,5 @@ class Request(HttpRequest):
     def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
     @override
-    def FILES(self) -> Incomplete: ...  # type: ignore[override]
+    def FILES(self) -> MultiValueDict[str, UploadedFile[Any]]: ...  # type: ignore[override]
     def force_plaintext_errors(self, value: Any) -> None: ...

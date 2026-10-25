@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections.abc import Iterable, Mapping
 from typing import Any, TypeAlias
 
@@ -29,7 +28,7 @@ def force_authenticate(
 
 class HeaderDict(urllib3._collections.HTTPHeaderDict):
     @override
-    def get_all(self, key: str, default: Any) -> Incomplete: ...  # type: ignore[override]
+    def get_all(self, key: str, default: Any) -> list[str]: ...  # type: ignore[override]
 
 class MockOriginalResponse:
     msg: Any
@@ -42,9 +41,9 @@ class DjangoTestAdapter(requests.adapters.HTTPAdapter):
     app: Any
     factory: Any
     def __init__(self) -> None: ...
-    def get_environ(self, request: Request) -> Incomplete: ...
+    def get_environ(self, request: requests.PreparedRequest) -> dict[str, Any]: ...
     @override
-    def send(self, request: Request, *args: Any, **kwargs: Any) -> requests.Response: ...  # type: ignore[override]
+    def send(self, request: requests.PreparedRequest, *args: Any, **kwargs: Any) -> requests.Response: ...
     @override
     def close(self) -> None: ...
 
