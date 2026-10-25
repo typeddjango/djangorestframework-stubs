@@ -1,16 +1,21 @@
+from _typeshed import SupportsWrite
 from collections.abc import Callable
-from json import JSONDecoder, JSONEncoder
-from typing import IO, Any, NoReturn
+from json import JSONEncoder
+
+# Reuse stdlib signatures for following functions (different across Python versions)
+from json import load as load
+from json import loads as loads
+from typing import Any, NoReturn
 
 def strict_constant(o: Any) -> NoReturn: ...
 def dump(
     obj: Any,
-    fp: IO[str],
+    fp: SupportsWrite[str],
     *,
     skipkeys: bool = False,
     ensure_ascii: bool = True,
     check_circular: bool = True,
-    allow_nan: bool = True,
+    allow_nan: bool = False,  # DRF overrides the stdlib default to False.
     cls: type[JSONEncoder] | None = None,
     indent: int | str | None = None,
     separators: tuple[str, str] | None = None,
@@ -24,7 +29,7 @@ def dumps(
     skipkeys: bool = False,
     ensure_ascii: bool = True,
     check_circular: bool = True,
-    allow_nan: bool = True,
+    allow_nan: bool = False,  # DRF overrides the stdlib default to False.
     cls: type[JSONEncoder] | None = None,
     indent: int | str | None = None,
     separators: tuple[str, str] | None = None,
@@ -32,25 +37,3 @@ def dumps(
     sort_keys: bool = False,
     **kw: Any,
 ) -> str: ...
-def load(
-    fp: IO[str],
-    *,
-    cls: type[JSONDecoder] | None = None,
-    object_hook: Callable[[dict[str, Any]], Any] | None = None,
-    parse_float: Callable[[str], Any] | None = None,
-    parse_int: Callable[[str], Any] | None = None,
-    parse_constant: Callable[[str], Any] | None = None,
-    object_pairs_hook: Callable[[list[tuple[str, Any]]], Any] | None = None,
-    **kw: Any,
-) -> Any: ...
-def loads(
-    s: str,
-    *,
-    cls: type[JSONDecoder] | None = None,
-    object_hook: Callable[[dict[str, Any]], Any] | None = None,
-    parse_float: Callable[[str], Any] | None = None,
-    parse_int: Callable[[str], Any] | None = None,
-    parse_constant: Callable[[str], Any] | None = None,
-    object_pairs_hook: Callable[[list[tuple[str, Any]]], Any] | None = None,
-    **kw: Any,
-) -> Any: ...

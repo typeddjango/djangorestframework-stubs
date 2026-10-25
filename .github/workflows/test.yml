@@ -28,11 +28,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
       - uses: actions/checkout@v7
       - name: Install uv & Python ${{ matrix.python-version }}
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -52,11 +52,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
       - uses: actions/checkout@v7
       - name: Install uv & Python ${{ matrix.python-version }}
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -69,12 +69,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.14"]
+        python-version: ["3.15"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v7
       - name: Install uv & Python ${{ matrix.python-version }}
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -90,9 +90,9 @@ jobs:
         with:
           fetch-tags: true
       - name: Install uv & Python
-        uses: astral-sh/setup-uv@v10.3.0
+        uses: astral-sh/setup-uv@v10.3.2
         with:
-          python-version: "3.14"
+          python-version: "3.15"
       - name: Ensure uv.lock is up to date
         run: env --unset=UV_FROZEN uv lock --check
       - name: Build
