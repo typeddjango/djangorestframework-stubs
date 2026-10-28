@@ -1,6 +1,6 @@
 from collections.abc import Callable, Mapping, Sequence
 from http import HTTPMethod
-from typing import Any, Concatenate, Literal, Protocol, TypeAlias, TypeVar, type_check_only
+from typing import Any, Concatenate, Literal, Protocol, Self, TypeAlias, TypeVar, overload, type_check_only
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
@@ -20,6 +20,8 @@ from typing_extensions import ParamSpec, override
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
+_RESP_co = TypeVar("_RESP_co", bound=HttpResponseBase, covariant=True)
+_ViewSet = TypeVar("_ViewSet")
 
 _MixedCaseHttpMethod: TypeAlias = Literal[
     "GET",
@@ -56,14 +58,33 @@ class MethodMapper(dict):
     def trace(self, func: _View) -> _View: ...
 
 @type_check_only
-class ViewSetAction(Protocol[_View]):
+class _ViewSetActionAttributes(Protocol):
     detail: bool
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
     mapping: MethodMapper
-    __call__: _View
     __name__: str
+
+@type_check_only
+class BoundViewSetAction(_ViewSetActionAttributes, Protocol[_P, _RESP_co]):
+    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _RESP_co: ...
+
+@type_check_only
+class ViewSetAction(_ViewSetActionAttributes, Protocol[_View]):
+    __call__: _View
+    # `@action` returns the decorated function itself, so accessing it on a viewset
+    # instance yields a bound method: the first parameter (`self`) is consumed.
+    @overload
+    def __get__(self, instance: None, owner: type[Any], /) -> Self: ...
+    @overload
+    def __get__(
+        self: ViewSetAction[Callable[Concatenate[_ViewSet, _P], _RESP]], instance: _ViewSet, owner: type[Any], /
+    ) -> BoundViewSetAction[_P, _RESP]: ...
+    # Reached only by checkers that cannot solve the overload above (mypy 1.13): access keeps
+    # the unbound type, as before this overload existed.
+    @overload
+    def __get__(self, instance: object, owner: type[Any], /) -> Self: ...
 
 def api_view(
     http_method_names: Sequence[str] | None = ...,

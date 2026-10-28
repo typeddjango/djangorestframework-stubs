@@ -24,3 +24,20 @@
         from typing_extensions import reveal_type
         from rest_framework.decorators import permission_classes
         reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[type[rest_framework.permissions.BasePermission] | rest_framework.permissions.OperandHolder | rest_framework.permissions.SingleOperandHolder]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View) -> _View"
+-   case: action_bound_on_instance
+    main: |
+        from typing_extensions import reveal_type
+        from rest_framework import viewsets
+        from rest_framework.decorators import action
+        from rest_framework.request import Request
+        from rest_framework.response import Response
+
+        class MyViewSet(viewsets.ViewSet):
+            @action(detail=True, methods=["post"])
+            def resend(self, request: Request, pk: int) -> Response: ...
+
+        view = MyViewSet()
+        reveal_type(MyViewSet.resend)  # N: Revealed type is "rest_framework.decorators.ViewSetAction[def (self: main.MyViewSet, request: rest_framework.request.Request, pk: int) -> rest_framework.response.Response]"
+        reveal_type(view.resend)  # N: Revealed type is "rest_framework.decorators.BoundViewSetAction[[request: rest_framework.request.Request, pk: int], rest_framework.response.Response]"
+        view.resend(view.request)  # E: Missing positional argument "pk" in call to "__call__" of "BoundViewSetAction"  [call-arg]
+        view.resend(view.request, pk="1")  # E: Argument "pk" to "__call__" of "BoundViewSetAction" has incompatible type "str"; expected "int"  [arg-type]
