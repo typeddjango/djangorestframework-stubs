@@ -186,6 +186,14 @@ class ListSerializer(BaseSerializer[_IN]):
         max_length: int | None = ...,
     ) -> None: ...
     def run_child_validation(self, data: Any) -> Any: ...
+    # The list-level validators receive the whole list, with the `ListSerializer` as context.
+    @override  # type: ignore[explicit-override, override]
+    @property
+    def validators(self) -> list[SerializerValidator[list[Any]]]: ...
+    @validators.setter
+    def validators(self, validators: list[SerializerValidator[list[Any]]]) -> None: ...
+    @override
+    def get_validators(self) -> list[SerializerValidator[list[Any]]]: ...  # type: ignore[override]
     @override
     def to_representation(self, data: Manager[Any] | Iterable[Any]) -> list[Any]: ...  # type: ignore[override]
     @override

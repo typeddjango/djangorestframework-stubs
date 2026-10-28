@@ -40,11 +40,21 @@ class UserSerializer(serializers.ModelSerializer[User]):
         fields = ["username", "email"]
 
 
-user_serializer = UserSerializer(validators=[together, for_date, validator])
-user_serializer.validators = [*user_serializer.get_unique_together_validators(), validator]
-serializer_validators: list[SerializerValidator[Any]] = [together, for_date, validator]
+user_serializer = UserSerializer(validators=[together, for_date])
+user_serializer.validators = [*user_serializer.get_unique_together_validators(), for_date]
+serializer_validators: list[SerializerValidator[Any]] = [together, for_date]
 
 
 # case: serializer_validators_narrow_to_unique_together_validator
 narrowed = [v for v in user_serializer.validators if isinstance(v, UniqueTogetherValidator)]
 assert_type(narrowed, list[UniqueTogetherValidator])
+
+
+# case: list_serializer_validators_receive_the_list
+def at_most_two(value: list[Any]) -> None: ...
+
+
+user_list = serializers.ListSerializer[User](child=UserSerializer(), validators=[at_most_two])
+assert_type(user_list.validators, list[SerializerValidator[list[Any]]])
+assert_type(user_list.get_validators(), list[SerializerValidator[list[Any]]])
+user_list.validators = [at_most_two]
