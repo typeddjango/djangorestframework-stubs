@@ -5,6 +5,7 @@ import requests
 import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpRequest
 from django.test import testcases
 from django.test.client import Client as DjangoClient
@@ -12,7 +13,6 @@ from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
 from django_stubs_ext import StrOrPromise
 from rest_framework.authtoken.models import Token
-from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
 from typing_extensions import override
 
@@ -56,9 +56,9 @@ class APIRequestFactory(DjangoRequestFactory):
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
     @override
-    def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
+    def request(self, **kwargs: Any) -> WSGIRequest: ...
     @override
-    def get(self, path: StrOrPromise, data: _GetDataType = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    def get(self, path: StrOrPromise, data: _GetDataType = ..., **extra: Any) -> WSGIRequest: ...  # type: ignore[override]
     @override
     def post(  # type: ignore[override]
         self,
@@ -67,7 +67,7 @@ class APIRequestFactory(DjangoRequestFactory):
         format: str | None = ...,
         content_type: str | None = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
     @override
     def put(  # type: ignore[override]
         self,
@@ -76,7 +76,7 @@ class APIRequestFactory(DjangoRequestFactory):
         format: str | None = ...,
         content_type: str | None = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
     @override
     def patch(  # type: ignore[override]
         self,
@@ -85,7 +85,7 @@ class APIRequestFactory(DjangoRequestFactory):
         format: str | None = ...,
         content_type: str | None = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
     @override
     def delete(  # type: ignore[override]
         self,
@@ -94,7 +94,7 @@ class APIRequestFactory(DjangoRequestFactory):
         format: str | None = ...,
         content_type: str | None = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
     @override
     def options(  # type: ignore[override]
         self,
@@ -103,7 +103,7 @@ class APIRequestFactory(DjangoRequestFactory):
         format: str | None = ...,
         content_type: Any | None = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
     @override
     def generic(  # type: ignore[override]
         self,
@@ -113,12 +113,12 @@ class APIRequestFactory(DjangoRequestFactory):
         content_type: str = ...,
         secure: bool = ...,
         **extra: Any,
-    ) -> Request: ...
+    ) -> WSGIRequest: ...
 
 class ForceAuthClientHandler(ClientHandler):
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     @override
-    def get_response(self, request: Request) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def get_response(self, request: HttpRequest) -> _MonkeyPatchedResponse: ...
 
 class APIClient(APIRequestFactory, DjangoClient):
     def credentials(self, **kwargs: Any) -> None: ...
