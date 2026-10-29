@@ -63,9 +63,11 @@ rest_framework.authtoken.models.Token.save
 # users of the library.
 # Most such symbols are marked with `@typing.type_check_only`, but that
 # decorator can't be applied to `TypeAlias` assignments, so `Validator`
-# stays here. `ModelSerializer.Meta` is present at runtime as a subclass
-# hook but stubtest can't reconcile its stub-only class attributes.
+# and `SerializerValidator` stay here. `ModelSerializer.Meta` is present
+# at runtime as a subclass hook but stubtest can't reconcile its stub-only
+# class attributes.
 rest_framework.serializers.ModelSerializer.Meta
+rest_framework.validators.SerializerValidator
 rest_framework.validators.Validator
 
 # Model field descriptor mismatches: django-stubs types model fields as their
