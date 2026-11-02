@@ -1,10 +1,14 @@
 from typing import assert_type
 
+from django.contrib.auth.models import AnonymousUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.test.client import Client
 from django.urls import URLPattern, URLResolver, reverse_lazy
 from rest_framework import status, test
+from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
 from rest_framework.test import APIClient, APILiveServerTestCase, APISimpleTestCase, APITestCase, APITransactionTestCase
+from rest_framework.views import APIView
 
 
 # case: api_client_returns_proper_responses
@@ -49,12 +53,22 @@ assert_type(APILiveServerTestCase.client, APIClient)
 # case: test_requestfactory_http_verbs
 url = reverse_lazy("api:example")
 request_factory = test.APIRequestFactory()
-request_factory.get(url)
-request_factory.post(url)
-request_factory.put(url)
-request_factory.patch(url)
-request_factory.delete(url)
-request_factory.generic("get", url)
+assert_type(request_factory.get(url), WSGIRequest)
+assert_type(request_factory.post(url), WSGIRequest)
+assert_type(request_factory.put(url), WSGIRequest)
+assert_type(request_factory.patch(url), WSGIRequest)
+assert_type(request_factory.delete(url), WSGIRequest)
+assert_type(request_factory.options(url), WSGIRequest)
+assert_type(request_factory.generic("get", url), WSGIRequest)
+assert_type(request_factory.request(), WSGIRequest)
+
+
+# case: test_requestfactory_request_is_wrapped_by_drf
+factory_request = request_factory.get(url)
+test.force_authenticate(factory_request, user=AnonymousUser())
+assert_type(Request(factory_request), Request)
+assert_type(APIView().initialize_request(factory_request), Request)
+APIView.as_view()(factory_request)
 
 
 # case: test_apiclient_http_verbs
