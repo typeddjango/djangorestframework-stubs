@@ -195,6 +195,8 @@ class ListSerializer(BaseSerializer[_IN]):
     @override
     def get_validators(self) -> list[SerializerValidator[list[Any]]]: ...  # type: ignore[override]
     @override
+    def to_internal_value(self, data: Any) -> list[Any]: ...
+    @override
     def to_representation(self, data: Manager[Any] | Iterable[Any]) -> list[Any]: ...  # type: ignore[override]
     @override
     def get_initial(self) -> list[Mapping[Any, Any]]: ...
@@ -251,6 +253,10 @@ class ModelSerializer(Serializer[_MT]):
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ) -> None: ...
+    # The validated values of the model's fields. Not on `Serializer`: a plain serializer may
+    # validate into any shape (a dataclass, a domain object).
+    @override
+    def to_internal_value(self, data: Any) -> dict[str, Any]: ...
     @override
     def update(self, instance: _MT, validated_data: Any) -> _MT: ...
     @override
