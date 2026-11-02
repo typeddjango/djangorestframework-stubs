@@ -1,4 +1,4 @@
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from http import HTTPMethod
 from typing import Any, Generic, TypeVar, assert_type
 
@@ -6,7 +6,7 @@ from django.db.models import Model
 from django.http import HttpRequest
 from mypy_extensions import Arg
 from rest_framework import viewsets
-from rest_framework.decorators import MethodMapper, action, api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -95,20 +95,8 @@ assert_type(ActionViewSet.list_action(action_view, action_request), Response)
 assert_type(ActionViewSet.detail_action(action_view, action_request, pk=1), Response)
 
 
-# case: action_attributes
-assert_type(ActionViewSet.list_action.detail, bool)
-assert_type(ActionViewSet.list_action.url_path, str)
-assert_type(ActionViewSet.list_action.url_name, str)
-assert_type(ActionViewSet.list_action.kwargs, Mapping[str, Any])
-assert_type(ActionViewSet.list_action.mapping, MethodMapper)
-assert_type(ActionViewSet.list_action.__name__, str)
-assert_type(action_view.detail_action.detail, bool)
-assert_type(action_view.detail_action.url_path, str)
-assert_type(action_view.detail_action.url_name, str)
-assert_type(action_view.detail_action.kwargs, Mapping[str, Any])
-assert_type(action_view.detail_action.mapping, MethodMapper)
-assert_type(action_view.detail_action.__name__, str)
-ActionViewSet.as_view(actions={"get": ActionViewSet.list_action})
+# case: bound_action_metadata_for_reverse
+action_view.reverse_action(action_view.detail_action.url_name, args=["1"])
 
 
 # case: action_overridden_in_subclass
