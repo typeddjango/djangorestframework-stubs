@@ -63,7 +63,7 @@ from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.request import Request
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from rest_framework.validators import BaseUniqueForValidator, UniqueTogetherValidator, Validator
+from rest_framework.validators import BaseUniqueForValidator, SerializerValidator, UniqueTogetherValidator
 from rest_framework.views import APIView
 from typing_extensions import TypeVar, override
 
@@ -109,11 +109,20 @@ class BaseSerializer(Field[Any, Any, Any, _IN, _CT]):
         help_text: StrOrPromise | None = None,
         style: dict[str, Any] | None = None,
         error_messages: dict[str, StrOrPromise] | None = None,
-        validators: Sequence[Validator[Any]] | None = ...,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> None: ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
+    # Incompatible with `Field.validators` on purpose: a serializer calls its validators with itself as
+    # context, so they may require a serializer (`UniqueTogetherValidator`), which no field validator may.
+    @override  # type: ignore[explicit-override, override]
+    @property
+    def validators(self) -> list[SerializerValidator[Any]]: ...
+    @validators.setter
+    def validators(self, validators: list[SerializerValidator[Any]]) -> None: ...
+    @override
+    def get_validators(self) -> list[SerializerValidator[Any]]: ...  # type: ignore[override]
     def is_valid(self, *, raise_exception: bool = ...) -> bool: ...
     @property
     def data(self) -> Any: ...
@@ -183,12 +192,20 @@ class ListSerializer(BaseSerializer[_IN, _CT]):
         help_text: StrOrPromise | None = None,
         style: dict[str, Any] | None = None,
         error_messages: dict[str, StrOrPromise] | None = None,
-        validators: Sequence[Validator[list[Any]]] | None = ...,
+        validators: Sequence[SerializerValidator[list[Any]]] | None = ...,
         allow_null: bool = ...,
         min_length: int | None = ...,
         max_length: int | None = ...,
     ) -> None: ...
     def run_child_validation(self, data: Any) -> Any: ...
+    # The list-level validators receive the whole list, with the `ListSerializer` as context.
+    @override  # type: ignore[explicit-override, override]
+    @property
+    def validators(self) -> list[SerializerValidator[list[Any]]]: ...
+    @validators.setter
+    def validators(self, validators: list[SerializerValidator[list[Any]]]) -> None: ...
+    @override
+    def get_validators(self) -> list[SerializerValidator[list[Any]]]: ...  # type: ignore[override]
     @override
     def to_representation(self, data: Manager[Any] | Iterable[Any]) -> list[Any]: ...  # type: ignore[override]
     @override
@@ -242,7 +259,7 @@ class ModelSerializer(Serializer[_MT, _CT]):
         help_text: StrOrPromise | None = None,
         style: dict[str, Any] | None = None,
         error_messages: dict[str, StrOrPromise] | None = None,
-        validators: Sequence[Validator[_MT]] | None = ...,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ) -> None: ...
@@ -274,7 +291,7 @@ class ModelSerializer(Serializer[_MT, _CT]):
     ) -> MutableMapping[str, Any]: ...
     def get_extra_kwargs(self) -> dict[str, Any]: ...
     def get_unique_together_constraints(
-        self, model: _MT
+        self, model: type[_MT]
     ) -> Iterator[
         tuple[Sequence[str], Manager[_MT], list[str], models.Q | None, bool | None, models.UniqueConstraint | None]
     ]: ...
