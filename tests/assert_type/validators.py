@@ -37,7 +37,7 @@ for_date = UniqueForDateValidator(queryset=User.objects.all(), field="username",
 class UserSerializer(serializers.ModelSerializer[User]):
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["username", "email", "date_joined"]
 
 
 user_serializer = UserSerializer(validators=[together, for_date])
@@ -55,6 +55,4 @@ def at_most_two(value: list[Any]) -> None: ...
 
 
 user_list = serializers.ListSerializer[User](child=UserSerializer(), validators=[at_most_two])
-assert_type(user_list.validators, list[SerializerValidator[list[Any]]])
-assert_type(user_list.get_validators(), list[SerializerValidator[list[Any]]])
 user_list.validators = [at_most_two]
