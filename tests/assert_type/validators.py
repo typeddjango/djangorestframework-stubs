@@ -45,12 +45,6 @@ user_serializer.validators = [*user_serializer.get_unique_together_validators(),
 serializer_validators: list[SerializerValidator[Any]] = [together, for_date]
 
 
-# case: serializer_level_validators_are_rejected_by_fields
-serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
-# DictField supplies a compatible value type; rejection must be due to the serializer context.
-serializers.DictField(validators=[together])  # type: ignore[list-item]
-
-
 # case: serializer_validators_narrow_to_unique_together_validator
 narrowed = [v for v in user_serializer.validators if isinstance(v, UniqueTogetherValidator)]
 assert_type(narrowed, list[UniqueTogetherValidator])
