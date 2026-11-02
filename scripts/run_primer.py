@@ -90,19 +90,20 @@ if TYPE_CHECKING:
     from mypy_primer.model import Project  # type: ignore[import-not-found]
 
 ROOT = Path(__file__).resolve().parent.parent
-# Runner choices, not compatibility floors: some projects also have upper bounds.
+# Runner choices, not compatibility floors: respect explicit Python upper bounds,
+# including exact-version pins, even when dependency-only setup works.
 PYTHON_PROJECTS: dict[str, tuple[str, ...]] = {
     "3.11": ("rainbond-console",),
-    "3.12": ("lidotiku", "django-styleguide-example", "opencontracts"),
-    "3.13": (
-        "sentry",
+    "3.12": ("lidotiku", "opencontracts"),
+    "3.13": ("sentry", "swh-web"),
+    "3.14": ("cookiecutter-django",),
+    "3.15": (
         "django-polymorphic",
         "djangorestframework-dataclasses",
         "django-seriously",
         "django-rest-registration",
-        "swh-web",
+        "django-styleguide-example",
     ),
-    "3.14": ("cookiecutter-django",),
 }
 
 # Exclude large non-Python assets; settings and plugin imports still need the source tree.
