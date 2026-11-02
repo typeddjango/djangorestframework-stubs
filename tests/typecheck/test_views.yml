@@ -30,6 +30,26 @@
               class MyModel(models.Model):
                   pass
 
+- case: test_generic_api_view_many_does_not_expose_child_methods
+  main: |
+    from typing import Any
+    from rest_framework import generics, serializers
+
+    class ItemSerializer(serializers.Serializer[Any]):
+        name = serializers.CharField()
+
+        def to_dto(self) -> dict[str, str]:
+            return {"name": self.data["name"]}
+
+    class ItemView(generics.GenericAPIView[Any, ItemSerializer]):
+        serializer_class = ItemSerializer
+
+    # DRF wraps the child in a ListSerializer for many=True. The old BaseSerializer return
+    # type was already imprecise, but did not expose the child's custom to_dto() method.
+    # Covariance cannot fix a return type that depends on the many argument.
+    many = ItemView().get_serializer(many=True)
+    many.to_dto()  # E: "ListSerializer[Any]" has no attribute "to_dto"  [attr-defined]
+
 - case: test_destroy_api_view
   main: |
     from typing_extensions import override
