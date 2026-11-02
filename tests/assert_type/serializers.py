@@ -2,6 +2,7 @@ from collections.abc import Iterable, Mapping, Sequence
 from typing import Any, TypedDict, assert_type, cast
 
 from django.contrib.auth.models import Group, User
+from django.db.models import Manager, Q, UniqueConstraint
 from django.utils.functional import cached_property
 from rest_framework import serializers
 from rest_framework.relations import PKOnlyObject
@@ -163,3 +164,17 @@ assert_type(context_list_ser.context, Mapping[str, Any])
 
 context_model_ser: serializers.ModelSerializer = serializers.ModelSerializer(None, context=context)
 assert_type(context_model_ser.context, Mapping[str, Any])
+
+
+# case: unique_together_constraints_take_the_model_class
+# DRF passes `self.Meta.model` (the class), not an instance.
+class UserSerializer(serializers.ModelSerializer[User]):
+    class Meta:
+        model = User
+        fields = "__all__"
+
+
+assert_type(
+    next(UserSerializer().get_unique_together_constraints(User)),
+    tuple[Sequence[str], Manager[User], list[str], Q | None, bool | None, UniqueConstraint | None],
+)
