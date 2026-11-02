@@ -90,16 +90,18 @@ def check_model_covariance(
     viewset: viewsets.ModelViewSet[ChildModel],
     fixed_serializer_view: generics.GenericAPIView[ChildModel, BaseSerializer[Model]],
 ) -> None:
-    # These one-argument forms allowed model widening before the serializer parameter.
-    # Making only _S covariant would not help: its defaults are BaseSerializer[ChildModel]
-    # and BaseSerializer[MyModel], and BaseSerializer itself is invariant.
-    # Covariant _S would help when one explicitly selected serializer subclasses another,
-    # but that is not automatically safe because serializer_class is writable.
+    # Making only _S covariant would not fix these failures: BaseSerializer[ChildModel]
+    # is not a subtype of BaseSerializer[MyModel] (BaseSerializer is invariant).
+    # Covariant _S would help when one chosen serializer subclasses another, but allowing
+    # callers to replace serializer_class makes that unsafe.
+    # Regression: a child-model view used to work where a parent-model view was expected.
     accept_parent_view(view)
+    # Regression: the same valid model widening now fails for built-in list views.
     accept_parent_list(list_view)
+    # Regression: the same valid model widening now fails for model viewsets.
     accept_parent_viewset(viewset)
 
-    # Model covariance still works when both views use exactly the same serializer type.
+    # OK on the PR: model widening works when both views name the exact same serializer type.
     accept_parent_with_fixed_serializer(fixed_serializer_view)
 
 
@@ -115,12 +117,12 @@ def accept_parent_forwarding_view(view: ForwardingView[MyModel]) -> None: ...
 
 
 def check_forwarded_model_covariance(view: ForwardingView[ChildModel]) -> None:
-    # This remains a passing boundary case even though the built-in views above regress.
+    # OK on the PR: a custom generic view still accepts a child model in place of its parent.
     accept_parent_forwarding_view(view)
 
 
 # case: test_generic_api_view_many_returns_list_serializer
-# These exercise the new two-argument API, not compatibility with the pre-PR signatures.
+# New-API checks below: master does not support the second type argument used here.
 class ItemSerializer(Serializer[Any]):
     name = CharField()
 
@@ -132,19 +134,24 @@ class ItemView(generics.GenericAPIView[Any, ItemSerializer]):
     serializer_class = ItemSerializer
 
 
+# OK on the PR: without many=True, get_serializer() returns the chosen serializer.
 single = ItemView().get_serializer()
 assert_type(single, ItemSerializer)
 assert_type(single.to_dto(), dict[str, str])
 
+# OK on the PR: explicitly passing many=False also returns the chosen serializer.
 single_explicit = ItemView().get_serializer(many=False)
 assert_type(single_explicit, ItemSerializer)
 
-# Covariance cannot fix a return type that depends on the many argument.
+# New-API problem, not a master regression: many=True returns a list serializer at runtime,
+# but the PR claims it returns ItemSerializer. Making _S covariant would not fix this.
 many = ItemView().get_serializer(many=True)
 assert_type(many, ListSerializer[Any])
 
 
 # case: test_generic_api_view_dynamic_many_returns_either_serializer
 def check_dynamic_many(flag: bool) -> None:
+    # New-API problem, not a master regression: an unknown flag can return either type,
+    # but the PR claims it always returns ItemSerializer.
     serializer = ItemView().get_serializer(many=flag)
     assert_type(serializer, ItemSerializer | ListSerializer[Any])

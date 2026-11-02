@@ -44,9 +44,9 @@
     class ItemView(generics.GenericAPIView[Any, ItemSerializer]):
         serializer_class = ItemSerializer
 
-    # DRF wraps the child in a ListSerializer for many=True. The old BaseSerializer return
-    # type was already imprecise, but did not expose the child's custom to_dto() method.
-    # Covariance cannot fix a return type that depends on the many argument.
+    # New-API problem: mypy accepts to_dto(), but the list serializer has no such method.
+    # The old return type did not expose this child-only method.
+    # Not a direct master regression: master does not support the second type argument.
     many = ItemView().get_serializer(many=True)
     many.to_dto()  # E: "ListSerializer[Any]" has no attribute "to_dto"  [attr-defined]
 
