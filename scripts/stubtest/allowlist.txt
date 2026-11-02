@@ -63,7 +63,8 @@ rest_framework.authtoken.models.Token.save
 # users of the library.
 # Most such symbols are marked with `@typing.type_check_only`, but that
 # decorator can't be applied to `TypeAlias` assignments, so `Validator`
-# stays here.
+# and `SerializerValidator` stay here.
+rest_framework.validators.SerializerValidator
 rest_framework.validators.Validator
 
 # Model field descriptor mismatches: django-stubs types model fields as their
