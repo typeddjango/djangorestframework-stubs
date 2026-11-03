@@ -42,7 +42,6 @@ jobs:
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_HEAD: ${{ github.event.pull_request.head.sha }}
-      PR_BASE: ${{ github.event.pull_request.base.sha }}
       PYTHON_VERSION: ${{ matrix.python }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
@@ -54,14 +53,15 @@ jobs:
         run: |
           mkdir -p primer-artifacts
           cd rest_framework-stubs_to_test
-          merge_base=$(git merge-base HEAD "$PR_BASE")
-          export TESTED_MERGE=$(git rev-parse HEAD)
-          export TESTED_BASE="$merge_base"
+          # PR base.sha can lag behind the target branch used by GitHub's test merge.
+          TESTED_MERGE=$(git rev-parse HEAD)
+          TESTED_BASE=$(git rev-parse HEAD^1)
+          export TESTED_MERGE TESTED_BASE
           echo "TESTED_BASE=$TESTED_BASE" >> "$GITHUB_ENV"
           python - <<'PY'
           import json, os
           from pathlib import Path
-          keys = ["PR_NUMBER", "PR_HEAD", "PR_BASE", "TESTED_MERGE", "TESTED_BASE", "GITHUB_RUN_ID", "PYTHON_VERSION"]
+          keys = ["PR_NUMBER", "PR_HEAD", "TESTED_MERGE", "TESTED_BASE", "GITHUB_RUN_ID", "PYTHON_VERSION"]
           data = {key: os.environ[key] for key in keys}
           Path("../primer-artifacts/metadata.json").write_text(json.dumps(data))
           print(json.dumps(data, indent=2))
