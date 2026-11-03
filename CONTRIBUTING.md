@@ -78,7 +78,6 @@ uv run mypy tests
 uv run pyright
 ```
 
-Pyright checks `tests/assert_type/`. To check one file, run `uv run pyright tests/assert_type/serializers.py`.
 The YAML cases in `tests/typecheck/` use pytest and mypy.
 
 ### Testing stubs with `stubtest`
