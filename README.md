@@ -27,7 +27,7 @@ plugins =
 
 in your `mypy.ini` file.
 
-## FAQ
+## Troubleshooting
 
 ### Model instance is inferred as `Any` instead of my `Model` class
 
@@ -41,6 +41,19 @@ class MyModelSerializer(serializers.ModelSerializer[MyModel]):
 ```
 
 Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `MyModel | typing.Sequence[MyModel] | None`.
+
+### `Need type annotation` for relation fields
+
+```python
+owner = serializers.PrimaryKeyRelatedField(read_only=True)
+# error: Need type annotation for "owner"  [var-annotated]
+```
+
+Supply the related model as a type argument:
+
+```python
+owner = serializers.PrimaryKeyRelatedField[User](read_only=True)
+```
 
 ## To get help
 
