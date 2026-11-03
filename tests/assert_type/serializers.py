@@ -26,8 +26,18 @@ class SerializerC(SerializerA, SerializerB):  # pyright: ignore[reportIncompatib
     pass
 
 
+# case: model_serializer_meta_attributes
+# These options remain typed in mypy; Pyright deliberately exposes the base Meta as Any.
+assert_type(serializers.ModelSerializer.Meta.model, type[serializers._MT])  # type: ignore[valid-type]  # pyright: ignore[reportAssertTypeFailure, reportGeneralTypeIssues]
+assert_type(serializers.ModelSerializer.Meta.fields, Sequence[str])  # pyright: ignore[reportAssertTypeFailure]
+assert_type(serializers.ModelSerializer.Meta.read_only_fields, Sequence[str] | None)  # pyright: ignore[reportAssertTypeFailure]
+assert_type(serializers.ModelSerializer.Meta.exclude, Sequence[str] | None)  # pyright: ignore[reportAssertTypeFailure]
+assert_type(serializers.ModelSerializer.Meta.depth, int | None)  # pyright: ignore[reportAssertTypeFailure]
+assert_type(serializers.ModelSerializer.Meta.extra_kwargs, dict[str, dict[str, Any]])  # pyright: ignore[reportAssertTypeFailure]
+
+
 # case: test_model_serializer_passes_check
-class TestSerializer(serializers.ModelSerializer[User]):
+class TestSerializer(serializers.ModelSerializer):  # pyright: ignore[reportMissingTypeArgument]
     class Meta:
         model = User
 

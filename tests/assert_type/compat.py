@@ -1,7 +1,9 @@
+import types
 from typing import assert_type
 
 from django.contrib.postgres import fields as django_postgres_fields
 from rest_framework.compat import postgres_fields
 
 # case: test_compat_postgres_fields
+postgres_module: types.ModuleType = postgres_fields
 assert_type(postgres_fields.hstore.HStoreField(), django_postgres_fields.HStoreField)

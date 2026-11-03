@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from http import HTTPMethod
-from typing import Any, Generic, TypeVar, assert_type
+from typing import Any, Generic, Protocol, TypeVar, assert_type
 
 from django.db.models import Model
 from django.http import HttpRequest
@@ -28,6 +28,11 @@ assert_type(view_func1(HttpRequest()), Any)
 def view_func2(request: Request, arg: str) -> Response: ...
 
 
+class FancyViewCallable(Protocol):
+    def __call__(self, request: HttpRequest, /, arg: str) -> Response: ...
+
+
+fancy_view: AsView[FancyViewCallable] = view_func2
 view_func2(HttpRequest(), "test")
 assert_type(view_func2(HttpRequest(), arg="test"), Response)
 assert_type(view_func2(HttpRequest(), "test"), Response)
