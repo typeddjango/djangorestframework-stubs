@@ -49,20 +49,23 @@ jobs:
   pyright:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
       - uses: actions/checkout@v7
-      - name: Install uv & Python ${{ matrix.python-version }}
+      - name: Install uv & Python
         uses: astral-sh/setup-uv@v10.3.3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.15"
       - name: Install dependencies
         run: uv sync
-      - name: Run Pyright on the test cases
-        run: uv run pyright
+      - name: Run Pyright for all supported Python targets
+        run: |
+          status=0
+          for version in 3.11 3.12 3.13 3.14 3.15; do
+            echo "Checking Python $version"
+            uv run pyright --pythonversion "$version" || status=1
+            echo
+          done
+          exit "$status"
 
   test:
     timeout-minutes: 10
