@@ -9,19 +9,21 @@ class MyModel(Model):
     pass
 
 
+# Pyright does not use the UsesQuerySet self annotation to specialize these hook overrides.
+# Keep the model-specific signatures; mypy resolves them from GenericAPIView[MyModel].
 # case: test_create
-class CreateView(GenericAPIView, CreateModelMixin):
+class CreateView(GenericAPIView[MyModel], CreateModelMixin):
     @override
-    def perform_create(self, serializer: BaseSerializer[MyModel]) -> None: ...
+    def perform_create(self, serializer: BaseSerializer[MyModel]) -> None: ...  # pyright: ignore[reportIncompatibleMethodOverride]
 
 
 # case: test_perform_update
-class UpdateView(GenericAPIView, UpdateModelMixin):
+class UpdateView(GenericAPIView[MyModel], UpdateModelMixin):
     @override
-    def perform_update(self, serializer: BaseSerializer[MyModel]) -> None: ...
+    def perform_update(self, serializer: BaseSerializer[MyModel]) -> None: ...  # pyright: ignore[reportIncompatibleMethodOverride]
 
 
 # case: test_perform_destroy
-class DestroyView(GenericAPIView, DestroyModelMixin):
+class DestroyView(GenericAPIView[MyModel], DestroyModelMixin):
     @override
-    def perform_destroy(self, instance: MyModel) -> None: ...
+    def perform_destroy(self, instance: MyModel) -> None: ...  # pyright: ignore[reportIncompatibleMethodOverride]

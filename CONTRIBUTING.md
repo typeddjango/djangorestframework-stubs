@@ -55,8 +55,8 @@ pre-commit install
 
 ### Testing and Linting
 
-We use `mypy`, `pytest`, `ruff`, and `black` for quality control. All tools except pytest are executed using pre-commit when you make a commit.
-To ensure there are not formatting or typing issues in the entire repository you can run:
+We use `mypy`, `pyright`, `pytest`, and Ruff for quality control. Pre-commit runs the formatting and linting hooks; type checks run separately in CI.
+To run the formatting and linting hooks across the repository:
 
 ```bash
 pre-commit run --all-files
@@ -68,8 +68,18 @@ You can also run pre-commit per file or for a specific path, simply replace "--a
 To execute the unit tests, simply run:
 
 ```bash
-pytest
+uv run pytest
 ```
+
+### Type-checking
+
+```bash
+uv run mypy tests
+uv run pyright
+```
+
+Pyright checks `tests/assert_type/`. To check one file, run `uv run pyright tests/assert_type/serializers.py`.
+The YAML cases in `tests/typecheck/` use pytest and mypy.
 
 ### Testing stubs with `stubtest`
 
