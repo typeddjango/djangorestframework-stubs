@@ -13,7 +13,7 @@ from django.db import models
 from django.forms import ImageField as DjangoImageField  # noqa: F401
 from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import ErrorDetail
-from rest_framework.serializers import BaseSerializer
+from rest_framework.serializers import BaseSerializer, _AnyContextType, _ContextType
 from rest_framework.validators import Validator
 from typing_extensions import override
 
@@ -68,6 +68,7 @@ _IN = TypeVar("_IN")  # Instance Type
 _VT = TypeVar("_VT")  # Value Type
 _DT = TypeVar("_DT")  # Data Type
 _RP = TypeVar("_RP")  # Representation Type
+_CT = TypeVar("_CT", bound=_AnyContextType, default=_ContextType)  # Context Type
 
 @type_check_only
 class SupportsToPython(Protocol):
@@ -75,7 +76,7 @@ class SupportsToPython(Protocol):
 
 _DefaultInitial: TypeAlias = _VT | Callable[[], _VT] | _Empty | None
 
-class Field(Generic[_VT, _DT, _RP, _IN]):
+class Field(Generic[_VT, _DT, _RP, _IN, _CT]):
     allow_null: bool
     default: _VT | None
     default_empty_html: Any  # Any: empty sentinel or field default value
@@ -130,7 +131,7 @@ class Field(Generic[_VT, _DT, _RP, _IN]):
     @property
     def root(self) -> BaseSerializer: ...
     @property
-    def context(self) -> Mapping[str, Any]: ...
+    def context(self) -> _CT: ...
     def __new__(cls, *args: Any, **kwargs: Any) -> Self: ...
     def __deepcopy__(self, memo: dict[int, Any]) -> Self: ...
 
