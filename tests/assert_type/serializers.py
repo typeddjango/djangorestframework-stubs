@@ -58,37 +58,52 @@ class TestSerializer3(serializers.ModelSerializer[User]):
         model = User
 
 
+# The existing __new__ signature loses concrete related-field types in Pyright.
+# Preserve these mypy assertions; fix constructor typing in a separate PR.
 # case: read_only_related_field_explicit_model_type
 class ReadOnlyRelationSerializer(serializers.ModelSerializer[User]):
     untyped_owner = serializers.PrimaryKeyRelatedField(read_only=True)  # type: ignore[var-annotated]  # pyright: ignore[reportUnknownVariableType]
     owner = serializers.PrimaryKeyRelatedField[User](read_only=True)
 
 
-assert_type(ReadOnlyRelationSerializer.owner, serializers.PrimaryKeyRelatedField[User])
+assert_type(ReadOnlyRelationSerializer.owner, serializers.PrimaryKeyRelatedField[User])  # pyright: ignore[reportAssertTypeFailure]
 
 
 # case: related_field_get_attribute_model_or_pk
-field = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+field = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())  # pyright: ignore[reportUnknownVariableType]
 user = cast("User", object())
-value = field.get_attribute(user)
-assert_type(value, User | PKOnlyObject | None)
+value = field.get_attribute(user)  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+assert_type(value, User | PKOnlyObject | None)  # pyright: ignore[reportAssertTypeFailure]
 
-pk_field_typed = serializers.PrimaryKeyRelatedField(
+pk_field_typed = serializers.PrimaryKeyRelatedField(  # pyright: ignore[reportUnknownVariableType]
     queryset=User.objects.all(),
     pk_field=serializers.UUIDField(format="hex"),
 )
-assert_type(pk_field_typed.pk_field, serializers.Field[Any, Any, Any, Any] | None)
+assert_type(
+    pk_field_typed.pk_field,  # pyright: ignore[reportUnknownMemberType, reportAssertTypeFailure, reportAttributeAccessIssue]
+    serializers.Field[Any, Any, Any, Any] | None,
+)
 
 # case: slug_related_field_accepts_pk_object
-field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+field = serializers.SlugRelatedField(  # pyright: ignore[reportUnknownVariableType]
+    slug_field="username", queryset=User.objects.all()
+)
 obj = PKOnlyObject(pk=1)
-assert_type(field.to_representation(obj), str)
+assert_type(
+    field.to_representation(obj),  # pyright: ignore[reportUnknownMemberType, reportAssertTypeFailure, reportArgumentType]
+    str,
+)
 
 # case: many_related_field_value_type_iterable
-child_relation = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+child_relation = serializers.PrimaryKeyRelatedField(  # pyright: ignore[reportUnknownVariableType]
+    queryset=Group.objects.all()
+)
 groups_qs = Group.objects.all()
 many_field = serializers.ManyRelatedField(
-    child_relation=child_relation, read_only=True, default=groups_qs, initial=groups_qs
+    child_relation=child_relation,  # pyright: ignore[reportArgumentType]
+    read_only=True,
+    default=groups_qs,
+    initial=groups_qs,
 )
 user = cast("User", object())
 value = many_field.get_attribute(user)

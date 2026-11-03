@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from typing import Any, Literal, Self, TypeVar, overload
+from typing import Any, Self, TypeVar
 
 from django.db.models import Manager, Model, QuerySet
 from django_stubs_ext import StrOrPromise
@@ -57,12 +57,8 @@ class RelatedField(Field[_MT, _DT, _PT, Any]):
         error_messages: dict[str, StrOrPromise] | None = ...,
         style: dict[str, str] | None = ...,
     ) -> None: ...
-    @overload
-    def __new__(cls, *args: Any, many: Literal[True], **kwargs: Any) -> ManyRelatedField: ...  # type: ignore[misc]
-    @overload
-    def __new__(cls, *args: Any, many: Literal[False] = False, **kwargs: Any) -> Self: ...
-    @overload
-    def __new__(cls, *args: Any, many: bool, **kwargs: Any) -> Self | ManyRelatedField: ...  # type: ignore[misc]
+    # mypy doesn't accept the typing below, although its accurate to what this class is doing, hence the ignore
+    def __new__(cls, *args: Any, **kwargs: Any) -> RelatedField[_MT, _DT, _PT] | ManyRelatedField: ...  # type: ignore[misc]
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> ManyRelatedField: ...
     def get_queryset(self) -> QuerySet[_MT] | None: ...
