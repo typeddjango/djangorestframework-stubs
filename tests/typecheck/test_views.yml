@@ -1,3 +1,55 @@
+- case: test_generic_api_view_serializer_type
+  main: |
+    from typing import Any
+    from typing_extensions import reveal_type
+    from rest_framework import generics, viewsets
+    from rest_framework.serializers import BaseSerializer
+    from myapp.models import MyModel
+
+    class MySerializer(BaseSerializer[Any]):
+        def to_dto(self) -> dict[str, str]: ...
+
+    class MyView(generics.GenericAPIView[Any, MySerializer]):
+        serializer_class = MySerializer
+
+    class MyViewSet(viewsets.ModelViewSet[MyModel, MySerializer]): ...
+
+    class Plain(generics.GenericAPIView[MyModel]): ...
+
+    reveal_type(MyView().get_serializer())  # N: Revealed type is "main.MySerializer"
+    reveal_type(MyView().get_serializer_class())  # N: Revealed type is "type[main.MySerializer]"
+    reveal_type(MyViewSet().get_serializer())  # N: Revealed type is "main.MySerializer"
+    reveal_type(Plain().get_serializer())  # N: Revealed type is "rest_framework.serializers.BaseSerializer[myapp.models.MyModel]"
+  installed_apps:
+      - myapp
+  files:
+      -   path: myapp/__init__.py
+      -   path: myapp/models.py
+          content: |
+              from django.db import models
+              class MyModel(models.Model):
+                  pass
+
+- case: test_generic_api_view_many_does_not_expose_child_methods
+  main: |
+    from typing import Any
+    from rest_framework import generics, serializers
+
+    class ItemSerializer(serializers.Serializer[Any]):
+        name = serializers.CharField()
+
+        def to_dto(self) -> dict[str, str]:
+            return {"name": self.data["name"]}
+
+    class ItemView(generics.GenericAPIView[Any, ItemSerializer]):
+        serializer_class = ItemSerializer
+
+    # New-API problem: mypy accepts to_dto(), but the list serializer has no such method.
+    # The old return type did not expose this child-only method.
+    # Not a direct master regression: master does not support the second type argument.
+    many = ItemView().get_serializer(many=True)
+    many.to_dto()  # E: "ListSerializer[Any]" has no attribute "to_dto"  [attr-defined]
+
 - case: test_destroy_api_view
   main: |
     from typing_extensions import override
