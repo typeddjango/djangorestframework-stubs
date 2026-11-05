@@ -201,3 +201,51 @@ assert_type(
     next(UserSerializer().get_unique_together_constraints(User)),
     tuple[Sequence[str], Manager[User], list[str], Q | None, bool | None, UniqueConstraint | None],
 )
+
+
+# case: serializer_many_returns_list_serializer
+# `BaseSerializer.__new__()` returns `many_init(...)` for `many=True`.
+class IntSerializer(serializers.Serializer[int]):
+    pass
+
+
+def serializer_many(flag: bool) -> None:
+    assert_type(IntSerializer(), IntSerializer)
+    assert_type(IntSerializer(1), IntSerializer)
+    assert_type(IntSerializer(instance=1, many=False), IntSerializer)
+    assert_type(IntSerializer(data={}, partial=True), IntSerializer)
+    assert_type(IntSerializer([1, 2], many=True), serializers.ListSerializer[int])
+    assert_type(IntSerializer(instance=[1, 2], many=True), serializers.ListSerializer[int])
+    assert_type(IntSerializer(many=True), serializers.ListSerializer[int])
+    assert_type(IntSerializer(data=[{}], many=True, context={}), serializers.ListSerializer[int])
+    IntSerializer([1, 2])  # type: ignore[call-overload]
+    IntSerializer(["a"], many=True)  # type: ignore[call-overload]
+    # `many` is keyword-only at runtime: a second positional argument is `data`.
+    IntSerializer(1, True, True)  # type: ignore[call-overload]
+
+
+# case: model_serializer_many_returns_list_serializer
+def model_serializer_many(flag: bool) -> None:
+    assert_type(UserSerializer(), UserSerializer)
+    assert_type(UserSerializer(User()), UserSerializer)
+    assert_type(UserSerializer(User(), context={}), UserSerializer)
+    assert_type(UserSerializer(data={}, partial=True), UserSerializer)
+    assert_type(UserSerializer(many=True), serializers.ListSerializer[User])
+    assert_type(UserSerializer([User()], many=True), serializers.ListSerializer[User])
+    assert_type(UserSerializer(User.objects.all(), many=True), serializers.ListSerializer[User])
+    assert_type(UserSerializer(User.objects, many=True, context={}), serializers.ListSerializer[User])
+    assert_type(UserSerializer(data=[{}], many=True), serializers.ListSerializer[User])
+    assert_type(
+        UserSerializer(User.objects.all(), many=flag),
+        UserSerializer | serializers.ListSerializer[User],
+    )
+    UserSerializer(User.objects.all())  # type: ignore[call-overload]
+    UserSerializer(Group())  # type: ignore[call-overload]
+    UserSerializer([Group()], many=True)  # type: ignore[list-item]
+
+
+# case: list_serializer_infers_instance_type_from_child
+assert_type(serializers.ListSerializer(child=IntSerializer()), serializers.ListSerializer[int])
+assert_type(serializers.ListSerializer(child=UserSerializer()), serializers.ListSerializer[User])
+assert_type(serializers.ListSerializer([User()], child=UserSerializer()), serializers.ListSerializer[User])
+assert_type(serializers.ListSerializer(child=serializers.CharField()), serializers.ListSerializer[Any])

@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, Self, TypeVar, overload
+from typing import Any, ClassVar, Literal, NoReturn, Self, TypeVar, overload, type_check_only
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -72,17 +72,31 @@ ALL_FIELDS: str
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
 
-class BaseSerializer(Field[Any, Any, Any, _IN]):
+# The typing specification states: "After evaluating the `__new__` method, a type checker should
+# evaluate the `__init__` method (if applicable) using the supplied arguments."
+# https://typing.python.org/en/latest/spec/constructors.html#init-method
+# So `__init__()` must accept the constructor arguments, which the inherited `Field.__init__()` doesn't.
+# Mypy, however, evaluates only one of `__new__()` and `__init__()`: whichever comes first in the MRO,
+# preferring `__init__()` when both are on the same class. Defining `__init__()` on `BaseSerializer`
+# would make mypy ignore the `__new__()` overloads, so it is defined here, after `BaseSerializer` in the MRO.
+# Issues: https://github.com/python/mypy/issues/17251 / https://github.com/python/mypy/issues/12045.
+@type_check_only
+class _BaseSerializerInit(Field[Any, Any, Any, _IN]):
+    def __init__(self, instance: Any = None, data: Any = ..., **kwargs: Any) -> None: ...
+
+class BaseSerializer(_BaseSerializerInit[_IN]):
     partial: bool
     many: bool
     instance: _IN | None
     initial_data: Any
     _context: Mapping[str, Any]
-    # When both __init__ and __new__ are present, mypy will prefer __init__
     @overload
     def __new__(
-        cls: type[Self],
-        instance: Iterable[_IN] | None,
+        cls,
+        instance: Iterable[_IN] | None = ...,
+        data: Any = ...,
+        *,
+        partial: bool = ...,
         many: Literal[True],
         allow_empty: bool = ...,
         context: Mapping[str, Any] = ...,
@@ -101,8 +115,11 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     ) -> ListSerializer[_IN]: ...
     @overload
     def __new__(
-        cls: type[Self],
+        cls,
         instance: _IN | None = ...,
+        data: Any = ...,
+        *,
+        partial: bool = ...,
         many: Literal[False] = ...,
         allow_empty: bool = ...,
         context: Mapping[str, Any] = ...,
@@ -120,7 +137,7 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
         allow_null: bool = ...,
     ) -> Self: ...
     @classmethod
-    def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
+    def many_init(cls, *args: Any, **kwargs: Any) -> ListSerializer: ...
     # Incompatible with `Field.validators` on purpose: a serializer calls its validators with itself as
     # context, so they may require a serializer (`UniqueTogetherValidator`), which no field validator may.
     @override  # type: ignore[explicit-override, override]
@@ -181,14 +198,15 @@ class ListSerializer(BaseSerializer[_IN]):
     many: bool
     default_error_messages: ClassVar[dict[str, StrOrPromise]]
     allow_empty: bool | None
-    def __init__(
-        self,
+    def __new__(
+        cls,
         instance: Iterable[_IN] | None = ...,
         data: Any = ...,
+        *,
         partial: bool = ...,
         context: Mapping[str, Any] = ...,
         allow_empty: bool = ...,
-        child: Field | BaseSerializer | None = ...,
+        child: Field[Any, Any, Any, _IN] | None = ...,
         read_only: bool = ...,
         write_only: bool = ...,
         required: bool | None = None,
@@ -203,7 +221,7 @@ class ListSerializer(BaseSerializer[_IN]):
         allow_null: bool = ...,
         min_length: int | None = ...,
         max_length: int | None = ...,
-    ) -> None: ...
+    ) -> Self: ...
     def run_child_validation(self, data: Any) -> Any: ...
     # The list-level validators receive the whole list, with the `ListSerializer` as context.
     @override  # type: ignore[explicit-override, override]
@@ -252,24 +270,35 @@ class ModelSerializer(Serializer[_MT]):
 
     @overload
     def __new__(  # type: ignore[misc]
-        cls: type[Self],
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT],
-        many: Literal[True],
-    ) -> ListSerializer[_MT]: ...
-    @overload
-    def __new__(
-        cls: type[Self],
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT],
-        many: Literal[False],
-    ) -> Self: ...
-    @overload
-    def __new__(
-        cls: type[Self],
-        instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
+        cls,
+        instance: Iterable[_MT] | QuerySet[_MT] | Manager[_MT] | None = ...,
         data: Any = ...,
         *,
         partial: bool = ...,
-        many: bool = ...,
+        many: Literal[True],
+        allow_empty: bool = ...,
+        context: Mapping[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool | None = None,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> ListSerializer[_MT]: ...
+    @overload
+    def __new__(
+        cls,
+        instance: _MT | None = ...,
+        data: Any = ...,
+        *,
+        partial: bool = ...,
+        many: Literal[False] = ...,
         allow_empty: bool = ...,
         context: Mapping[str, Any] = ...,
         read_only: bool = ...,
@@ -285,6 +314,29 @@ class ModelSerializer(Serializer[_MT]):
         validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> Self: ...
+    @overload
+    def __new__(  # type: ignore[misc]
+        cls,
+        instance: _MT | Iterable[_MT] | QuerySet[_MT] | Manager[_MT] | None = ...,
+        data: Any = ...,
+        *,
+        partial: bool = ...,
+        many: bool,
+        allow_empty: bool = ...,
+        context: Mapping[str, Any] = ...,
+        read_only: bool = ...,
+        write_only: bool = ...,
+        required: bool | None = None,
+        default: Any = ...,
+        initial: Any = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
+        allow_null: bool = ...,
+    ) -> Self | ListSerializer[_MT]: ...
     # The validated values of the model's fields. Not on `Serializer`: a plain serializer may
     # validate into any shape (a dataclass, a domain object).
     @override
