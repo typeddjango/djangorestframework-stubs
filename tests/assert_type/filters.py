@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 
 # case: basic_filters
-class MyView1(GenericAPIView):
+class MyView1(GenericAPIView[Any]):
     filter_backends = [OrderingFilter]
 
 
@@ -19,23 +19,22 @@ class MyModel(Model):
 
 class MyFilterBackend:
     def filter_queryset(self, request: Request, queryset: QuerySet[MyModel], view: APIView) -> QuerySet[MyModel]:
-        pass
+        return queryset
 
     def get_schema_fields(self, view: APIView) -> list[Any]:
-        pass
+        return []
 
     def get_schema_operation_parameters(self, view: APIView) -> Any:
         pass
 
 
-class MyView(GenericAPIView):
+class MyView(GenericAPIView[MyModel]):
     filter_backends = [MyFilterBackend]
 
 
 # case: base_filter_backend_preserves_queryset_type
-backend = BaseFilterBackend()
-request: Request
-view: APIView
-values_qs: QuerySet[MyModel, dict[str, Any]]
-result = backend.filter_queryset(request, values_qs, view)
-assert_type(result, QuerySet[MyModel, dict[str, Any]])
+def check_filter_queryset(
+    backend: BaseFilterBackend, request: Request, view: APIView, values_qs: QuerySet[MyModel, dict[str, Any]]
+) -> None:
+    result = backend.filter_queryset(request, values_qs, view)
+    assert_type(result, QuerySet[MyModel, dict[str, Any]])

@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from http import HTTPMethod
-from typing import Any, Generic, TypeVar, assert_type
+from typing import Any, Generic, Protocol, TypeVar, assert_type
 
 from django.db.models import Model
 from django.http import HttpRequest
-from mypy_extensions import Arg
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import BasePermission, IsAuthenticated
@@ -29,9 +28,13 @@ assert_type(view_func1(HttpRequest()), Any)
 def view_func2(request: Request, arg: str) -> Response: ...
 
 
+class FancyViewCallable(Protocol):
+    def __call__(self, request: HttpRequest, /, arg: str) -> Response: ...
+
+
+fancy_view: AsView[FancyViewCallable] = view_func2
 view_func2(HttpRequest(), "test")
-view_func2(HttpRequest(), arg="test")
-assert_type(view_func2, AsView[Callable[[HttpRequest, Arg(str, "arg")], Response]])
+assert_type(view_func2(HttpRequest(), arg="test"), Response)
 assert_type(view_func2(HttpRequest(), "test"), Response)
 
 
@@ -82,28 +85,27 @@ class ActionViewSet(viewsets.ViewSet):
         assert_type(self.mapped_post(request), Response)
 
 
-action_view = ActionViewSet()
-action_request: Request
-assert_type(action_view.list_action(action_request), Response)
-assert_type(action_view.detail_action(action_request), Response)
-assert_type(action_view.detail_action(action_request, pk=1), Response)
-assert_type(action_view.mapped_post(action_request), Response)
+def check_action_binding(action_view: ActionViewSet, action_request: Request) -> None:
+    assert_type(action_view.list_action(action_request), Response)
+    assert_type(action_view.detail_action(action_request), Response)
+    assert_type(action_view.detail_action(action_request, pk=1), Response)
+    assert_type(action_view.mapped_post(action_request), Response)
 
+    # case: action_called_on_class_takes_self
+    assert_type(ActionViewSet.list_action(action_view, action_request), Response)
+    assert_type(ActionViewSet.detail_action(action_view, action_request, pk=1), Response)
 
-# case: action_called_on_class_takes_self
-assert_type(ActionViewSet.list_action(action_view, action_request), Response)
-assert_type(ActionViewSet.detail_action(action_view, action_request, pk=1), Response)
-
-
-# case: bound_action_metadata_for_reverse
-action_view.reverse_action(action_view.detail_action.url_name, args=["1"])
+    # case: bound_action_metadata_for_reverse
+    action_view.reverse_action(action_view.detail_action.url_name, args=["1"])
 
 
 # case: action_overridden_in_subclass
+# Pyright compares the unbound ViewSetAction types, including each class's self parameter.
+# The bound method signatures are compatible; retain the override and super() coverage.
 class ActionViewSetChild(ActionViewSet):
     @override
     @action(detail=False)
-    def list_action(self, request: Request) -> Response:
+    def list_action(self, request: Request) -> Response:  # pyright: ignore[reportIncompatibleVariableOverride]
         return super().list_action(request)
 
 
@@ -119,8 +121,9 @@ class GenericActionViewSet(viewsets.GenericViewSet[_ActionModel], Generic[_Actio
 class ConcreteActionViewSet(GenericActionViewSet[Model]):
     @override
     @action(detail=False)
-    def some_action(self, request: Request) -> Response:
+    def some_action(self, request: Request) -> Response:  # pyright: ignore[reportIncompatibleVariableOverride]
         return super().some_action(request)
 
 
-assert_type(ConcreteActionViewSet().some_action(action_request), Response)
+def check_overridden_action(action_request: Request) -> None:
+    assert_type(ConcreteActionViewSet().some_action(action_request), Response)

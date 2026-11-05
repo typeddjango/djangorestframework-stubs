@@ -23,7 +23,7 @@ class ContextValidator(Protocol[_V, _C]):
 Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
 # On a serializer (`Meta.validators`, `validators=`) it is the serializer, and the value is the dict of
 # validated attributes.
-SerializerValidator: TypeAlias = Callable[[_V], None] | ContextValidator[_V, BaseSerializer]
+SerializerValidator: TypeAlias = Callable[[_V], None] | ContextValidator[_V, BaseSerializer[Any]]
 
 def qs_exists(queryset: QuerySet) -> bool: ...
 def qs_exists_with_condition(queryset: QuerySet[Any], condition: Q | None, against: dict[str, Any]) -> bool: ...
