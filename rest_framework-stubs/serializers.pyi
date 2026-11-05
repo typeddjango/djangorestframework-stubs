@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import Manager, Model, QuerySet
 from django.utils.functional import cached_property
 from django_stubs_ext import StrOrPromise
+from rest_framework._compat import MYPY
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -71,6 +72,15 @@ ALL_FIELDS: str
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
+
+@type_check_only
+class _ModelSerializerMeta:
+    model: ClassVar[type[_MT]]  # type: ignore[valid-type]
+    fields: ClassVar[Sequence[str] | Literal["__all__"]]
+    read_only_fields: ClassVar[Sequence[str] | None]
+    exclude: ClassVar[Sequence[str] | None]
+    depth: ClassVar[int | None]
+    extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
 
 # The typing specification states: "After evaluating the `__new__` method, a type checker should
 # evaluate the `__init__` method (if applicable) using the supplied arguments."
@@ -260,13 +270,12 @@ class ModelSerializer(Serializer[_MT]):
     serializer_choice_field: ClassVar[type[Field]]
     url_field_name: ClassVar[str | None]
 
-    class Meta:
-        model: ClassVar[type[_MT]]  # type: ignore[valid-type]
-        fields: ClassVar[Sequence[str] | Literal["__all__"]]
-        read_only_fields: ClassVar[Sequence[str] | None]
-        exclude: ClassVar[Sequence[str] | None]
-        depth: ClassVar[int | None]
-        extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
+    # Work around pyright's incompatible nested-class overrides: expose Meta as Any
+    # there, while preserving the typed interface for mypy, which treats MYPY as true.
+    if MYPY:  # noqa: PYI002
+        Meta = _ModelSerializerMeta
+    else:
+        Meta: Any
 
     @overload
     def __new__(  # type: ignore[misc]

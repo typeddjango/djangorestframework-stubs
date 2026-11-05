@@ -66,6 +66,15 @@ class TestSerializer3(serializers.ModelSerializer):
         model = User
 
 
+# case: read_only_related_field_explicit_model_type
+class ReadOnlyRelationSerializer(serializers.ModelSerializer[User]):
+    untyped_owner = serializers.PrimaryKeyRelatedField(read_only=True)  # type: ignore[var-annotated]
+    owner = serializers.PrimaryKeyRelatedField[User](read_only=True)
+
+
+assert_type(ReadOnlyRelationSerializer.owner, serializers.PrimaryKeyRelatedField[User])
+
+
 # case: related_field_get_attribute_model_or_pk
 field = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 user = cast("User", object())
