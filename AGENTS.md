@@ -35,9 +35,9 @@ Commit tests only for complex typing:
 - Fixing nontrivial bugs
 - django-stubs integration
 
-Run `uv run mypy tests && uv run pytest`
+Run `uv run mypy tests && uv run pyright && uv run pytest`
 
-- `tests/assert_type/*.py`: Preferred; must type-check without errors.
+- `tests/assert_type/*.py`: Preferred; must type-check without errors under mypy and Pyright.
 - `tests/typecheck/*.yml`: Use only when plain Python tests are insufficient,
   e.g. expected diagnostics or plugin behavior.
 

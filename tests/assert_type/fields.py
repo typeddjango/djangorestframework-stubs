@@ -39,8 +39,8 @@ JSONField(default=lambda: {"a": [], "b": "str"}, initial=lambda: {"a": [], "b": 
 JSONField(default=lambda: 123, initial=lambda: 123)
 
 # case: json_field_invalid_default_and_initial
-JSONField(default=object())  # type: ignore[arg-type]
-JSONField(initial=object())  # type: ignore[arg-type]
+JSONField(default=object())  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
+JSONField(initial=object())  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
 non_string_keys: Mapping[int, str] = {1: "value"}
-JSONField(default=non_string_keys)  # type: ignore[arg-type]
-JSONField(initial=non_string_keys)  # type: ignore[arg-type]
+JSONField(default=non_string_keys)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
+JSONField(initial=non_string_keys)  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]

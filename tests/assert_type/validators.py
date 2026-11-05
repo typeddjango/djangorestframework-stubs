@@ -11,22 +11,17 @@ from rest_framework.validators import (
     qs_filter,
 )
 
-# case: qs_filter_preserves_queryset_type
-values_qs: QuerySet[User, dict[str, Any]]
-result = qs_filter(values_qs, pk=1)
-assert_type(result, QuerySet[User, dict[str, Any]])
 
+# case: validator_helpers_preserve_queryset_row_type
+def check_queryset_rows(values_qs: QuerySet[User, dict[str, Any]], validator: UniqueValidator, instance: User) -> None:
+    result = qs_filter(values_qs, pk=1)
+    assert_type(result, QuerySet[User, dict[str, Any]])
 
-# case: unique_validator_filter_queryset_preserves_queryset_type
-validator: UniqueValidator
-result2 = validator.filter_queryset("value", values_qs, "name")
-assert_type(result2, QuerySet[User, dict[str, Any]])
+    result2 = validator.filter_queryset("value", values_qs, "name")
+    assert_type(result2, QuerySet[User, dict[str, Any]])
 
-
-# case: unique_validator_exclude_current_instance_preserves_queryset_type
-instance: User
-result3 = validator.exclude_current_instance(values_qs, instance)
-assert_type(result3, QuerySet[User, dict[str, Any]])
+    result3 = validator.exclude_current_instance(values_qs, instance)
+    assert_type(result3, QuerySet[User, dict[str, Any]])
 
 
 # case: serializer_level_validators_are_accepted_by_serializers
