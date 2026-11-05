@@ -1,69 +1,97 @@
 from collections.abc import Callable, Container, Iterable, MutableMapping
-from typing import Any, TypeVar, Protocol
-from typing_extensions import TypeAlias
+from typing import Any, Protocol, TypeAlias, TypeVar, type_check_only
 
-from django.db.models import Model, QuerySet
+from django.db.models import Model, Q, QuerySet
+from django_stubs_ext import StrOrPromise
 from rest_framework.fields import Field
 from rest_framework.serializers import BaseSerializer
 
-_T = TypeVar("_T", bound=Model)
+_Model = TypeVar("_Model", bound=Model)
+_Row = TypeVar("_Row", default=_Model)
 _V = TypeVar("_V", contravariant=True)
+_C = TypeVar("_C", contravariant=True, default=Field)
 
-class ContextValidator(Protocol[_V]):
+@type_check_only
+class ContextValidator(Protocol[_V, _C]):
     requires_context: bool
-    def __call__(self, __value: _V, __context: Field) -> None: ...
+    def __call__(self, value: _V, context: _C, /) -> None: ...
 
+# DRF calls a validator with `requires_context = True` as `validator(value, self)`, where `self` is
+# whatever holds the validator (`Field.run_validators`).
+# On a field that is the field, so `UniqueTogetherValidator` and `Unique*ForValidator`, which need the
+# serializer, are not accepted there.
 Validator: TypeAlias = Callable[[_V], None] | ContextValidator[_V]
+# On a serializer (`Meta.validators`, `validators=`) it is the serializer, and the value is the dict of
+# validated attributes.
+SerializerValidator: TypeAlias = Callable[[_V], None] | ContextValidator[_V, BaseSerializer]
 
 def qs_exists(queryset: QuerySet) -> bool: ...
-def qs_filter(queryset: QuerySet[_T], **kwargs: Any) -> QuerySet[_T]: ...
+def qs_exists_with_condition(queryset: QuerySet[Any], condition: Q | None, against: dict[str, Any]) -> bool: ...
+def qs_filter(queryset: QuerySet[_Model, _Row], **kwargs: Any) -> QuerySet[_Model, _Row]: ...
 
 class UniqueValidator:
-    message: str
+    message: StrOrPromise
     requires_context: bool
     queryset: QuerySet
     lookup: str
-    def __init__(self, queryset: QuerySet, message: str | None = ..., lookup: str = ...) -> None: ...
-    def filter_queryset(self, value: Any, queryset: QuerySet[_T], field_name: str) -> QuerySet[_T]: ...
-    def exclude_current_instance(self, queryset: QuerySet[_T], instance: _T) -> QuerySet[_T]: ...
+    def __init__(self, queryset: QuerySet, message: StrOrPromise | None = None, lookup: str = "exact") -> None: ...
+    def filter_queryset(
+        self, value: Any, queryset: QuerySet[_Model, _Row], field_name: str
+    ) -> QuerySet[_Model, _Row]: ...
+    def exclude_current_instance(
+        self, queryset: QuerySet[_Model, _Row], instance: _Model
+    ) -> QuerySet[_Model, _Row]: ...
     def __call__(self, value: Any, serializer_field: Field) -> None: ...
 
 class UniqueTogetherValidator:
-    message: str
-    missing_message: str
+    message: StrOrPromise
+    missing_message: StrOrPromise
     requires_context: bool
+    code: str
     queryset: QuerySet
     fields: Iterable[str]
-    def __init__(self, queryset: QuerySet, fields: Iterable[str], message: str | None = ...) -> None: ...
+    def __init__(
+        self,
+        queryset: QuerySet,
+        fields: Iterable[str],
+        message: StrOrPromise | None = None,
+        condition_fields: Iterable[str] | None = None,
+        condition: Q | None = None,
+        code: str | None = None,
+        nulls_distinct: bool | None = None,
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str], serializer: BaseSerializer) -> None: ...
     def filter_queryset(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], serializer: BaseSerializer
-    ) -> QuerySet[_T]: ...
+        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], serializer: BaseSerializer
+    ) -> QuerySet[_Model, _Row]: ...
     def exclude_current_instance(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], instance: _T
-    ) -> QuerySet[_T]: ...
+        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], instance: _Model
+    ) -> QuerySet[_Model, _Row]: ...
     def __call__(self, attrs: MutableMapping[str, Any], serializer: BaseSerializer) -> None: ...
 
 class ProhibitSurrogateCharactersValidator:
-    message: str
+    message: StrOrPromise
     code: str
     def __call__(self, value: Any) -> None: ...
 
 class BaseUniqueForValidator:
-    message: str
-    missing_message: str
+    # DISCREPANCY: `message` cannot be None -- None is a placeholder, but subclasses must override this to StrOrPromise
+    message: StrOrPromise
+    missing_message: StrOrPromise
     requires_context: bool
     queryset: QuerySet
     field: str
     date_field: str
-    def __init__(self, queryset: QuerySet, field: str, date_field: str, message: str | None = ...) -> None: ...
+    def __init__(
+        self, queryset: QuerySet, field: str, date_field: str, message: StrOrPromise | None = None
+    ) -> None: ...
     def enforce_required_fields(self, attrs: Container[str]) -> None: ...
     def filter_queryset(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], field_name: str, date_field_name: str
-    ) -> QuerySet[_T]: ...
+        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], field_name: str, date_field_name: str
+    ) -> QuerySet[_Model, _Row]: ...
     def exclude_current_instance(
-        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_T], instance: Model
-    ) -> QuerySet[_T]: ...
+        self, attrs: MutableMapping[str, Any], queryset: QuerySet[_Model, _Row], instance: _Model
+    ) -> QuerySet[_Model, _Row]: ...
     def __call__(self, attrs: MutableMapping[str, Any], serializer: BaseSerializer) -> None: ...
 
 class UniqueForDateValidator(BaseUniqueForValidator): ...

@@ -1,14 +1,15 @@
-<img src="http://mypy-lang.org/static/mypy_light.svg" alt="mypy logo" width="300px"/>
+<img src="https://mypy-lang.org/static/mypy_light.svg" alt="mypy logo" width="300px"/>
 
 # pep484 stubs for Django REST framework
 
-[![Build Status](https://travis-ci.com/typeddjango/djangorestframework-stubs.svg?branch=master)](https://travis-ci.com/typeddjango/djangorestframework-stubs)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+[![test](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/test.yml/badge.svg?branch=master&event=push)](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/test.yml)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Gitter](https://badges.gitter.im/mypy-django/Lobby.svg)](https://gitter.im/mypy-django/Lobby)
+[![StackOverflow](https://shields.io/badge/ask-stackoverflow-orange?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/django-stubs?tab=Active)
 
 
 Mypy stubs for [Django REST Framework](https://pypi.org/project/djangorestframework/).
-Supports Python 3.7 and up.
+Supports Python 3.11 and up.
 
 ## Installation
 
@@ -26,6 +27,20 @@ plugins =
 
 in your `mypy.ini` file.
 
+## FAQ
+
+### Model instance is inferred as `Any` instead of my `Model` class
+
+When subclassing `ModelSerializer`, add a [type argument](https://peps.python.org/pep-0484/#generics) to type-hint the related model class, for example:
+
+```python
+class MyModelSerializer(serializers.ModelSerializer[MyModel]):
+    class Meta:
+        model = MyModel
+        fields = ("id", "example")
+```
+
+Which means that methods where the model is being passed around will know the actual type of the model instead of being `Any`. The `instance` attribute on the above serializer will be `MyModel | typing.Sequence[MyModel] | None`.
 
 ## To get help
 

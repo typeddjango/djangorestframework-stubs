@@ -16,7 +16,7 @@ class BaseVersioning:
         kwargs: Mapping[str, Any] | None = ...,
         request: Request | None = ...,
         format: str | None = ...,
-        **extra: Any
+        **extra: Any,
     ) -> str: ...
     def is_allowed_version(self, version: str | None) -> bool: ...
 

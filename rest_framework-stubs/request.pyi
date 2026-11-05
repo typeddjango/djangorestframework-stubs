@@ -1,25 +1,32 @@
-from contextlib import contextmanager
-from types import TracebackType
 from collections.abc import Iterator, Sequence
-from contextlib import AbstractContextManager
-from typing import Any
+from contextlib import AbstractContextManager, contextmanager
+from types import TracebackType
+from typing import Any, Self
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, _User
+from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest
 from django.http.request import _ImmutableQueryDict
+from django.utils.datastructures import MultiValueDict
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
+from rest_framework.renderers import BaseRenderer
 from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView
+from typing_extensions import override
+
+MAX_MEDIA_TYPE_LENGTH: int
 
 def is_form_media_type(media_type: str) -> bool: ...
 
 class override_method(AbstractContextManager[Request]):
-    def __init__(self, view: APIView, request: Request, method: str): ...
+    def __init__(self, view: APIView, request: Request, method: str) -> None: ...
+    @override
     def __enter__(self) -> Request: ...
+    @override
     def __exit__(
         self,
         exc_type: type[BaseException] | None,
@@ -46,7 +53,9 @@ class Request(HttpRequest):
     parsers: Sequence[BaseParser] | None
     authenticators: Sequence[BaseAuthentication | ForcedAuthentication] | None
     negotiator: BaseContentNegotiation | None
-    parser_context: dict[str, Any] | None
+    accepted_renderer: BaseRenderer
+    accepted_media_type: str
+    parser_context: dict[str, Any]
     version: str | None
     versioning_scheme: BaseVersioning | None
     _request: HttpRequest
@@ -58,31 +67,31 @@ class Request(HttpRequest):
         negotiator: BaseContentNegotiation | None = ...,
         parser_context: dict[str, Any] | None = ...,
     ) -> None: ...
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     @property
+    @override
     def content_type(self) -> str: ...  # type: ignore[override]
     @property
     def stream(self) -> Any: ...
     @property
     def query_params(self) -> _ImmutableQueryDict: ...
     @property
-    def data(self) -> dict[str, Any]: ...
-    @property  # type: ignore[override]
-    def user(self) -> AbstractBaseUser | AnonymousUser: ...  # type: ignore[override]
+    def data(self) -> dict[str, Any] | list[Any]: ...
+    @override  # type: ignore[explicit-override]
+    @property
+    def user(self) -> _User | AnonymousUser: ...
     @user.setter
-    def user(self, value: AbstractBaseUser | AnonymousUser) -> None: ...
+    def user(self, value: _User | AnonymousUser) -> None: ...
     @property
     def auth(self) -> Token | Any: ...
     @auth.setter
     def auth(self, value: Token | Any) -> None: ...
     @property
     def successful_authenticator(self) -> BaseAuthentication | ForcedAuthentication | None: ...
-    def __getattr__(self, attr: str) -> Any: ...
     @property
-    def DATA(self) -> None: ...
-    @property
+    @override
     def POST(self) -> _ImmutableQueryDict: ...  # type: ignore[override]
     @property
-    def FILES(self): ...
-    @property
-    def QUERY_PARAMS(self) -> None: ...
+    @override
+    def FILES(self) -> MultiValueDict[str, UploadedFile[Any]]: ...  # type: ignore[override]
     def force_plaintext_errors(self, value: Any) -> None: ...

@@ -1,43 +1,40 @@
--   case: api_view
-    main: |
-        from rest_framework.decorators import api_view
-        @api_view()
-        def view_func1(request): ...
-        reveal_type(view_func1)  # N: Revealed type is "rest_framework.views.AsView[def (django.http.request.HttpRequest) -> Any]"
--   case: api_view_fancy
+-   case: api_view_fancy_error
     main: |
         from rest_framework.decorators import api_view
         from rest_framework.request import Request
         from rest_framework.response import Response
         @api_view(['GET', 'POST'])
         def view_func2(request: Request, arg: str) -> Response: ...
-        reveal_type(view_func2)  # N: Revealed type is "rest_framework.views.AsView[def (django.http.request.HttpRequest, arg: builtins.str) -> rest_framework.response.Response]"
 
-        view_func2(None, 10)  # E: Argument 1 has incompatible type "None"; expected "HttpRequest"  # E: Argument 2 has incompatible type "int"; expected "str"
+        view_func2(None, 10)  # E: Argument 1 has incompatible type "None"; expected "HttpRequest"  [arg-type]  # E: Argument 2 has incompatible type "int"; expected "str"  [arg-type]
 -   case: api_view_bare_is_error
     main: |
+        from typing import Any
         from rest_framework.decorators import api_view
-        @api_view  # E: Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Optional[Sequence[str]]"
-        def view_func2(request): ...
+        @api_view  # E: Argument 1 to "api_view" has incompatible type "Callable[[Any], Any]"; expected "Sequence[str] | None"  [arg-type]
+        def view_func2(request: Any) -> Any: ...
 -   case: api_view_incorrect_return
     main: |
         from rest_framework.decorators import api_view
-        @api_view()  # E: Value of type variable "_RESP" of function cannot be "List[Any]"
-        def view_func2(request) -> list: ...
-
+        from rest_framework.request import Request
+        @api_view()  # E: Value of type variable "_RESP" of function cannot be "list[Any]"  [type-var]
+        def view_func2(request: Request) -> list: ...
 -   case: permission_classes
     main: |
+        from typing_extensions import reveal_type
         from rest_framework.decorators import permission_classes
-        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[Union[Type[rest_framework.permissions.BasePermission], rest_framework.permissions.OperandHolder, rest_framework.permissions.SingleOperandHolder]]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View`-1) -> _View`-1"
-
--   case: permission_classes_with_operators
+        reveal_type(permission_classes) # N: Revealed type is "def (permission_classes: typing.Sequence[type[rest_framework.permissions.BasePermission] | rest_framework.permissions.OperandHolder | rest_framework.permissions.SingleOperandHolder]) -> def [_View <: def (*Any, **Any) -> django.http.response.HttpResponseBase] (_View) -> _View"
+-   case: action_bound_on_instance
     main: |
-        from rest_framework.permissions import BasePermission, IsAuthenticated
-        from rest_framework.decorators import permission_classes
+        from rest_framework import viewsets
+        from rest_framework.decorators import action
+        from rest_framework.request import Request
+        from rest_framework.response import Response
 
-        class Permission(BasePermission):
-            pass
+        class MyViewSet(viewsets.ViewSet):
+            @action(detail=True, methods=["post"])
+            def resend(self, request: Request, pk: int) -> Response: ...
 
-        permission_classes([IsAuthenticated & Permission])
-        permission_classes([IsAuthenticated | Permission])
-        permission_classes([~Permission])
+        view = MyViewSet()
+        view.resend(view.request)  # E: Missing positional argument "pk" in call to "__call__" of "BoundViewSetAction"  [call-arg]
+        view.resend(view.request, pk="1")  # E: Argument "pk" to "__call__" of "BoundViewSetAction" has incompatible type "str"; expected "int"  [arg-type]

@@ -1,80 +1,98 @@
--   case: multiple_inheritance_from_two_serializers_with_meta_nested_class_defined
-    main: |
-        from rest_framework import serializers
-        class SerializerA(serializers.Serializer):
-            class Meta:
-                pass
-        class SerializerB(serializers.Serializer):
-            class Meta:
-                pass
-        class SerializerC(SerializerA, SerializerB):
-            pass
-
-- case: model_serializer_meta_attributes
+- case: test_return_list_serializer_argument_is_kw_only
+  parametrized:
+    - arg: ""
+      err: No overload variant of "ReturnList" matches argument type "TestSerializer"  [call-overload]
+    - arg: "[],"
+      err: No overload variant of "ReturnList" matches argument types "list[Never]", "TestSerializer"  [call-overload]
   main: |
     from rest_framework import serializers
+    from rest_framework.utils.serializer_helpers import ReturnList
 
-    reveal_type(serializers.ModelSerializer.Meta.model) # N: Revealed type is "Type[_MT?]"
-    reveal_type(serializers.ModelSerializer.Meta.fields) # N: Revealed type is "typing.Sequence[builtins.str]"
-    reveal_type(serializers.ModelSerializer.Meta.read_only_fields) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
-    reveal_type(serializers.ModelSerializer.Meta.exclude) # N: Revealed type is "Union[typing.Sequence[builtins.str], None]"
-    reveal_type(serializers.ModelSerializer.Meta.depth) # N: Revealed type is "Union[builtins.int, None]"
-    reveal_type(serializers.ModelSerializer.Meta.extra_kwargs) # N: Revealed type is "builtins.dict[builtins.str, builtins.dict[builtins.str, Any]]"
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnList({{ arg }} self)
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def [_T] ReturnList(*, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
 
-- case: test_model_serializer_passes_check
+- case: test_return_list_serializer_is_required
+  parametrized:
+    - arg: ""
+      err: All overload variants of "ReturnList" require at least one argument  [call-overload]
+    - arg: "[]"
+      err: No overload variant of "ReturnList" matches argument type "list[Never]"  [call-overload]
   main: |
     from rest_framework import serializers
-    from django.contrib.auth.models import User
-    from typing import Type
+    from rest_framework.utils.serializer_helpers import ReturnList
 
-    class TestSerializer(serializers.ModelSerializer):
-        class Meta:
-          model = User
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnList({{ arg }})
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def [_T] ReturnList(*, serializer: BaseSerializer[Any]) -> ReturnList[_T]
+    main:6: note:     def [_T] ReturnList(Iterable[_T], /, *, serializer: BaseSerializer[Any]) -> ReturnList[_T]
 
-    def is_meta_model(serializer: Type[serializers.ModelSerializer]) -> bool:
-        return bool(serializer.Meta.model)
-
-    reveal_type(is_meta_model(TestSerializer)) # N: Revealed type is "builtins.bool"
-
-- case: test_model_serializer_with_customized_serializer_field_mapping
+- case: test_return_dict_serializer_argument_is_kw_only
+  parametrized:
+    - arg: ""
+      err: No overload variant of "ReturnDict" matches argument type "TestSerializer"  [call-overload]
+    - arg: "{},"
+      err: No overload variant of "ReturnDict" matches argument types "dict[Never, Never]", "TestSerializer"  [call-overload]
+    - arg: "[],"
+      err: No overload variant of "ReturnDict" matches argument types "list[Never]", "TestSerializer"  [call-overload]
+    - arg: "[('a', 'a')],"
+      err: No overload variant of "ReturnDict" matches argument types "list[tuple[str, str]]", "TestSerializer"  [call-overload]
   main: |
     from rest_framework import serializers
-    from django.contrib.auth.models import User
+    from rest_framework.utils.serializer_helpers import ReturnDict
 
-    class TestSerializer(serializers.ModelSerializer):
-        serializer_related_field = serializers.PrimaryKeyRelatedField
-        serializer_related_to_field = serializers.SlugRelatedField
-        serializer_url_field = serializers.HyperlinkedIdentityField
-        serializer_choice_field = serializers.ChoiceField
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnDict({{ arg }} self)
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
 
-        class Meta:
-            model = User
-
-- case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
+- case: test_return_dict_serializer_is_required
+  parametrized:
+    - arg: ""
+      err: All overload variants of "ReturnDict" require at least one argument  [call-overload]
+    - arg: "{}"
+      err: No overload variant of "ReturnDict" matches argument type "dict[Never, Never]"  [call-overload]
+    - arg: "[]"
+      err: No overload variant of "ReturnDict" matches argument type "list[Never]"  [call-overload]
+    - arg: "[('a', 'a')]"
+      err: No overload variant of "ReturnDict" matches argument type "list[tuple[str, str]]"  [call-overload]
   main: |
     from rest_framework import serializers
-    from django.contrib.auth.models import User
+    from rest_framework.utils.serializer_helpers import ReturnDict
 
-    class TestSerializer(serializers.HyperlinkedModelSerializer):
-        serializer_related_field = serializers.HyperlinkedRelatedField
-
-        class Meta:
-            model = User
-
-- case: test_model_serializer_with_overriden_fields_property
-  main: |
-    from rest_framework import serializers
-    from rest_framework.utils.serializer_helpers import BindingDict
-    from django.contrib.auth.models import User
-    from django.utils.functional import cached_property
-
-    class TestSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = User
-
-        @cached_property
-        def fields(self) -> BindingDict:
-            return super().fields
+    class TestSerializer(serializers.Serializer):
+        def test(self) -> None:
+            ReturnDict({{ arg }})
+  out: |
+    main:6: error: {{ err }}
+    main:6: note: Possible overload variants:
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(*, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[_KT, _VT], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(SupportsKeysAndGetItem[str, _VT], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[_KT, _VT]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[_KT, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
+    main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
 - case: test_serializer_many_equals_false
   main: |
     from rest_framework import serializers

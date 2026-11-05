@@ -1,0 +1,165 @@
+name: Comment with mypy_primer diff
+
+on:
+  workflow_run:
+    workflows:
+      - Run mypy_primer
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: mypy-primer-comment-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+jobs:
+  comment:
+    name: Comment PR from mypy_primer
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 5
+    steps:
+      # No checkout: this privileged workflow never imports or executes PR code.
+      - name: Post comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        with:
+          script: |
+            const {execFileSync} = require('node:child_process');
+            const run = context.payload.workflow_run;
+            const repo = context.repo;
+            if (run.event !== 'pull_request') {
+              core.notice('Not a PR comparison.');
+              return;
+            }
+            const workflow = await github.rest.actions.getWorkflow({...repo, workflow_id: 'mypy_primer.yml'});
+            if (workflow.data.id !== run.workflow_id) throw new Error('Unexpected producer workflow');
+            let pr;
+            async function current() {
+              const {data: latestPR} = await github.rest.pulls.get({...repo, pull_number: pr.number});
+              if (latestPR.state !== 'open' || latestPR.head.sha !== run.head_sha ||
+                  latestPR.merge_commit_sha !== pr.merge_commit_sha) return false;
+              const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+                ...repo, workflow_id: run.workflow_id, event: 'pull_request', head_sha: run.head_sha, per_page: 100,
+              });
+              return !runs.some(other => other.run_number > run.run_number ||
+                (other.id === run.id && other.run_attempt > run.run_attempt));
+            }
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              ...repo, run_id: run.id, per_page: 100,
+            });
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+              ...repo, run_id: run.id, filter: 'latest', per_page: 100,
+            });
+            const versions = jobs.map(job => /^Run \((\d+\.\d+)\)$/.exec(job.name)?.[1]).filter(Boolean);
+            if (!versions.length || new Set(versions).size !== versions.length)
+              throw new Error('Missing or duplicate Python comparison jobs');
+            versions.sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+            const sections = [];
+            const reader = `
+            import io, json, sys, zipfile
+            limits = {"pr_number.txt": 32, "metadata.json": 8192, "comparison.txt": 64 * 1024 * 1024, "exit-code.txt": 8}
+            result = {}
+            with zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())) as archive:
+                for name, limit in limits.items():
+                    matches = [info for info in archive.infolist() if info.filename == name]
+                    if len(matches) != 1 or matches[0].file_size > limit:
+                        raise ValueError("Missing, duplicate, or oversized expected artifact file: " + name)
+                    with archive.open(matches[0]) as source:
+                        raw = source.read(min(limit, 524288) + 1)
+                    if name == "comparison.txt" and len(raw) > 524288:
+                        raw = raw[:524288] + b"\\n[truncated; see full artifact]"
+                    elif len(raw) > limit:
+                        raise ValueError("Oversized artifact member")
+                    result[name] = raw.decode("utf-8", errors="replace")
+            print(json.dumps(result))
+            `;
+            for (const version of versions) {
+              const matches = artifacts.filter(a => a.name === `mypy-primer-${version}` && !a.expired);
+              if (matches.length !== 1 || matches[0].size_in_bytes > 64 * 1024 * 1024)
+                throw new Error('Missing, duplicate, or oversized comparison artifact');
+              const download = await github.rest.actions.downloadArtifact({
+                ...repo, artifact_id: matches[0].id, archive_format: 'zip',
+              });
+              const files = JSON.parse(execFileSync('python3', ['-c', reader], {
+                input: Buffer.from(download.data), maxBuffer: 2 * 1024 * 1024, timeout: 10000,
+              }).toString());
+              const prNumberRaw = files['pr_number.txt'].trim();
+              const prNumber = Number(prNumberRaw);
+              if (!/^[1-9]\d*$/.test(prNumberRaw) || !Number.isSafeInteger(prNumber))
+                throw new Error('Invalid PR number in PR artifact');
+              if (!pr) {
+                // Fork workflow_run payloads can omit pull_requests; read the number from the artifact.
+                const {data} = await github.rest.pulls.get({...repo, pull_number: prNumber});
+                if (data.state !== 'open' || data.head.sha !== run.head_sha ||
+                    data.head.repo?.full_name !== run.head_repository.full_name ||
+                    data.base.repo.full_name !== `${repo.owner}/${repo.repo}`) {
+                  core.notice('No current PR for the tested head; ignoring stale results.');
+                  return;
+                }
+                pr = data;
+                if (!await current()) return;
+              }
+              if (prNumber !== pr.number) throw new Error('Comparison artifacts refer to different PRs');
+              const metadata = JSON.parse(files['metadata.json']);
+              if (metadata.PR_NUMBER !== String(pr.number) || metadata.PR_HEAD !== pr.head.sha ||
+                  metadata.GITHUB_RUN_ID !== String(run.id) || metadata.PYTHON_VERSION !== version ||
+                  ![metadata.PR_BASE, metadata.TESTED_MERGE, metadata.TESTED_BASE]
+                    .every(sha => /^[0-9a-f]{40}$/.test(sha)))
+                throw new Error('Artifact metadata does not match trusted current PR/run metadata');
+              if (metadata.PR_BASE !== pr.base.sha || metadata.TESTED_MERGE !== pr.merge_commit_sha) {
+                core.notice('The target branch or PR merge changed; ignoring stale results.');
+                return;
+              }
+              const merge = await github.rest.repos.getCommit({...repo, ref: metadata.TESTED_MERGE});
+              if (merge.data.parents.length !== 2 || merge.data.parents[1].sha !== pr.head.sha ||
+                  merge.data.parents[0].sha !== pr.base.sha) throw new Error('Unexpected tested merge parents');
+              const base = await github.rest.repos.compareCommits({
+                ...repo, base: pr.base.sha, head: metadata.TESTED_MERGE,
+              });
+              if (base.data.merge_base_commit.sha !== metadata.TESTED_BASE)
+                throw new Error('Unexpected tested merge base');
+              const exitCode = files['exit-code.txt'].trim();
+              if (!['0', '1'].includes(exitCode)) throw new Error('Artifact is not a successful comparison');
+              // ANSI and Markdown are untrusted diagnostic data, not comment markup.
+              const diff = files['comparison.txt'].replace(/\x1b(?:\[[0-9;]*m|\([A-Za-z0-9])/g, '').trim();
+              if ((exitCode === '0') !== (diff === '')) throw new Error('Inconsistent comparison status');
+              sections.push({version, diff});
+            }
+            const marker = '<!-- drf-mypy-primer -->';
+            const link = `https://github.com/${repo.owner}/${repo.repo}/actions/runs/${run.id}`;
+            const header = `${marker}\n## mypy_primer\n\nCompared DRF stubs and plugin at ${pr.merge_commit_sha} with the target-branch merge base. Differences are advisory.\n\n`;
+            const footer = `\n\n[Full comparison and diagnostic artifacts](${link})`;
+            const MAX_CHARACTERS = 50000
+            const MAX_CHARACTERS_PER_PROJECT = MAX_CHARACTERS / 3
+
+            function truncateIfNeeded(original, maxLength) {
+              if (original.length <= maxLength) {
+                return original
+              }
+              let truncated = original.substring(0, maxLength)
+              // further, remove last line that might be truncated
+              truncated = truncated.substring(0, truncated.lastIndexOf('\n'))
+              let lines_truncated = original.split('\n').length - truncated.split('\n').length
+              return `${truncated}\n\n... (truncated ${lines_truncated} lines) ...`
+            }
+
+            let data = sections.map(({version, diff}) => {
+              if (!diff) return `Python ${version}\n\nNo diagnostic differences.`;
+              const projects = diff.split('\n\n');
+              return `Python ${version}\n\n` +
+                projects.map(project => truncateIfNeeded(project, MAX_CHARACTERS_PER_PROJECT)).join('\n\n');
+            }).join('\n\n');
+            data = truncateIfNeeded(data, MAX_CHARACTERS);
+            const body = header + '```diff\n' + data + '\n```' + footer;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              ...repo, issue_number: pr.number, per_page: 100,
+            });
+            const existing = comments.find(c => c.user.login === 'github-actions[bot]' && c.body.startsWith(marker));
+            // Recheck after artifact download and parsing, immediately before writing.
+            if (!await current()) return;
+            if (existing) await github.rest.issues.updateComment({...repo, comment_id: existing.id, body});
+            else await github.rest.issues.createComment({...repo, issue_number: pr.number, body});

@@ -18,7 +18,7 @@ def django_plugin_hook(test_item: YamlTestItem) -> None:
     if "SECRET_KEY" not in custom_settings:
         custom_settings = 'SECRET_KEY = "1"\n' + custom_settings
 
-    django_settings_section = "\n[mypy.plugins.django-stubs]\n" "django_settings_module = mysettings"
+    django_settings_section = "\n[mypy.plugins.django-stubs]\ndjango_settings_module = mysettings"
     if not test_item.additional_mypy_config:
         test_item.additional_mypy_config = django_settings_section
     else:

@@ -5,9 +5,12 @@ from django.core.files.uploadedfile import UploadedFile
 from django.http.request import _ImmutableQueryDict
 from django.utils.datastructures import MultiValueDict
 from rest_framework.renderers import JSONRenderer
+from typing_extensions import override
 
 _Data = TypeVar("_Data")
 _Files = TypeVar("_Files")
+
+def get_encoding(parser_context: Mapping[str, Any]) -> str: ...
 
 class DataAndFiles(Generic[_Data, _Files]):
     data: _Data
@@ -23,24 +26,27 @@ class BaseParser:
 class JSONParser(BaseParser):
     renderer_class: type[JSONRenderer]
     strict: bool
+    @override
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
     ) -> dict[str, Any]: ...
 
 class FormParser(BaseParser):
+    @override
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
     ) -> _ImmutableQueryDict: ...
 
 class MultiPartParser(BaseParser):
+    @override
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
     ) -> DataAndFiles[_ImmutableQueryDict, MultiValueDict]: ...
 
 class FileUploadParser(BaseParser):
     errors: dict[str, str]
+    @override
     def parse(
         self, stream: IO[Any], media_type: str | None = ..., parser_context: Mapping[str, Any] | None = ...
     ) -> DataAndFiles[None, Mapping[str, UploadedFile]]: ...
     def get_filename(self, stream: IO[Any], media_type: str | None, parser_context: Mapping[str, Any]) -> str: ...
-    def get_encoded_filename(self, filename_parm: Mapping[str, Any]) -> str: ...

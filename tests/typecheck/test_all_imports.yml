@@ -15,7 +15,6 @@
         import rest_framework.checks
         import rest_framework.compat
         import rest_framework.decorators
-        import rest_framework.documentation
         import rest_framework.exceptions
         import rest_framework.fields
         import rest_framework.filters
@@ -34,7 +33,6 @@
         import rest_framework.reverse
         import rest_framework.routers
         import rest_framework.schemas
-        import rest_framework.schemas.coreapi
         import rest_framework.schemas.generators
         import rest_framework.schemas.inspectors
         import rest_framework.schemas.openapi

@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Sequence
-from typing_extensions import TypeAlias
+from typing import TypeAlias
 
 from django.urls.resolvers import URLPattern, URLResolver
 

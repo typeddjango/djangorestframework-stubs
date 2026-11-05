@@ -1,0 +1,203 @@
+from collections.abc import Iterable, Mapping, Sequence
+from typing import Any, TypedDict, assert_type, cast
+
+from django.contrib.auth.models import Group, User
+from django.db.models import Manager, Q, UniqueConstraint
+from django.utils.functional import cached_property
+from rest_framework import serializers
+from rest_framework.relations import PKOnlyObject
+from rest_framework.utils.serializer_helpers import BindingDict, ReturnDict, ReturnList
+from typing_extensions import override
+
+
+# case: multiple_inheritance_from_two_serializers_with_meta_nested_class_defined
+class SerializerA(serializers.Serializer):
+    class Meta:
+        pass
+
+
+class SerializerB(serializers.Serializer):
+    class Meta:
+        pass
+
+
+class SerializerC(SerializerA, SerializerB):
+    pass
+
+
+# case: model_serializer_meta_attributes
+assert_type(serializers.ModelSerializer.Meta.model, type[serializers._MT])  # type: ignore[valid-type]
+assert_type(serializers.ModelSerializer.Meta.fields, Sequence[str])
+assert_type(serializers.ModelSerializer.Meta.read_only_fields, Sequence[str] | None)
+assert_type(serializers.ModelSerializer.Meta.exclude, Sequence[str] | None)
+assert_type(serializers.ModelSerializer.Meta.depth, int | None)
+assert_type(serializers.ModelSerializer.Meta.extra_kwargs, dict[str, dict[str, Any]])
+
+
+# case: test_model_serializer_passes_check
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+
+
+def is_meta_model(serializer: type[serializers.ModelSerializer]) -> bool:
+    return bool(serializer.Meta.model)
+
+
+assert_type(is_meta_model(TestSerializer), bool)
+
+
+# case: test_return_dict_reduce
+class TestSerializer2(serializers.Serializer):
+    def test(self) -> None:
+        ret = ReturnDict({"a": "1"}, serializer=self)
+        callable, args = ret.__reduce__()
+        assert_type(callable(*args), dict[str, str])
+
+
+# case: test_model_serializer_with_customized_serializer_field_mapping
+class TestSerializer3(serializers.ModelSerializer):
+    serializer_related_field = serializers.PrimaryKeyRelatedField
+    serializer_related_to_field = serializers.SlugRelatedField
+    serializer_url_field = serializers.HyperlinkedIdentityField
+    serializer_choice_field = serializers.ChoiceField
+
+    class Meta:
+        model = User
+
+
+# case: related_field_get_attribute_model_or_pk
+field = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+user = cast("User", object())
+value = field.get_attribute(user)
+assert_type(value, User | PKOnlyObject | None)
+
+pk_field_typed = serializers.PrimaryKeyRelatedField(
+    queryset=User.objects.all(),
+    pk_field=serializers.UUIDField(format="hex"),
+)
+assert_type(pk_field_typed.pk_field, serializers.Field | None)
+
+# case: slug_related_field_accepts_pk_object
+field = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
+obj = PKOnlyObject(pk=1)
+assert_type(field.to_representation(obj), str)
+
+# case: many_related_field_value_type_iterable
+child_relation = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
+groups_qs = Group.objects.all()
+many_field = serializers.ManyRelatedField(
+    child_relation=child_relation, read_only=True, default=groups_qs, initial=groups_qs
+)
+user = cast("User", object())
+value = many_field.get_attribute(user)
+assert_type(value, Iterable[Any] | None)
+
+
+# case: test_hyperlinked_model_serializer_with_customized_serializer_field_mapping
+class TestSerializer4(serializers.HyperlinkedModelSerializer):
+    serializer_related_field = serializers.HyperlinkedRelatedField
+
+    class Meta:
+        model = User
+
+
+# case: test_model_serializer_with_overriden_fields_property
+class TestSerializer5(serializers.ModelSerializer):
+    class Meta:
+        model = User
+
+    @cached_property
+    @override
+    def fields(self) -> BindingDict:
+        return super().fields
+
+
+# case: model_serializer_to_internal_value_returns_validated_values
+class UserNameSerializer(serializers.ModelSerializer[User]):
+    class Meta:
+        model = User
+        fields = ["username"]
+
+    @override
+    def to_internal_value(self, data: Any) -> dict[str, Any]:
+        validated = super().to_internal_value(data)
+        assert_type(validated, dict[str, Any])
+        return validated
+
+
+# case: plain_serializer_to_internal_value_keeps_any_shape
+class NameSerializer(serializers.Serializer):
+    name = serializers.CharField()
+
+
+assert_type(NameSerializer().to_internal_value({"name": "x"}), Any)
+assert_type(serializers.ListSerializer(child=NameSerializer()).to_internal_value([]), list[Any])
+assert_type(NameSerializer().validate({"name": "x"}), Any)
+
+
+# case: test_return_list
+class TestSerializer6(serializers.Serializer):
+    def test(self) -> None:
+        ReturnList([], serializer=self)
+        ReturnList((), serializer=self)
+        ReturnList([{}], serializer=self)
+        ReturnList(serializer=self)
+        ret = ReturnList(["1"], serializer=self)
+        assert_type(ret, ReturnList[str])
+
+
+# case: test_return_list_reduce
+class TestSerializer7(serializers.Serializer):
+    def test(self) -> None:
+        ret = ReturnList(["1"], serializer=self)
+        callable, args = ret.__reduce__()
+        assert_type(callable(*args), list[str])
+
+
+# case: test_return_dict
+class TestSerializer8(serializers.Serializer):
+    def test(self) -> None:
+        input: Mapping[str, str] = {}
+        ReturnDict({}, serializer=self)
+        ReturnDict([("a", "a")], serializer=self)
+        ReturnDict(input, serializer=self)
+        iterable = ""
+        sep = " "
+        ReturnDict((string.split(sep) for string in iterable), serializer=self)
+        ReturnDict(serializer=self)
+        ret = ReturnDict({"a": "a"}, serializer=self)
+        assert_type(ret, ReturnDict[str, str])
+        copy = ret.copy()
+        assert_type(copy, ReturnDict[str, str])
+
+
+# case: test_context_accepts_typeddict
+class SomeContext(TypedDict):
+    some_string: str
+    some_number: int
+
+
+context: SomeContext = {"some_string": "hey", "some_number": 1}
+context_ser: serializers.Serializer = serializers.Serializer(None, context=context)
+assert_type(context_ser.context, Mapping[str, Any])
+
+context_list_ser: serializers.ListSerializer = serializers.ListSerializer(None, context=context)
+assert_type(context_list_ser.context, Mapping[str, Any])
+
+context_model_ser: serializers.ModelSerializer = serializers.ModelSerializer(None, context=context)
+assert_type(context_model_ser.context, Mapping[str, Any])
+
+
+# case: unique_together_constraints_take_the_model_class
+# DRF passes `self.Meta.model` (the class), not an instance.
+class UserSerializer(serializers.ModelSerializer[User]):
+    class Meta:
+        model = User
+        fields = "__all__"
+
+
+assert_type(
+    next(UserSerializer().get_unique_together_constraints(User)),
+    tuple[Sequence[str], Manager[User], list[str], Q | None, bool | None, UniqueConstraint | None],
+)

@@ -1,12 +1,143 @@
-[tool.black]
-line-length = 120
-include = '\.pyi?$'
+[project]
+name = "djangorestframework-stubs"
+version = "3.18.2"
+requires-python = ">=3.11"
+description = "PEP-484 stubs for django-rest-framework"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.txt"]
+authors = [{ name = "Maksim Kurnikov", email = "maxim.kurnikov@gmail.com" }]
+maintainers = [
+  { name = "Marti Raudsepp", email = "marti@juffo.org" },
+  { name = "Nikita Sobolev", email = "mail@sobolevn.me" },
+]
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Typing :: Typed",
+  "Framework :: Django",
+]
+dependencies = [
+  "django-stubs>=6.1.2",
+  "typing-extensions>=4.0",
+  "types-PyYAML",
+]
 
-[tool.isort]
-line_length = 120
-multi_line_output = 3
-include_trailing_comma = true
-profile = 'black'
+[project.urls]
+Homepage = "https://github.com/typeddjango/djangorestframework-stubs"
+Funding = "https://github.com/sponsors/typeddjango"
+"Release notes" = "https://github.com/typeddjango/djangorestframework-stubs/releases"
+
+[project.optional-dependencies]
+compatible-mypy = ["mypy>=1.13,<2.5", "django-stubs[compatible-mypy]"]
+coreapi = ["coreapi>=2.0.0"]
+markdown = ["types-Markdown>=0.1.5"]
+requests = ["types-requests"]
+
+[dependency-groups]
+dev = [
+  "pre-commit==4.7.0",
+  "pytest==9.2.0",
+  "pytest-mypy-plugins==4.1.0",
+  "djangorestframework==3.18.3",
+  "django==5.2.*; python_version < '3.12'",
+  "django==6.1.*; python_version >= '3.12'",
+  "types-pytz",
+  "types-requests",
+  "types-Pygments",
+  "types-pyyaml",
+  "django-stubs[compatible-mypy] @ git+https://github.com/typeddjango/django-stubs",
+  "django-stubs-ext @ git+https://github.com/typeddjango/django-stubs#subdirectory=ext",
+  "djangorestframework-stubs[compatible-mypy,coreapi,markdown,requests]",
+]
+primer = [
+  "mypy-primer @ git+https://github.com/hauntsaninja/mypy_primer",
+]
 
 [build-system]
-requires = ["setuptools<64", "wheel"]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["rest_framework-stubs", "mypy_drf_plugin"]
+module-root = ""
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = [
+  "--tb=native",
+  "-s",
+  "-v",
+  "--cache-clear",
+  "--mypy-extension-hook=scripts.tests_extension_hook.django_plugin_hook",
+  # Suppress errors from other packages due to https://github.com/typeddjango/pytest-mypy-plugins/issues/134
+  "--mypy-ini-file=mypy.ini"
+]
+
+# Ruff configuration
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+# See Rules in Ruff documentation: https://docs.astral.sh/ruff/rules/
+[tool.ruff.lint]
+select = [
+  "B",      # bugbear
+  "E",      # pycodestyle
+  "F",      # pyflakes
+  "FURB",   # refurb
+  "INP",    # flake8-tidy-imports
+  "W",      # pycodestyle
+  "I",      # isort
+  "ISC001", # Implicitly concatenated string literals on one line
+  "ISC002", # Implicitly concatenated string literals over multiple lines
+  "UP",     # pyupgrade
+  "TID251", # Disallowed imports (flake8-tidy-imports.banned-api)
+  "PYI",    # flake8-pyi
+  "RUF100", # Equivalent to flake8-noqa NQA103
+  "PGH004", # Equivalent to flake8-noqa NQA104
+  "PGH003", # Disallowed blanket `type: ignore` annotations.
+  "RET504", # Unnecessary assignment to {name} before return statement
+  "RET505", # Unnecessary {branch} after return statement
+  "RET506", # Unnecessary {branch} after raise statement
+  "RET507", # Unnecessary {branch} after continue statement
+  "RET508", # Unnecessary {branch} after break statement
+  "RUF",    # Ruff specific rules
+  "TC",     # flake8-type-checking
+]
+ignore = [
+  "PYI021", # We have a few meaningful docstrings for stubs only constructs/utilities.
+  "PYI041", # This might not be obvious that `float | int` is mostly equivalent to `float` typing wise | int | str
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*.pyi" = [
+  "B",
+  "E501",
+  "E741",
+  "E743",
+  "F403",   # Use wildcard import
+  "F405",
+  "F822",
+  "F821",
+]
+"rest_framework-stubs/compat.pyi" = ["PYI042"]
+"tests/assert_type/*.py" = ["RUF012", "F821"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"_typeshed.Self".msg = "Use typing_extensions.Self (PEP 673) instead."
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+extra-standard-library = ["_typeshed"]
+
+# Pyright configuration
+[tool.pyright]
+pythonVersion = "3.11"
+include = ["rest_framework-stubs", "tests"]
+exclude = [".venv", ".mypy_cache", ".pytest_cache", ".idea"]

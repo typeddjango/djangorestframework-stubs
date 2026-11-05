@@ -4,71 +4,98 @@ on:
   push:
     branches:
       - master
+      - "renovate/**"
   pull_request:
   workflow_dispatch:
+  schedule:
+    # 15:41 UTC every day
+    - cron: "41 15 * * *"
+
+env:
+  UV_FROZEN: true # https://docs.astral.sh/uv/configuration/environment/#uv_frozen
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  lint:
+  mypy-self-check:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.10']
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - name: Install uv & Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
-          pip install -U pip setuptools wheel
-          pip install -r ./requirements.txt
-
-      - name: Run pre-commit
-        run: pre-commit install && pre-commit run --all-files
+        run: uv sync
+      - name: Run mypy on plugin code
+        run: uv run mypy --strict mypy_drf_plugin
+      - name: Run mypy on scripts and utils
+        run: uv run mypy --strict scripts
+      - name: Run mypy on stubs
+        run: uv run mypy --cache-dir=/dev/null --no-incremental rest_framework-stubs
+      - name: Run mypy on the test cases
+        run: uv run mypy tests
 
   test:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install binutils libproj-dev gdal-bin
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - name: Install uv & Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
-          pip install -U pip setuptools wheel
-          pip install -r ./requirements.txt
-
+        run: uv sync
       - name: Run tests
-        run: pytest
+        run: uv run pytest
 
-  typecheck:
+  stubtest:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ["3.15"]
+      fail-fast: false
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install binutils libproj-dev gdal-bin
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - name: Install uv & Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v10.3.3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: |
-          pip install -U pip setuptools wheel
-          pip install -r ./requirements.txt
+        run: uv sync
 
-      - name: Run tests
-        run: python ./scripts/typecheck_tests.py
+      - name: Run stubtest
+        run: uv run ./scripts/stubtest.sh
+
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-tags: true
+      - name: Install uv & Python
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.15"
+      - name: Ensure uv.lock is up to date
+        run: env --unset=UV_FROZEN uv lock --check
+      - name: Build
+        run: uv build
+      - name: Check package metadata
+        run: uvx twine check --strict dist/*

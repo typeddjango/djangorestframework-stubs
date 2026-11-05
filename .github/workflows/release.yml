@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+      url: https://pypi.org/p/djangorestframework-stubs
+    permissions:
+      id-token: write
+    steps:
+      - name: Install uv & Python
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: "3.15"
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Build package
+        run: uv build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.14.3

@@ -1,81 +1,74 @@
-from typing import Any
+from typing import Any, TypeAlias
 
-import requests  # noqa: F401
 from django.db.models import QuerySet
+from typing_extensions import override
 
 try:
     from django.contrib.postgres import fields as postgres_fields
 except ImportError:
-    postgres_fields = None  # type: ignore
-try:
-    import coreapi
-except ImportError:
-    coreapi = None  # type: ignore
+    postgres_fields: TypeAlias = None  # type: ignore[no-redef]
 try:
     import uritemplate
 except ImportError:
-    uritemplate = None  # type: ignore
-try:
-    import coreschema
-except ImportError:
-    coreschema = None  # type: ignore
+    uritemplate: TypeAlias = None  # type: ignore[no-redef]
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml: TypeAlias = None  # type: ignore[no-redef]
+try:
+    import inflection  # type: ignore[import-not-found,unused-ignore]
+except ImportError:
+    inflection: TypeAlias = None  # type: ignore[no-redef]
 try:
     import requests
 except ImportError:
-    requests = None  # type: ignore
+    requests: TypeAlias = None  # type: ignore[no-redef]
 try:
     import pygments
 except ImportError:
-    pygments = None  # type: ignore
+    pygments: TypeAlias = None  # type: ignore[no-redef]
+
 try:
-    import markdown  # type: ignore
-    def apply_markdown(text: str): ...
-
-except ImportError:
-    apply_markdown = None  # type: ignore
-    markdown = None  # type: ignore
-
-if markdown is not None and pygments is not None:
-    from markdown.preprocessors import Preprocessor  # type: ignore
+    import markdown
+    from markdown.preprocessors import Preprocessor
+    def apply_markdown(text: str) -> str: ...
 
     class CodeBlockPreprocessor(Preprocessor):
         pattern: Any
         formatter: Any
-        def run(self, lines: Any): ...
+        @override
+        def run(self, lines: list[str]) -> list[str]: ...
+
+except ImportError:
+    apply_markdown: TypeAlias = None  # type: ignore[no-redef]
+    markdown: TypeAlias = None  # type: ignore[no-redef]
 
 def pygments_css(style: Any) -> str | None: ...
 def pygments_highlight(text: str, lang: str, style: Any) -> Any: ...
 def md_filter_add_syntax_highlight(md: Any) -> bool: ...
 def unicode_http_header(value: str | bytes) -> str: ...
-def distinct(queryset: QuerySet, base: QuerySet | None) -> QuerySet: ...
 
 SHORT_SEPARATORS: tuple[str, str]
 LONG_SEPARATORS: tuple[str, str]
 INDENT_SEPARATORS: tuple[str, str]
 
 __all__ = [
-    "coreapi",
-    "coreschema",
-    "requests",
-    "postgres_fields",
-    "QuerySet",
-    "uritemplate",
-    "yaml",
-    "pygments",
-    "markdown",
-    "apply_markdown",
-    "Preprocessor",
+    "INDENT_SEPARATORS",
+    "LONG_SEPARATORS",
+    "SHORT_SEPARATORS",
     "CodeBlockPreprocessor",
+    "Preprocessor",
+    "QuerySet",
+    "apply_markdown",
+    "inflection",
+    "markdown",
+    "md_filter_add_syntax_highlight",
+    "postgres_fields",
+    "pygments",
     "pygments_css",
     "pygments_highlight",
-    "md_filter_add_syntax_highlight",
+    "requests",
     "unicode_http_header",
-    "distinct",
-    "SHORT_SEPARATORS",
-    "LONG_SEPARATORS",
-    "INDENT_SEPARATORS",
+    "uritemplate",
+    "yaml",
 ]

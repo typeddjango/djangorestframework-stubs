@@ -1,9 +1,8 @@
-from collections.abc import Sequence
-from typing import Any, Protocol, TypeVar
+from collections.abc import Mapping, Sequence
+from typing import Any, Protocol, Self, TypeVar, type_check_only
 
 from django.db.models import Manager, Model
 from django.db.models.query import QuerySet
-
 from rest_framework import mixins, views
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.pagination import BasePagination
@@ -13,38 +12,40 @@ from rest_framework.serializers import BaseSerializer
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 _MT_inv = TypeVar("_MT_inv", bound=Model)
+_Row = TypeVar("_Row", default=_MT_co)
 
 def get_object_or_404(
     queryset: type[_MT_co] | Manager[_MT_co] | QuerySet[_MT_co], *filter_args: Any, **filter_kwargs: Any
 ) -> _MT_co: ...
 
+@type_check_only
 class UsesQuerySet(Protocol[_MT_co]):
     def get_queryset(self) -> QuerySet[_MT_co]: ...
 
 # Can't just use BaseFilterBackend because there's also things like django_filters.rest_framework.DjangoFilterBackend that are
 # valid options but don't extend it
+@type_check_only
 class BaseFilterProtocol(Protocol[_MT_inv]):
     def filter_queryset(
         self, request: Request, queryset: QuerySet[_MT_inv], view: views.APIView
     ) -> QuerySet[_MT_inv]: ...
-    def get_schema_fields(self, view: views.APIView) -> list[Any]: ...
-    def get_schema_operation_parameters(self, view: views.APIView): ...
 
 class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
     queryset: QuerySet[_MT_co] | Manager[_MT_co] | None
-    serializer_class: type[BaseSerializer] | None
+    serializer_class: type[BaseSerializer[_MT_co]] | None
     lookup_field: str
     lookup_url_kwarg: str | None
-    filter_backends: Sequence[type[BaseFilterBackend] | type[BaseFilterProtocol[_MT_co]]]
+    filter_backends: Sequence[type[BaseFilterBackend | BaseFilterProtocol[_MT_co]]]
     pagination_class: type[BasePagination] | None
+    def __class_getitem__(cls, *args: Any, **kwargs: Any) -> type[Self]: ...
     def get_object(self) -> _MT_co: ...
     def get_serializer(self, *args: Any, **kwargs: Any) -> BaseSerializer[_MT_co]: ...
     def get_serializer_class(self) -> type[BaseSerializer[_MT_co]]: ...
-    def get_serializer_context(self) -> dict[str, Any]: ...
-    def filter_queryset(self, queryset: QuerySet[_MT_co]) -> QuerySet[_MT_co]: ...
+    def get_serializer_context(self) -> Mapping[str, Any]: ...
+    def filter_queryset(self, queryset: QuerySet[_MT_co, _Row]) -> QuerySet[_MT_co, _Row]: ...
     @property
     def paginator(self) -> BasePagination | None: ...
-    def paginate_queryset(self, queryset: QuerySet[_MT_co] | Sequence[Any]) -> Sequence[Any] | None: ...
+    def paginate_queryset(self, queryset: QuerySet[_MT_co, _Row] | Sequence[_Row]) -> list[_Row] | None: ...
     def get_paginated_response(self, data: Any) -> Response: ...
 
 class CreateAPIView(mixins.CreateModelMixin, GenericAPIView[_MT_co]):

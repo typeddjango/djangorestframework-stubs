@@ -1,6 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Protocol, Union  # noqa: Y037  # https://github.com/python/mypy/issues/12392
-from typing_extensions import TypeAlias
+from typing import Any, Protocol, TypeAlias
 
 from django.db.models import Model, QuerySet
 from rest_framework.request import Request
@@ -13,7 +12,7 @@ class _SupportsHasPermission(Protocol):
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 
 # https://github.com/python/mypy/issues/12392
-_PermissionClass: TypeAlias = Union[type[BasePermission], OperandHolder, SingleOperandHolder]
+_PermissionClass: TypeAlias = type[BasePermission] | OperandHolder | SingleOperandHolder
 
 class OperationHolderMixin:
     def __and__(self, other: _PermissionClass) -> OperandHolder: ...
@@ -25,8 +24,8 @@ class OperationHolderMixin:
 class SingleOperandHolder(OperationHolderMixin):
     operator_class: _SupportsHasPermission
     op1_class: _PermissionClass
-    def __init__(self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass): ...
-    def __call__(self, *args, **kwargs) -> _SupportsHasPermission: ...
+    def __init__(self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass) -> None: ...
+    def __call__(self, *args: Any, **kwargs: Any) -> _SupportsHasPermission: ...
 
 class OperandHolder(OperationHolderMixin):
     operator_class: _SupportsHasPermission
@@ -34,8 +33,8 @@ class OperandHolder(OperationHolderMixin):
     op2_class: _PermissionClass
     def __init__(
         self, operator_class: _SupportsHasPermission, op1_class: _PermissionClass, op2_class: _PermissionClass
-    ): ...
-    def __call__(self, *args, **kwargs) -> _SupportsHasPermission: ...
+    ) -> None: ...
+    def __call__(self, *args: Any, **kwargs: Any) -> _SupportsHasPermission: ...
 
 class AND(_SupportsHasPermission):
     def __init__(self, op1: _SupportsHasPermission, op2: _SupportsHasPermission) -> None: ...
@@ -46,9 +45,9 @@ class OR(_SupportsHasPermission):
 class NOT(_SupportsHasPermission):
     def __init__(self, op1: _SupportsHasPermission) -> None: ...
 
-class BasePermissionMetaclass(OperationHolderMixin, type): ...  # type: ignore[misc]
+class BasePermissionMetaclass(OperationHolderMixin, type): ...  # type: ignore[misc,unused-ignore]
 
-class BasePermission(metaclass=BasePermissionMetaclass):  # type: ignore[misc]
+class BasePermission(metaclass=BasePermissionMetaclass):
     def has_permission(self, request: Request, view: APIView) -> bool: ...
     def has_object_permission(self, request: Request, view: APIView, obj: Any) -> bool: ...
 

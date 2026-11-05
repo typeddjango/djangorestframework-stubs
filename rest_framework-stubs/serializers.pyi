@@ -1,16 +1,10 @@
-from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, Generic, NoReturn, TypeVar, overload
-from _typeshed import Self
+from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
+from typing import Any, ClassVar, Literal, NoReturn, Self, TypeVar, overload
 
-from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
-from django.db.models import DurationField as ModelDurationField
 from django.db.models import Manager, Model, QuerySet
-from django.db.models.fields import Field as DjangoModelField
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
-from typing_extensions import Literal
-
+from django_stubs_ext import StrOrPromise
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -23,8 +17,9 @@ from rest_framework.exceptions import PermissionDenied as PermissionDenied
 from rest_framework.exceptions import Throttled as Throttled
 from rest_framework.exceptions import UnsupportedMediaType as UnsupportedMediaType
 from rest_framework.exceptions import ValidationError as ValidationError
+from rest_framework.fields import BigIntegerField as BigIntegerField
 from rest_framework.fields import BooleanField as BooleanField
-from rest_framework.fields import CharField as CharField  # noqa: F401
+from rest_framework.fields import CharField as CharField
 from rest_framework.fields import ChoiceField as ChoiceField
 from rest_framework.fields import CreateOnlyDefault as CreateOnlyDefault
 from rest_framework.fields import CurrentUserDefault as CurrentUserDefault
@@ -47,7 +42,6 @@ from rest_framework.fields import JSONField as JSONField
 from rest_framework.fields import ListField as ListField
 from rest_framework.fields import ModelField as ModelField
 from rest_framework.fields import MultipleChoiceField as MultipleChoiceField
-from rest_framework.fields import NullBooleanField as NullBooleanField
 from rest_framework.fields import ReadOnlyField as ReadOnlyField
 from rest_framework.fields import RegexField as RegexField
 from rest_framework.fields import SerializerMethodField as SerializerMethodField
@@ -56,6 +50,7 @@ from rest_framework.fields import SlugField as SlugField
 from rest_framework.fields import TimeField as TimeField
 from rest_framework.fields import URLField as URLField
 from rest_framework.fields import UUIDField as UUIDField
+from rest_framework.fields import _DefaultInitial
 from rest_framework.fields import empty as empty
 from rest_framework.relations import Hyperlink as Hyperlink
 from rest_framework.relations import HyperlinkedIdentityField as HyperlinkedIdentityField
@@ -67,21 +62,22 @@ from rest_framework.relations import SlugRelatedField as SlugRelatedField
 from rest_framework.relations import StringRelatedField as StringRelatedField
 from rest_framework.utils.model_meta import FieldInfo, RelationInfo
 from rest_framework.utils.serializer_helpers import BindingDict, BoundField, ReturnDict, ReturnList
-from rest_framework.validators import Validator, UniqueTogetherValidator, BaseUniqueForValidator
+from rest_framework.validators import BaseUniqueForValidator, SerializerValidator, UniqueTogetherValidator
+from typing_extensions import override
 
 LIST_SERIALIZER_KWARGS: Sequence[str]
+LIST_SERIALIZER_KWARGS_REMOVE: Sequence[str]
 ALL_FIELDS: str
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
 
-class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
+class BaseSerializer(Field[Any, Any, Any, _IN]):
     partial: bool
     many: bool
     instance: _IN | None
     initial_data: Any
-    _context: dict[str, Any]
-    def __class_getitem__(cls, *args, **kwargs): ...
+    _context: Mapping[str, Any]
     # When both __init__ and __new__ are present, mypy will prefer __init__
     @overload
     def __new__(
@@ -89,18 +85,18 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         instance: Iterable[_IN] | None,
         many: Literal[True],
         allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> ListSerializer[_IN]: ...
     @overload
@@ -109,23 +105,32 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
         instance: _IN | None = ...,
         many: Literal[False] = ...,
         allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> Self: ...
     @classmethod
     def many_init(cls, *args: Any, **kwargs: Any) -> BaseSerializer: ...
-    def is_valid(self, raise_exception: bool = ...) -> bool: ...
+    # Incompatible with `Field.validators` on purpose: a serializer calls its validators with itself as
+    # context, so they may require a serializer (`UniqueTogetherValidator`), which no field validator may.
+    @override  # type: ignore[explicit-override, override]
+    @property
+    def validators(self) -> list[SerializerValidator[Any]]: ...
+    @validators.setter
+    def validators(self, validators: list[SerializerValidator[Any]]) -> None: ...
+    @override
+    def get_validators(self) -> list[SerializerValidator[Any]]: ...  # type: ignore[override]
+    def is_valid(self, *, raise_exception: bool = ...) -> bool: ...
     @property
     def data(self) -> Any: ...
     @property
@@ -135,27 +140,27 @@ class BaseSerializer(Generic[_IN], Field[Any, Any, Any, _IN]):
     def update(self, instance: _IN, validated_data: Any) -> _IN: ...
     def create(self, validated_data: Any) -> _IN: ...
     def save(self, **kwargs: Any) -> _IN: ...
-    def to_representation(self, instance: _IN) -> Any: ...  # type: ignore[override]
+    @override
+    def to_representation(self, instance: _IN) -> Any: ...
 
 class SerializerMetaclass(type):
-    def __new__(cls, name: Any, bases: Any, attrs: Any): ...
+    def __new__(cls, name: Any, bases: Any, attrs: Any) -> SerializerMetaclass: ...
     @classmethod
     def _get_declared_fields(cls, bases: Sequence[type], attrs: dict[str, Any]) -> dict[str, Field]: ...
 
 def as_serializer_error(exc: Exception) -> dict[str, list[ErrorDetail]]: ...
 
-class Serializer(
-    BaseSerializer[
-        _IN,
-    ],
-    metaclass=SerializerMetaclass,
-):
+class Serializer(BaseSerializer[_IN], metaclass=SerializerMetaclass):
     _declared_fields: dict[str, Field]
-    default_error_messages: dict[str, Any]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
+    @override
     def get_initial(self) -> Any: ...
+    def set_value(self, dictionary: MutableMapping[str, Any], keys: Sequence[str], value: Any) -> None: ...
     @cached_property
     def fields(self) -> BindingDict: ...
     def get_fields(self) -> dict[str, Field]: ...
+    @override
+    def to_representation(self, instance: _IN) -> dict[str, Any]: ...
     def validate(self, attrs: Any) -> Any: ...
     def __iter__(self) -> Iterator[BoundField]: ...
     def __getitem__(self, key: str) -> BoundField: ...
@@ -165,63 +170,86 @@ class Serializer(
     @property
     def _readable_fields(self) -> list[Field]: ...
     @property
+    @override
     def data(self) -> ReturnDict: ...
     @property
+    @override
     def errors(self) -> ReturnDict: ...
 
-class ListSerializer(
-    BaseSerializer[_IN],
-):
+class ListSerializer(BaseSerializer[_IN]):
     child: Field | BaseSerializer | None
     many: bool
-    default_error_messages: dict[str, Any]
+    default_error_messages: ClassVar[dict[str, StrOrPromise]]
     allow_empty: bool | None
     def __init__(
         self,
         instance: Iterable[_IN] | None = ...,
         data: Any = ...,
         partial: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         allow_empty: bool = ...,
         child: Field | BaseSerializer | None = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[list[Any]]] | None = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[list[Any]]] | None = ...,
         allow_null: bool = ...,
+        min_length: int | None = ...,
+        max_length: int | None = ...,
     ) -> None: ...
+    def run_child_validation(self, data: Any) -> Any: ...
+    # The list-level validators receive the whole list, with the `ListSerializer` as context.
+    @override  # type: ignore[explicit-override, override]
+    @property
+    def validators(self) -> list[SerializerValidator[list[Any]]]: ...
+    @validators.setter
+    def validators(self, validators: list[SerializerValidator[list[Any]]]) -> None: ...
+    @override
+    def get_validators(self) -> list[SerializerValidator[list[Any]]]: ...  # type: ignore[override]
+    @override
+    def to_internal_value(self, data: Any) -> list[Any]: ...
+    @override
+    def to_representation(self, data: Manager[Any] | Iterable[Any]) -> list[Any]: ...  # type: ignore[override]
+    @override
     def get_initial(self) -> list[Mapping[Any, Any]]: ...
     def validate(self, attrs: Any) -> Any: ...
     @property
+    @override
     def data(self) -> ReturnList: ...
+    # `ReturnList` only for the empty, no-errors case, since `_errors` defaults to `[]` here.
+    # Every error path in DRF 3.18 produces a `ReturnDict`: child errors are keyed by list index and
+    # list-level errors by `NON_FIELD_ERRORS_KEY`. A non-empty `ReturnList` is still reachable on DRF
+    # >= 3.19 with `LIST_SERIALIZER_ERRORS_AS_DICT = False` (deprecated, removed in DRF 3.20), which
+    # restores the positional list format, and from subclasses raising list-shaped details.
     @property
-    def errors(self) -> ReturnList: ...
+    @override
+    def errors(self) -> ReturnDict | ReturnList: ...
 
 def raise_errors_on_nested_writes(method_name: str, serializer: BaseSerializer, validated_data: Any) -> None: ...
 
-class ModelSerializer(Serializer, BaseSerializer[_MT]):
-    serializer_field_mapping: dict[type[models.Field], type[Field]]
-    serializer_related_field: type[RelatedField]
-    serializer_related_to_field: type[RelatedField]
-    serializer_url_field: type[RelatedField]
-    serializer_choice_field: type[Field]
-    url_field_name: str | None
-    instance: _MT | Sequence[_MT] | None  # type: ignore[override]
+class ModelSerializer(Serializer[_MT]):
+    serializer_field_mapping: ClassVar[dict[type[models.Field], type[Field]]]
+    serializer_related_field: ClassVar[type[RelatedField]]
+    serializer_related_to_field: ClassVar[type[RelatedField]]
+    serializer_url_field: ClassVar[type[RelatedField]]
+    serializer_choice_field: ClassVar[type[Field]]
+    url_field_name: ClassVar[str | None]
 
     class Meta:
-        model: type[_MT]  # type: ignore
-        fields: Sequence[str] | Literal["__all__"]
-        read_only_fields: Sequence[str] | None
-        exclude: Sequence[str] | None
-        depth: int | None
-        extra_kwargs: dict[str, dict[str, Any]]  # type: ignore[override]
+        model: ClassVar[type[_MT]]  # type: ignore[valid-type]
+        fields: ClassVar[Sequence[str] | Literal["__all__"]]
+        read_only_fields: ClassVar[Sequence[str] | None]
+        exclude: ClassVar[Sequence[str] | None]
+        depth: ClassVar[int | None]
+        extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
+
     @overload
     def __new__(  # type: ignore[misc]
         cls: type[Self],
@@ -239,34 +267,41 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
         cls: type[Self],
         instance: None | _MT | Sequence[_MT] | QuerySet[_MT] | Manager[_MT] = ...,
         data: Any = ...,
+        *,
         partial: bool = ...,
         many: bool = ...,
         allow_empty: bool = ...,
-        context: dict[str, Any] = ...,
+        context: Mapping[str, Any] = ...,
         read_only: bool = ...,
         write_only: bool = ...,
-        required: bool = ...,
+        required: bool | None = None,
         default: Any = ...,
         initial: Any = ...,
-        source: str = ...,
-        label: str = ...,
-        help_text: str = ...,
-        style: dict[str, Any] = ...,
-        error_messages: dict[str, str] = ...,
-        validators: Sequence[Validator[Any]] | None = ...,
+        source: str | None = None,
+        label: StrOrPromise | None = None,
+        help_text: StrOrPromise | None = None,
+        style: dict[str, Any] | None = None,
+        error_messages: dict[str, StrOrPromise] | None = None,
+        validators: Sequence[SerializerValidator[Any]] | None = ...,
         allow_null: bool = ...,
     ) -> Self: ...
-    def update(self, instance: _MT, validated_data: Any) -> _MT: ...  # type: ignore[override]
-    def create(self, validated_data: Any) -> _MT: ...  # type: ignore[override]
-    def save(self, **kwargs: Any) -> _MT: ...  # type: ignore[override]
-    def to_representation(self, instance: _MT) -> Any: ...  # type: ignore[override]
+    # The validated values of the model's fields. Not on `Serializer`: a plain serializer may
+    # validate into any shape (a dataclass, a domain object).
+    @override
+    def to_internal_value(self, data: Any) -> dict[str, Any]: ...
+    @override
+    def update(self, instance: _MT, validated_data: Any) -> _MT: ...
+    @override
+    def create(self, validated_data: Any) -> _MT: ...
+    @override
+    def save(self, **kwargs: Any) -> _MT: ...
     def get_field_names(self, declared_fields: Mapping[str, Field], info: FieldInfo) -> list[str]: ...
     def get_default_field_names(self, declared_fields: Mapping[str, Field], model_info: FieldInfo) -> list[str]: ...
     def build_field(
-        self, field_name: str, info: FieldInfo, model_class: _MT, nested_depth: int
+        self, field_name: str, info: FieldInfo, model_class: type[_MT], nested_depth: int
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_standard_field(
-        self, field_name: str, model_field: type[models.Field]
+        self, field_name: str, model_field: models.Field
     ) -> tuple[type[Field], dict[str, Any]]: ...
     def build_relational_field(
         self, field_name: str, relation_info: RelationInfo
@@ -274,13 +309,18 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     def build_nested_field(
         self, field_name: str, relation_info: RelationInfo, nested_depth: int
     ) -> tuple[type[Field], dict[str, Any]]: ...
-    def build_property_field(self, field_name: str, model_class: _MT) -> tuple[type[Field], dict[str, Any]]: ...
-    def build_url_field(self, field_name: str, model_class: _MT) -> tuple[type[Field], dict[str, Any]]: ...
-    def build_unknown_field(self, field_name: str, model_class: _MT) -> NoReturn: ...
+    def build_property_field(self, field_name: str, model_class: type[_MT]) -> tuple[type[Field], dict[str, Any]]: ...
+    def build_url_field(self, field_name: str, model_class: type[_MT]) -> tuple[type[Field], dict[str, Any]]: ...
+    def build_unknown_field(self, field_name: str, model_class: type[_MT]) -> NoReturn: ...
     def include_extra_kwargs(
         self, kwargs: MutableMapping[str, Any], extra_kwargs: MutableMapping[str, Any]
     ) -> MutableMapping[str, Any]: ...
     def get_extra_kwargs(self) -> dict[str, Any]: ...
+    def get_unique_together_constraints(
+        self, model: type[_MT]
+    ) -> Iterator[
+        tuple[Sequence[str], Manager[_MT], list[str], models.Q | None, bool | None, models.UniqueConstraint | None]
+    ]: ...
     def get_uniqueness_extra_kwargs(
         self, field_names: Iterable[str], declared_fields: Mapping[str, Field], extra_kwargs: dict[str, Any]
     ) -> tuple[dict[str, Any], dict[str, HiddenField]]: ...
@@ -290,4 +330,4 @@ class ModelSerializer(Serializer, BaseSerializer[_MT]):
     def get_unique_together_validators(self) -> list[UniqueTogetherValidator]: ...
     def get_unique_for_date_validators(self) -> list[BaseUniqueForValidator]: ...
 
-class HyperlinkedModelSerializer(ModelSerializer): ...
+class HyperlinkedModelSerializer(ModelSerializer[_MT]): ...

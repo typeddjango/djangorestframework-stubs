@@ -1,47 +1,53 @@
-from typing import Any
+from collections.abc import Iterable, Mapping
+from typing import Any, TypeAlias
 
-import coreapi
 import requests
 import urllib3
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AnonymousUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpRequest
 from django.test import testcases
 from django.test.client import Client as DjangoClient
 from django.test.client import ClientHandler
 from django.test.client import RequestFactory as DjangoRequestFactory
+from django_stubs_ext import StrOrPromise
 from rest_framework.authtoken.models import Token
-from rest_framework.request import Request
 from rest_framework.response import _MonkeyPatchedResponse
+from typing_extensions import override
+
+_GetDataType: TypeAlias = (
+    Mapping[str, str | bytes | float | Iterable[str | bytes | float]]
+    | Iterable[tuple[str, str | bytes | float | Iterable[str | bytes | float]]]
+    | None
+)
 
 def force_authenticate(
     request: HttpRequest, user: AnonymousUser | AbstractBaseUser | None = ..., token: Token | None = ...
 ) -> None: ...
 
 class HeaderDict(urllib3._collections.HTTPHeaderDict):
-    def get_all(self, key: Any, default: Any): ...
+    @override
+    def get_all(self, key: str, default: Any) -> list[str]: ...  # type: ignore[override]
 
 class MockOriginalResponse:
     msg: Any
     closed: bool
     def __init__(self, headers: Any) -> None: ...
-    def isclosed(self): ...
+    def isclosed(self) -> bool: ...
     def close(self) -> None: ...
 
 class DjangoTestAdapter(requests.adapters.HTTPAdapter):
     app: Any
     factory: Any
     def __init__(self) -> None: ...
-    def get_environ(self, request: Request): ...
-    def send(self, request: Request, *args: Any, **kwargs: Any) -> requests.Response: ...  # type: ignore[override]
+    def get_environ(self, request: requests.PreparedRequest) -> dict[str, Any]: ...
+    @override
+    def send(self, request: requests.PreparedRequest, *args: Any, **kwargs: Any) -> requests.Response: ...
+    @override
     def close(self) -> None: ...
 
 class RequestsClient(requests.Session): ...
-
-class CoreAPIClient(coreapi.Client):
-    def __init__(self, *args: Any, **kwargs: Any): ...
-    @property
-    def session(self): ...
 
 class APIRequestFactory(DjangoRequestFactory):
     renderer_classes_list: Any
@@ -49,31 +55,143 @@ class APIRequestFactory(DjangoRequestFactory):
     enforce_csrf_checks: Any
     renderer_classes: Any
     def __init__(self, enforce_csrf_checks: bool = ..., **defaults: Any) -> None: ...
-    def request(self, **kwargs: Any) -> Request: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
-    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
-    def options(self, path: str, data: dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> Request: ...  # type: ignore[override]
+    @override
+    def request(self, **kwargs: Any) -> WSGIRequest: ...
+    @override
+    def get(self, path: StrOrPromise, data: _GetDataType = ..., **extra: Any) -> WSGIRequest: ...  # type: ignore[override]
+    @override
+    def post(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
+    @override
+    def put(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
+    @override
+    def patch(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
+    @override
+    def delete(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
+    @override
+    def options(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: dict[str, str] | str | None = ...,
+        format: str | None = ...,
+        content_type: Any | None = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
+    @override
     def generic(  # type: ignore[override]
-        self, method: str, path: str, data: str = ..., content_type: str = ..., secure: bool = ..., **extra: Any
-    ) -> Request: ...
+        self,
+        method: str,
+        path: StrOrPromise,
+        data: str = ...,
+        content_type: str = ...,
+        secure: bool = ...,
+        **extra: Any,
+    ) -> WSGIRequest: ...
 
 class ForceAuthClientHandler(ClientHandler):
-    def __init__(self, *args: Any, **kwargs: Any): ...
-    def get_response(self, request: Request) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
+    @override
+    def get_response(self, request: HttpRequest) -> _MonkeyPatchedResponse: ...
 
 class APIClient(APIRequestFactory, DjangoClient):
-    def credentials(self, **kwargs: Any): ...
-    def force_authenticate(self, user: AnonymousUser | AbstractBaseUser = ..., token: Token | None = ...) -> None: ...
+    def credentials(self, **kwargs: Any) -> None: ...
+    def force_authenticate(
+        self, user: AnonymousUser | AbstractBaseUser | None = ..., token: Token | None = ...
+    ) -> None: ...
+    @override
     def request(self, **kwargs: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def get(self, path: str, data: dict[str, Any] | str | None = ..., follow: bool = ..., **extra: Any): ...  # type: ignore[override]
-    def post(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def put(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def patch(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def delete(self, path: str, data: Any | None = ..., format: str | None = ..., content_type: str | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
-    def options(self, path: str, data: dict[str, str] | str = ..., format: str | None = ..., content_type: Any | None = ..., follow: bool = ..., **extra: Any) -> _MonkeyPatchedResponse: ...  # type: ignore[override]
+    @override
+    def get(  # type: ignore[override]
+        self, path: StrOrPromise, data: _GetDataType = ..., follow: bool = ..., **extra: Any
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def post(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        follow: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def put(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        follow: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def patch(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        follow: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def delete(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: Any | None = ...,
+        format: str | None = ...,
+        content_type: str | None = ...,
+        follow: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def options(  # type: ignore[override]
+        self,
+        path: StrOrPromise,
+        data: dict[str, str] | str | None = ...,
+        format: str | None = ...,
+        content_type: Any | None = ...,
+        follow: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
+    def generic(  # type: ignore[override]
+        self,
+        method: str,
+        path: StrOrPromise,
+        data: str = ...,
+        content_type: str = ...,
+        secure: bool = ...,
+        **extra: Any,
+    ) -> _MonkeyPatchedResponse: ...
+    @override
     def logout(self) -> None: ...
 
 class APITransactionTestCase(testcases.TransactionTestCase):
@@ -91,5 +209,7 @@ class APISimpleTestCase(testcases.SimpleTestCase):
 class APILiveServerTestCase(testcases.LiveServerTestCase):
     client_class: type[APIClient]
     client: APIClient
+
+def cleanup_url_patterns(cls: type[URLPatternsTestCase]) -> None: ...
 
 class URLPatternsTestCase(testcases.SimpleTestCase): ...

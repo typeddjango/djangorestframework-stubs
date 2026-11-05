@@ -1,26 +1,54 @@
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any, Protocol, TypeVar
+from http import HTTPMethod
+from typing import Any, Concatenate, Literal, Protocol, Self, TypeAlias, TypeVar, overload, type_check_only
 
 from django.http import HttpRequest
 from django.http.response import HttpResponseBase
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.metadata import BaseMetadata
+from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
 from rest_framework.permissions import _PermissionClass
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.schemas.inspectors import ViewInspector
 from rest_framework.throttling import BaseThrottle
+from rest_framework.versioning import BaseVersioning
 from rest_framework.views import APIView, AsView  # noqa: F401
-from typing_extensions import Concatenate, Literal, ParamSpec, TypeAlias
+from typing_extensions import ParamSpec, override
 
 _View = TypeVar("_View", bound=Callable[..., HttpResponseBase])
 _P = ParamSpec("_P")
 _RESP = TypeVar("_RESP", bound=HttpResponseBase)
+_RESP_co = TypeVar("_RESP_co", bound=HttpResponseBase, covariant=True)
+_ViewSet = TypeVar("_ViewSet")
+
+_MixedCaseHttpMethod: TypeAlias = Literal[
+    "GET",
+    "POST",
+    "DELETE",
+    "PUT",
+    "PATCH",
+    "TRACE",
+    "HEAD",
+    "OPTIONS",
+    "get",
+    "post",
+    "delete",
+    "put",
+    "patch",
+    "trace",
+    "head",
+    "options",
+]
+
+_HttpMethod: TypeAlias = _MixedCaseHttpMethod | HTTPMethod
 
 class MethodMapper(dict):
     def __init__(self, action: _View, methods: Sequence[str]) -> None: ...
     def _map(self, method: str, func: _View) -> _View: ...
-    def get(self, func: _View) -> _View: ...  # type: ignore
+    @override
+    def get(self, func: _View) -> _View: ...  # type: ignore[override]
     def post(self, func: _View) -> _View: ...
     def put(self, func: _View) -> _View: ...
     def patch(self, func: _View) -> _View: ...
@@ -29,48 +57,34 @@ class MethodMapper(dict):
     def options(self, func: _View) -> _View: ...
     def trace(self, func: _View) -> _View: ...
 
-_LOWER_CASE_HTTP_VERBS: TypeAlias = list[
-    Literal[
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
-    ]
-]
-
-_MIXED_CASE_HTTP_VERBS: TypeAlias = list[
-    Literal[
-        "GET",
-        "POST",
-        "DELETE",
-        "PUT",
-        "PATCH",
-        "TRACE",
-        "HEAD",
-        "OPTIONS",
-        "get",
-        "post",
-        "delete",
-        "put",
-        "patch",
-        "trace",
-        "head",
-        "options",
-    ]
-]
-
-class ViewSetAction(Protocol[_View]):
+@type_check_only
+class _ViewSetActionAttributes(Protocol):
     detail: bool
-    methods: _LOWER_CASE_HTTP_VERBS
     url_path: str
     url_name: str
     kwargs: Mapping[str, Any]
     mapping: MethodMapper
+    __name__: str
+
+@type_check_only
+class BoundViewSetAction(_ViewSetActionAttributes, Protocol[_P, _RESP_co]):
+    def __call__(self, *args: _P.args, **kwargs: _P.kwargs) -> _RESP_co: ...
+
+@type_check_only
+class ViewSetAction(_ViewSetActionAttributes, Protocol[_View]):
     __call__: _View
+    # `@action` returns the decorated function itself, so accessing it on a viewset
+    # instance yields a bound method: the first parameter (`self`) is consumed.
+    @overload
+    def __get__(self, instance: None, owner: type[Any], /) -> Self: ...
+    @overload
+    def __get__(
+        self: ViewSetAction[Callable[Concatenate[_ViewSet, _P], _RESP]], instance: _ViewSet, owner: type[Any], /
+    ) -> BoundViewSetAction[_P, _RESP]: ...
+    # Reached only by checkers that cannot solve the overload above (mypy 1.13): access keeps
+    # the unbound type, as before this overload existed.
+    @overload
+    def __get__(self, instance: object, owner: type[Any], /) -> Self: ...
 
 def api_view(
     http_method_names: Sequence[str] | None = ...,
@@ -82,9 +96,13 @@ def authentication_classes(
 ) -> Callable[[_View], _View]: ...
 def throttle_classes(throttle_classes: Sequence[BaseThrottle | type[BaseThrottle]]) -> Callable[[_View], _View]: ...
 def permission_classes(permission_classes: Sequence[_PermissionClass]) -> Callable[[_View], _View]: ...
+def content_negotiation_class(content_negotiation_class: type[BaseContentNegotiation]) -> Callable[[_View], _View]: ...
+def metadata_class(metadata_class: type[BaseMetadata] | None) -> Callable[[_View], _View]: ...
+def versioning_class(versioning_class: type[BaseVersioning] | None) -> Callable[[_View], _View]: ...
 def schema(view_inspector: ViewInspector | type[ViewInspector] | None) -> Callable[[_View], _View]: ...
+def throttle_scope(throttle_scope: str) -> Callable[[_View], _View]: ...
 def action(
-    methods: _MIXED_CASE_HTTP_VERBS | None = ...,
+    methods: Sequence[_HttpMethod] | None = ...,
     detail: bool = ...,
     url_path: str | None = ...,
     url_name: str | None = ...,

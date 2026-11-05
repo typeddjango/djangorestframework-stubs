@@ -1,0 +1,115 @@
+# This is a true allow list with things that we really don't care about.
+#
+# Please, move things here when you are sure that they really should be ignored.
+# Comments about why things are ignored are mandatory.
+
+# Constructor arguments *appear* optional but actually throw exception
+rest_framework.relations.ManyRelatedField.__init__
+rest_framework.relations.SlugRelatedField.__init__
+
+# None is used as a placeholder, but not valid in actual usage
+rest_framework.parsers.BaseParser.media_type
+rest_framework.renderers.BaseRenderer.format
+rest_framework.renderers.BaseRenderer.media_type
+rest_framework.validators.BaseUniqueForValidator.message
+# `@action(detail=...)` is required at runtime (asserts non-None), so the stub
+# marks `detail: bool` without a default even though the runtime signature is
+# `detail=None`. The stub also promotes `suffix` / `name` from `**kwargs` to
+# named keyword parameters for better editor support.
+rest_framework.decorators.action
+
+# DRF defaults allow_nan to False, unlike stdlib json. Stubtest follows the
+# functools.wraps metadata and incorrectly sees the stdlib's True default.
+rest_framework.utils.json.dump
+rest_framework.utils.json.dumps
+
+# `RequestsClient.__init__(*args, **kwargs)` at runtime just delegates to the
+# `requests.Session.__init__(self)` superclass and doesn't actually accept
+# arbitrary arguments.
+rest_framework.test.RequestsClient.__init__
+
+# Migrations are omitted
+rest_framework.authtoken.migrations
+rest_framework.authtoken.migrations.0001_initial
+rest_framework.authtoken.migrations.0002_auto_20160226_1747
+rest_framework.authtoken.migrations.0003_tokenproxy
+rest_framework.authtoken.migrations.0004_alter_tokenproxy_options
+
+# `empty` hinted as enum, to work correctly in unions:
+# https://github.com/typeddjango/djangorestframework-stubs/issues/42
+rest_framework.fields.empty
+
+# Mypy doesn't like default value `empty`
+rest_framework.fields.DateField.__init__
+rest_framework.fields.DateTimeField.__init__
+rest_framework.fields.DurationField.__init__
+rest_framework.fields.TimeField.__init__
+
+# Generated objects:
+rest_framework.authtoken.models.Token@AnnotatedWith
+rest_framework.authtoken.models.TokenProxy@AnnotatedWith
+
+# The django-stubs mypy plugin synthesizes a `ManagerFrom<QuerySet>` class and a
+# matching `as_manager()` classmethod for every `QuerySet` subclass. Neither
+# exists at runtime; `TokenProxy.objects` is a plain `Manager` there.
+rest_framework.authtoken.models.ManagerFromTokenProxyQuerySet
+rest_framework.authtoken.models.TokenProxyQuerySet.as_manager
+
+# .save() will be different soon:
+rest_framework.authtoken.models.Token.save
+
+# Stub-only synthetic types (Protocols, TypeAliases, TypedDicts, base Meta),
+# intentionally not present at runtime. They exist to give better types to
+# users of the library.
+# Most such symbols are marked with `@typing.type_check_only`, but that
+# decorator can't be applied to `TypeAlias` assignments, so `Validator`
+# and `SerializerValidator` stay here. `ModelSerializer.Meta` is present
+# at runtime as a subclass hook but stubtest can't reconcile its stub-only
+# class attributes.
+rest_framework.serializers.ModelSerializer.Meta
+rest_framework.validators.SerializerValidator
+rest_framework.validators.Validator
+
+# Model field descriptor mismatches: django-stubs types model fields as their
+# `Field` subclass, but at runtime Django replaces them with
+# `DeferredAttribute` / `ForwardOneToOneDescriptor` / `ForeignKeyDeferredAttribute`
+# / property. This is a known django-stubs limitation and can only be fixed
+# there, not in drf-stubs.
+rest_framework.authtoken.models.Token.created
+rest_framework.authtoken.models.Token.key
+rest_framework.authtoken.models.Token.user
+rest_framework.authtoken.models.Token.user_id
+rest_framework.authtoken.models.TokenProxy.pk
+rest_framework.authtoken.models.TokenProxy.user_id
+
+# django-stubs synthesizes `get_next_by_<field>` / `get_previous_by_<field>`
+# helpers without the internal `field` / `is_next` keyword-only parameters that
+# `functools.partialmethod` binds at runtime. This is a django-stubs concern.
+rest_framework.authtoken.models.Token.get_next_by_created
+rest_framework.authtoken.models.Token.get_previous_by_created
+rest_framework.authtoken.models.TokenProxy.get_next_by_created
+rest_framework.authtoken.models.TokenProxy.get_previous_by_created
+
+# `User = get_user_model()` resolves to a dynamic model class at runtime, but
+# the stubs annotate it as the abstract base class for typing purposes. There
+# is no clean way to express this in stubs.
+rest_framework.authtoken.admin.User
+rest_framework.authtoken.management.commands.drf_create_token.UserModel
+
+# Only defined at runtime when the optional `markdown` package is installed.
+# The stubs unconditionally expose them (guarded by `try: import markdown`),
+# which is the desired behaviour for downstream typing.
+rest_framework.compat.CodeBlockPreprocessor
+rest_framework.compat.apply_markdown
+rest_framework.compat.__all__
+
+# `api_settings` is a `LazySettings`-style proxy: the runtime object is
+# `APISettings`, but the stubs expose it via the `_Settings` protocol/alias so
+# that user code sees the individual setting attributes with their proper types.
+rest_framework.settings.api_settings
+rest_framework.negotiation.DefaultContentNegotiation.settings
+
+# `SimpleRateThrottle.cache` is `django.core.cache.caches[...]` at runtime,
+# which returns a `ConnectionProxy` that transparently proxies to a `BaseCache`.
+# Typing it as `BaseCache` is the correct user-facing type.
+rest_framework.throttling.SimpleRateThrottle.cache

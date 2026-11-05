@@ -32,21 +32,19 @@ Additionally, the following resources might be useful:
 ### Repository Setup
 
 As a first step you will need to fork this repository and clone your fork locally.
-In order to be able to continously sync your fork with the origin repository's master branch, you will need to set up an upstream master. To do so follow this [official github guide](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
+In order to be able to continously sync your fork with the origin repository's master branch, you will need to set up an upstream master.
+To do so follow this [official github guide](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/syncing-a-fork).
 
 ### Dependency Setup
 
-After your repository is setup you will then need to create and activate a git ignored virtual env, e.g.:
+We use [uv](https://github.com/astral-sh/uv) to manage our dev dependencies.
+To install it, see their [installation guide](https://docs.astral.sh/uv/getting-started/installation/)
+
+Once it's done, simply run the following command to automatically setup a virtual environment and install dev dependencies:
 
 ```bash
-python3 -m venv .venv
+uv sync
 source .venv/bin/activate
-```
-
-Then install the dev requirements:
-
-```bash
-pip install -r ./requirements.txt
 ```
 
 Finally, install the pre-commit hooks:
@@ -57,7 +55,7 @@ pre-commit install
 
 ### Testing and Linting
 
-We use `mypy`, `pytest`, `flake8`, and `black` for quality control. All tools except pytest are executed using pre-commit when you make a commit.
+We use `mypy`, `pytest`, `ruff`, and `black` for quality control. All tools except pytest are executed using pre-commit when you make a commit.
 To ensure there are not formatting or typing issues in the entire repository you can run:
 
 ```bash
@@ -73,35 +71,31 @@ To execute the unit tests, simply run:
 pytest
 ```
 
-We also test the stubs against the DRF's own test suite. This is done in CI but you can also do this locally.
-To execute the script run:
+### Testing stubs with `stubtest`
+
+Run `bash ./scripts/stubtest.sh` to test that stubs and sources are in-line.
+
+We have a special file to allow errors:
+
+1. `scripts/stubtest/allowlist.txt` where we store things that we really don't care about: hacks, DRF internal utility modules, things that are handled by our plugin, things that are not representable by type system, etc
+
+You might also want to disable `incremental` mode while working on `stubtest` changes.
+This mode leads to several known problems (stubs do not show up or have strange errors).
+
+### Downstream checks with mypy_primer
+
+CI uses [mypy_primer](https://github.com/hauntsaninja/mypy_primer) to check how DRF
+stub and plugin changes affect downstream projects.
+
+To run locally, you must have `uv` and some packages required by checked projects: `libpq-dev`, `libgdal-dev`, and `libgeos-dev` on Debian/Ubuntu.
 
 ```bash
-python ./scripts/typecheck_tests.py
+python scripts/run_primer.py
+python scripts/run_primer.py --help
+python scripts/run_primer.py --projects=sentry,lidotiku
 ```
 
-You can also optionally specify a specific version tag to test against, e.g.
-
-```bash
-python ./scripts/typecheck_tests.py --drf_version 3.12.1
-```
-
-### Generating Stubs using Stubgen
-
-The stubs are based on auto-generated code created by Mypy's stubgen tool (see: [the stubgen docs](https://mypy.readthedocs.io/en/stable/stubgen.html)).
-To make life easier we have a helper script that auto generates these stubs. To use it you can run:
-
-```bash
-python ./scripts/stubgen-drf.py
-```
-
-You can also pass an optional version tag, e.g.
-
-```bash
-python ./scripts/stubgen-drf.py --drf_version 3.12.1
-```
-
-The output for this is a gitignored folder called "stubgen" in the repo's root.
+The default run compares your changes against origin, including uncommitted files.
 
 ## Submission Guidelines
 
@@ -112,3 +106,31 @@ The workflow for contributions is fairly simple:
 3. make whatever changes you want to contribute.
 4. ensure your contribution does not introduce linting issues or breaks the tests by linting and testing the code.
 5. make a pull request with an adequate description.
+
+## Releasing `djangorestframework-stubs`
+
+1. Open a pull request that updates `pyproject.toml` (anyone can open this PR, not just maintainers):
+
+   - Increase `version =` value within `[project]` section. Version number `major.minor.patch` is formed as follows:
+
+     `major.minor` version must match newest supported `djangorestframework` release.
+
+     `patch` is sequentially increasing for each stubs release. Reset to `0` if `major.minor` was updated.
+
+   - Under `dependencies =`, update the `django-stubs>=` version to point to latest `django-stubs` release.
+   - Update lockfile, run: `uv lock`
+   - Use pull request title "Version x.y.z release" by convention.
+
+2. Ensure the CI succeeds. A maintainer must merge this PR. If it's just a verison bump, no need
+   to wait for a second maintainer's approval.
+
+3. Maintainers need to [сreate a new GitHub release](https://github.com/typeddjango/djangorestframework-stubs/releases/new):
+
+   - Under "Choose a tag" enter the new version number. Do NOT use `v` prefix.
+   - Click "Generate release notes".
+   - Delete all release notes lines containing `by @pre-commit-ci` or `by @renovate`, as these
+     are irrelevant for our users.
+
+4. Once you feel brave enough, click "Publish release".
+
+5. Check that the [release workflow](https://github.com/typeddjango/djangorestframework-stubs/actions/workflows/release.yml) succeeds.
