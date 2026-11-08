@@ -234,10 +234,10 @@ def serializer_many(flag: bool) -> None:
     assert_type(IntSerializer(instance=[1, 2], many=True), serializers.ListSerializer[int])
     assert_type(IntSerializer(many=True), serializers.ListSerializer[int])
     assert_type(IntSerializer(data=[{}], many=True, context={}), serializers.ListSerializer[int])
-    IntSerializer([1, 2])  # type: ignore[call-overload]
-    IntSerializer(["a"], many=True)  # type: ignore[call-overload]
+    IntSerializer([1, 2])  # type: ignore[call-overload]  # pyright: ignore[reportArgumentType]
+    IntSerializer(["a"], many=True)  # type: ignore[call-overload]  # pyright: ignore[reportCallIssue, reportArgumentType]
     # `many` is keyword-only at runtime: a second positional argument is `data`.
-    IntSerializer(1, True, True)  # type: ignore[call-overload]
+    IntSerializer(1, True, True)  # type: ignore[call-overload]  # pyright: ignore[reportCallIssue]
 
 
 # case: model_serializer_many_returns_list_serializer
@@ -255,9 +255,9 @@ def model_serializer_many(flag: bool) -> None:
         UserSerializer(User.objects.all(), many=flag),
         UserSerializer | serializers.ListSerializer[User],
     )
-    UserSerializer(User.objects.all())  # type: ignore[call-overload]
-    UserSerializer(Group())  # type: ignore[call-overload]
-    UserSerializer([Group()], many=True)  # type: ignore[list-item]
+    UserSerializer(User.objects.all())  # type: ignore[call-overload]  # pyright: ignore[reportArgumentType]
+    UserSerializer(Group())  # type: ignore[call-overload]  # pyright: ignore[reportArgumentType]
+    UserSerializer([Group()], many=True)  # type: ignore[list-item]  # pyright: ignore[reportCallIssue, reportArgumentType]
 
 
 # case: list_serializer_infers_instance_type_from_child
