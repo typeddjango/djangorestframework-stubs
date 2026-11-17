@@ -74,20 +74,20 @@
     main: |
         from rest_framework.fields import MultipleChoiceField
 
-        def int_set_callback() -> set[int]: ...
-        def mixed_set_callback() -> set[int | str]: ...
+        def int_list_callback() -> list[int]: ...
+        def mixed_list_callback() -> list[int | str]: ...
 
-        MultipleChoiceField(choices=[1], default={1})
+        MultipleChoiceField(choices=[1], default=[1])
         MultipleChoiceField(choices=['test'], allow_null=True, default=None)
-        MultipleChoiceField(choices=[1], default=int_set_callback)
-        MultipleChoiceField(choices=[1, 'lulz'], default=mixed_set_callback)
-        MultipleChoiceField(choices=[1], default=lambda: [1])   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], list[int]]"; expected "set[str | int] | set[str] | set[int] | Callable[[], set[str | int] | set[str] | set[int]] | _Empty | None"  [arg-type]  # E: Incompatible return value type (got "list[int]", expected "set[str | int] | set[str] | set[int]")  [return-value]
+        MultipleChoiceField(choices=[1], default=int_list_callback)
+        MultipleChoiceField(choices=[1, 'lulz'], default=mixed_list_callback)
+        MultipleChoiceField(choices=[1], default=lambda: {1})   # E: Argument "default" to "MultipleChoiceField" has incompatible type "Callable[[], set[int]]"; expected "Sequence[str | int] | Sequence[str] | Sequence[int] | Callable[[], Sequence[str | int] | Sequence[str] | Sequence[int]] | _Empty | None"  [arg-type]  # E: Incompatible return value type (got "set[int]", expected "Sequence[str | int] | Sequence[str] | Sequence[int]")  [return-value]
 
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])  # E: Argument "default" to "MultipleChoiceField" has incompatible type "list[int]"; expected "set[str | int] | set[str] | set[int] | Callable[[], set[str | int] | set[str] | set[int]] | _Empty | None"  [arg-type]
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default=[1])
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], default={1})  # E: Argument "default" to "MultipleChoiceField" has incompatible type "set[int]"; expected "Sequence[str | int] | Sequence[str] | Sequence[int] | Callable[[], Sequence[str | int] | Sequence[str] | Sequence[int]] | _Empty | None"  [arg-type]
 
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})
-        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "list[int]"; expected "set[str | _StrPromise | int] | set[str | _StrPromise] | set[int] | Callable[[], set[str | _StrPromise | int] | set[str | _StrPromise] | set[int]] | _Empty | None"  [arg-type]
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial=[1])
+        MultipleChoiceField(choices=[(1, "1"), (2, "2")], initial={1})  # E: Argument "initial" to "MultipleChoiceField" has incompatible type "set[int]"; expected "Sequence[str | _StrPromise | int] | Sequence[str | _StrPromise] | Sequence[int] | Callable[[], Sequence[str | _StrPromise | int] | Sequence[str | _StrPromise] | Sequence[int]] | _Empty | None"  [arg-type]
 
 -   case: FileField_default
     main: |

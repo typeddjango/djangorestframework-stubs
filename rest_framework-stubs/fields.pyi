@@ -518,9 +518,9 @@ class ChoiceField(Field[str, str | int | tuple[str | int, str | int | tuple], st
 class MultipleChoiceField(
     ChoiceField,
     Field[
-        str,
+        list[Any],
         Sequence[str | int | tuple[str | int, str | int]],
-        Sequence[str | tuple[str | int, str | int]],
+        list[str | tuple[str | int, str | int]],
         Any,
     ],
 ):
@@ -532,8 +532,8 @@ class MultipleChoiceField(
         read_only: bool = False,
         write_only: bool = False,
         required: bool | None = None,
-        default: _DefaultInitial[set[str | int] | set[str] | set[int]] = ...,
-        initial: _DefaultInitial[set[StrOrPromise | int] | set[StrOrPromise] | set[int]] = ...,
+        default: _DefaultInitial[Sequence[str | int] | Sequence[str] | Sequence[int]] = ...,
+        initial: _DefaultInitial[Sequence[StrOrPromise | int] | Sequence[StrOrPromise] | Sequence[int]] = ...,
         source: str | None = None,
         label: StrOrPromise | None = None,
         help_text: StrOrPromise | None = None,
@@ -546,6 +546,8 @@ class MultipleChoiceField(
         allow_blank: bool = False,
         allow_empty: bool = True,
     ) -> None: ...
+    @override
+    def to_internal_value(self, data: Sequence[str | int | tuple[str | int, str | int]]) -> list[Any]: ...
 
 class FilePathField(ChoiceField):
     def __init__(
