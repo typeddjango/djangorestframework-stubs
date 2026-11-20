@@ -48,7 +48,9 @@ class TestSerializer2(serializers.Serializer[Any]):
 
 
 # case: test_serializer_data_and_errors_are_parameterized
-def check_serializer_return_types(serializer: serializers.Serializer, many: serializers.ListSerializer) -> None:
+def check_serializer_return_types(
+    serializer: serializers.Serializer[Any], many: serializers.ListSerializer[Any]
+) -> None:
     assert_type(serializer.data, ReturnDict[str, Any])
     assert_type(serializer.errors, ReturnDict[str, Any])
     assert_type(many.errors, ReturnDict[int, Any] | ReturnDict[str, Any] | ReturnList[Any])
