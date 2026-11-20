@@ -93,3 +93,17 @@
     main:6: note:     def [_KT, _VT] ReturnDict(Iterable[tuple[str, _VT]], /, *, serializer: BaseSerializer[Any], **kwargs: _VT) -> ReturnDict[str, _VT]
     main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[str]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[str, str]
     main:6: note:     def [_KT, _VT] ReturnDict(Iterable[list[bytes]], /, *, serializer: BaseSerializer[Any]) -> ReturnDict[bytes, bytes]
+
+- case: model_serializer_meta_attributes
+  main: |
+    from collections.abc import Sequence
+    from typing import Any, assert_type
+    from rest_framework import serializers
+
+    # The typed ModelSerializer.Meta interface is guarded by `if MYPY` in the stubs.
+    assert_type(serializers.ModelSerializer.Meta.model, type[serializers._MT])  # type: ignore[valid-type]
+    assert_type(serializers.ModelSerializer.Meta.fields, Sequence[str])
+    assert_type(serializers.ModelSerializer.Meta.read_only_fields, Sequence[str] | None)
+    assert_type(serializers.ModelSerializer.Meta.exclude, Sequence[str] | None)
+    assert_type(serializers.ModelSerializer.Meta.depth, int | None)
+    assert_type(serializers.ModelSerializer.Meta.extra_kwargs, dict[str, dict[str, Any]])

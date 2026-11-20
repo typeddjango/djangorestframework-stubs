@@ -107,20 +107,18 @@ jobs:
               const metadata = JSON.parse(files['metadata.json']);
               if (metadata.PR_NUMBER !== String(pr.number) || metadata.PR_HEAD !== pr.head.sha ||
                   metadata.GITHUB_RUN_ID !== String(run.id) || metadata.PYTHON_VERSION !== version ||
-                  ![metadata.PR_BASE, metadata.TESTED_MERGE, metadata.TESTED_BASE]
+                  ![metadata.TESTED_MERGE, metadata.TESTED_BASE]
                     .every(sha => /^[0-9a-f]{40}$/.test(sha)))
                 throw new Error('Artifact metadata does not match trusted current PR/run metadata');
-              if (metadata.PR_BASE !== pr.base.sha || metadata.TESTED_MERGE !== pr.merge_commit_sha) {
-                core.notice('The target branch or PR merge changed; ignoring stale results.');
+              if (metadata.TESTED_MERGE !== pr.merge_commit_sha) {
+                core.notice('The PR merge changed; ignoring stale results.');
                 return;
               }
               const merge = await github.rest.repos.getCommit({...repo, ref: metadata.TESTED_MERGE});
-              if (merge.data.parents.length !== 2 || merge.data.parents[1].sha !== pr.head.sha ||
-                  merge.data.parents[0].sha !== pr.base.sha) throw new Error('Unexpected tested merge parents');
-              const base = await github.rest.repos.compareCommits({
-                ...repo, base: pr.base.sha, head: metadata.TESTED_MERGE,
-              });
-              if (base.data.merge_base_commit.sha !== metadata.TESTED_BASE)
+              // The current GitHub-generated merge is trusted; artifact base metadata is not.
+              if (merge.data.parents.length !== 2 || merge.data.parents[1].sha !== pr.head.sha)
+                throw new Error('Unexpected tested merge parents');
+              if (merge.data.parents[0].sha !== metadata.TESTED_BASE)
                 throw new Error('Unexpected tested merge base');
               const exitCode = files['exit-code.txt'].trim();
               if (!['0', '1'].includes(exitCode)) throw new Error('Artifact is not a successful comparison');
@@ -131,7 +129,7 @@ jobs:
             }
             const marker = '<!-- drf-mypy-primer -->';
             const link = `https://github.com/${repo.owner}/${repo.repo}/actions/runs/${run.id}`;
-            const header = `${marker}\n## mypy_primer\n\nCompared DRF stubs and plugin at ${pr.merge_commit_sha} with the target-branch merge base. Differences are advisory.\n\n`;
+            const header = `${marker}\n## mypy_primer\n\nCompared DRF stubs and plugin at ${pr.merge_commit_sha} with its target-branch parent. Differences are advisory.\n\n`;
             const footer = `\n\n[Full comparison and diagnostic artifacts](${link})`;
             const MAX_CHARACTERS = 50000
             const MAX_CHARACTERS_PER_PROJECT = MAX_CHARACTERS / 3

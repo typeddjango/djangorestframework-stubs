@@ -1,10 +1,11 @@
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, TypeVar
+from typing import Any, ClassVar, Literal, NoReturn, TypeVar, type_check_only
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
 from django.utils.functional import cached_property
 from django_stubs_ext import StrOrPromise
+from rest_framework._compat import MYPY
 from rest_framework.exceptions import APIException as APIException
 from rest_framework.exceptions import AuthenticationFailed as AuthenticationFailed
 from rest_framework.exceptions import ErrorDetail as ErrorDetail
@@ -71,6 +72,15 @@ ALL_FIELDS: str
 
 _MT = TypeVar("_MT", bound=Model)  # Model Type
 _IN = TypeVar("_IN")  # Instance Type
+
+@type_check_only
+class _ModelSerializerMeta:
+    model: ClassVar[type[_MT]]  # type: ignore[valid-type]
+    fields: ClassVar[Sequence[str] | Literal["__all__"]]
+    read_only_fields: ClassVar[Sequence[str] | None]
+    exclude: ClassVar[Sequence[str] | None]
+    depth: ClassVar[int | None]
+    extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
 
 class BaseSerializer(Field[Any, Any, Any, _IN]):
     partial: bool
@@ -195,6 +205,8 @@ class ListSerializer(BaseSerializer[_IN]):
     @override
     def get_validators(self) -> list[SerializerValidator[list[Any]]]: ...  # type: ignore[override]
     @override
+    def to_internal_value(self, data: Any) -> list[Any]: ...
+    @override
     def to_representation(self, data: Manager[Any] | Iterable[Any]) -> list[Any]: ...  # type: ignore[override]
     @override
     def get_initial(self) -> list[Mapping[Any, Any]]: ...
@@ -221,13 +233,12 @@ class ModelSerializer(Serializer[_MT]):
     serializer_choice_field: ClassVar[type[Field]]
     url_field_name: ClassVar[str | None]
 
-    class Meta:
-        model: ClassVar[type[_MT]]  # type: ignore[valid-type]
-        fields: ClassVar[Sequence[str] | Literal["__all__"]]
-        read_only_fields: ClassVar[Sequence[str] | None]
-        exclude: ClassVar[Sequence[str] | None]
-        depth: ClassVar[int | None]
-        extra_kwargs: ClassVar[dict[str, dict[str, Any]]]
+    # Work around pyright's incompatible nested-class overrides: expose Meta as Any
+    # there, while preserving the typed interface for mypy, which treats MYPY as true.
+    if MYPY:  # noqa: PYI002
+        Meta = _ModelSerializerMeta
+    else:
+        Meta: Any
 
     def __init__(
         self,
@@ -251,6 +262,10 @@ class ModelSerializer(Serializer[_MT]):
         allow_null: bool = ...,
         allow_empty: bool = ...,
     ) -> None: ...
+    # The validated values of the model's fields. Not on `Serializer`: a plain serializer may
+    # validate into any shape (a dataclass, a domain object).
+    @override
+    def to_internal_value(self, data: Any) -> dict[str, Any]: ...
     @override
     def update(self, instance: _MT, validated_data: Any) -> _MT: ...
     @override
