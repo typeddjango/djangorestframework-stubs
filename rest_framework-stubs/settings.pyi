@@ -36,7 +36,7 @@ class DefaultsSettings(TypedDict, total=False):
     SEARCH_PARAM: str
     ORDERING_PARAM: str
     DEFAULT_VERSION: str | None
-    ALLOWED_VERSIONS: str | None
+    ALLOWED_VERSIONS: Sequence[str] | None
     VERSION_PARAM: str
     UNAUTHENTICATED_USER: str
     UNAUTHENTICATED_TOKEN: str | None
@@ -106,7 +106,7 @@ class _Settings(APISettings):
     SEARCH_PARAM: str
     ORDERING_PARAM: str
     DEFAULT_VERSION: str | None
-    ALLOWED_VERSIONS: str | None
+    ALLOWED_VERSIONS: Sequence[str] | None
     VERSION_PARAM: str
     UNAUTHENTICATED_USER: Callable[[], Any] | None
     UNAUTHENTICATED_TOKEN: Callable[[], Any] | None
