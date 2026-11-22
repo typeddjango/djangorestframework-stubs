@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, ClassVar, Literal, NoReturn, TypeVar, type_check_only
+from typing import Any, ClassVar, Literal, NoReturn, TypeVar, overload, type_check_only
 
 from django.db import models
 from django.db.models import Manager, Model, QuerySet
@@ -121,6 +121,9 @@ class BaseSerializer(Field[Any, Any, Any, _IN]):
     def validators(self, validators: list[SerializerValidator[Any]]) -> None: ...
     @override
     def get_validators(self) -> list[SerializerValidator[Any]]: ...  # type: ignore[override]
+    @overload
+    def is_valid(self, *, raise_exception: Literal[True]) -> Literal[True]: ...
+    @overload
     def is_valid(self, *, raise_exception: bool = ...) -> bool: ...
     @property
     def data(self) -> Any: ...
