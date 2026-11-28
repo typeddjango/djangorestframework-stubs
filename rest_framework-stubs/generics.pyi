@@ -31,7 +31,7 @@ class BaseFilterProtocol(Protocol[_MT_inv]):
     ) -> QuerySet[_MT_inv]: ...
 
 class GenericAPIView(views.APIView, UsesQuerySet[_MT_co]):
-    queryset: QuerySet[_MT_co] | Manager[_MT_co] | None
+    queryset: QuerySet[_MT_co] | None
     serializer_class: type[BaseSerializer[_MT_co]] | None
     lookup_field: str
     lookup_url_kwarg: str | None
